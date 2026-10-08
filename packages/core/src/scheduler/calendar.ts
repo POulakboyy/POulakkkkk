@@ -74,12 +74,12 @@ export function localDay(date: LocalDate, timeZone: TimeZone): LocalDay {
 
 /** Every local day that overlaps `range`, in chronological order. */
 export function localDays(range: Interval, timeZone: TimeZone): LocalDay[] {
-  if (!Number.isFinite(range.start) || !Number.isFinite(range.end)) return [];
+  if (!isValidInterval(range)) return [];
   const out: LocalDay[] = [];
   const first = localDate(range.start, timeZone);
   for (let i = 0; ; i++) {
     const day = localDay(shiftDate(first, i), timeZone);
-    if (day.start >= range.end && i > 0) break;
+    if (day.start >= range.end) break;
     if (day.end > range.start) out.push(day);
   }
   return out;
