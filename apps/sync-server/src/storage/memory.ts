@@ -14,6 +14,8 @@ import {
 
 interface SpaceData {
   entries: StoredEnvelope[];
+  /** Serialized size of each entry, parallel to `entries`. */
+  sizes: number[];
   ids: Set<string>;
   bytes: number;
 }
@@ -26,7 +28,7 @@ export class MemoryStorage implements Storage {
     if (this.open_.has(space)) throw new Error('space log is already open');
     let data = this.spaces.get(space);
     if (!data) {
-      data = { entries: [], ids: new Set(), bytes: 0 };
+      data = { entries: [], sizes: [], ids: new Set(), bytes: 0 };
       this.spaces.set(space, data);
     }
     this.open_.add(space);
@@ -59,6 +61,7 @@ class MemorySpaceLog implements SpaceLog {
   async append(envelopes: readonly Envelope[], options: AppendOptions = {}): Promise<AppendOutcome> {
     this.assertOpen();
     const stored: StoredEnvelope[] = [];
+    const sizes: number[] = [];
     const duplicates: string[] = [];
     const batchIds = new Set<string>();
     let addedBytes = 0;
@@ -75,17 +78,20 @@ class MemorySpaceLog implements SpaceLog {
         payload: envelope.payload,
         seq: this.data.entries.length + stored.length + 1,
       };
-      addedBytes += recordBytes(entry);
+      const size = recordBytes(entry);
+      addedBytes += size;
+      sizes.push(size);
       stored.push(entry);
     }
     const maxBytes = options.maxBytes ?? 0;
     if (stored.length > 0 && maxBytes > 0 && this.data.bytes + addedBytes > maxBytes) {
       throw new QuotaExceededError();
     }
-    for (const entry of stored) {
-      this.data.entries.push(entry);
+    stored.forEach((entry, i) => {
+      this.data.entries.push({ ...entry });
+      this.data.sizes.push(sizes[i] ?? 0);
       this.data.ids.add(entry.id);
-    }
+    });
     this.data.bytes += addedBytes;
     return { stored, duplicates, head: this.data.entries.length };
   }
@@ -96,8 +102,8 @@ class MemorySpaceLog implements SpaceLog {
     let bytes = 0;
     for (let seq = afterSeq + 1; seq <= this.data.entries.length && out.length < limit; seq++) {
       const entry = this.data.entries[seq - 1];
-      if (!entry) break;
-      const size = recordBytes(entry);
+      const size = this.data.sizes[seq - 1];
+      if (!entry || size === undefined) break;
       if (out.length > 0 && bytes + size > maxBytes) break;
       bytes += size;
       out.push({ ...entry });
