@@ -13,7 +13,7 @@ function isResolved(dependency: Task | undefined): boolean {
   return dependency === undefined || !isOpen(dependency);
 }
 
-/** Distinct dependency ids of `task`, in declaration order, without self-references. */
+/** Distinct dependency ids of `task`, in declaration order. */
 function dependencyIds(task: Task): Id[] {
   return [...new Set(task.dependsOn)];
 }
@@ -46,6 +46,7 @@ export function actionable(tasks: readonly Task[]): Task[] {
  */
 export function unlockedBy(doneId: Id, tasks: readonly Task[]): Task[] {
   const byId = indexById(tasks);
+  if (!byId.has(doneId)) return [];
   return tasks.filter(
     (task) =>
       task.id !== doneId &&
@@ -56,7 +57,7 @@ export function unlockedBy(doneId: Id, tasks: readonly Task[]): Task[] {
 }
 
 /** Adjacency list restricted to tasks present in the set (dangling ids are ignored). */
-function adjacency(tasks: readonly Task[], byId: TaskLookup): Map<Id, Id[]> {
+function adjacency(byId: TaskLookup): Map<Id, Id[]> {
   const edges = new Map<Id, Id[]>();
   for (const task of byId.values()) {
     edges.set(
@@ -64,8 +65,6 @@ function adjacency(tasks: readonly Task[], byId: TaskLookup): Map<Id, Id[]> {
       dependencyIds(task).filter((id) => byId.has(id)),
     );
   }
-  // Keep `tasks` as the source of truth for iteration order in callers.
-  void tasks;
   return edges;
 }
 
@@ -76,7 +75,7 @@ function adjacency(tasks: readonly Task[], byId: TaskLookup): Map<Id, Id[]> {
  */
 export function topoOrder(tasks: readonly Task[]): Task[] {
   const byId = indexById(tasks);
-  const edges = adjacency(tasks, byId);
+  const edges = adjacency(byId);
   const state = new Map<Id, 'visiting' | 'done'>();
   const out: Task[] = [];
 
@@ -112,7 +111,7 @@ export function topoOrder(tasks: readonly Task[]): Task[] {
  */
 export function detectCycles(tasks: readonly Task[]): Id[][] {
   const byId = indexById(tasks);
-  const edges = adjacency(tasks, byId);
+  const edges = adjacency(byId);
   const position = new Map<Id, number>();
   [...byId.keys()].forEach((id, i) => position.set(id, i));
 
