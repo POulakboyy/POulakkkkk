@@ -174,3 +174,34 @@ export function stem(token: string): string {
 
   return w;
 }
+
+/* ------------------------------------------------------------------------------------------ */
+/* Excerpts                                                                                    */
+/* ------------------------------------------------------------------------------------------ */
+
+/**
+ * Excerpt of `text` around the range [start, end): up to `radius` characters on each side, cut
+ * on whitespace (never inside a word), whitespace collapsed, `…` where text was dropped.
+ */
+export function excerpt(text: string, start: number, end: number, radius: number): string {
+  let from = Math.max(0, start - radius);
+  let to = Math.min(text.length, end + radius);
+  if (from > 0 && !isSpace(text[from - 1])) {
+    let i = from;
+    while (i < start && !isSpace(text[i])) i++;
+    if (i < start) from = i + 1;
+  }
+  if (to < text.length && !isSpace(text[to])) {
+    let i = to;
+    while (i > end && !isSpace(text[i - 1])) i--;
+    if (i > end) to = i - 1;
+  }
+  const body = text.slice(from, to).replace(/\s+/g, ' ').trim();
+  const before = from > 0 && text.slice(0, from).trim() !== '' ? '…' : '';
+  const after = to < text.length && text.slice(to).trim() !== '' ? '…' : '';
+  return `${before}${body}${after}`;
+}
+
+function isSpace(c: string | undefined): boolean {
+  return c !== undefined && /\s/.test(c);
+}

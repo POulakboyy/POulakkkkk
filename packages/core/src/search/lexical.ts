@@ -12,7 +12,7 @@
  * Sandbox records (5.8) are indexed but excluded from results unless explicitly requested.
  */
 import type { CollectionName, Id, Timestamp } from '../model.ts';
-import { tokenize, type Token } from './text.ts';
+import { excerpt, tokenize, type Token } from './text.ts';
 
 /** A record flattened for indexing. Build one from a domain record with `toSearchDoc`. */
 export interface SearchDoc {
@@ -386,22 +386,6 @@ export function makeSnippet(
   const hit = tokenize(text).find((t) => !t.stop && terms.has(t.term));
   if (!hit) return '';
   return excerpt(text, hit.start, hit.end, radius);
-}
-
-/** Excerpt of `text` around [start, end) cut on whitespace, whitespace collapsed. */
-export function excerpt(text: string, start: number, end: number, radius: number): string {
-  let from = Math.max(0, start - radius);
-  let to = Math.min(text.length, end + radius);
-  if (from > 0) {
-    const space = text.indexOf(' ', from);
-    if (space !== -1 && space < start) from = space + 1;
-  }
-  if (to < text.length) {
-    const space = text.lastIndexOf(' ', to);
-    if (space >= end) to = space;
-  }
-  const body = text.slice(from, to).replace(/\s+/g, ' ').trim();
-  return `${from > 0 ? '…' : ''}${body}${to < text.length ? '…' : ''}`;
 }
 
 export interface HighlightRange {
