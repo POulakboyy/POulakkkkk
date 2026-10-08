@@ -264,18 +264,13 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     const clauses = parseQuery(query, opts.prefix ?? true);
     if (clauses.length === 0) return [];
 
-    const collections = opts.collections ? new Set(opts.collections) : undefined;
-    const includeSandbox = opts.includeSandbox ?? false;
+    const keep = docFilter(opts);
     const accepted = new Map<Id, boolean>();
     const accepts = (id: Id): boolean => {
       let ok = accepted.get(id);
       if (ok === undefined) {
         const doc = entries.get(id)?.doc;
-        ok =
-          doc !== undefined &&
-          (includeSandbox || !doc.sandbox) &&
-          (!collections || collections.has(doc.collection)) &&
-          (!opts.filter || opts.filter(doc));
+        ok = doc !== undefined && keep(doc);
         accepted.set(id, ok);
       }
       return ok;
@@ -367,6 +362,21 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     },
     search,
   };
+}
+
+/**
+ * Predicate applying the `collections`, `includeSandbox` and `filter` options of a search, so
+ * other rankers (e.g. the semantic leg of hybrid search) filter exactly like the index.
+ */
+export function docFilter(
+  opts: Pick<SearchOptions, 'collections' | 'includeSandbox' | 'filter'>,
+): (doc: SearchDoc) => boolean {
+  const collections = opts.collections ? new Set(opts.collections) : undefined;
+  const includeSandbox = opts.includeSandbox ?? false;
+  return (doc) =>
+    (includeSandbox || !doc.sandbox) &&
+    (!collections || collections.has(doc.collection)) &&
+    (!opts.filter || opts.filter(doc));
 }
 
 /* ------------------------------------------------------------------------------------------ */

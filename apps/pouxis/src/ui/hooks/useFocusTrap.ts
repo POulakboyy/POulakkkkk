@@ -65,7 +65,7 @@ export function useFocusTrap(
       const target = e.target as Node | null;
       if (target && container.contains(target)) return;
       // Allow focus into overlays layered above this one (menus, tooltips, toasts).
-      if (target instanceof Element && target.closest('[data-px-layer-above], [data-px-inert-exempt]'))
+      if (target instanceof Element && target.closest('[data-px-layer], [data-px-inert-exempt]'))
         return;
       focusElement(getTabbable(container)[0] ?? container);
     };

@@ -43,7 +43,8 @@ export interface WikiLink {
 
 const WIKI_RE = /(!?)\[\[([^[\]\n]+?)\]\]/g;
 const FENCE_RE = /^ {0,3}(`{3,}|~{3,})/;
-const INLINE_CODE_RE = /(`+)[^`][\s\S]*?(?<!`)\1(?!`)|(`+)(?<!`)\2(?!`)/g;
+// A run of N backticks, content ending with a non-backtick, then exactly N backticks.
+const INLINE_CODE_RE = /(`+)[\s\S]*?[^`]\1(?!`)/g;
 
 /** Ranges of `text` covered by Markdown code (fenced blocks and inline code spans). */
 function codeRanges(text: string): Array<[number, number]> {
@@ -75,7 +76,6 @@ function codeRanges(text: string): Array<[number, number]> {
   for (const [from, to] of outside) {
     const chunk = text.slice(from, to);
     for (const m of chunk.matchAll(INLINE_CODE_RE)) {
-      if (m[2] !== undefined) continue; // unmatched backtick run
       ranges.push([from + m.index, from + m.index + m[0].length]);
     }
   }
