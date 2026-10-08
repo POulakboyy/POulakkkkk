@@ -146,8 +146,11 @@ export function parse(tokens: readonly Token[], maxDepth: number): Node {
     next(); // (
     const args: Node[] = [];
     if (peek().type !== ')') {
-      do args.push(expression(0, level + 1));
-      while (peek().type === ',' && next());
+      for (;;) {
+        args.push(expression(0, level + 1));
+        if (peek().type !== ',') break;
+        next();
+      }
     }
     expect(')', '"," or ")"');
     if (args.length < spec.minArgs || args.length > spec.maxArgs) {
