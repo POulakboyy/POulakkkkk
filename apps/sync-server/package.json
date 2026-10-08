@@ -1,0 +1,20 @@
+{
+  "name": "@pouxis/sync-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Relais de synchronisation POuxis : échange d'opérations CRDT chiffrées entre appareils.",
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "start": "node src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@pouxis/core": "0.1.0",
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "@types/ws": "8.18.2"
+  }
+}

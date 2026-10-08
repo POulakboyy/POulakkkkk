@@ -1,0 +1,64 @@
+/*
+ * Motion primitives. Rules: animate only transform and opacity (GPU-composited, no layout),
+ * keep UI feedback under 100 ms and transitions under 400 ms (Nielsen; Doherty & Thadani),
+ * and let tokens collapse to 0 ms for reduced motion and e-ink.
+ */
+
+@keyframes px-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes px-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes px-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes px-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.px-fade-in {
+  animation: px-fade-in var(--dur-base) var(--ease-out) both;
+}
+
+.px-rise-in {
+  animation: px-rise-in var(--dur-slow) var(--ease-out) both;
+}
+
+.px-scale-in {
+  animation: px-scale-in var(--dur-base) var(--ease-out) both;
+}
+
+/* Staggered lists: set --i on each child. */
+.px-stagger > * {
+  animation: px-rise-in var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(min(var(--i, 0), 12) * 24ms);
+}
+
+/* View transitions between top-level views (progressive enhancement). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

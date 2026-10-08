@@ -1,0 +1,6 @@
+node_modules
+dist
+coverage
+apps/pouxis/src-tauri/target
+apps/pouxis/src-tauri/gen
+package-lock.json
