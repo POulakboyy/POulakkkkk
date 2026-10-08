@@ -48,9 +48,9 @@ const FRENCH_STOPWORDS = [
   'en entre et eux il ils je la le les leur leurs lui ma mais me meme mes moi mon ne ni nos',
   'notre nous on ou par pas pour qu que quel quelle quels quelles qui quoi sa sans se ses',
   'si son sont sur ta te tes toi ton tu un une vos votre vous etre ai as avons avez ont',
-  'suis es est sommes etes etait ete aussi alors car lors puis tout tous toute toutes tres',
-  'deja ici jusqu lorsqu puisqu quoiqu aujourd ceux celle celles celui sous vers peu fait',
-  'ainsi',
+  'suis es est sommes etes etait aussi alors car lors puis tout tous toute toutes tres',
+  'deja ici jusqu lorsqu puisqu quoiqu aujourd hui ceux celle celles celui sous vers peu',
+  'fait ainsi',
 ]
   .join(' ')
   .split(' ');

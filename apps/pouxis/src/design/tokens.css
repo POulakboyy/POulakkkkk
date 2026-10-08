@@ -3,10 +3,20 @@
  *
  * Token NAMES are a contract shared by every component and view: values may be tuned,
  * names must not be renamed or removed. Add new tokens rather than repurposing old ones.
+ * Reference, roles and contrast results: docs/design/DESIGN_SYSTEM.md (+ tokens.json, DTCG).
+ * Contrast is enforced by contrast.test.ts — run `npm test -w @pouxis/app` after any change,
+ * then `node apps/pouxis/src/design/build-tokens.mjs` to refresh generated sections.
  *
  * Themes: light (default), dark, eink. `data-theme` on <html> forces one; without it the
- * OS preference decides. `data-mode="create|execute"` switches `--mode-accent` (blue for
- * creative work, warm for execution — Mehta & Zhu, Science 2009).
+ * OS preference decides, unless `data-theme-auto="daylight"` (daylight.ts) drives a
+ * progressive light → dark blend from the sun's elevation (7.6).
+ * `data-mode="create|execute"` switches `--mode-accent` (blue for creative work, warm for
+ * execution — a deliberately subtle cue after Mehta & Zhu, Science 2009; see the docs).
+ *
+ * Contrast roles (WCAG 2.2): every `--ink*` and semantic colour is text-safe (≥ 4.5:1) on
+ * --bg, --bg-elevated, --surface, --surface-2 and its own -soft tint. "UI only" (≥ 3:1,
+ * never body text): --line-control, --focus-ring, --viz-*. Decorative (no text on paper):
+ * --accent (fill, carries --accent-ink), --line, --line-strong, --cat-* (fills, ink on top).
  */
 
 :root {
@@ -17,10 +27,12 @@
   --surface-2: #f0ede6;
   --surface-3: #e8e4db;
   --ink: #1c1b18;
-  --ink-2: #57534a;
-  --ink-3: #8c877c;
+  --ink-2: #4f4b44;
+  --ink-3: #656156;
   --line: #e6e2d8;
   --line-strong: #d3cec2;
+  /* Boundary of inputs, checkboxes, toggles: ≥ 3:1 on paper (WCAG 1.4.11). UI only. */
+  --line-control: #827d73;
   --overlay: rgb(28 27 24 / 0.32);
   --glass: rgb(251 250 247 / 0.72);
   --shadow-color: 28 27 24;
@@ -29,24 +41,36 @@
   --accent: #ff8f70;
   --accent-ink: #1c1b18;
   --accent-soft: #ffe5dc;
-  --accent-strong: #b4472b;
+  --accent-strong: #a83c1f;
 
   /* Work modes */
-  --create: #3b57f0;
+  --create: #344ce5;
   --create-soft: #e3e8ff;
-  --execute: #c93c25;
-  --execute-soft: #ffe4de;
+  --create-ink: #ffffff;
+  --execute: #a04803;
+  --execute-soft: #ffead7;
+  --execute-ink: #ffffff;
   --mode-accent: var(--create);
   --mode-accent-soft: var(--create-soft);
+  --mode-accent-ink: var(--create-ink);
 
-  /* Status */
-  --success: #1f8a5b;
-  --success-soft: #dcf3e7;
-  --warning: #9a6412;
+  /* Status — always paired with an icon or a word, never colour alone */
+  --success: #007144;
+  --success-soft: #dbf6e7;
+  --success-ink: #ffffff;
+  --warning: #8b5600;
   --warning-soft: #fdf0d5;
-  --danger: #c2362b;
+  --danger: #b12620;
   --danger-soft: #fbe0dd;
-  --focus-ring: #3b57f0;
+  --danger-ink: #ffffff;
+  --focus-ring: #344ce5;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* Interaction states — translucent ink layered over any surface */
+  --state-hover: rgb(28 27 24 / 0.05);
+  --state-pressed: rgb(28 27 24 / 0.1);
+  --opacity-disabled: 0.45;
 
   /* Category palette for timeline blocks (Tiimo-like pastels, ink text stays readable) */
   --cat-1: #ffd8cc;
@@ -58,12 +82,26 @@
   --cat-7: #d4f0ef;
   --cat-8: #ede6da;
 
-  /* Heatmap scale (energy, activity) */
+  /* Heatmap scale (energy, activity) — sequential, one warm hue, light → dark */
   --heat-0: #f0ede6;
   --heat-1: #ffe5dc;
   --heat-2: #ffc2ad;
   --heat-3: #ff9d80;
   --heat-4: #e8694a;
+
+  /*
+   * Data-viz categorical palette — 8 fixed slots, assigned in order, never cycled. Validated
+   * for CVD (Machado et al. 2009): adjacent pairs ΔE ≥ 8 (protan/deutan), ≥ 15 normal vision;
+   * marks ≥ 3:1 on paper. Scatter/maps: first 3 slots only. Labels/legend always present.
+   */
+  --viz-1: #2a78d6;
+  --viz-2: #e15f2a;
+  --viz-3: #009b67;
+  --viz-4: #c07600;
+  --viz-5: #ce648d;
+  --viz-6: #008300;
+  --viz-7: #4a3aa7;
+  --viz-8: #e34948;
 
   /* Typography — native stacks: zero network, platform-correct rendering */
   --font-sans:
@@ -72,6 +110,7 @@
   --font-serif: ui-serif, 'New York', 'Iowan Old Style', 'Charter', Georgia, serif;
   --font-mono:
     ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --text-2xs: 0.6875rem;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-md: 1rem;
@@ -80,15 +119,21 @@
   --text-2xl: 1.75rem;
   --text-3xl: 2.25rem;
   --text-4xl: 3rem;
+  /* Fluid editorial display (large titles à la Apple Music): 36 px phone → 60 px desktop */
+  --text-display: clamp(2.25rem, 1.5rem + 2.6vw, 3.75rem);
   --leading-tight: 1.15;
   --leading-snug: 1.3;
   --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
   --tracking-tight: -0.02em;
   --tracking-wide: 0.04em;
+  --tracking-caps: 0.08em;
+  /* Comfortable reading line length (45–75 characters) */
+  --measure: 66ch;
 
   /* Spacing — 4 px base */
   --space-1: 0.25rem;
@@ -101,6 +146,10 @@
   --space-8: 2.5rem;
   --space-9: 3rem;
   --space-10: 4rem;
+  --space-11: 5rem;
+  --space-12: 6rem;
+  /* Page side margin: 16 px phone → 32 px desktop */
+  --gutter: clamp(1rem, 0.6rem + 1.8vw, 2rem);
 
   /* Radii */
   --radius-xs: 6px;
@@ -110,29 +159,51 @@
   --radius-xl: 28px;
   --radius-pill: 999px;
 
+  /* Strokes */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
   /* Elevation */
   --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.06), 0 1px 1px rgb(var(--shadow-color) / 0.04);
   --shadow-2: 0 4px 12px rgb(var(--shadow-color) / 0.08), 0 1px 3px rgb(var(--shadow-color) / 0.06);
   --shadow-3:
     0 16px 40px rgb(var(--shadow-color) / 0.14), 0 4px 12px rgb(var(--shadow-color) / 0.08);
 
-  /* Motion — compositor-only (transform, opacity); see motion.css */
+  /*
+   * Motion — compositor-only (transform, opacity); see motion.css and docs/design/MOTION.md.
+   * Duration follows travel: instant = state change in place, fast = < 8 px or colour,
+   * base = small surfaces (popover, toast), slow = sheets/panels, slower = full-screen.
+   */
   --dur-instant: 80ms;
   --dur-fast: 140ms;
   --dur-base: 220ms;
   --dur-slow: 320ms;
   --dur-slower: 480ms;
+  --dur-zen-out: 700ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-enter: var(--ease-out);
+  --ease-exit: var(--ease-in);
+  --stagger-step: 24ms;
+  --motion-offset-sm: 8px;
+  --motion-offset-md: 24px;
+  --motion-scale-from: 0.96;
+
+  /* Daylight level (7.6): 1 = full day, 0 = night. Set by daylight.ts. */
+  --daylight: 1;
 
   /* Layout */
   --sidebar-w: 264px;
   --tabbar-h: 64px;
   --header-h: 56px;
   --content-max: 1120px;
+  --content-narrow: 720px;
   --tap-min: 44px;
+  --row-min: 44px;
+  --control-h-sm: 32px;
+  --control-h-lg: 52px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -154,21 +225,31 @@
 :root[data-mode='execute'] {
   --mode-accent: var(--execute);
   --mode-accent-soft: var(--execute-soft);
+  --mode-accent-ink: var(--execute-ink);
 }
 
-/* Dark — applied by OS preference unless a theme is forced */
+/* Compact density — pointer-precise devices only; touch keeps 44 px targets. */
+@media (pointer: fine) {
+  :root[data-density='compact'] {
+    --row-min: 36px;
+    --control-h-sm: 28px;
+  }
+}
+
+/* Dark — applied by OS preference unless a theme is forced or daylight drives the palette */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']):not([data-theme='eink']) {
+  :root:not([data-theme='light']):not([data-theme='eink']):not([data-theme-auto='daylight']) {
     --bg: #121211;
     --bg-elevated: #1a1a18;
     --surface: #1f1e1c;
     --surface-2: #272623;
     --surface-3: #312f2b;
     --ink: #f3f1ec;
-    --ink-2: #b8b3a8;
-    --ink-3: #8a857b;
+    --ink-2: #bdb8ad;
+    --ink-3: #9f9a8f;
     --line: #2e2d29;
     --line-strong: #3d3b36;
+    --line-control: #7e7a72;
     --overlay: rgb(0 0 0 / 0.5);
     --glass: rgb(26 26 24 / 0.72);
     --shadow-color: 0 0 0;
@@ -178,17 +259,23 @@
     --accent-strong: #ffa58c;
     --create: #8ea2ff;
     --create-soft: #1e2547;
-    --execute: #ff8a70;
-    --execute-soft: #3b1f19;
+    --create-ink: #121211;
+    --execute: #f2a067;
+    --execute-soft: #362113;
+    --execute-ink: #121211;
     --success: #5cc995;
     --success-soft: #16301f;
+    --success-ink: #121211;
     --warning: #e9b05a;
     --warning-soft: #33280f;
     --danger: #ff7a6e;
     --danger-soft: #3a1a17;
+    --danger-ink: #121211;
     --focus-ring: #8ea2ff;
+    --state-hover: rgb(243 241 236 / 0.06);
+    --state-pressed: rgb(243 241 236 / 0.11);
     --cat-1: #4a3029;
-    --cat-2: #4a4126;
+    --cat-2: #453c23;
     --cat-3: #24402d;
     --cat-4: #23364f;
     --cat-5: #362c4f;
@@ -200,21 +287,32 @@
     --heat-2: #6b3727;
     --heat-3: #b2533a;
     --heat-4: #ff9c80;
+    --viz-1: #3987e5;
+    --viz-2: #d95926;
+    --viz-3: #199e70;
+    --viz-4: #c98500;
+    --viz-5: #d55181;
+    --viz-6: #008300;
+    --viz-7: #9085e9;
+    --viz-8: #e66767;
     color-scheme: dark;
   }
 }
 
-:root[data-theme='dark'] {
+/* Keep in sync with the media block above (contrast.test.ts checks it). */
+:root[data-theme='dark'],
+:root[data-theme-auto='daylight'][data-daylight-phase='night']:not([data-theme]) {
   --bg: #121211;
   --bg-elevated: #1a1a18;
   --surface: #1f1e1c;
   --surface-2: #272623;
   --surface-3: #312f2b;
   --ink: #f3f1ec;
-  --ink-2: #b8b3a8;
-  --ink-3: #8a857b;
+  --ink-2: #bdb8ad;
+  --ink-3: #9f9a8f;
   --line: #2e2d29;
   --line-strong: #3d3b36;
+  --line-control: #7e7a72;
   --overlay: rgb(0 0 0 / 0.5);
   --glass: rgb(26 26 24 / 0.72);
   --shadow-color: 0 0 0;
@@ -224,17 +322,23 @@
   --accent-strong: #ffa58c;
   --create: #8ea2ff;
   --create-soft: #1e2547;
-  --execute: #ff8a70;
-  --execute-soft: #3b1f19;
+  --create-ink: #121211;
+  --execute: #f2a067;
+  --execute-soft: #362113;
+  --execute-ink: #121211;
   --success: #5cc995;
   --success-soft: #16301f;
+  --success-ink: #121211;
   --warning: #e9b05a;
   --warning-soft: #33280f;
   --danger: #ff7a6e;
   --danger-soft: #3a1a17;
+  --danger-ink: #121211;
   --focus-ring: #8ea2ff;
+  --state-hover: rgb(243 241 236 / 0.06);
+  --state-pressed: rgb(243 241 236 / 0.11);
   --cat-1: #4a3029;
-  --cat-2: #4a4126;
+  --cat-2: #453c23;
   --cat-3: #24402d;
   --cat-4: #23364f;
   --cat-5: #362c4f;
@@ -246,10 +350,22 @@
   --heat-2: #6b3727;
   --heat-3: #b2533a;
   --heat-4: #ff9c80;
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #199e70;
+  --viz-4: #c98500;
+  --viz-5: #d55181;
+  --viz-6: #008300;
+  --viz-7: #9085e9;
+  --viz-8: #e66767;
   color-scheme: dark;
 }
 
-/* E-ink (7.10) — pure black on white, no shadows, no motion, thicker strokes */
+/*
+ * E-ink (7.10) — pure black on white for Onyx Boox / reMarkable class screens: no shadows,
+ * blur, gradients or motion (ghosting), 2 px strokes, larger targets, no grey text lighter
+ * than #333. Behavioural rules (animation kill-switch, backdrop-filter…) live in base.css.
+ */
 :root[data-theme='eink'] {
   --bg: #ffffff;
   --bg-elevated: #ffffff;
@@ -261,6 +377,7 @@
   --ink-3: #333333;
   --line: #000000;
   --line-strong: #000000;
+  --line-control: #000000;
   --overlay: rgb(255 255 255 / 0.9);
   --glass: #ffffff;
   --accent: #000000;
@@ -269,15 +386,23 @@
   --accent-strong: #000000;
   --create: #000000;
   --create-soft: #ffffff;
+  --create-ink: #ffffff;
   --execute: #000000;
   --execute-soft: #ffffff;
+  --execute-ink: #ffffff;
   --success: #000000;
   --success-soft: #ffffff;
+  --success-ink: #ffffff;
   --warning: #000000;
   --warning-soft: #ffffff;
   --danger: #000000;
   --danger-soft: #ffffff;
+  --danger-ink: #ffffff;
   --focus-ring: #000000;
+  --focus-ring-width: 3px;
+  --state-hover: transparent;
+  --state-pressed: rgb(0 0 0 / 0.12);
+  --opacity-disabled: 0.6;
   --cat-1: #ffffff;
   --cat-2: #ffffff;
   --cat-3: #ffffff;
@@ -291,18 +416,40 @@
   --heat-2: #aaaaaa;
   --heat-3: #555555;
   --heat-4: #000000;
+  /* Charts in e-ink rely on direct labels and texture, never on hue. */
+  --viz-1: #000000;
+  --viz-2: #000000;
+  --viz-3: #000000;
+  --viz-4: #000000;
+  --viz-5: #000000;
+  --viz-6: #000000;
+  --viz-7: #000000;
+  --viz-8: #000000;
   --shadow-1: none;
   --shadow-2: none;
   --shadow-3: none;
+  --border-width: 2px;
+  --border-width-strong: 3px;
+  --tap-min: 48px;
+  --row-min: 52px;
+  --control-h-sm: 40px;
   --dur-instant: 0ms;
   --dur-fast: 0ms;
   --dur-base: 0ms;
   --dur-slow: 0ms;
   --dur-slower: 0ms;
+  --dur-zen-out: 0ms;
+  --stagger-step: 0ms;
+  --motion-offset-sm: 0px;
+  --motion-offset-md: 0px;
+  --motion-scale-from: 1;
   color-scheme: light;
   -webkit-font-smoothing: none;
   font-smooth: never;
 }
+
+/* @generated daylight:start */
+/* @generated daylight:end */
 
 /* Reduced motion: no travel, no springs; state changes stay instant and legible. */
 @media (prefers-reduced-motion: reduce) {
@@ -312,5 +459,10 @@
     --dur-base: 0ms;
     --dur-slow: 0ms;
     --dur-slower: 0ms;
+    --dur-zen-out: 0ms;
+    --stagger-step: 0ms;
+    --motion-offset-sm: 0px;
+    --motion-offset-md: 0px;
+    --motion-scale-from: 1;
   }
 }

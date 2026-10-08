@@ -15,10 +15,8 @@ export function useAnchoredPosition(
   const [pos, setPos] = useState<Position | null>(null);
 
   useLayoutEffect(() => {
-    if (!open) {
-      setPos(null);
-      return;
-    }
+    // Keep the last position while closed so the exit animation plays in place.
+    if (!open) return;
     let frame = 0;
     const update = () => {
       const anchor = anchorRef.current;

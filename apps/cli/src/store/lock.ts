@@ -4,7 +4,7 @@
  * crashed process (dead pid on this host, or older than `staleMs`) is broken automatically.
  */
 import { randomBytes } from 'node:crypto';
-import { open, readFile, unlink } from 'node:fs/promises';
+import { open, readFile, stat, unlink } from 'node:fs/promises';
 import { hostname } from 'node:os';
 
 export interface LockOptions {
@@ -56,10 +56,18 @@ export async function acquireLock(file: string, options: LockOptions = {}): Prom
 
     const holder = await readLock(file);
     if (holder === 'missing') continue; // released between our attempt and the read
-    if (holder !== 'unreadable' && isStale(holder, now(), staleMs)) {
+    if (holder === 'unreadable') {
+      // An owner that crashed between creating and writing the file leaves it empty.
+      if (await olderThan(file, staleMs)) {
+        await unlink(file).catch(ignoreMissing);
+        continue;
+      }
+    } else if (isStale(holder, now(), staleMs)) {
       // Re-read right before deleting so we never remove a lock that was just re-acquired.
       const again = await readLock(file);
-      if (typeof again === 'object' && again.token === holder.token) await unlink(file).catch(ignoreMissing);
+      if (typeof again === 'object' && again.token === holder.token) {
+        await unlink(file).catch(ignoreMissing);
+      }
       continue;
     }
     if (Date.now() >= deadline) {
@@ -121,6 +129,14 @@ export function isProcessAlive(pid: number): boolean {
   } catch (error) {
     // EPERM: the process exists but belongs to another user.
     return (error as NodeJS.ErrnoException).code === 'EPERM';
+  }
+}
+
+async function olderThan(file: string, ms: number): Promise<boolean> {
+  try {
+    return Date.now() - (await stat(file)).mtimeMs > ms;
+  } catch {
+    return false;
   }
 }
 
