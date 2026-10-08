@@ -144,13 +144,32 @@ const MACHADO: Record<CvdKind, readonly (readonly [number, number, number])[]> =
   ],
 };
 
+function simulateLinear(color: string, kind: CvdKind): Rgb {
+  const lin = parseHex(color).map(srgbToLinear);
+  return MACHADO[kind].map((row) =>
+    Math.min(1, Math.max(0, row[0] * lin[0]! + row[1] * lin[1]! + row[2] * lin[2]!)),
+  ) as unknown as Rgb;
+}
+
+function oklabFromLinear([r, g, b]: Rgb): Oklab {
+  return toOklab([linearToSrgb(r), linearToSrgb(g), linearToSrgb(b)]);
+}
+
 /** Simulates how a colour is perceived with full protanopia, deuteranopia or tritanopia. */
 export function simulateCvd(color: string, kind: CvdKind): string {
-  const lin = parseHex(color).map(srgbToLinear);
-  const out = MACHADO[kind].map(
-    (row) => row[0] * lin[0]! + row[1] * lin[1]! + row[2] * lin[2]!,
-  ) as unknown as Rgb;
-  return toHex(out.map((c) => linearToSrgb(Math.min(1, Math.max(0, c)))) as unknown as Rgb);
+  return toHex(simulateLinear(color, kind).map(linearToSrgb) as unknown as Rgb);
+}
+
+/**
+ * OKLab ΔE × 100 between two colours as seen with a given deficiency (or normal vision when
+ * `kind` is omitted). Same model and scale as the data-viz validator: target ≥ 8, floor ≥ 6
+ * for adjacent series under protan/deutan, ≥ 15 under normal vision.
+ */
+export function cvdDeltaE(a: string, b: string, kind?: CvdKind): number {
+  if (!kind) return deltaEOk(a, b);
+  const la = oklabFromLinear(simulateLinear(a, kind));
+  const lb = oklabFromLinear(simulateLinear(b, kind));
+  return Math.hypot(la[0] - lb[0], la[1] - lb[1], la[2] - lb[2]) * 100;
 }
 
 /** Returns the candidate with the highest contrast against `background`. */
