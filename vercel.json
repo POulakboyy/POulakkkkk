@@ -5,6 +5,10 @@
   "outputDirectory": "apps/pouxis/dist",
   "framework": null,
   "ignoreCommand": "git log -1 --pretty=%s | grep -q '^WIP checkpoint'",
+  "github": {
+    "silent": true,
+    "autoJobCancelation": true
+  },
   "headers": [
     {
       "source": "/(.*)",
