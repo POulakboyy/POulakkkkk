@@ -15,7 +15,7 @@
 // Zero dependencies on purpose: it runs before `npm ci`.
 
 import { appendFileSync, existsSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -69,7 +69,8 @@ function fromAppPackage() {
 const resolved = fromTauriConf() ?? fromCargoToml() ?? fromAppPackage();
 if (!resolved) fail('Aucune version trouvée (tauri.conf.json, Cargo.toml ou package.json).');
 
-const { version, source } = resolved;
+const { version } = resolved;
+const source = relative(ROOT, resolved.source);
 const semver = SEMVER.exec(version);
 if (!semver) fail(`« ${version} » (${source}) n'est pas une version SemVer valide.`);
 if (semver[5] !== undefined) {

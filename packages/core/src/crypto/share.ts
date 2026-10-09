@@ -165,8 +165,10 @@ export async function createShareLink(options: CreateShareLinkOptions): Promise<
   }
 
   const secret = randomBytes(LINK_SECRET_BYTES);
+  let proof: Bytes | undefined;
   try {
     const keys = await deriveShareKeys(secret, claims, options.password);
+    proof = keys.proof;
     const token = await issueToken(options.signer, claims);
     const link: ShareLink = {
       url: `${baseUrl}/s/${token}#k=${toBase64Url(secret)}`,
@@ -174,13 +176,10 @@ export async function createShareLink(options: CreateShareLinkOptions): Promise<
       claims,
       contentKey: keys.contentKey,
     };
-    if (keys.proof) {
-      link.passwordRecord = { v: 1, hash: toBase64Url(await sha256(keys.proof)) };
-      zeroize(keys.proof);
-    }
+    if (proof) link.passwordRecord = { v: 1, hash: toBase64Url(await sha256(proof)) };
     return link;
   } finally {
-    zeroize(secret);
+    zeroize(secret, proof);
   }
 }
 

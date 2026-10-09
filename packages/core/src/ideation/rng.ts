@@ -49,9 +49,12 @@ export function pick<T>(rng: Rng, items: readonly T[]): T | undefined {
  * Index drawn with probability proportional to `weights[i]` (non-positive and non-finite
  * weights never win). Returns -1 when no weight is positive.
  */
-export function weightedIndex(rng: Rng, weights: readonly number[]): number {
+export function weightedIndex(rng: Rng, weights: ArrayLike<number>): number {
   let total = 0;
-  for (const w of weights) if (w > 0 && Number.isFinite(w)) total += w;
+  for (let i = 0; i < weights.length; i++) {
+    const w = weights[i] ?? 0;
+    if (w > 0 && Number.isFinite(w)) total += w;
+  }
   if (total <= 0) return -1;
   let target = rng() * total;
   let last = -1;

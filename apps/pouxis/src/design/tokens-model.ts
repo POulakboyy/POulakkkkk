@@ -232,9 +232,9 @@ export const DAYLIGHT_PAPER_TOKENS = [
 ] as const;
 
 /** Max share of the dark value mixed into light paper at the switch point (dusk). */
-export const DAYLIGHT_DIM = 0.08;
+export const DAYLIGHT_DIM = 0.05;
 /** Max share of the light value mixed into dark paper right after the switch. */
-export const DAYLIGHT_LIFT = 0.06;
+export const DAYLIGHT_LIFT = 0.05;
 
 /** Token values as the CSS would compute them for a given daylight level (0 night .. 1 day). */
 export function daylightTokens(

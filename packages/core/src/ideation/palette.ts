@@ -297,11 +297,11 @@ function kMeans(
   };
 
   // k-means++: first center ∝ weight, then ∝ weight × squared distance to the nearest center.
-  setCenter(0, Math.max(0, weightedIndex(rng, weights as unknown as number[])));
+  setCenter(0, Math.max(0, weightedIndex(rng, weights)));
   const d2 = new Float64Array(n);
   for (let i = 0; i < n; i++) d2[i] = dist2(points, i, centers, 0);
   let seeded = 1;
-  const score = new Array<number>(n);
+  const score = new Float64Array(n);
   while (seeded < k) {
     for (let i = 0; i < n; i++) score[i] = (weights[i] ?? 0) * (d2[i] ?? 0);
     const next = weightedIndex(rng, score);
