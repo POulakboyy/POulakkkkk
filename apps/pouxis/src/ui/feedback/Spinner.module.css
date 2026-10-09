@@ -1,0 +1,23 @@
+.spinner {
+  display: inline-block;
+  flex: none;
+  color: inherit;
+  animation: px-spin calc(var(--dur-slower) * 1.6) linear infinite;
+}
+
+.track {
+  opacity: 0.2;
+}
+
+@keyframes px-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reduced motion: a static ring segment, still legible as "busy". */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

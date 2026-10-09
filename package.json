@@ -1,0 +1,29 @@
+{
+  "name": "pouxis",
+  "private": true,
+  "version": "0.1.0",
+  "description": "POuxis — espace de travail open source, local-first : temps, tâches, idées et graphes, synchronisé sur iOS, Android, macOS et Windows.",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @pouxis/app",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@types/node": "26.6.4",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+# Tauri / Rust
+apps/pouxis/src-tauri/target/
+apps/pouxis/src-tauri/gen/schemas/
+# Playwright
+test-results/
+playwright-report/
+# Local data
+.pouxis/
