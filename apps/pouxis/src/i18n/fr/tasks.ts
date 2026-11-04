@@ -11,6 +11,8 @@ export const tasks = {
     hint: 'Astuce : « Appeler Léa demain 15h #perso » remplit la date et l’étiquette.',
     added: 'Tâche ajoutée',
     addedTo: 'Ajoutée à {list}',
+    label: 'Nouvelle tâche',
+    invalid: 'Écrivez au moins un mot pour créer la tâche.',
   },
 
   views: {
@@ -18,6 +20,7 @@ export const tasks = {
     list: 'Liste',
     kanban: 'Tableau',
     matrix: 'Matrice',
+    deps: 'Dépendances',
   },
 
   groups: {
@@ -73,6 +76,22 @@ export const tasks = {
     copyLink: 'Copier le lien de la tâche',
     delete: 'Supprimer la tâche',
     noNotes: 'Pas encore de notes',
+    open: 'Ouvrir « {title} »',
+    actions: 'Actions pour « {title} »',
+    complete: 'Terminer « {title} »',
+    reopen: 'Rouvrir « {title} »',
+    status: 'Statut',
+    notesHint: 'Markdown accepté : **gras**, _italique_, - listes, [lien](https://…).',
+    preview: 'Aperçu',
+    write: 'Écrire',
+    minutes: 'minutes',
+    noEnergy: 'Non précisée',
+    noDate: 'Aucune',
+    clearDate: 'Retirer la date',
+    removeTag: 'Retirer l’étiquette {tag}',
+    tagPlaceholder: 'Nouvelle étiquette, puis Entrée',
+    due: 'Échéance {when}',
+    plannedFor: 'Prévue {when}',
   },
 
   /** Inbox triage, one card at a time. Swipe / keys map to `actions`. */
@@ -113,12 +132,14 @@ export const tasks = {
       project: 'Projet',
       priority: 'Priorité',
       tag: 'Étiquette',
+      mode: 'Type de travail',
     },
     addCard: 'Ajouter une carte',
     dropHere: 'Déposer ici',
     columnEmpty: 'Aucune carte',
     wip: '{count} sur {limit}',
     wipA11y: '{count} tâches en cours, pour une limite de {limit}',
+    noTag: 'Sans étiquette',
   },
 
   /** Eisenhower matrix. Placement is computed from deadline, priority and tags. */
@@ -162,6 +183,17 @@ export const tasks = {
     remove: 'Retirer la dépendance',
     cycle: 'Impossible : « {title} » attend déjà cette tâche, cela créerait une boucle.',
     a11y: 'En attente d’une autre tâche',
+    hint: 'Une tâche n’apparaît dans Aujourd’hui qu’une fois ses tâches préalables terminées.',
+    blocked: 'Bloquée',
+    ready: 'Prête',
+    pick: 'Tâche préalable',
+    pickPlaceholder: 'Choisir une tâche…',
+    none: 'Aucune tâche préalable',
+    added: 'Dépendance ajoutée',
+    removed: 'Dépendance retirée',
+    removeA11y: 'Retirer « {title} » des tâches préalables',
+    emptyTitle: 'Aucun lien entre vos tâches',
+    emptyBody: 'Ouvrez une tâche et ajoutez une tâche préalable : elle attendra que l’autre soit terminée.',
   },
 
   /** Task decay (postponed ≥ threshold). Informational, never a reproach. */
@@ -188,6 +220,7 @@ export const tasks = {
     changeLimit: 'Modifier la limite',
     counter: '{count} sur {limit} priorités',
     counterA11y: '{count} priorités sur {limit} aujourd’hui',
+    swapped: '« {title} » passe en priorité moyenne',
   },
 
   subtasks: {
@@ -205,6 +238,10 @@ export const tasks = {
     regenerate: 'Proposer autre chose',
     splitFailed: 'Le découpage n’a pas abouti. Vous pouvez ajouter les étapes à la main.',
     empty: 'Pas de sous-tâche. Découpez-la si elle vous paraît grosse.',
+    decompose: 'Décomposer',
+    itemA11y: 'Sous-tâche « {title} »',
+    remove: 'Retirer la sous-tâche « {title} »',
+    added: '{count, plural, one {# sous-tâche ajoutée} other {# sous-tâches ajoutées}}',
   },
 
   pomodoro: {
@@ -217,6 +254,10 @@ export const tasks = {
     estimateVsActual: 'Estimé {estimate} · réel {actual}',
     sessions: '{count, plural, one {# session} other {# sessions}}',
     noLogs: 'Aucun temps enregistré pour l’instant',
+    history: 'Sessions pomodoro',
+    planned: 'Pour l’estimation : {count, plural, one {# session} other {# sessions}} de focus',
+    logSession: 'Noter une session de {duration}',
+    sessionA11y: 'Session de {duration}, {when}',
   },
 
   /** Programmable fields; formula errors explain where and how to fix. */
@@ -235,6 +276,11 @@ export const tasks = {
     formula: 'Formule',
     placeholder: 'Ex. estimation * taux_horaire',
     help: 'Utilisez les noms des champs, des nombres et + - * / ( ).',
+    value: 'Valeur',
+    remove: 'Retirer le champ {name}',
+    invalidName: 'Lettres, chiffres et _ uniquement, sans espace.',
+    duplicateName: 'Un champ porte déjà ce nom.',
+    empty: 'Aucun champ pour l’instant. Ajoutez par exemple un taux horaire, puis une formule de coût.',
     preview: 'Résultat : {value}',
     errors: {
       syntax: 'La formule ne se lit pas, près de « {near} ».',
@@ -242,6 +288,11 @@ export const tasks = {
       divideByZero: 'Division par zéro : « {name} » vaut 0.',
       cycle: 'Ce champ se calcule à partir de lui-même.',
       notANumber: '« {name} » n’est pas un nombre.',
+      missingValue: '« {name} » n’a pas encore de valeur.',
+      divisionByZero: 'Division par zéro, près de « {near} ».',
+      type: 'Types incompatibles près de « {near} ».',
+      unknownFunction: 'Aucune fonction ne s’appelle « {name} ».',
+      tooComplex: 'Formule trop longue ou trop imbriquée : répartissez-la sur plusieurs champs.',
     },
   },
 
@@ -259,6 +310,7 @@ export const tasks = {
     },
     next: 'Prochaines : {dates}',
     invalid: 'Règle non reconnue. Essayez « chaque lundi » ou « le 1er de chaque mois ».',
+    understood: 'Compris : {rule}',
   },
 
   geo: {
@@ -268,6 +320,7 @@ export const tasks = {
     add: 'Ajouter un lieu',
     remove: 'Retirer le lieu',
     needsPermission: 'Pour vous le rappeler sur place, POuxis a besoin de votre position.',
+    soon: 'Les rappels de lieu arriveront avec les applications mobiles.',
   },
 
   delegate: {
@@ -319,6 +372,33 @@ export const tasks = {
     schedule: 'Planifier',
     move: 'Déplacer',
     delete: 'Supprimer',
+  },
+
+  search: {
+    label: 'Rechercher une tâche',
+    placeholder: 'Rechercher…',
+  },
+
+  filters: {
+    label: 'Filtres',
+    today: 'Aujourd’hui',
+    priority: 'Prioritaires',
+    create: 'Création',
+    organize: 'Organisation',
+    blocked: 'Bloquées',
+    quick: 'Moins de 15 min',
+    tag: '#{tag}',
+    clear: 'Effacer les filtres',
+  },
+
+  dnd: {
+    handle: 'Déplacer « {title} »',
+    instructions: 'Espace pour saisir, flèches pour choisir la destination, Espace pour déposer, Échap pour annuler.',
+    grabbed: '« {title} » saisie, dans {zone}. Choisissez la destination avec les flèches.',
+    over: '{zone}',
+    dropped: '« {title} » déposée dans {zone}',
+    cancelled: 'Déplacement annulé',
+    deadlineTooClose: 'Son échéance est trop proche : la tâche reste urgente.',
   },
 
   /** Toasts — always paired with `common.undo` when the action is reversible. */

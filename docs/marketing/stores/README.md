@@ -89,14 +89,15 @@ est reprise, jamais le texte.
 
 ## Diagnostic marketing (critique)
 
-- ✅ **Forces réelles** : confidentialité locale et chiffrement de bout en bout vérifiables dans
-  le code ; planification automatique concrète et démontrable en une capture ; code ouvert.
+- ✅ **Forces réelles** : confidentialité locale ; chiffrement de bout en bout prévu (primitives
+  dans `core/crypto`, branchement à faire) ; planification automatique concrète et démontrable en une
+  capture ; code ouvert.
 - ⚠️ **Risques critiques** : périmètre très large (le brief compte 100 fonctions) — une fiche qui
   les énumère toutes ne convainc personne ; marque sans notoriété ni preuve sociale ; modèle
   économique non défini, ce qui empêche toute mention tarifaire et l'emploi de « gratuit ».
-- ❌ **Failles à corriger avant soumission** : aucune politique de confidentialité, aucune URL
-  d'assistance, aucune licence dans le dépôt (l'argument « open source » est donc invérifiable
-  aujourd'hui), vues de l'app encore en construction.
+- ❌ **Failles à corriger avant soumission** : politique de confidentialité non publiée (brouillon
+  dans `docs/legal/`), aucune URL d'assistance, dépôt public à ouvrir (licence AGPL-3.0-or-later
+  présente), vues de l'app encore en construction.
 - 🔄 **Recommandations** : (1) n'annoncer que les fonctions cochées dans `claims-register.md` ;
   (2) tester en priorité, via les pages produit personnalisées ou tests A/B des stores, deux
   angles d'ouverture : « journée planifiée » contre « idées privées » ; (3) revoir mots-clés et

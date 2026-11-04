@@ -12,6 +12,7 @@ import { onboarding } from './onboarding.ts';
 import { errors } from './errors.ts';
 import { empty } from './empty.ts';
 import { a11y } from './a11y.ts';
+import { lab } from './lab.ts';
 
 export const fr = {
   common,
@@ -28,4 +29,5 @@ export const fr = {
   errors,
   empty,
   a11y,
+  lab,
 };

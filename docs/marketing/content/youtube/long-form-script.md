@@ -1,7 +1,7 @@
 # Vidéo longue — « Je construis l'app de productivité que j'ai toujours voulue (open source) »
 
-> Chaîne : K13 Studios. Durée visée : 10 à 12 min (environ 1 600 mots parlés à un débit posé,
-> pauses comprises). Voix : le fondateur, tutoiement, monologue en spirale. Garde-fous : voir
+> Chaîne : K13 Studios. Durée visée : 10 à 12 min (environ 1 500 mots parlés à un débit posé, pauses,
+> silences et plans de démonstration compris). Voix : le fondateur, tutoiement, monologue en spirale. Garde-fous : voir
 > [`../README.md`](../README.md#garde-fous-avant-publication). Passages ◆ = anecdote à remplacer
 > par un souvenir vrai ou à supprimer.
 
@@ -25,12 +25,13 @@
 ```
 00:00 Le jour où mon agenda a gagné
 00:45 Sept applis pour une seule journée
-02:15 Spirale 1 — Le temps entre les choses
-04:30 Spirale 2 — La série qui casse
-06:30 Spirale 3 — Ce qui t'appartient
-08:45 Ce que j'ai déjà construit (et ce qui manque)
-10:30 Pourquoi je le fais en public
-11:15 La porte reste ouverte
+02:15 Une phrase, une journée
+03:30 Spirale 1 — Le temps entre les choses
+05:30 Spirale 2 — La série qui casse
+07:30 Spirale 3 — Ce qui t'appartient
+09:30 Ce que j'ai déjà construit (et ce qui manque)
+10:45 Pourquoi je le fais en public
+11:30 La porte reste ouverte
 ```
 
 ---
@@ -84,7 +85,36 @@ concentrer, faire le bilan.
 Ça s'appelle POuxis. <!-- prononciation à trancher, BRAND.md §9 --> C'est open source, ça
 marche sans connexion, et tes données restent chez toi.
 
-## [SPIRALE 1 — Le temps entre les choses] — 02:15
+## [DÉMO — Une phrase, une journée] — 02:15
+
+[ÉCRAN plein cadre : capture réelle, vitesse 1×, aucune accélération. Réf. C4, C5.]
+
+Je te montre plutôt que de t'expliquer.
+[pause]
+J'écris : « Réunion projet mardi 14 h-16 h ».
+[Les fragments reconnus se surlignent : « mardi », « 14 h-16 h ».]
+Huit mots. L'app a compris le jour, l'heure de début, l'heure de fin. L'événement est là, dans la
+semaine.
+
+Maintenant j'ajoute trois tâches. Une de deux heures, une d'une heure, une de vingt minutes. Je ne
+leur donne pas d'heure. Je leur donne juste une durée.
+[Les tâches se placent dans les créneaux libres, autour de la réunion.]
+Elles trouvent leur place toutes seules, dans les trous de la journée. Et la réunion, elle, ne
+bouge pas. Ce qui est fixe reste fixe.
+[Toucher une tâche : une ligne explique pourquoi elle est là.]
+Et si je me demande pourquoi celle-ci est à 10 h, l'app me le dit. En une phrase. Je ne veux pas
+d'une boîte noire qui décide de ma journée à ma place.
+[pause]
+Et si le plan ne me plaît pas ? J'annule. Tout revient exactement comme avant.
+
+◆ La première fois que ça a marché sur mon écran, j'ai pas crié, j'ai pas sauté. J'ai juste
+regardé ma journée. Et pour une fois, elle avait l'air… respirable.
+[silence]
+
+Mais une journée bien rangée, ça ne suffit pas. Ce qui m'intéresse, c'est ce qui se passe dans
+les interstices.
+
+## [SPIRALE 1 — Le temps entre les choses] — 03:30
 
 **Anecdote.**
 ◆ Tu connais ce moment. Une réunion finit à 14 h. La suivante commence à 14 h. Tu fermes une
@@ -118,7 +148,7 @@ Le temps entre les choses, c'est pas du temps perdu.
 C'est la porte qu'on referme doucement pour ne pas la claquer.
 [silence]
 
-## [SPIRALE 2 — La série qui casse] — 04:30
+## [SPIRALE 2 — La série qui casse] — 05:30
 
 **Anecdote.**
 ◆ J'ai eu une série de quatre-vingts jours dans une appli de langue. Le quatre-vingt-unième, j'étais
@@ -152,7 +182,7 @@ Une habitude, c'est pas une chaîne.
 C'est un sentier. Il ne disparaît pas parce que t'as pas marché dessus un mardi.
 [silence]
 
-## [SPIRALE 3 — Ce qui t'appartient] — 06:30
+## [SPIRALE 3 — Ce qui t'appartient] — 07:30
 
 **Anecdote.**
 ◆ Un jour, une appli que j'utilisais tous les jours a changé ses conditions. Rien de dramatique.
@@ -182,7 +212,7 @@ On dit souvent que si c'est gratuit, c'est toi le produit.
 Ici, je voudrais que ce soit plus simple que ça. C'est gratuit, c'est ouvert… et c'est à toi.
 [silence]
 
-## [CE QUI EST FAIT, CE QUI MANQUE] — 08:45
+## [CE QUI EST FAIT, CE QUI MANQUE] — 09:30
 
 [Ton plus direct, presque technique. Plan d'écran + insert visage.]
 
@@ -200,7 +230,7 @@ préfère une boucle complète que cent fonctions à moitié finies.
 
 <!-- Ne lister à l'écran que les éléments vérifiés le jour du tournage. -->
 
-## [POURQUOI EN PUBLIC] — 10:30
+## [POURQUOI EN PUBLIC] — 10:45
 
 Pourquoi je te montre tout ça avant que ce soit fini ?
 [pause]
@@ -215,7 +245,7 @@ Et le Discord, si tu veux me dire où je me trompe. C'est là que j'apprends le 
 [Liens : `{{GITHUB_URL}}`, `{{WAITLIST_URL}}`, `{{DISCORD_URL}}`, en commentaire épinglé et en
 description.]
 
-## [SORTIE OUVERTE] — 11:15
+## [SORTIE OUVERTE] — 11:30
 
 [Retour au plan serré du début. Même lumière.]
 

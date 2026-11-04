@@ -30,8 +30,7 @@ question ouverte qui prépare le suivant.
 - **Contenu** : `@pouxis/core` en TypeScript pur, sans API DOM ni Node, testé avec Vitest. Les
   dates avec fuseau IANA explicite (`src/time.ts`) et pourquoi « l'heure locale de la machine »
   est un piège (passage à l'heure d'été, voyage, serveur).
-- **À l'écran** : `package.json` sans dépendances, un test de changement d'heure qui passe, l'ADR
-  0005.
+- **À l'écran** : `package.json` sans dépendances, un test de changement d'heure qui passe, l'ADR 0005.
 - **Sortie ouverte** : « Chaque dépendance est une promesse que quelqu'un d'autre doit tenir. »
 
 ### Épisode 3 — « Une phrase, une journée » (C4, C5)
@@ -107,4 +106,4 @@ question ouverte qui prépare le suivant.
 - **Invitation finale** : une seule, sincère, après avoir donné : GitHub, liste d'attente ou
   Discord, selon l'épisode — jamais les trois à chaque fois.
 - **Sources** : chaque étude citée apparaît en description avec son DOI, recopié de
-  [`SCIENTIFIC_BASIS.md`](../../research/SCIENTIFIC_BASIS.md#10-références).
+  [`SCIENTIFIC_BASIS.md`](../../../research/SCIENTIFIC_BASIS.md#10-références).

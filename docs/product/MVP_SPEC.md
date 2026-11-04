@@ -74,7 +74,8 @@ remplir de formulaire.
 - **AC-1.4** — Étant donné la langue de l'interface (fr ou en), quand je saisis des expressions
   dans l'autre langue prise en charge, alors elles sont aussi reconnues.
 - **AC-1.5** — Étant donné une heure inexistante (passage à l'heure d'été), quand elle est saisie,
-  alors l'heure est résolue selon la règle documentée du moteur et l'aperçu l'affiche.
+  alors l'heure est décalée vers l'avant (règle de `packages/core/src/time.ts` : une heure sautée
+  par le changement d'heure est résolue vers l'avant) et l'aperçu affiche l'heure effective.
 
 **US-2 — Capture universelle sur ordinateur (2.11).** En tant que développeur·se (`PP3`), je veux
 un raccourci global qui ouvre une ligne de capture par-dessus n'importe quel logiciel.
@@ -281,10 +282,13 @@ modifications faites hors-ligne sur deux appareils fusionnent sans perte.
   tâche, quand ils se reconnectent, alors les deux modifications sont présentes sur les deux
   appareils.
 - **AC-19.2** — Étant donné deux modifications concurrentes du même champ, quand ils se
-  reconnectent, alors les deux appareils convergent vers la même valeur selon la règle documentée
-  du moteur, sans intervention.
+  reconnectent, alors les deux appareils convergent vers la même valeur, sans intervention : la valeur
+  au plus grand HLC l'emporte ([`ARCHITECTURE.md` § 7](../architecture/ARCHITECTURE.md#7-sémantique-des-conflits),
+  [ADR 0002](../adr/0002-crdt-hlc-lww-par-champ-et-blocs.md)).
 - **AC-19.3** — Étant donné une suppression sur un appareil et une modification sur l'autre, quand
-  ils se reconnectent, alors le résultat suit la règle documentée et est identique sur les deux.
+  ils se reconnectent, alors la suppression l'emporte (pas de « résurrection »,
+  [`ARCHITECTURE.md` § 7](../architecture/ARCHITECTURE.md#7-sémantique-des-conflits)) et le
+  résultat est identique sur les deux.
 - **AC-19.4** — Étant donné le relais de synchronisation, quand il reçoit des données, alors il ne
   reçoit que des charges chiffrées ; aucun titre, contenu ni date en clair ne transite.
 - **AC-19.5** — Étant donné une connexion instable, quand la synchronisation reprend, alors seules

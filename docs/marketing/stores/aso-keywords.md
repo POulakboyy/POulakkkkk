@@ -105,3 +105,7 @@ octet) ; les lettres accentuées coûtent deux octets, d'où le choix de formes 
   Métadonnées.
 - Promettre une fonction absente du build pour capter une requête : rejet en revue et avis
   négatifs.
+- Utiliser une marque déposée de tiers dans les métadonnées (règle 2.3.7 des App Review
+  Guidelines). « Pomodoro » est revendiqué comme marque par son auteur (Francesco Cirillo) : faire
+  vérifier le statut d'enregistrement avant soumission ; à défaut, remplacer le mot-clé par
+  « minuteur »/« timer » et écrire « minuteur de concentration » dans les descriptions.

@@ -2,49 +2,72 @@ import type { insights as fr } from '../fr/insights.ts';
 
 export const insights: typeof fr = {
   title: 'Insights',
+  subtitle: 'Your patterns, calculated from what you do — no judgment.',
+  privacy: 'Calculated on this device. Nothing leaves it.',
+  showTable: 'Show as table',
 
-  period: {
-    label: 'Period',
-    week: 'This week',
-    month: 'This month',
-    quarter: 'This quarter',
-    custom: 'Custom',
+  week: {
+    label: 'Week shown',
+    previous: 'Previous week',
+    next: 'Next week',
+    current: 'This week',
   },
 
   energy: {
     title: 'Your energy hours',
-    hint: 'Based on tasks completed over the past few weeks.',
-    peak: 'You usually get the most done {range}',
+    hint: 'Based on your focus sessions and completed tasks over the past 4 weeks.',
+    peak: 'You usually get the most done on {day} around {hour}',
     legendLow: 'Less',
     legendHigh: 'More',
-    cellA11y:
-      '{day} at {hour}: {count, plural, =0 {no tasks done} one {# task done} other {# tasks done}}',
-    useForPlanning: 'Schedule creative work in these hours',
-    notEnough: 'A few more days of use and the map will take shape.',
+    legendConfidence: 'Full square: reliable estimate. Small square: not much data yet.',
+    a11ySummary:
+      'Energy heatmap, 7 days by 24 hours. {peak}. Use the arrow keys to move between slots.',
+    cell: '{day} {hour} · energy {value} · {confidence}',
+    confident: 'reliable estimate',
+    tentative: 'not much data yet',
+    readoutHint: 'Hover or move through the map to read a slot.',
+    hourColumn: 'Hour',
+    notEnough: 'A few more days of use and the map will sharpen.',
+    priorNote:
+      'Until your data comes in, the map starts from an average daily profile and adjusts with every session.',
   },
 
   balance: {
     title: 'Creating and organizing',
     hint: 'Time spent making things, compared with time spent keeping things running.',
-    create: 'Creating · {percent}',
-    organize: 'Organizing · {percent}',
-    a11y: '{create} creating, {organize} organizing',
-    goal: 'Your target balance: {percent} creating',
-    setGoal: 'Set a target balance',
-    noData: 'Not enough time logged yet.',
+    create: 'Creating',
+    organize: 'Organizing',
+    meetings: 'Meetings',
+    share: '{label} · {percent}',
+    a11y: '{create} creating, {organize} organizing, {meetings} in meetings',
+    total: '{duration} tracked this week',
+    dayColumn: 'Day',
+    totalColumn: 'Total',
+    noData: 'No time tracked this week yet. Start a focus session to begin.',
   },
 
   streak: {
     title: 'Creative streak',
     days: '{count, plural, =0 {No streak right now} one {# day} other {# days}}',
     best: 'Longest streak: {count, plural, one {# day} other {# days}}',
-    jokers: '{count, plural, =0 {No jokers} one {# joker available} other {# jokers available}}',
+    jokers: '{count, plural, =0 {No jokers saved} one {# joker saved} other {# jokers saved}}',
     jokerHint:
-      'A joker covers a rest day without breaking the streak. You earn one every {days} days.',
-    jokerUsed: 'Joker used {when}: rest is part of the work.',
+      'A joker covers a rest day without breaking the streak. You get {count, plural, one {one} other {#}} every week.',
+    status: {
+      active: 'Streak running',
+      protected: 'Yesterday was a rest day, covered by a joker.',
+      paused: 'Streak paused: it picks up again on your next creative day.',
+      none: 'One creative day is all it takes to start a streak.',
+    },
     restarted: 'New streak. What you did still counts.',
-    paused: 'Streak paused',
-    hide: 'Hide streaks',
+    calendar: 'The last {count} days',
+    dayActive: '{date}: creative day',
+    dayJoker: '{date}: rest covered by a joker',
+    dayRest: '{date}: rest',
+    dayToday: '{date}: today',
+    legendActive: 'Creating',
+    legendJoker: 'Joker',
+    legendRest: 'Rest',
   },
 
   weekly: {
@@ -53,32 +76,78 @@ export const insights: typeof fr = {
     ready: 'Your weekly review is ready',
     wins: 'Wins this week',
     winsEmpty: 'Nothing checked off? A week of thinking or rest counts too.',
+    biggestWin: 'The standout',
     blockers: 'Recurring blockers',
     blockersEmpty: 'No recurring blockers.',
-    focusTime: '{duration} of focus',
-    completed: '{count, plural, =0 {No tasks done} one {# task done} other {# tasks done}}',
-    planned: 'Planned {planned} · actual {actual}',
-    reflect: 'One thing to carry into next week?',
-    reflectPlaceholder: 'Optional',
-    close: 'Close the week',
-  },
-
-  deadEnds: {
-    title: 'Dormant threads',
-    count:
-      '{count, plural, =0 {No dormant threads} one {# dormant thread} other {# dormant threads}}',
-    open: 'Go through them',
+    blockerCount: '{count, plural, one {# mention} other {# mentions}}, {week} this week',
+    focusTime: 'Focus',
+    completed: 'Done',
+    creationShare: 'Creating',
+    planning: 'Planning accuracy',
+    planningEstimates: 'Durations: median at {ratio} of the estimate, {within} of tasks within ±25%',
+    planningScheduled: 'Slots: {done} of {planned} planned tasks done',
+    planningEmpty: 'Not enough estimates yet to measure planning accuracy.',
+    slipped: '{count, plural, one {# task to reschedule} other {# tasks to reschedule}}',
+    suggestions: 'Ideas for next week',
+    suggestion: {
+      padEstimates:
+        'Your tasks usually take {factor} of the planned time: try widening your estimates by as much.',
+      trimEstimates: 'You often finish sooner than planned: estimates at {factor} would do.',
+      lightenPlan: '{rate} of planned slots got done: a slightly lighter plan would leave room.',
+      addressBlocker: '“{terms}” came up {count} times: a dedicated moment could clear it.',
+      protectCreation:
+        'Creating was {share} of tracked time: blocking out maker time could help.',
+      rescheduleSlipped:
+        '{count, plural, one {One task is waiting} other {# tasks are waiting}} for a new slot.',
+    },
+    share: 'Share as image',
+    shareTitle: 'My weekly review',
+    shared: 'Image ready',
+    sharedBody: 'Your weekly review was saved as an image.',
+    shareFailed: 'The image couldn’t be created. Try again in a moment.',
+    imageFooter: 'POuxis · calculated on device',
   },
 
   skills: {
     title: 'Skill tree',
-    hint: 'Branches grow with the projects you finish.',
-    branch: '{name} · {count, plural, one {# project} other {# projects}}',
-    rename: 'Rename branch',
-    empty: 'Finish a first project to watch the first branch grow.',
+    hint: 'Each branch grows with the tasks you finish, based on their tags.',
+    node: '{name} · level {level} · {count, plural, one {# task} other {# tasks}}',
+    a11y: 'Skill tree: {count, plural, one {# branch} other {# branches}}. {top}',
+    top: 'Main branch: {name}.',
+    empty: 'Finish a tagged task (for example “design/type”) to watch the first branch grow.',
+    skillColumn: 'Skill',
+    levelColumn: 'Level',
+    tasksColumn: 'Tasks',
   },
 
-  privacy: 'Calculated on this device. Nothing leaves it.',
+  deadEnds: {
+    title: 'Dormant threads',
+    hint: 'Ideas and tasks left as they were since you created them.',
+    count:
+      '{count, plural, =0 {No dormant threads} one {# dormant thread} other {# dormant threads}}',
+    idle: 'Untouched for {count, plural, one {# day} other {# days}}',
+    keep: 'Keep',
+    kept: 'Thread kept',
+    empty: 'No dormant threads: every idea has been picked up at least once.',
+  },
+
+  archive: {
+    title: 'Archive?',
+    hint: 'No activity for over two years. Nothing is archived without your say-so.',
+    idle: 'No activity for {count, plural, one {# day} other {# days}}',
+    archive: 'Archive',
+    archived: 'Task archived',
+    keep: 'Keep',
+    kept: 'Kept as is',
+    empty: 'Nothing to archive right now.',
+  },
+
+  kind: {
+    task: 'Task',
+    note: 'Note',
+  },
+
+  untitled: 'Untitled',
 
   empty: {
     title: 'Insights build up over time',

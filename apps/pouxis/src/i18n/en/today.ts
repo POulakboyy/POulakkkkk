@@ -16,6 +16,31 @@ export const today: typeof fr = {
     focus: '{duration} of focus',
   },
 
+  plan: {
+    action: 'Plan my day',
+    hint: 'Places your tasks in free slots, matched to your usual energy. Fixed appointments stay put.',
+    done: 'Day planned',
+    placed: '{count, plural, one {# task placed} other {# tasks placed}}',
+    nothing: 'Everything is already in place.',
+    unplaced:
+      '{count, plural, one {# task found no slot today} other {# tasks found no slot today}}',
+  },
+
+  progress: {
+    label: 'of the day',
+    a11y: '{percent} of the working day elapsed',
+    dayA11y: '{percent} of the day elapsed',
+  },
+
+  energy: {
+    label: 'Estimated energy',
+    hint: 'Based on your past focus sessions; a typical curve until there’s history.',
+    hour: '{time} · {level} energy',
+    low: 'low',
+    medium: 'medium',
+    high: 'high',
+  },
+
   timeline: {
     label: 'Day timeline',
     now: 'Now',
@@ -78,6 +103,13 @@ export const today: typeof fr = {
     remaining: '{time} left',
     remainingA11y: '{duration} left',
     session: 'Session {current} of {total}',
+    mode: 'Single focus',
+    sound: 'Ambient sound',
+    soundOff: 'None',
+    dnd: 'Do Not Disturb',
+    nextBreak: 'Up next: {duration} break',
+    nextFocus: 'Up next: {duration} of focus',
+    ready: 'Ready for the next session',
     pickTask: 'Pick a task to begin',
     dndOn: 'Do Not Disturb is on',
     dndOff: 'Do Not Disturb is off',
@@ -117,6 +149,7 @@ export const today: typeof fr = {
     overflowHint: 'They move to tomorrow’s floating tasks, unless you choose otherwise.',
     toTomorrow: 'Plan them for tomorrow',
     choose: 'Choose for each',
+    preview: 'Dotted outlines show the new times for what follows.',
   },
 
   buffers: {
@@ -135,6 +168,8 @@ export const today: typeof fr = {
     suggest: 'Suggest another time',
     suggestion: '{time} would work without splitting the block',
     keep: 'Keep this time',
+    move: 'Move to {time}',
+    noSuggestion: 'No other free time keeps the block intact today or tomorrow.',
     protected: 'Protected maker block',
     protectedA11y: 'Protected maker block from {start} to {end}',
   },

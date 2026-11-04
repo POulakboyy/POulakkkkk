@@ -9,6 +9,8 @@ export const tasks: typeof fr = {
     hint: 'Tip: “Call Lea tomorrow 3pm #personal” fills in the date and tag.',
     added: 'Task added',
     addedTo: 'Added to {list}',
+    label: 'New task',
+    invalid: 'Type at least one word to create the task.',
   },
 
   views: {
@@ -16,6 +18,7 @@ export const tasks: typeof fr = {
     list: 'List',
     kanban: 'Board',
     matrix: 'Matrix',
+    deps: 'Dependencies',
   },
 
   groups: {
@@ -70,6 +73,22 @@ export const tasks: typeof fr = {
     copyLink: 'Copy task link',
     delete: 'Delete task',
     noNotes: 'No notes yet',
+    open: 'Open “{title}”',
+    actions: 'Actions for “{title}”',
+    complete: 'Complete “{title}”',
+    reopen: 'Reopen “{title}”',
+    status: 'Status',
+    notesHint: 'Markdown works: **bold**, _italic_, - lists, [link](https://…).',
+    preview: 'Preview',
+    write: 'Write',
+    minutes: 'minutes',
+    noEnergy: 'Not set',
+    noDate: 'None',
+    clearDate: 'Remove date',
+    removeTag: 'Remove tag {tag}',
+    tagPlaceholder: 'New tag, then Enter',
+    due: 'Due {when}',
+    plannedFor: 'Planned {when}',
   },
 
   inbox: {
@@ -109,12 +128,14 @@ export const tasks: typeof fr = {
       project: 'Project',
       priority: 'Priority',
       tag: 'Tag',
+      mode: 'Kind of work',
     },
     addCard: 'Add card',
     dropHere: 'Drop here',
     columnEmpty: 'No cards',
     wip: '{count} of {limit}',
     wipA11y: '{count} tasks in progress, limit {limit}',
+    noTag: 'No tag',
   },
 
   matrix: {
@@ -157,6 +178,17 @@ export const tasks: typeof fr = {
     remove: 'Remove dependency',
     cycle: 'Can’t do that: “{title}” already waits on this task, which would create a loop.',
     a11y: 'Waiting on another task',
+    hint: 'A task only shows up in Today once its prerequisites are done.',
+    blocked: 'Blocked',
+    ready: 'Ready',
+    pick: 'Prerequisite',
+    pickPlaceholder: 'Pick a task…',
+    none: 'No prerequisites',
+    added: 'Dependency added',
+    removed: 'Dependency removed',
+    removeA11y: 'Remove “{title}” from prerequisites',
+    emptyTitle: 'No links between your tasks yet',
+    emptyBody: 'Open a task and add a prerequisite: it will wait until the other one is done.',
   },
 
   decay: {
@@ -181,6 +213,7 @@ export const tasks: typeof fr = {
     changeLimit: 'Change the limit',
     counter: '{count} of {limit} priorities',
     counterA11y: '{count} of {limit} priorities today',
+    swapped: '“{title}” moved to medium priority',
   },
 
   subtasks: {
@@ -198,6 +231,10 @@ export const tasks: typeof fr = {
     regenerate: 'Suggest something else',
     splitFailed: 'Couldn’t break it down. You can add steps by hand.',
     empty: 'No subtasks. Break it down if it feels big.',
+    decompose: 'Break down',
+    itemA11y: 'Subtask “{title}”',
+    remove: 'Remove subtask “{title}”',
+    added: '{count, plural, one {# subtask added} other {# subtasks added}}',
   },
 
   pomodoro: {
@@ -210,6 +247,10 @@ export const tasks: typeof fr = {
     estimateVsActual: 'Estimated {estimate} · actual {actual}',
     sessions: '{count, plural, one {# session} other {# sessions}}',
     noLogs: 'No time logged yet',
+    history: 'Pomodoro sessions',
+    planned: 'For the estimate: {count, plural, one {# focus session} other {# focus sessions}}',
+    logSession: 'Log a {duration} session',
+    sessionA11y: '{duration} session, {when}',
   },
 
   formulas: {
@@ -227,6 +268,11 @@ export const tasks: typeof fr = {
     formula: 'Formula',
     placeholder: 'E.g. estimate * hourly_rate',
     help: 'Use field names, numbers and + - * / ( ).',
+    value: 'Value',
+    remove: 'Remove field {name}',
+    invalidName: 'Letters, digits and _ only, no spaces.',
+    duplicateName: 'A field already has this name.',
+    empty: 'No fields yet. Add an hourly rate, for example, then a cost formula.',
     preview: 'Result: {value}',
     errors: {
       syntax: 'The formula can’t be read, near “{near}”.',
@@ -234,6 +280,11 @@ export const tasks: typeof fr = {
       divideByZero: 'Division by zero: “{name}” is 0.',
       cycle: 'This field is calculated from itself.',
       notANumber: '“{name}” isn’t a number.',
+      missingValue: '“{name}” has no value yet.',
+      divisionByZero: 'Division by zero, near “{near}”.',
+      type: 'Mismatched types near “{near}”.',
+      unknownFunction: 'No function is called “{name}”.',
+      tooComplex: 'Formula too long or too nested: spread it over several fields.',
     },
   },
 
@@ -251,6 +302,7 @@ export const tasks: typeof fr = {
     },
     next: 'Next: {dates}',
     invalid: 'Rule not recognized. Try “every Monday” or “the 1st of every month”.',
+    understood: 'Understood: {rule}',
   },
 
   geo: {
@@ -260,6 +312,7 @@ export const tasks: typeof fr = {
     add: 'Add location',
     remove: 'Remove location',
     needsPermission: 'To remind you on the spot, POuxis needs your location.',
+    soon: 'Location reminders will come with the mobile apps.',
   },
 
   delegate: {
@@ -310,6 +363,33 @@ export const tasks: typeof fr = {
     schedule: 'Schedule',
     move: 'Move',
     delete: 'Delete',
+  },
+
+  search: {
+    label: 'Search tasks',
+    placeholder: 'Search…',
+  },
+
+  filters: {
+    label: 'Filters',
+    today: 'Today',
+    priority: 'Priorities',
+    create: 'Creative',
+    organize: 'Organizing',
+    blocked: 'Blocked',
+    quick: 'Under 15 min',
+    tag: '#{tag}',
+    clear: 'Clear filters',
+  },
+
+  dnd: {
+    handle: 'Move “{title}”',
+    instructions: 'Space to pick up, arrows to choose where, Space to drop, Esc to cancel.',
+    grabbed: '“{title}” picked up, in {zone}. Use the arrows to choose where.',
+    over: '{zone}',
+    dropped: '“{title}” dropped in {zone}',
+    cancelled: 'Move cancelled',
+    deadlineTooClose: 'Its deadline is too close: the task stays urgent.',
   },
 
   toast: {

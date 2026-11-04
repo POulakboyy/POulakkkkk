@@ -19,6 +19,34 @@ export const today = {
     focus: '{duration} de focus',
   },
 
+  /** « Planifier ma journée » (1.1): scheduler.route with the energy profile (1.3). */
+  plan: {
+    action: 'Planifier ma journée',
+    hint: 'Place vos tâches dans les créneaux libres, selon votre énergie habituelle. Les rendez-vous fixes ne bougent pas.',
+    done: 'Journée planifiée',
+    placed: '{count, plural, one {# tâche placée} other {# tâches placées}}',
+    nothing: 'Tout est déjà en place.',
+    unplaced:
+      '{count, plural, one {# tâche n’a pas trouvé de créneau aujourd’hui} other {# tâches n’ont pas trouvé de créneau aujourd’hui}}',
+  },
+
+  /** Time progress watermark (1.14). `{percent}` is preformatted. */
+  progress: {
+    label: 'de la journée',
+    a11y: '{percent} de la journée de travail écoulée',
+    dayA11y: '{percent} de la journée écoulée',
+  },
+
+  /** Hourly energy strip on the timeline (1.3), from insights.energyProfile. */
+  energy: {
+    label: 'Énergie estimée',
+    hint: 'D’après vos sessions de focus passées ; sans historique, une courbe type.',
+    hour: '{time} · énergie {level}',
+    low: 'basse',
+    medium: 'moyenne',
+    high: 'haute',
+  },
+
   timeline: {
     label: 'Frise de la journée',
     now: 'Maintenant',
@@ -84,6 +112,13 @@ export const today = {
     remaining: 'Reste {time}',
     remainingA11y: 'Il reste {duration}',
     session: 'Session {current} sur {total}',
+    mode: 'Focus unique',
+    sound: 'Son d’ambiance',
+    soundOff: 'Aucun',
+    dnd: 'Ne pas déranger',
+    nextBreak: 'Ensuite : pause de {duration}',
+    nextFocus: 'Ensuite : focus de {duration}',
+    ready: 'Prêt pour la session suivante',
     pickTask: 'Choisissez une tâche pour commencer',
     dndOn: 'Ne pas déranger est activé',
     dndOff: 'Ne pas déranger est désactivé',
@@ -126,6 +161,7 @@ export const today = {
       'Elles passent dans les tâches flottantes de demain, sauf si vous choisissez autre chose.',
     toTomorrow: 'Les prévoir demain',
     choose: 'Choisir pour chacune',
+    preview: 'En pointillés : le nouvel horaire de la suite.',
   },
 
   buffers: {
@@ -145,6 +181,8 @@ export const today = {
     suggest: 'Proposer un autre horaire',
     suggestion: '{time} conviendrait, sans couper la plage',
     keep: 'Garder cet horaire',
+    move: 'Déplacer à {time}',
+    noSuggestion: 'Aucun autre horaire libre ne préserve la plage aujourd’hui ou demain.',
     protected: 'Plage de création protégée',
     protectedA11y: 'Plage de création protégée de {start} à {end}',
   },

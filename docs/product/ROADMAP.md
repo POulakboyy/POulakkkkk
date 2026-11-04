@@ -177,8 +177,7 @@ données garantie, extensibilité (webhooks, extensions) et performance canvas �
 **Critères de sortie.** Format de données et protocole de synchronisation versionnés et gelés
 (migrations testées) ; revue de sécurité indépendante du chiffrement et du relais ; audit
 d'accessibilité complet ; documentation utilisateur FR/EN ; builds signés pour les cinq
-plateformes ; politique de confidentialité et conditions publiées (voir `docs/legal/` quand il
-existera) ; procédure de signalement de vulnérabilités opérationnelle.
+plateformes ; politique de confidentialité et conditions publiées (projet : [`PRIVACY_POLICY_DRAFT.md`](../legal/PRIVACY_POLICY_DRAFT.md)) ; procédure de signalement de vulnérabilités opérationnelle.
 
 **Métriques de succès.** Rétention d'usage à 8 semaines dans les cohortes longitudinales (phase 5
 du programme de recherche) ; taux de crash déclaré nul en bloquant sur les parcours de la boucle ;
@@ -391,7 +390,8 @@ tiers) en 2.0+.
 
 Ces signalements identifient **où une analyse juridique est nécessaire** ; ils ne constituent pas
 un avis juridique. Les références de textes sont à vérifier par une personne qualifiée avant toute
-décision, et seront détaillées dans `docs/legal/` lorsque ce dossier existera.
+décision, et sont détaillées dans [`COMPLIANCE.md`](../legal/COMPLIANCE.md) et
+[`DPIA_SCREENING.md`](../legal/DPIA_SCREENING.md).
 
 | ID                    | Signalement                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Position par défaut                                                                                                                                             |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -464,13 +464,17 @@ phase.
 
 - Recherche : [`USER_RESEARCH.md`](../research/USER_RESEARCH.md) (risques `R1`–`R7`, seuils de
   décision), [`PERSONAS.md`](../research/PERSONAS.md) (proto-personas, top 10 hypothétique).
-- Architecture : `docs/architecture/` (en cours de rédaction) ; contrats du domaine dans
+- Architecture : [`ARCHITECTURE.md`](../architecture/ARCHITECTURE.md) (matrice fonctionnalité →
+  module au § 11), décisions dans [`docs/adr/`](../adr/README.md) ; contrats du domaine dans
   `packages/core/src/model.ts`.
 - Sécurité : [`SECURITY_ARCHITECTURE.md`](../security/SECURITY_ARCHITECTURE.md),
   [`THREAT_MODEL.md`](../security/THREAT_MODEL.md).
 - Exploitation : [`RELEASE_CHECKLIST.md`](../operations/RELEASE_CHECKLIST.md),
   [`VERSIONING.md`](../operations/VERSIONING.md), [`CI_CD.md`](../operations/CI_CD.md).
-- Juridique : `docs/legal/` (en cours de rédaction).
+- Juridique : [`COMPLIANCE.md`](../legal/COMPLIANCE.md),
+  [`PRIVACY_BY_DESIGN.md`](../legal/PRIVACY_BY_DESIGN.md),
+  [`DPIA_SCREENING.md`](../legal/DPIA_SCREENING.md), [`LICENSING.md`](../legal/LICENSING.md).
+- Design : [`DESIGN_SYSTEM.md`](../design/DESIGN_SYSTEM.md), [`MOTION.md`](../design/MOTION.md).
 - Produit : [`MVP_SPEC.md`](./MVP_SPEC.md), [`RISKS.md`](./RISKS.md),
   [`FEATURE_TEMPLATE.md`](./FEATURE_TEMPLATE.md).
 
