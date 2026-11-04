@@ -28,7 +28,7 @@
 | ---- | ------------------------------------------------------------------------------------------ |
 | ✅   | Implémenté : code présent, exporté par l'API publique du paquet, couvert par des tests.    |
 | 🧩   | Moteur implémenté (`@pouxis/core`), interface utilisateur pas encore branchée.             |
-| 🚧   | En cours : code présent mais API non encore exportée, ou implémentation provisoire.        |
+| 🚧   | En cours : implémentation partielle ou provisoire.                                         |
 | 🗓️   | Prévu : conçu ou phasé, aucun code.                                                        |
 | 🔬   | Recherche : faisabilité, éthique ou légalité non établies (voir `ROADMAP.md` § Recherche). |
 
@@ -139,7 +139,7 @@ flowchart TB
 | --------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Interface React | 🚧     | Shell, routeur à hash, registre des vues, design system, i18n et primitives UI en place ; les sept vues (`src/views/*`) sont encore des squelettes, construits au sprint 2.                                   |
 | Store           | 🚧     | Contrat `Store` stable (`src/store/types.ts`). Implémentation actuelle : mémoire + `localStorage` (`memory.ts`), explicitement provisoire. Implémentation CRDT + IndexedDB/SQLite prévue (ADR 0003).          |
-| `@pouxis/core`  | ✅/🚧  | Modules `scheduler`, `tasks`, `sync`, `insights`, `ideation`, `search`, `crypto` exportés ; `nlp`, `recurrence`, `graph` contiennent du code mais leur barrel n'exporte encore rien.                          |
+| `@pouxis/core`  | ✅     | Les dix modules (`scheduler`, `tasks`, `sync`, `crypto`, `insights`, `ideation`, `search`, `nlp`, `recurrence`, `graph`) exposent leur API publique par leur `index.ts` et sont couverts par des tests.       |
 | Shell Tauri 2   | ✅     | Focus OS (1.11) honnête par OS, liens profonds `pouxis://` (1.13), tray, raccourci global (2.11), fenêtre scrapbook (5.6), haptique mobile (7.7), instance unique, mémorisation de la géométrie des fenêtres. |
 | Relais de sync  | ✅     | Protocole v1, jetons HMAC à rotation, stockage fichier JSONL durable avec récupération, limitation de débit, métriques, Docker/Compose. Ne lit jamais les charges utiles.                                     |
 | CLI             | ✅     | Fichier `$POUXIS_HOME/data.json` versionné avec concurrence optimiste et verrou ; export/import `.zip` (writer/reader ZIP maison, CRC32).                                                                     |
@@ -202,18 +202,18 @@ flowchart LR
     ins --> m7
 ```
 
-| Module       | Fonctions du brief                        | Contenu principal                                                                                                                                | Statut |
-| ------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `scheduler`  | 1.1, 1.2, 1.6, 1.9, 1.10, 1.14, 1.15      | `route`, `propagateDelay`, `insertBuffers`, `magnetize`, `snapshot`/`compareSnapshots`, `progress`, garde maker schedule                         | ✅     |
-| `tasks`      | 2.1, 2.2, 2.3, 2.4, 2.6, 2.8, 2.12, 2.15  | dépendances, décomposition heuristique et modèles, decay, Eisenhower, Pomodoro, moteur de formules, Kanban, limite WIP                           | ✅     |
-| `sync`       | 1.7, 3.3, 3.11                            | HLC, réplique LWW par champ, tombstones, documents par blocs avec historique, index fractionnaires, diff texte, codec compact, protocole, client | ✅     |
-| `crypto`     | 3.5, 3.10, 6.5                            | AES-256-GCM `pxv1`, KDF, coffres, clé de récupération, charges utiles de sync avec Padmé, liens de partage, journal d'audit chaîné               | ✅     |
-| `insights`   | 1.3, 3.9, 5.15, 7.2, 7.3, 7.5, 7.9        | heatmap d'énergie, équilibre création/organisation, séries avec jokers, bilan hebdomadaire, culs-de-sac et archivage, arbre de compétences       | ✅     |
-| `ideation`   | 5.1, 5.2, 5.4, 5.10                       | connecteur aléatoire, palette d'images, contraintes divergentes, cartes de méthodes ; RNG déterministe (`mulberry32`)                            | ✅     |
-| `search`     | 3.2, 3.14, 5.8                            | BM25F lexical, recherche hybride RRF avec `Embedder` enfichable, backlinks, exclusion du bac à sable                                             | ✅     |
-| `nlp`        | 1.8                                       | aides de texte « pliées » (positions préservées), calendrier ; parseur en cours                                                                  | 🚧     |
-| `recurrence` | 2.9                                       | RRULE, syntaxe cron, vocabulaire littéral, expansion                                                                                             | 🚧     |
-| `graph`      | 4.1, 4.2, 4.3, 4.5, 4.9, 4.11, 4.13, 4.15 | quadtree (culling, hit test), force-directed, arbre de Buchheim-Walker, hiérarchie, timeline, conversion tâches → graphe                         | 🚧     |
+| Module       | Fonctions du brief                        | Contenu principal                                                                                                                                             | Statut |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `scheduler`  | 1.1, 1.2, 1.6, 1.9, 1.10, 1.14, 1.15      | `route`, `propagateDelay`, `insertBuffers`, `magnetize`, `snapshot`/`compareSnapshots`, `progress`, garde maker schedule                                      | ✅     |
+| `tasks`      | 2.1, 2.2, 2.3, 2.4, 2.6, 2.8, 2.12, 2.15  | dépendances, décomposition heuristique et modèles, decay, Eisenhower, Pomodoro, moteur de formules, Kanban, limite WIP                                        | ✅     |
+| `sync`       | 1.7, 3.3, 3.11                            | HLC, réplique LWW par champ, tombstones, documents par blocs avec historique, index fractionnaires, diff texte, codec compact, protocole, client              | ✅     |
+| `crypto`     | 3.5, 3.10, 6.5                            | AES-256-GCM `pxv1`, KDF, coffres, clé de récupération, charges utiles de sync avec Padmé, liens de partage, journal d'audit chaîné                            | ✅     |
+| `insights`   | 1.3, 3.9, 5.15, 7.2, 7.3, 7.5, 7.9        | heatmap d'énergie, équilibre création/organisation, séries avec jokers, bilan hebdomadaire, culs-de-sac et archivage, arbre de compétences                    | ✅     |
+| `ideation`   | 5.1, 5.2, 5.4, 5.10                       | connecteur aléatoire, palette d'images, contraintes divergentes, cartes de méthodes ; RNG déterministe (`mulberry32`)                                         | ✅     |
+| `search`     | 3.2, 3.14, 5.8                            | BM25F lexical, recherche hybride RRF avec `Embedder` enfichable, backlinks, exclusion du bac à sable                                                          | ✅     |
+| `nlp`        | 1.8, 2.7 (texte), 2.11                    | `parse` FR/EN (dates, heures, durées, échéances, participants, tags, priorité, récurrence, mode), `cleanTranscript`/`splitActions` (texte dicté), `inferMode` | 🧩     |
+| `recurrence` | 2.9                                       | `parseRule` (littéral FR/EN, cron, RRULE) → `RecurrenceRule`, `occurrences`/`next` dans un fuseau IANA explicite, `describe`, `toRRule`                       | 🧩     |
+| `graph`      | 4.1, 4.2, 4.3, 4.5, 4.9, 4.11, 4.13, 4.15 | quadtree, force-directed, arbre Buchheim-Walker, hiérarchie, repli, timeline, flux conditionnels, viewport, outline/OPML/SVG, tâches → graphe                 | 🧩     |
 
 ### 5.2 `apps/pouxis` — client
 
@@ -477,7 +477,7 @@ correspondante est prévue au sprint 2 (vues de l'application).
 | 1.5  | Multi-fuseaux collaborateurs    | `time.ts`, vue `calendar`    | 🗓️                                                         |
 | 1.6  | Buffers                         | `scheduler.insertBuffers`    | 🧩                                                         |
 | 1.7  | Synchronisation CRDT            | `sync`, relais               | 🚧 (moteur et relais ✅, branchement app 🗓️)               |
-| 1.8  | Analyseur NLP                   | `nlp`                        | 🚧                                                         |
+| 1.8  | Analyseur NLP                   | `nlp.parse`                  | 🧩                                                         |
 | 1.9  | Snapshot prévu / réalisé        | `scheduler.snapshot`         | 🧩                                                         |
 | 1.10 | Tâches flottantes               | `scheduler.magnetize`        | 🧩                                                         |
 | 1.11 | Hyperfocus OS                   | `focus.rs`, `platform`       | ✅ (macOS, GNOME) ; repli interne Windows/iOS ; Android 🗓️ |
@@ -496,9 +496,9 @@ correspondante est prévue au sprint 2 (vues de l'application).
 | 2.4  | Eisenhower calculée          | `tasks` (eisenhower)                               | 🧩                                        |
 | 2.5  | Tags géolocalisés            | `model` (`GeoTrigger`), `platform`                 | 🗓️                                        |
 | 2.6  | Pomodoro par tâche           | `tasks` (pomodoro), `features/focus`               | 🧩                                        |
-| 2.7  | Parser vocal                 | sidecar STT (ADR 0007)                             | 🗓️                                        |
+| 2.7  | Parser vocal                 | `nlp` (texte dicté), sidecar STT (ADR 0007)        | 🧩 (post-traitement du texte) ; STT 🗓️    |
 | 2.8  | Champs à formules            | `tasks` (formula)                                  | 🧩                                        |
-| 2.9  | Récurrence cron / littérale  | `recurrence`                                       | 🚧                                        |
+| 2.9  | Récurrence cron / littérale  | `recurrence`                                       | 🧩                                        |
 | 2.10 | Tâches depuis le mail        | relais étendu                                      | 🗓️                                        |
 | 2.11 | Capture universelle          | `desktop.rs`, `features/command`                   | 🚧 (raccourci natif ✅, UI de capture 🗓️) |
 | 2.12 | Vues Kanban                  | `tasks` (kanban)                                   | 🧩                                        |
@@ -528,23 +528,23 @@ correspondante est prévue au sprint 2 (vues de l'application).
 
 ### Module 4 — Organigrammes, graphes et spatialisation
 
-| ID   | Fonction                        | Module(s)                          | Statut                            |
-| ---- | ------------------------------- | ---------------------------------- | --------------------------------- |
-| 4.1  | Canvas infini 10 000 nœuds      | `graph` (quadtree), vue `canvas`   | 🚧 (index spatial ; rendu GPU 🗓️) |
-| 4.2  | Layout force-directed           | `graph` (force)                    | 🚧                                |
-| 4.3  | Transmutation liste → arbre     | `graph` (from-tasks, tree)         | 🚧                                |
-| 4.4  | Nœuds enrichis                  | plugins (ADR 0008)                 | 🗓️                                |
-| 4.5  | Organigramme temporel           | `graph` (timeline)                 | 🚧                                |
-| 4.6  | Stylet                          | vue `canvas`                       | 🗓️                                |
-| 4.7  | Logique conditionnelle des flux | `model` (`EdgeCondition`), `graph` | 🚧                                |
-| 4.8  | Squelette par IA                | ADR 0007                           | 🗓️                                |
-| 4.9  | Collapsibilité                  | `graph` (hierarchy)                | 🚧                                |
-| 4.10 | Présentation caméra dynamique   | vue `canvas`                       | 🗓️                                |
-| 4.11 | Export multi-formats            | `graph` (hierarchy → OPML/SVG)     | 🚧                                |
-| 4.12 | Templates UML / BPMN / cloud    | —                                  | 🗓️                                |
-| 4.13 | Minimap                         | `graph` (quadtree, geometry)       | 🚧                                |
-| 4.14 | Multi-curseurs                  | canal de présence (§ 12)           | 🗓️                                |
-| 4.15 | Extraction graphe → texte       | `graph` (hierarchy)                | 🚧                                |
+| ID   | Fonction                        | Module(s)                          | Statut                                      |
+| ---- | ------------------------------- | ---------------------------------- | ------------------------------------------- |
+| 4.1  | Canvas infini 10 000 nœuds      | `graph` (quadtree), vue `canvas`   | 🧩 (index spatial, viewport ; rendu GPU 🗓️) |
+| 4.2  | Layout force-directed           | `graph` (force)                    | 🧩                                          |
+| 4.3  | Transmutation liste → arbre     | `graph` (from-tasks, tree)         | 🧩                                          |
+| 4.4  | Nœuds enrichis                  | plugins (ADR 0008)                 | 🗓️                                          |
+| 4.5  | Organigramme temporel           | `graph` (timeline)                 | 🧩                                          |
+| 4.6  | Stylet                          | vue `canvas`                       | 🗓️                                          |
+| 4.7  | Logique conditionnelle des flux | `model` (`EdgeCondition`), `graph` | 🧩                                          |
+| 4.8  | Squelette par IA                | ADR 0007                           | 🗓️                                          |
+| 4.9  | Collapsibilité                  | `graph` (hierarchy)                | 🧩                                          |
+| 4.10 | Présentation caméra dynamique   | `graph` (viewport), vue `canvas`   | 🗓️ (maths de viewport 🧩)                   |
+| 4.11 | Export multi-formats            | `graph` (hierarchy → OPML/SVG)     | 🧩                                          |
+| 4.12 | Templates UML / BPMN / cloud    | —                                  | 🗓️                                          |
+| 4.13 | Minimap                         | `graph` (quadtree, geometry)       | 🧩                                          |
+| 4.14 | Multi-curseurs                  | canal de présence (§ 12)           | 🗓️                                          |
+| 4.15 | Extraction graphe → texte       | `graph` (hierarchy)                | 🧩                                          |
 
 ### Module 5 — Idéation et outils créatifs
 
@@ -672,7 +672,6 @@ comportementales).
 | Écart                                                 | Conséquence                                                          | Résolution prévue                                                                            |
 | ----------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Store en mémoire + `localStorage`, sans réplique CRDT | Pas de sync ni d'historique dans l'app ; quota `localStorage` limité | Store CRDT + IndexedDB/SQLite (ADR 0003)                                                     |
-| Barrels `nlp`, `recurrence`, `graph` vides            | Code présent mais non consommable via `@pouxis/core`                 | Export de l'API publique par les responsables des modules                                    |
 | Vues à l'état de squelette                            | Fonctions moteur 🧩 invisibles pour la personne                      | Sprint 2                                                                                     |
 | PBKDF2 plutôt qu'Argon2id                             | Résistance moindre aux attaques GPU hors ligne                       | ADR-SEC-001 (`SECURITY_ARCHITECTURE.md` § 4.1)                                               |
 | Relais mono-processus, stockage fichier               | Pas de haute disponibilité                                           | Suffisant pour l'auto-hébergement ; interface `storage/types.ts` prête pour d'autres moteurs |
