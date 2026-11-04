@@ -2,7 +2,7 @@
  * Entry point: `node src/index.ts`. Reads the configuration from the environment, starts
  * the relay and drains gracefully on SIGTERM/SIGINT.
  */
-import { ConfigError, loadConfig, type ServerConfig } from './config.ts';
+import { ConfigError, DEV_SECRET, loadConfig, type ServerConfig } from './config.ts';
 import { createLogger, serializeError } from './logger.ts';
 import { startServer, type SyncServer } from './server.ts';
 
@@ -19,7 +19,7 @@ async function main(): Promise<void> {
     return;
   }
   const logger = createLogger({ level: config.logLevel });
-  if (config.development && config.secrets.length === 1 && process.env['POUXIS_SYNC_SECRET'] === undefined) {
+  if (config.secrets.includes(DEV_SECRET)) {
     logger.warn('config.insecure_dev_secret', {
       hint: 'NODE_ENV=development without POUXIS_SYNC_SECRET: tokens use a public secret',
     });

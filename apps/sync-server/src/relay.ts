@@ -558,7 +558,10 @@ export class Session {
         this.logger.debug('session.live', { cursor: this.cursor_ });
         return;
       }
-      const page = await space.log.read(this.cursor_, backlogPageSize, backlogPageBytes);
+      // Never read past the committed head: an append resolved by the log but not yet
+      // committed must reach this session through the commit path, which knows its pusher.
+      const limit = Math.min(backlogPageSize, space.head - this.cursor_);
+      const page = await space.log.read(this.cursor_, limit, backlogPageBytes);
       if (this.state_ !== 'backlog' || this.closing) return;
       const last = page[page.length - 1];
       if (!last) throw new Error('log returned no record below the space head');

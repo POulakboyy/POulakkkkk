@@ -80,7 +80,7 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'podcast',
-    patterns: [/\bpodcasts?\b/, /\bepisodes?\b/],
+    patterns: [/\bpodcasts?\b/],
     steps: [
       ['Choisir le sujet et l’invité', 'Choose the topic and guest', 30, 'create'],
       ['Préparer la trame et les questions', 'Prepare the outline and questions', 60, 'create'],
@@ -93,7 +93,7 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
   },
   {
     id: 'article',
-    patterns: [/\barticles?\b/, /\bblog\b/, /\bbillet\b/, /\bnewsletter\b/, /\bessai\b/, /\bessay\b/],
+    patterns: [/\barticles?\b/, /\bblog\b/, /\bbillet\b/, /\bnewsletter\b/, /\bessay\b/],
     steps: [
       ['Définir le sujet, l’angle et le lecteur', 'Define the topic, angle and reader', 30, 'create'],
       ['Rechercher et prendre des notes', 'Research and take notes', 60, 'organize'],
@@ -185,7 +185,10 @@ export const GOAL_TEMPLATES: readonly GoalTemplate[] = [
 
 export interface VerbClass {
   id: string;
-  /** Prefixes of the first matching word (folded): `redig` matches rédiger, rédige… */
+  /**
+   * Prefixes of the goal's leading verb (folded): `redig` matches rédiger, rédige… A stem
+   * ending in `$` must match the whole word (`sort$` must not catch « sortir »).
+   */
   stems: readonly string[];
   steps: readonly Step[];
 }
@@ -194,7 +197,7 @@ export interface VerbClass {
 export const VERB_CLASSES: readonly VerbClass[] = [
   {
     id: 'write',
-    stems: ['redig', 'redac', 'ecri', 'write', 'writing', 'draft'],
+    stems: ['redig', 'redac', 'ecri', 'write', 'draft'],
     steps: [
       ['Rassembler les idées et les sources', 'Gather ideas and sources', 30, 'organize'],
       ['Faire un plan', 'Outline', 30, 'create'],
@@ -205,7 +208,7 @@ export const VERB_CLASSES: readonly VerbClass[] = [
   },
   {
     id: 'fix',
-    stems: ['repar', 'corrig', 'resoud', 'resol', 'debug', 'fix', 'repair', 'solv', 'solve'],
+    stems: ['repare', 'reparat', 'corrig', 'resoud', 'resol', 'debug', 'fix', 'repair', 'solv'],
     steps: [
       ['Observer et reproduire le problème', 'Observe and reproduce the problem', 30, 'organize'],
       ['Identifier la cause', 'Find the cause', 45, 'create', 'high'],
@@ -246,7 +249,7 @@ export const VERB_CLASSES: readonly VerbClass[] = [
   },
   {
     id: 'tidy',
-    stems: ['rang', 'nettoy', 'tri', 'clean', 'tidy', 'declutter', 'sort'],
+    stems: ['rang', 'nettoy', 'trie', 'triez', 'clean', 'tidy', 'declutter', 'sort$'],
     steps: [
       ['Choisir la zone à traiter', 'Pick the area to tackle', 5, 'organize', 'low'],
       ['Trier : garder, donner, jeter', 'Sort: keep, donate, discard', 60, 'organize'],
@@ -256,7 +259,7 @@ export const VERB_CLASSES: readonly VerbClass[] = [
   },
   {
     id: 'plan',
-    stems: ['organis', 'planifi', 'prepar', 'plan', 'organiz', 'prepar'],
+    stems: ['organis', 'organiz', 'planifi', 'plan$', 'prepar'],
     steps: [
       ['Définir l’objectif et l’échéance', 'Define the goal and deadline', 20, 'organize'],
       ['Lister tout ce qu’il faut', 'List everything needed', 30, 'organize'],
@@ -267,7 +270,7 @@ export const VERB_CLASSES: readonly VerbClass[] = [
   },
   {
     id: 'build',
-    stems: ['cree', 'creer', 'construi', 'develop', 'fabriqu', 'code', 'implement', 'build', 'create', 'make'],
+    stems: ['cree', 'construi', 'develop', 'fabriqu', 'code', 'implement', 'build', 'create', 'make'],
     steps: [
       ['Clarifier le résultat attendu', 'Clarify the expected result', 20, 'organize'],
       ['Esquisser une première version', 'Sketch a first version', 45, 'create'],

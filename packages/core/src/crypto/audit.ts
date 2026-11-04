@@ -120,6 +120,7 @@ export async function verifyAuditChain(
   if (checkpoint && checkpointKey && !(await verifyCheckpoint(checkpoint, checkpointKey))) {
     return { ok: false, reason: 'bad-checkpoint-signature', index: -1 };
   }
+  if (checkpoint) assertHead(checkpoint);
   if (options.from) assertHead(options.from);
   let expectedSeq = options.from ? options.from.seq + 1 : 0;
   let expectedPrev = options.from ? options.from.hash : AUDIT_GENESIS;

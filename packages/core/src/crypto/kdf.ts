@@ -23,9 +23,11 @@ import { randomBytes, subtle } from './runtime.ts';
 export const PBKDF2_DEFAULT_ITERATIONS = 600_000;
 /**
  * Floor accepted when deriving: no v1 header was ever written below the OWASP figure, so a
- * lower count can only come from a tampered or forged header.
+ * lower count can only come from a tampered or forged header. Deliberately a separate literal:
+ * raising the default later must not lock users out of vaults written with the old one
+ * (`vaultNeedsUpgrade` + `upgradeVaultKdf` migrate them instead).
  */
-export const PBKDF2_MIN_ITERATIONS = PBKDF2_DEFAULT_ITERATIONS;
+export const PBKDF2_MIN_ITERATIONS = 600_000;
 /** Ceiling accepted when deriving: stops a forged header from freezing the client (DoS). */
 export const PBKDF2_MAX_ITERATIONS = 10_000_000;
 /** Salt length in bytes (128 bits, NIST SP 800-132 §5.1). */

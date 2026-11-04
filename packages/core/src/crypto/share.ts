@@ -169,11 +169,11 @@ export async function createShareLink(options: CreateShareLinkOptions): Promise<
   try {
     const keys = await deriveShareKeys(secret, claims, options.password);
     proof = keys.proof;
-    const token = await issueToken(options.signer, claims);
+    const { token, signed } = await issueToken(options.signer, claims);
     const link: ShareLink = {
       url: `${baseUrl}/s/${token}#k=${toBase64Url(secret)}`,
       token,
-      claims,
+      claims: signed,
       contentKey: keys.contentKey,
     };
     if (proof) link.passwordRecord = { v: 1, hash: toBase64Url(await sha256(proof)) };
@@ -498,10 +498,16 @@ function parseClaims(bytes: Uint8Array): ShareTokenClaims {
   return claims;
 }
 
-async function issueToken(signer: ShareSigner, claims: ShareTokenClaims): Promise<string> {
-  if (typeof signer !== 'function') return signShareToken(claims, signer);
+/** Returns the token and the claims it actually carries (a remote signer may shorten `exp`). */
+async function issueToken(
+  signer: ShareSigner,
+  claims: ShareTokenClaims,
+): Promise<{ token: string; signed: ShareTokenClaims }> {
+  if (typeof signer !== 'function') {
+    return { token: await signShareToken(claims, signer), signed: claims };
+  }
   const token = await signer(claims);
-  // The server may only have signed what we asked for (it may shorten the lifetime).
+  // The server may only have signed what we asked for, or a shorter lifetime of it.
   const signed = decodeShareToken(token);
   if (
     signed.lid !== claims.lid ||
@@ -512,7 +518,7 @@ async function issueToken(signer: ShareSigner, claims: ShareTokenClaims): Promis
   ) {
     throw new CryptoError('invalid-argument', 'Signer returned a token for different claims');
   }
-  return token;
+  return { token, signed };
 }
 
 async function deriveShareKeys(
