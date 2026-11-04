@@ -155,11 +155,20 @@ class FileSpaceLog implements SpaceLog {
   }
 
   static async open(options: OpenOptions): Promise<FileSpaceLog> {
-    const existed = await stat(options.file).then(
-      () => true,
-      () => false,
-    );
-    const fh = await open(options.file, fsConstants.O_RDWR | fsConstants.O_CREAT, 0o600);
+    // Create-exclusive first so "did it exist?" and the open are one atomic step (no TOCTOU).
+    let existed = false;
+    let fh: FileHandle;
+    try {
+      fh = await open(
+        options.file,
+        fsConstants.O_RDWR | fsConstants.O_CREAT | fsConstants.O_EXCL,
+        0o600,
+      );
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+      existed = true;
+      fh = await open(options.file, fsConstants.O_RDWR);
+    }
     try {
       if (!existed) await syncDirectory(options.dir);
       const recovered = await recover(fh, options.file);

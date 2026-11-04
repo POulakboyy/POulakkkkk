@@ -153,7 +153,8 @@ export function contrastTable(themes: Record<ThemeName, TokenMap>): string {
 
 /** Full token table: name, light value, dark value, e-ink value. */
 export function tokenTable(themes: Record<ThemeName, TokenMap>): string {
-  const esc = (v: string | undefined) => (v === undefined ? '—' : `\`${v.replace(/\|/g, '\\|')}\``);
+  const esc = (v: string | undefined) =>
+    v === undefined ? '—' : `\`${v.replace(/\\/g, '\\\\').replace(/\|/g, '\\|')}\``;
   const rows = Object.keys(themes.light)
     .filter((n) => !n.startsWith('--_'))
     .map((n) => {

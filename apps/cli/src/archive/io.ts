@@ -1,5 +1,5 @@
 /** Writing an export bundle to a ZIP file or a directory, and reading one back. */
-import { mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, open, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, sep } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import { writeFileAtomic } from '../store/atomic.ts';
@@ -29,16 +29,17 @@ export async function writeDirBundle(dir: string, files: readonly BundleFile[]):
 
 /** Reads every file of a ZIP archive or a directory into a name → text map. */
 export async function readBundleFiles(path: string): Promise<Map<string, string>> {
-  const info = await stat(path);
   const files = new Map<string, string>();
   const utf8 = new TextDecoder('utf-8');
-  if (info.isDirectory()) {
+  // Read through one handle so the type check and the read see the same file (no TOCTOU).
+  const archive = await readArchiveOrNull(path);
+  if (archive === null) {
     for (const name of await listFiles(path)) {
       if (name.endsWith('.json')) files.set(name, await readFile(join(path, name), 'utf8'));
     }
     return files;
   }
-  const entries = readZip(new Uint8Array(await readFile(path)), {
+  const entries = readZip(archive, {
     inflateRaw: (data, size) => inflateRawSync(data, { maxOutputLength: Math.max(size, 1) }),
   });
   for (const entry of entries) {
@@ -46,6 +47,28 @@ export async function readBundleFiles(path: string): Promise<Map<string, string>
       files.set(entry.name, utf8.decode(entry.data));
   }
   return files;
+}
+
+/** The file's bytes, or `null` when `path` is a directory. */
+async function readArchiveOrNull(path: string): Promise<Uint8Array | null> {
+  let fh: Awaited<ReturnType<typeof open>>;
+  try {
+    fh = await open(path, 'r');
+  } catch (error) {
+    // Windows refuses to open directories as files.
+    if (isCode(error, 'EISDIR') || isCode(error, 'EPERM')) return null;
+    throw error;
+  }
+  try {
+    if ((await fh.stat()).isDirectory()) return null;
+    return new Uint8Array(await fh.readFile());
+  } finally {
+    await fh.close();
+  }
+}
+
+function isCode(error: unknown, code: string): boolean {
+  return typeof error === 'object' && error !== null && (error as { code?: unknown }).code === code;
 }
 
 /** Relative `/`-separated paths of the files under `root` (two levels are enough here). */
