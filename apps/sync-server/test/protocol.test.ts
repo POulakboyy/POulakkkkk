@@ -49,18 +49,28 @@ describe('parseClientMessage', () => {
     const polluted = `{"t":"push","envelopes":[],"__proto__":{"admin":true}}`;
     expect(error(parseClientMessage(polluted))).toMatch(/unknown field "__proto__"/);
     const envPolluted = { t: 'push', envelopes: [{ ...env, seq: 3 }] };
-    expect(error(validateClientMessage(envPolluted))).toMatch(/envelopes\[0\]\.unknown field "seq"/);
+    expect(error(validateClientMessage(envPolluted))).toMatch(
+      /envelopes\[0\]\.unknown field "seq"/,
+    );
   });
 
   it('rejects malformed identifiers', () => {
-    const bad = ['', 'has space', 'tab\there', 'nul\u0000', 'é', 'x'.repeat(DEFAULT_LIMITS.maxIdLength + 1), 7];
+    const bad = [
+      '',
+      'has space',
+      'tab\there',
+      'nul\u0000',
+      'é',
+      'x'.repeat(DEFAULT_LIMITS.maxIdLength + 1),
+      7,
+    ];
     for (const space of bad) {
       expect(error(validateClientMessage({ ...hello, space }))).toBe('space: invalid identifier');
     }
     expect(error(validateClientMessage({ ...hello, node: null }))).toBe('node: invalid identifier');
-    expect(validateClientMessage({ ...hello, space: 'x'.repeat(DEFAULT_LIMITS.maxIdLength) }).ok).toBe(
-      true,
-    );
+    expect(
+      validateClientMessage({ ...hello, space: 'x'.repeat(DEFAULT_LIMITS.maxIdLength) }).ok,
+    ).toBe(true);
   });
 
   it('rejects malformed cursors in since', () => {
@@ -70,7 +80,13 @@ describe('parseClientMessage', () => {
   });
 
   it('rejects malformed tokens', () => {
-    for (const token of ['', 'has space', 'a+b/c=', 'x'.repeat(DEFAULT_LIMITS.maxTokenLength + 1), 1]) {
+    for (const token of [
+      '',
+      'has space',
+      'a+b/c=',
+      'x'.repeat(DEFAULT_LIMITS.maxTokenLength + 1),
+      1,
+    ]) {
       expect(error(validateClientMessage({ ...hello, token }))).toBe('token: invalid format');
     }
   });
@@ -78,7 +94,9 @@ describe('parseClientMessage', () => {
   it('validates every envelope field and reports its index', () => {
     const push = (e: unknown) => ({ t: 'push', envelopes: [env, e] });
     expect(error(validateClientMessage(push('x')))).toBe('envelopes[1].envelope must be an object');
-    expect(error(validateClientMessage(push({ ...env, id: '' })))).toBe('envelopes[1].id: invalid identifier');
+    expect(error(validateClientMessage(push({ ...env, id: '' })))).toBe(
+      'envelopes[1].id: invalid identifier',
+    );
     expect(error(validateClientMessage(push({ ...env, hlc: 'a b' })))).toBe(
       'envelopes[1].hlc: invalid identifier',
     );
@@ -88,7 +106,9 @@ describe('parseClientMessage', () => {
     expect(error(validateClientMessage(push({ ...env, payload: {} })))).toBe(
       'envelopes[1].payload: must be a string',
     );
-    expect(error(validateClientMessage({ t: 'push', envelopes: {} }))).toBe('envelopes: must be an array');
+    expect(error(validateClientMessage({ t: 'push', envelopes: {} }))).toBe(
+      'envelopes: must be an array',
+    );
   });
 
   it('limits payload size in UTF-8 bytes, not characters', () => {
@@ -110,7 +130,12 @@ describe('parseClientMessage', () => {
     const result = validateClientMessage({ t: 'push', envelopes: [env] });
     if (!result.ok || result.message.t !== 'push') throw new Error('expected push');
     expect(result.message.envelopes[0]).not.toBe(env);
-    expect(Object.keys(result.message.envelopes[0] ?? {}).sort()).toEqual(['hlc', 'id', 'node', 'payload']);
+    expect(Object.keys(result.message.envelopes[0] ?? {}).sort()).toEqual([
+      'hlc',
+      'id',
+      'node',
+      'payload',
+    ]);
   });
 });
 

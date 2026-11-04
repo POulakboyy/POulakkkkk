@@ -5,12 +5,7 @@
  */
 
 export type Json =
-  | null
-  | boolean
-  | number
-  | string
-  | readonly Json[]
-  | { readonly [key: string]: Json };
+  null | boolean | number | string | readonly Json[] | { readonly [key: string]: Json };
 
 export class InvalidValueError extends Error {
   override readonly name = 'InvalidValueError';

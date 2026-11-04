@@ -7,9 +7,11 @@ function subscribe(notify: () => void): () => void {
   const mql = typeof window.matchMedia === 'function' ? window.matchMedia(QUERY) : null;
   mql?.addEventListener('change', notify);
   // The e-ink theme also disables motion; watch the theme attribute on <html>.
-  const observer =
-    typeof MutationObserver === 'function' ? new MutationObserver(notify) : null;
-  observer?.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  const observer = typeof MutationObserver === 'function' ? new MutationObserver(notify) : null;
+  observer?.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
   return () => {
     mql?.removeEventListener('change', notify);
     observer?.disconnect();

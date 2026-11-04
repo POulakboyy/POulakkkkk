@@ -55,9 +55,15 @@ interface Prepared {
 }
 
 /** Builds a complete ZIP archive in memory. */
-export function createZip(entries: readonly ZipEntryInput[], options: ZipWriteOptions = {}): Uint8Array {
+export function createZip(
+  entries: readonly ZipEntryInput[],
+  options: ZipWriteOptions = {},
+): Uint8Array {
   if (entries.length > MAX_UINT16) {
-    throw new ZipError('ZIP_TOO_LARGE', `Too many entries (${entries.length}); ZIP64 is not supported`);
+    throw new ZipError(
+      'ZIP_TOO_LARGE',
+      `Too many entries (${entries.length}); ZIP64 is not supported`,
+    );
   }
   const defaultModified = options.modified ?? new Date();
   const seen = new Set<string>();
@@ -66,18 +72,21 @@ export function createZip(entries: readonly ZipEntryInput[], options: ZipWriteOp
 
   for (const entry of entries) {
     assertSafeEntryName(entry.name);
-    if (seen.has(entry.name)) throw new ZipError('ZIP_DUPLICATE_NAME', `Duplicate entry ${entry.name}`);
+    if (seen.has(entry.name))
+      throw new ZipError('ZIP_DUPLICATE_NAME', `Duplicate entry ${entry.name}`);
     seen.add(entry.name);
     const isDirectory = entry.name.endsWith('/');
     const name = encoder.encode(entry.name);
-    if (name.length > MAX_UINT16) throw new ZipError('ZIP_TOO_LARGE', `Entry name too long: ${entry.name}`);
+    if (name.length > MAX_UINT16)
+      throw new ZipError('ZIP_TOO_LARGE', `Entry name too long: ${entry.name}`);
     const data =
       isDirectory || entry.data === undefined
         ? new Uint8Array(0)
         : typeof entry.data === 'string'
           ? encoder.encode(entry.data)
           : entry.data;
-    if (data.length > MAX_UINT32 - 1) throw new ZipError('ZIP_TOO_LARGE', `Entry too large: ${entry.name}`);
+    if (data.length > MAX_UINT32 - 1)
+      throw new ZipError('ZIP_TOO_LARGE', `Entry too large: ${entry.name}`);
     prepared.push({
       name,
       data,
@@ -122,7 +131,9 @@ export function createZip(entries: readonly ZipEntryInput[], options: ZipWriteOp
   }
 
   for (const p of prepared) {
-    const external = p.isDirectory ? ((DIR_MODE << 16) | MSDOS_DIRECTORY) >>> 0 : (FILE_MODE << 16) >>> 0;
+    const external = p.isDirectory
+      ? ((DIR_MODE << 16) | MSDOS_DIRECTORY) >>> 0
+      : (FILE_MODE << 16) >>> 0;
     view.setUint32(pos, SIG_CENTRAL_HEADER, true);
     view.setUint16(pos + 4, VERSION_MADE_BY, true);
     view.setUint16(pos + 6, VERSION_NEEDED, true);

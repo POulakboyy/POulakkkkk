@@ -1,0 +1,5 @@
+# PLACEHOLDER DOMAIN: replace https://pouxis.example with the production domain.
+User-agent: *
+Allow: /
+
+Sitemap: https://pouxis.example/sitemap.xml

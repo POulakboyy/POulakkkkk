@@ -53,7 +53,11 @@ function onKeyDown(e: KeyboardEvent) {
   if (e.key !== 'Escape' || e.defaultPrevented) return;
   for (let i = stack.length - 1; i >= 0; i--) {
     const layer = stack[i]!;
-    if (!layer.onEscape) continue;
+    if (!layer.onEscape) {
+      // A modal that refuses Escape also shields the layers beneath it.
+      if (layer.modal) return;
+      continue;
+    }
     e.preventDefault();
     e.stopPropagation();
     layer.onEscape();

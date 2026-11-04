@@ -247,7 +247,11 @@ mod tests {
         let a = link(DeepLinkKind::Task, "a");
         let b = link(DeepLinkKind::Event, "b");
         assert_eq!(queue.offer(a.clone()), None);
-        assert_eq!(queue.offer(a.clone()), None, "consecutive duplicates are collapsed");
+        assert_eq!(
+            queue.offer(a.clone()),
+            None,
+            "consecutive duplicates are collapsed"
+        );
         assert_eq!(queue.offer(b.clone()), None);
         assert_eq!(queue.drain(), vec![a.clone(), b]);
         assert_eq!(queue.offer(a.clone()), Some(a));

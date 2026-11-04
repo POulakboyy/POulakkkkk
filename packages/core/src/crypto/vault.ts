@@ -27,13 +27,7 @@ import {
   generateVaultKey,
   parseEnvelope,
 } from './aead.ts';
-import {
-  type BinaryLike,
-  fromBase64UrlExact,
-  toBase64Url,
-  utf8Encode,
-  zeroize,
-} from './bytes.ts';
+import { type BinaryLike, fromBase64UrlExact, toBase64Url, utf8Encode, zeroize } from './bytes.ts';
 import { canonicalJson } from './canonical-json.ts';
 import { CryptoError } from './errors.ts';
 import {

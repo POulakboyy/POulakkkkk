@@ -83,7 +83,10 @@ export function readZip(bytes: Uint8Array, options: ZipReadOptions = {}): ZipEnt
   let pos = cdOffset;
 
   for (let i = 0; i < totalEntries; i++) {
-    if (pos + CENTRAL_HEADER_SIZE > cdOffset + cdSize || view.getUint32(pos, true) !== SIG_CENTRAL_HEADER) {
+    if (
+      pos + CENTRAL_HEADER_SIZE > cdOffset + cdSize ||
+      view.getUint32(pos, true) !== SIG_CENTRAL_HEADER
+    ) {
       throw new ZipError('ZIP_CORRUPT', `Bad central directory header for entry #${i + 1}`);
     }
     const flags = view.getUint16(pos + 8, true);
@@ -111,7 +114,8 @@ export function readZip(bytes: Uint8Array, options: ZipReadOptions = {}): ZipEnt
     if (compressedSize === MAX_UINT32 || size === MAX_UINT32 || localOffset === MAX_UINT32) {
       throw new ZipError('ZIP_UNSUPPORTED', 'ZIP64 archives are not supported');
     }
-    if (size > maxEntry) throw new ZipError('ZIP_TOO_LARGE', `Entry ${name} is too large (${size} bytes)`);
+    if (size > maxEntry)
+      throw new ZipError('ZIP_TOO_LARGE', `Entry ${name} is too large (${size} bytes)`);
     total += size;
     if (total > maxTotal) throw new ZipError('ZIP_TOO_LARGE', 'Archive contents are too large');
 
@@ -131,7 +135,10 @@ export function readZip(bytes: Uint8Array, options: ZipReadOptions = {}): ZipEnt
         throw new ZipError('ZIP_CORRUPT', `Cannot inflate ${name}: ${(error as Error).message}`);
       }
     } else {
-      throw new ZipError('ZIP_UNSUPPORTED', `Compression method ${method} is not supported (${name})`);
+      throw new ZipError(
+        'ZIP_UNSUPPORTED',
+        `Compression method ${method} is not supported (${name})`,
+      );
     }
     if (data.length !== size) {
       throw new ZipError('ZIP_CORRUPT', `Size mismatch for ${name}: ${data.length} ≠ ${size}`);
@@ -162,7 +169,10 @@ function findEndOfCentralDirectory(bytes: Uint8Array, view: DataView): number {
 }
 
 function localDataStart(bytes: Uint8Array, view: DataView, offset: number, name: string): number {
-  if (offset + LOCAL_HEADER_SIZE > bytes.length || view.getUint32(offset, true) !== SIG_LOCAL_HEADER) {
+  if (
+    offset + LOCAL_HEADER_SIZE > bytes.length ||
+    view.getUint32(offset, true) !== SIG_LOCAL_HEADER
+  ) {
     throw new ZipError('ZIP_CORRUPT', `Bad local header for ${name}`);
   }
   const nameLength = view.getUint16(offset + 26, true);

@@ -130,7 +130,12 @@ export function parseCommandArgs(
   }
 }
 
-function translateParseError(error: unknown, spec: OptionsSpec, m: Messages, command?: string): Error {
+function translateParseError(
+  error: unknown,
+  spec: OptionsSpec,
+  m: Messages,
+  command?: string,
+): Error {
   const err = error as { code?: string; message?: string };
   const message = err.message ?? String(error);
   const quoted = /'([^']+)'/.exec(message)?.[1] ?? '';
@@ -142,7 +147,13 @@ function translateParseError(error: unknown, spec: OptionsSpec, m: Messages, com
         ...(o.short ? [`-${o.short}`] : []),
         ...(o.type === 'boolean' ? [`--no-${name}`] : []),
       ]);
-      const guess = suggest(flag.split('=')[0] ?? flag, known);
+      // Compare without the dashes, which would otherwise make every option look close.
+      const bare = (s: string) => s.replace(/^-+/, '');
+      const input = bare(flag.split('=')[0] ?? flag);
+      const guess =
+        input.length < 2
+          ? undefined
+          : known.find((k) => bare(k) === suggest(input, known.map(bare)));
       return new UsageError(m.errors.unknownOption(flag), {
         hint: guess ? m.errors.didYouMean(guess) : m.errors.seeHelp(command),
         command,
@@ -150,11 +161,16 @@ function translateParseError(error: unknown, spec: OptionsSpec, m: Messages, com
     }
     case 'ERR_PARSE_ARGS_INVALID_OPTION_VALUE':
       return new UsageError(
-        /does not take an argument/.test(message) ? m.errors.noValue(flag) : m.errors.missingValue(flag),
+        /does not take an argument/.test(message)
+          ? m.errors.noValue(flag)
+          : m.errors.missingValue(flag),
         { hint: m.errors.seeHelp(command), command },
       );
     default:
-      return new UsageError(m.errors.badArgs(message), { hint: m.errors.seeHelp(command), command });
+      return new UsageError(m.errors.badArgs(message), {
+        hint: m.errors.seeHelp(command),
+        command,
+      });
   }
 }
 
@@ -194,6 +210,8 @@ export function suggest(input: string, candidates: readonly string[]): string | 
   }
   if (best !== undefined && bestDistance <= limit) return best;
   // A unique candidate starting with the input ("exp" → "export") is a good guess too.
-  const prefixed = candidates.filter((c) => needle.length >= 2 && c.toLowerCase().startsWith(needle));
+  const prefixed = candidates.filter(
+    (c) => needle.length >= 2 && c.toLowerCase().startsWith(needle),
+  );
   return prefixed.length === 1 ? prefixed[0] : undefined;
 }

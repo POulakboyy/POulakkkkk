@@ -11,13 +11,7 @@ import type { Locale } from '../model.ts';
 import { pick, type Rng } from './rng.ts';
 
 export type ConstraintCategory =
-  | 'user'
-  | 'time'
-  | 'resources'
-  | 'medium'
-  | 'inversion'
-  | 'scale'
-  | 'emotion';
+  'user' | 'time' | 'resources' | 'medium' | 'inversion' | 'scale' | 'emotion';
 
 export interface Constraint {
   /** Stable id (`<category>-<slug>`), safe to persist in a "already drawn" list. */
@@ -72,7 +66,11 @@ const LIBRARY: Readonly<Record<ConstraintCategory, readonly Row[]>> = {
       'L’utilisateur est dans un lieu bruyant et n’entend rien.',
       'The user is somewhere loud and can’t hear anything.',
     ],
-    ['offline', 'L’utilisateur n’a aucune connexion internet.', 'The user has no internet connection.'],
+    [
+      'offline',
+      'L’utilisateur n’a aucune connexion internet.',
+      'The user has no internet connection.',
+    ],
   ],
   time: [
     ['half', 'Fais-le en moitié moins de temps.', 'Do it in half the time.'],
@@ -81,7 +79,11 @@ const LIBRARY: Readonly<Record<ConstraintCategory, readonly Row[]>> = {
       'Tu n’as qu’une heure pour livrer une première version.',
       'You only have one hour to ship a first version.',
     ],
-    ['ten-years', 'Ça doit encore fonctionner dans dix ans.', 'It must still work ten years from now.'],
+    [
+      'ten-years',
+      'Ça doit encore fonctionner dans dix ans.',
+      'It must still work ten years from now.',
+    ],
     ['year-1900', 'Et si tu devais le réaliser en 1900 ?', 'What if you had to build it in 1900?'],
     ['year-2100', 'Imagine la version de 2100.', 'Imagine the 2100 version.'],
     [
@@ -127,11 +129,7 @@ const LIBRARY: Readonly<Record<ConstraintCategory, readonly Row[]>> = {
     ['object', 'Transforme-le en objet physique.', 'Turn it into a physical object.'],
     ['game', 'Fais-en un jeu.', 'Make it a game.'],
     ['ritual', 'Fais-en un rituel.', 'Make it a ritual.'],
-    [
-      'comic',
-      'Raconte-le en bande dessinée de trois cases.',
-      'Tell it as a three-panel comic.',
-    ],
+    ['comic', 'Raconte-le en bande dessinée de trois cases.', 'Tell it as a three-panel comic.'],
     ['map', 'Représente-le comme une carte géographique.', 'Represent it as a map.'],
     ['recipe', 'Écris-le sous forme de recette de cuisine.', 'Write it as a cooking recipe.'],
     [
@@ -181,7 +179,11 @@ const LIBRARY: Readonly<Record<ConstraintCategory, readonly Row[]>> = {
       'Ça doit servir un million de personnes demain.',
       'It must serve a million people tomorrow.',
     ],
-    ['one-person', 'Conçois-le pour une seule personne précise.', 'Design it for one specific person.'],
+    [
+      'one-person',
+      'Conçois-le pour une seule personne précise.',
+      'Design it for one specific person.',
+    ],
     ['pocket', 'Ça doit tenir dans une poche.', 'It must fit in a pocket.'],
     ['building', 'Donne-lui la taille d’un bâtiment.', 'Make it the size of a building.'],
     ['ten-times', 'Et si c’était dix fois plus grand ?', 'What if it were ten times bigger?'],
@@ -192,7 +194,11 @@ const LIBRARY: Readonly<Record<ConstraintCategory, readonly Row[]>> = {
   ],
   emotion: [
     ['laugh', 'Ça doit faire rire.', 'It must make people laugh.'],
-    ['calm', 'Ça doit apaiser en moins de dix secondes.', 'It must calm people within ten seconds.'],
+    [
+      'calm',
+      'Ça doit apaiser en moins de dix secondes.',
+      'It must calm people within ten seconds.',
+    ],
     [
       'nostalgia',
       'Ça doit évoquer la nostalgie de l’enfance.',

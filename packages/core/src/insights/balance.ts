@@ -147,7 +147,11 @@ export function balance(input: BalanceInput): Balance {
     ...all,
     shares:
       all.total > 0
-        ? { create: create / all.total, organize: organize / all.total, meetings: meetings / all.total }
+        ? {
+            create: create / all.total,
+            organize: organize / all.total,
+            meetings: meetings / all.total,
+          }
         : null,
     days,
   };

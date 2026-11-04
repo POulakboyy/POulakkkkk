@@ -1,0 +1,42 @@
+.skeleton {
+  display: block;
+  width: 100%;
+  background: var(--surface-3);
+  animation: pulse calc(var(--dur-slower) * 3) var(--ease-standard) infinite alternate;
+}
+
+.text {
+  height: 0.9em;
+  margin-block: 0.25em;
+  border-radius: var(--radius-xs);
+}
+
+.rect {
+  border-radius: var(--radius-md);
+}
+
+.circle {
+  flex: none;
+  border-radius: var(--radius-pill);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

@@ -94,7 +94,9 @@ export function useHotkeys(bindings: HotkeyMap, options: HotkeyOptions = {}): vo
     if (!enabled) return;
     const target: HTMLElement | Window | null = scope ? scope.current : window;
     if (!target) return;
-    const parsed = Object.keys(bindingsRef.current).map((combo) => [combo, parseHotkey(combo)] as const);
+    const parsed = Object.keys(bindingsRef.current).map(
+      (combo) => [combo, parseHotkey(combo)] as const,
+    );
     const apple = isApplePlatform();
     const onKeyDown = (event: Event) => {
       const e = event as KeyboardEvent;

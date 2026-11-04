@@ -71,8 +71,8 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
   border-radius: var(--radius-xs);
 }
 
@@ -99,4 +99,45 @@ button {
 
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/*
+ * E-ink (7.10) behaviour. Every partial refresh of an electrophoretic panel ghosts, so motion,
+ * translucency and soft depth are removed outright rather than shortened. Colours live in
+ * tokens.css; this block catches what tokens cannot (hard-coded effects in components).
+ */
+:root[data-theme='eink'] *,
+:root[data-theme='eink'] *::before,
+:root[data-theme='eink'] *::after {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+:root[data-theme='eink'] body {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeSpeed;
+}
+
+:root[data-theme='eink'] ::view-transition-group(*),
+:root[data-theme='eink'] ::view-transition-old(*),
+:root[data-theme='eink'] ::view-transition-new(*) {
+  animation: none !important;
+}
+
+:root[data-theme='eink'] ::selection {
+  background: var(--ink);
+  color: var(--bg);
 }

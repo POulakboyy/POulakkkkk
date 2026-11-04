@@ -6,13 +6,16 @@ describe('canonicalJson (RFC 8785)', () => {
     const value = {
       '€': 'Euro Sign',
       '\r': 'Carriage Return',
-      'דּ': 'Hebrew Letter Dalet With Dagesh',
+      דּ: 'Hebrew Letter Dalet With Dagesh',
       '1': 'One',
       '😀': 'Emoji: Grinning Face',
       '\u0080': 'Control',
-      'ö': 'Latin Small Letter O With Diaeresis',
+      ö: 'Latin Small Letter O With Diaeresis',
     };
-    const keys = Object.keys(JSON.parse(canonicalJson(value)) as object);
+    // Read keys from the serialized text: JSON.parse would hoist the integer-like key "1".
+    const keys = [...canonicalJson(value).matchAll(/"((?:[^"\\]|\\.)*)":/g)].map(
+      (match) => JSON.parse(`"${match[1] ?? ''}"`) as string,
+    );
     expect(keys).toEqual(['\r', '1', '\u0080', 'ö', '€', '😀', 'דּ']);
   });
 

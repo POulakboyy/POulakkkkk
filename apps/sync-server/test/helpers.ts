@@ -6,7 +6,12 @@ import { WebSocket } from 'ws';
 import { loadConfig, type ServerConfig } from '../src/config.ts';
 import type { Logger } from '../src/logger.ts';
 import { silentLogger } from '../src/logger.ts';
-import { PROTOCOL_PATH, type Envelope, type ServerMessage, type StoredEnvelope } from '../src/protocol.ts';
+import {
+  PROTOCOL_PATH,
+  type Envelope,
+  type ServerMessage,
+  type StoredEnvelope,
+} from '../src/protocol.ts';
 import { startServer, type SyncServer } from '../src/server.ts';
 import { MemoryStorage } from '../src/storage/memory.ts';
 import type { Storage } from '../src/storage/types.ts';
@@ -46,7 +51,10 @@ export async function startTestServer(
   return { server, storage, httpUrl, url: `ws://127.0.0.1:${server.port}${PROTOCOL_PATH}` };
 }
 
-export function token(space: string, options: { node?: string; ttl?: number; secret?: string } = {}): string {
+export function token(
+  space: string,
+  options: { node?: string; ttl?: number; secret?: string } = {},
+): string {
   const exp = Math.floor(Date.now() / 1000) + (options.ttl ?? 3600);
   const sign: { space: string; exp: number; node?: string } = { space, exp };
   if (options.node !== undefined) sign.node = options.node;
@@ -106,7 +114,8 @@ export class TestClient {
     const client = await TestClient.connect(url);
     client.send({ t: 'hello', space, node, since, token: token(space) });
     const welcome = await client.next();
-    if (welcome.t !== 'welcome') throw new Error(`expected welcome, got ${JSON.stringify(welcome)}`);
+    if (welcome.t !== 'welcome')
+      throw new Error(`expected welcome, got ${JSON.stringify(welcome)}`);
     return client;
   }
 
@@ -151,7 +160,10 @@ export class TestClient {
   }
 
   /** Reads `ops` messages until `count` envelopes were received. */
-  async collect(count: number, timeoutMs?: number): Promise<{ envelopes: StoredEnvelope[]; frames: number; cursor: string }> {
+  async collect(
+    count: number,
+    timeoutMs?: number,
+  ): Promise<{ envelopes: StoredEnvelope[]; frames: number; cursor: string }> {
     const envelopes: StoredEnvelope[] = [];
     let frames = 0;
     let cursor = '';
@@ -162,6 +174,11 @@ export class TestClient {
       frames++;
     }
     return { envelopes, frames, cursor };
+  }
+
+  /** Removes and returns every message received so far. */
+  drain(): ServerMessage[] {
+    return this.inbox.splice(0);
   }
 
   /** Asserts that no message arrives within `ms`. */

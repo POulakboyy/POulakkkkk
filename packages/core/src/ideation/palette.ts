@@ -218,7 +218,8 @@ export function extractSwatches(
   if (pixelCount <= sample) for (let p = 0; p < pixelCount; p++) visit(p);
   else {
     const stride = pixelCount / sample;
-    for (let i = 0; i < sample; i++) visit(Math.min(pixelCount - 1, Math.floor((i + rng()) * stride)));
+    for (let i = 0; i < sample; i++)
+      visit(Math.min(pixelCount - 1, Math.floor((i + rng()) * stride)));
   }
   if (opaque === 0) return [];
 
@@ -241,7 +242,8 @@ export function extractSwatches(
   // 3. Final assignment → cluster weights; clusters rounding to the same hex are merged.
   const clusterWeight = new Float64Array(clusterCount);
   for (let i = 0; i < n; i++) {
-    clusterWeight[nearest(points, i, centers)] += weights[i] ?? 0;
+    const c = nearest(points, i, centers);
+    clusterWeight[c] = (clusterWeight[c] ?? 0) + (weights[i] ?? 0);
   }
   const byHex = new Map<string, PaletteSwatch>();
   for (let c = 0; c < clusterCount; c++) {

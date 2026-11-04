@@ -53,7 +53,8 @@ export class ZipError extends Error {
  */
 export function assertSafeEntryName(name: string): void {
   const reason = unsafeNameReason(name);
-  if (reason) throw new ZipError('ZIP_UNSAFE_NAME', `Unsafe entry name ${JSON.stringify(name)}: ${reason}`);
+  if (reason)
+    throw new ZipError('ZIP_UNSAFE_NAME', `Unsafe entry name ${JSON.stringify(name)}: ${reason}`);
 }
 
 function unsafeNameReason(name: string): string | undefined {
@@ -63,7 +64,8 @@ function unsafeNameReason(name: string): string | undefined {
   if (name.startsWith('/')) return 'absolute path';
   if (/^[A-Za-z]:/.test(name)) return 'drive letter';
   const segments = name.replace(/\/$/, '').split('/');
-  if (segments.some((s) => s === '..' || s === '.' || s === '')) return 'empty, "." or ".." segment';
+  if (segments.some((s) => s === '..' || s === '.' || s === ''))
+    return 'empty, "." or ".." segment';
   return undefined;
 }
 

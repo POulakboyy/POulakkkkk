@@ -35,7 +35,9 @@ export function useAnchoredPosition(
         { offset, viewport },
       );
       setPos((prev) =>
-        prev && prev.x === next.x && prev.y === next.y && prev.placement === next.placement ? prev : next,
+        prev && prev.x === next.x && prev.y === next.y && prev.placement === next.placement
+          ? prev
+          : next,
       );
     };
     const schedule = () => {

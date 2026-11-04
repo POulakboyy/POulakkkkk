@@ -1,0 +1,23 @@
+# Example deployment. Put POUXIS_SYNC_SECRET (>= 32 random characters) in a `.env` file
+# next to this one, e.g. `openssl rand -base64 48`. Terminate TLS in a reverse proxy.
+services:
+  sync:
+    build: .
+    image: pouxis-sync:latest
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    environment:
+      POUXIS_SYNC_SECRET: ${POUXIS_SYNC_SECRET:?set POUXIS_SYNC_SECRET}
+      POUXIS_ALLOWED_ORIGINS: ${POUXIS_ALLOWED_ORIGINS:-}
+      POUXIS_METRICS_TOKEN: ${POUXIS_METRICS_TOKEN:-}
+    volumes:
+      - sync-data:/data
+    ports:
+      - '127.0.0.1:8787:8787'
+    stop_grace_period: 20s
+
+volumes:
+  sync-data:

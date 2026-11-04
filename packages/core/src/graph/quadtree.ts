@@ -340,7 +340,12 @@ export class QuadTree {
         y: ny,
         size: size * 2,
         items: null,
-        children: [leaf(nx, ny, size), leaf(nx + size, ny, size), leaf(nx, ny + size, size), leaf(nx + size, ny + size, size)],
+        children: [
+          leaf(nx, ny, size),
+          leaf(nx + size, ny, size),
+          leaf(nx, ny + size, size),
+          leaf(nx + size, ny + size, size),
+        ],
         count: old.count,
       };
       (parent.children as QuadNode[])[(growUp ? 2 : 0) + (growLeft ? 1 : 0)] = old;

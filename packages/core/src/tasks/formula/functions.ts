@@ -14,8 +14,22 @@ const MAX_ROUND_DIGITS = 15;
 
 export const FUNCTIONS: ReadonlyMap<string, FunctionSpec> = new Map<string, FunctionSpec>([
   ['if', { minArgs: 3, maxArgs: 3 }],
-  ['min', { minArgs: 1, maxArgs: Number.POSITIVE_INFINITY, apply: (n, a, nodes) => Math.min(...numbers(n, a, nodes)) }],
-  ['max', { minArgs: 1, maxArgs: Number.POSITIVE_INFINITY, apply: (n, a, nodes) => Math.max(...numbers(n, a, nodes)) }],
+  [
+    'min',
+    {
+      minArgs: 1,
+      maxArgs: Number.POSITIVE_INFINITY,
+      apply: (n, a, nodes) => Math.min(...numbers(n, a, nodes)),
+    },
+  ],
+  [
+    'max',
+    {
+      minArgs: 1,
+      maxArgs: Number.POSITIVE_INFINITY,
+      apply: (n, a, nodes) => Math.max(...numbers(n, a, nodes)),
+    },
+  ],
   ['abs', unary(Math.abs)],
   ['ceil', unary(Math.ceil)],
   ['floor', unary(Math.floor)],
@@ -27,7 +41,11 @@ export const FUNCTIONS: ReadonlyMap<string, FunctionSpec> = new Map<string, Func
 export const FUNCTION_NAMES: readonly string[] = [...FUNCTIONS.keys()];
 
 function unary(fn: (x: number) => number): FunctionSpec {
-  return { minArgs: 1, maxArgs: 1, apply: (name, args, nodes) => fn(numberArg(name, args, nodes, 0)) };
+  return {
+    minArgs: 1,
+    maxArgs: 1,
+    apply: (name, args, nodes) => fn(numberArg(name, args, nodes, 0)),
+  };
 }
 
 function numbers(name: string, args: readonly FormulaValue[], nodes: readonly Node[]): number[] {

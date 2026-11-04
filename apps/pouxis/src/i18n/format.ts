@@ -236,7 +236,11 @@ const DATE_STYLES: Record<DateStyle, Intl.DateTimeFormatOptions> = {
   monthYear: { month: 'long', year: 'numeric' },
 };
 
-const DAY_MONTH_YEAR: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+const DAY_MONTH_YEAR: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+};
 
 export function formatDate(
   ts: Timestamp,

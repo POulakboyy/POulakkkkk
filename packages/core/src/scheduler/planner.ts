@@ -17,10 +17,10 @@ import type {
   UnplacedReason,
 } from './types.ts';
 import {
-  alignUp,
   floorToMinute,
   hourLookup,
   intersect,
+  localAligner,
   overlapMs,
   subtract,
   type LocalDay,
@@ -49,6 +49,8 @@ export interface PlanDay {
   /** Focused work already booked on the local calendar day. */
   loadMs: number;
   hourAt: (ts: Timestamp) => number;
+  /** Rounds up to the next step of the local wall clock. */
+  align: (ts: Timestamp, stepMs: number) => Timestamp;
 }
 
 export interface PlanOutcome {
@@ -77,6 +79,7 @@ export function buildPlanDay(input: DayBuildInput): PlanDay | undefined {
     free: freeSlots(usable, input.busy).filter((s) => s.end > s.start),
     loadMs: overlapMs({ start: input.day.start, end: input.day.end }, input.focus),
     hourAt: hourLookup(input.window, input.timeZone),
+    align: localAligner(input.window, input.timeZone),
   };
 }
 
@@ -169,7 +172,10 @@ function placeTask(task: Task, days: readonly PlanDay[], s: PlannerSettings, out
   }
 
   if (!earliest.spot) {
-    out.unplaced.push({ taskId: task.id, reason: unplacedReason(dur, days, splittable, capBlocked) });
+    out.unplaced.push({
+      taskId: task.id,
+      reason: unplacedReason(dur, days, splittable, capBlocked),
+    });
     return;
   }
 
@@ -214,7 +220,7 @@ function findEarliest(
 ): { spot?: Spot; capBlocked: boolean } {
   let capBlocked = false;
   for (const day of days) {
-    const start = firstFit(day.free, dur, s.stepMs);
+    const start = firstFit(day, dur, s.stepMs);
     if (start === undefined) continue;
     if (!capAllows(day, dur, s)) {
       capBlocked = true;
@@ -225,9 +231,9 @@ function findEarliest(
   return { capBlocked };
 }
 
-function firstFit(free: readonly Interval[], dur: number, stepMs: number): Timestamp | undefined {
-  for (const slot of free) {
-    const start = alignUp(slot.start, stepMs);
+function firstFit(day: PlanDay, dur: number, stepMs: number): Timestamp | undefined {
+  for (const slot of day.free) {
+    const start = day.align(slot.start, stepMs);
     if (start + dur <= slot.end) return start;
   }
   return undefined;
@@ -249,7 +255,7 @@ function findChunks(
     let dayLoad = day.loadMs;
     for (const slot of day.free) {
       if (remaining <= 0) break;
-      const start = alignUp(slot.start, s.stepMs);
+      const start = day.align(slot.start, s.stepMs);
       const room = floorToMinute(slot.end - start);
       if (room < s.minChunkMs) continue;
       const capRoom =
@@ -330,7 +336,7 @@ function bestEnergyStart(
   let best: Timestamp | undefined;
   let bestValue = Number.NEGATIVE_INFINITY;
   for (const slot of day.free) {
-    for (let start = alignUp(slot.start, stepMs); start + dur <= slot.end; start += stepMs) {
+    for (let start = day.align(slot.start, stepMs); start + dur <= slot.end; start += stepMs) {
       if (deadline !== undefined && start + dur > deadline) return best;
       const score = energyScore(day, start, dur, energy, stepMs);
       const value = target.prefersHigh ? score : -score;

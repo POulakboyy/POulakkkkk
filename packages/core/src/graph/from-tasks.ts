@@ -61,7 +61,8 @@ export function tasksToGraph(
       y: 0,
       refId: task.id,
     };
-    const hasParent = task.parentId !== undefined && task.parentId !== task.id && ids.has(task.parentId);
+    const hasParent =
+      task.parentId !== undefined && task.parentId !== task.id && ids.has(task.parentId);
     if (hasParent) node.parentId = taskNodeId(task.parentId as Id);
     if (task.color !== undefined) node.color = task.color;
     if (task.deadline !== undefined) node.due = task.deadline;

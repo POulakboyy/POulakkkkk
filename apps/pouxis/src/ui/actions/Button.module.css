@@ -79,44 +79,44 @@
 }
 
 /* Variants */
-.button[data-variant='primary'] {
+.button.primary {
   --btn-bg: var(--accent);
   --btn-fg: var(--accent-ink);
   --btn-layer: var(--accent-ink);
 }
 
-.button[data-variant='secondary'] {
+.button.secondary {
   --btn-bg: var(--surface-2);
   --btn-fg: var(--ink);
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
-.button[data-variant='ghost'] {
+.button.ghost {
   --btn-bg: transparent;
   --btn-fg: var(--ink);
 }
 
-.button[data-variant='danger'] {
+.button.danger {
   --btn-bg: var(--danger);
-  --btn-fg: var(--surface);
+  --btn-fg: var(--danger-ink);
   --btn-layer: var(--ink);
 }
 
-.button[data-variant='danger-soft'] {
+.button.danger-soft {
   --btn-bg: var(--danger-soft);
   --btn-fg: color-mix(in oklab, var(--danger) 80%, var(--ink));
   --btn-layer: var(--danger);
 }
 
 /* Sizes */
-.button[data-size='sm'] {
+.button.sm {
   --btn-h: 36px;
   --btn-pad: var(--space-4);
   gap: var(--space-1);
   font-size: var(--text-sm);
 }
 
-.button[data-size='lg'] {
+.button.lg {
   --btn-h: 52px;
   --btn-pad: var(--space-6);
   font-size: var(--text-lg);
@@ -134,7 +134,7 @@
 
 .button:disabled:not([aria-busy='true']),
 .button[aria-disabled='true']:not([aria-busy='true']) {
-  opacity: 0.45;
+  opacity: var(--opacity-disabled);
 }
 
 .icon {
@@ -181,16 +181,16 @@
   --btn-bg: var(--surface-3);
 }
 
-.iconButton[data-variant='ghost'] {
+.iconButton.ghost {
   color: var(--ink-2);
 }
 
 @media (hover: hover) {
-  .iconButton[data-variant='ghost']:hover {
+  .iconButton.ghost:hover {
     color: var(--ink);
   }
 }
 
-.iconButton[data-size='sm'] {
+.iconButton.sm {
   --btn-h: 32px;
 }

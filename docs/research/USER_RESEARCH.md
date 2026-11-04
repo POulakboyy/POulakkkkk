@@ -39,16 +39,16 @@ Documents liés :
 
 ## 0. Conventions
 
-| Préfixe       | Signification                                                                    | Exemple                       |
-| ------------- | -------------------------------------------------------------------------------- | ----------------------------- |
-| `m.n`         | Fonctionnalité n du module m du brief (même convention que les commentaires du code) | `1.1` Routage dynamique       |
-| `R1`–`R7`     | Risque produit étudié (§ 2)                                                      | `R1` Confiance dans le routage |
-| `H1a`…        | Hypothèse falsifiable rattachée à un risque                                      | `H4b` Usure et culpabilité    |
-| `PP1`–`PP5`   | Proto-persona ([`PERSONAS.md`](./PERSONAS.md))                                   | `PP4` Étudiante TDAH          |
-| `P01`…        | Participant·e pseudonymisé·e (jamais de nom dans le dépôt)                       | `P07`                         |
-| `OBS-###`     | Observation atomique (un fait, une source)                                       | `OBS-042`                     |
-| `INS-###`     | Insight (carte, [`templates/carte-insight.md`](./templates/carte-insight.md))    | `INS-007`                     |
-| `DEC-###`     | Décision produit (§ 10)                                                          | `DEC-003`                     |
+| Préfixe     | Signification                                                                        | Exemple                        |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------------------ |
+| `m.n`       | Fonctionnalité n du module m du brief (même convention que les commentaires du code) | `1.1` Routage dynamique        |
+| `R1`–`R7`   | Risque produit étudié (§ 2)                                                          | `R1` Confiance dans le routage |
+| `H1a`…      | Hypothèse falsifiable rattachée à un risque                                          | `H4b` Usure et culpabilité     |
+| `PP1`–`PP5` | Proto-persona ([`PERSONAS.md`](./PERSONAS.md))                                       | `PP4` Étudiante TDAH           |
+| `P01`…      | Participant·e pseudonymisé·e (jamais de nom dans le dépôt)                           | `P07`                          |
+| `OBS-###`   | Observation atomique (un fait, une source)                                           | `OBS-042`                      |
+| `INS-###`   | Insight (carte, [`templates/carte-insight.md`](./templates/carte-insight.md))        | `INS-007`                      |
+| `DEC-###`   | Décision produit (§ 10)                                                              | `DEC-003`                      |
 
 **Échelle de preuve.** HYPOTHÈSE (non testée) → SIGNAL (une source, peu de participant·es) →
 INSIGHT (convergence, confiance moyenne ou forte) → DÉCISION. On ne saute pas d'étape.
@@ -86,15 +86,15 @@ décision explicites.
 
 ### Vue d'ensemble
 
-| Risque | Intitulé                                       | Fonctionnalités principales                         | Méthodes clés                                   | Décision éclairée                                    |
-| ------ | ---------------------------------------------- | --------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------- |
-| `R1`   | Confiance dans le routage automatique          | 1.1, 1.2, 1.6, 1.10, 1.15, 2.4, 2.15                 | Entretiens, test F2, journal, métriques         | Routage par défaut ou suggestion ; explication ; contrôle |
-| `R2`   | Périmètre : 100 fonctions, lesquelles comptent | Toutes ; présélection de ~30                         | Tests de concept, Kano, MaxDiff, buy-a-feature  | Périmètre MVP ; ordre de la feuille de route         |
-| `R3`   | Boucle capture → plan → focus → revue          | 2.11, 1.8, 5.14, 2.7, 1.1, 2.6, 2.14, 1.11, 7.9, 1.9 | Journal 14 jours, tests F1–F4, métriques        | Maillon à renforcer en premier ; rituels             |
-| `R4`   | Personnes neurodivergentes (TDAH)              | 1.14, 1.10, 2.2, 2.14, 2.15, 2.3, 7.3, 7.4, 5.13    | Co-conception, entretiens, journal, tests       | Réglages par défaut ; formulations ; mode « doux »   |
-| `R5`   | Local-first / E2EE comme moteur d'adoption     | 3.1, 3.5, 1.7, 6.11, 3.15                            | Entretiens « switch », MaxDiff critères, prix   | Positionnement ; priorité de 3.5 ; modèle économique |
-| `R6`   | Soutien à la créativité                        | 5.1, 5.4, 5.3, 5.11, 5.14, 5.15                      | Test F5 + CSI, journal                          | Place de l'idéation dans le MVP                      |
-| `R7`   | Réalité multi-plateforme                       | 1.7, 3.11, 3.12, 2.11, 7.7                           | Screener, enquête, journal                      | Plateformes prioritaires pour le MVP et les tests    |
+| Risque | Intitulé                                       | Fonctionnalités principales                          | Méthodes clés                                  | Décision éclairée                                         |
+| ------ | ---------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------- |
+| `R1`   | Confiance dans le routage automatique          | 1.1, 1.2, 1.6, 1.10, 1.15, 2.4, 2.15                 | Entretiens, test F2, journal, métriques        | Routage par défaut ou suggestion ; explication ; contrôle |
+| `R2`   | Périmètre : 100 fonctions, lesquelles comptent | Toutes ; présélection de ~30                         | Tests de concept, Kano, MaxDiff, buy-a-feature | Périmètre MVP ; ordre de la feuille de route              |
+| `R3`   | Boucle capture → plan → focus → revue          | 2.11, 1.8, 5.14, 2.7, 1.1, 2.6, 2.14, 1.11, 7.9, 1.9 | Journal 14 jours, tests F1–F4, métriques       | Maillon à renforcer en premier ; rituels                  |
+| `R4`   | Personnes neurodivergentes (TDAH)              | 1.14, 1.10, 2.2, 2.14, 2.15, 2.3, 7.3, 7.4, 5.13     | Co-conception, entretiens, journal, tests      | Réglages par défaut ; formulations ; mode « doux »        |
+| `R5`   | Local-first / E2EE comme moteur d'adoption     | 3.1, 3.5, 1.7, 6.11, 3.15                            | Entretiens « switch », MaxDiff critères, prix  | Positionnement ; priorité de 3.5 ; modèle économique      |
+| `R6`   | Soutien à la créativité                        | 5.1, 5.4, 5.3, 5.11, 5.14, 5.15                      | Test F5 + CSI, journal                         | Place de l'idéation dans le MVP                           |
+| `R7`   | Réalité multi-plateforme                       | 1.7, 3.11, 3.12, 2.11, 7.7                           | Screener, enquête, journal                     | Plateformes prioritaires pour le MVP et les tests         |
 
 ### R1 — Confiance dans le routage automatique des tâches
 
@@ -289,14 +289,14 @@ intervient à quel moment de la boucle ?
 
 ## 4. Programme par phases
 
-| Phase | Semaines (indicatif) | Méthodes                                                    | n cible (min)              | Risques           | Livrables                                         |
-| ----- | -------------------- | ----------------------------------------------------------- | -------------------------- | ----------------- | ------------------------------------------------- |
-| 0     | S0–S2                | Analyse documentaire, avis publics, pilotes, panel          | Pilotes : 1 + 1            | Tous              | Instruments validés, panel ≥ 60 inscrit·es        |
+| Phase | Semaines (indicatif) | Méthodes                                                    | n cible (min)              | Risques            | Livrables                                        |
+| ----- | -------------------- | ----------------------------------------------------------- | -------------------------- | ------------------ | ------------------------------------------------ |
+| 0     | S0–S2                | Analyse documentaire, avis publics, pilotes, panel          | Pilotes : 1 + 1            | Tous               | Instruments validés, panel ≥ 60 inscrit·es       |
 | 1     | S2–S6                | Entretiens de découverte (JTBD + « switch »), co-conception | 18 (12) + 2 ateliers × 4–5 | R1, R3, R4, R5, R7 | Synthèse, personas révisés, jobs prioritaires    |
-| 2     | S6–S10               | Tests de concept des 7 modules ; enquête Kano + MaxDiff     | 12 (8) ; 300 (150)         | R2, R5, R6        | Classement par segment, périmètre MVP recommandé  |
-| 3     | S10–S14              | Tests d'utilisabilité modérés du MVP (2 rounds)             | 2 × 8                      | R1, R3, R4, R6    | Rapports de round, problèmes classés par gravité  |
+| 2     | S6–S10               | Tests de concept des 7 modules ; enquête Kano + MaxDiff     | 12 (8) ; 300 (150)         | R2, R5, R6         | Classement par segment, périmètre MVP recommandé |
+| 3     | S10–S14              | Tests d'utilisabilité modérés du MVP (2 rounds)             | 2 × 8                      | R1, R3, R4, R6     | Rapports de round, problèmes classés par gravité |
 | 4     | S14–S18              | Étude journal de 14 jours sur la version alpha              | 16 recruté·es (12 au bout) | R1, R3, R4, R6, R7 | Carte d'expérience 14 jours, ruptures de boucle  |
-| 5     | S18 → continu        | Mesures longitudinales volontaires + entretiens de suivi    | 40–60 par cohorte ; 6      | R1, R2, R3, R5    | Tableau HEART, cohortes, entretiens trimestriels  |
+| 5     | S18 → continu        | Mesures longitudinales volontaires + entretiens de suivi    | 40–60 par cohorte ; 6      | R1, R2, R3, R5     | Tableau HEART, cohortes, entretiens trimestriels |
 
 ### Phase 0 — Cadrage et préparation (S0–S2)
 
@@ -407,13 +407,13 @@ synchronisation (§ 12).
 
 **Cadre HEART** (Rodden, Hutchinson & Fu, 2010), décliné en objectifs → signaux → indicateurs :
 
-| Dimension    | Indicateurs proposés                                                                                                     | Risques |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------ | ------- |
-| Happiness    | UMUX-Lite mensuel ; à J30, question de Sean Ellis : « Comment vous sentiriez-vous si vous ne pouviez plus utiliser POuxis ? » | R2      |
-| Engagement   | Jours actifs par semaine ; jours avec boucle complète ; sessions focus par semaine                                      | R3      |
-| Adoption     | Première utilisation de chaque fonction du top 10 ; délai jusqu'à la première revue                                      | R2, R3  |
-| Retention    | Part de personnes actives en S1, S4 et S8 (par cohorte) ; réactivation après une pause                                  | R3, R4  |
-| Task success | Part des tâches planifiées faites le jour prévu ; écart prévu / réalisé (instantanés 1.9) ; taille de la boîte de réception ; plans acceptés sans modification | R1, R3 |
+| Dimension    | Indicateurs proposés                                                                                                                                           | Risques |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Happiness    | UMUX-Lite mensuel ; à J30, question de Sean Ellis : « Comment vous sentiriez-vous si vous ne pouviez plus utiliser POuxis ? »                                  | R2      |
+| Engagement   | Jours actifs par semaine ; jours avec boucle complète ; sessions focus par semaine                                                                             | R3      |
+| Adoption     | Première utilisation de chaque fonction du top 10 ; délai jusqu'à la première revue                                                                            | R2, R3  |
+| Retention    | Part de personnes actives en S1, S4 et S8 (par cohorte) ; réactivation après une pause                                                                         | R3, R4  |
+| Task success | Part des tâches planifiées faites le jour prévu ; écart prévu / réalisé (instantanés 1.9) ; taille de la boîte de réception ; plans acceptés sans modification | R1, R3  |
 
 - **Échantillon.** 40 à 60 volontaires par cohorte. Analyses descriptives et par cohorte, sans
   généralisation à l'ensemble des utilisateur·ices (échantillon volontaire, donc biaisé).
@@ -426,16 +426,16 @@ cartes ouvert avec 15 à 20 personnes (ordre de grandeur recommandé par Tullis 
 
 ## 5. Tailles d'échantillon et justification
 
-| Méthode                          | n cible (min)       | Justification                                                                                                                                                                                                                                                                                  |
-| -------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Entretiens de découverte         | 18 (12)             | Dans un groupe assez homogène, l'essentiel des thèmes apparaît dans les 12 premiers entretiens (Guest, Bunce & Johnson, 2006) ; une revue systématique situe la saturation entre 9 et 17 entretiens, surtout pour des populations homogènes et des objectifs ciblés (Hennink & Kaiser, 2022). Notre population couvre 5 profils : d'où 3 à 4 entretiens par profil. Règle d'arrêt complémentaire : on s'arrête quand 3 entretiens consécutifs n'apportent plus de code nouveau (Francis et al., 2010). |
-| Ateliers de co-conception        | 8–10                | Profondeur et co-construction, pas représentativité.                                                                                                                                                                                                                                           |
-| Tests de concept qualitatifs     | 12 (8)              | Chaque module vu par 6 à 7 personnes. Objectif : compréhension et réactions, pas mesure.                                                                                                                                                                                                       |
-| Enquête Kano + MaxDiff           | 300 (150)           | Marge d'erreur d'une proportion à 95 % (p = 0,5) : ±5,7 points à n = 300, ±8 points à n = 150. En Kano, 10 fonctions sur 30 par personne donnent environ 50 avis par fonction à n = 150. Comparer des segments exige au moins 50 répondant·es par segment ; sinon, on ne publie que le résultat global. |
-| Utilisabilité formative          | 2 rounds × 8        | Avec 5 participant·es, on détecte en moyenne environ 85 % des problèmes fréquents (Nielsen & Landauer, 1993), mais cette moyenne masque une forte variabilité d'un échantillon à l'autre (Faulkner, 2003). 8 par round couvrent plateformes et profils, et limitent le risque de rater un problème propre à un segment. |
-| Utilisabilité sommative (bêta)   | ≥ 20                | Pour des taux de réussite et un SUS avec des intervalles de confiance exploitables (Sauro & Lewis, 2016).                                                                                                                                                                                       |
-| Étude journal 14 jours           | 16 (12 au bout)     | Hypothèse de planification : 20 à 30 % d'abandons sur deux semaines. 12 personnes au bout donnent environ 3 personnes par proto-persona prioritaire.                                                                                                                                             |
-| Mesures longitudinales           | 40–60 par cohorte   | Suffisant pour des tendances descriptives et pour repérer un décrochage massif ; insuffisant pour des inférences fines.                                                                                                                                                                          |
+| Méthode                        | n cible (min)     | Justification                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------ | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Entretiens de découverte       | 18 (12)           | Dans un groupe assez homogène, l'essentiel des thèmes apparaît dans les 12 premiers entretiens (Guest, Bunce & Johnson, 2006) ; une revue systématique situe la saturation entre 9 et 17 entretiens, surtout pour des populations homogènes et des objectifs ciblés (Hennink & Kaiser, 2022). Notre population couvre 5 profils : d'où 3 à 4 entretiens par profil. Règle d'arrêt complémentaire : on s'arrête quand 3 entretiens consécutifs n'apportent plus de code nouveau (Francis et al., 2010). |
+| Ateliers de co-conception      | 8–10              | Profondeur et co-construction, pas représentativité.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Tests de concept qualitatifs   | 12 (8)            | Chaque module vu par 6 à 7 personnes. Objectif : compréhension et réactions, pas mesure.                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Enquête Kano + MaxDiff         | 300 (150)         | Marge d'erreur d'une proportion à 95 % (p = 0,5) : ±5,7 points à n = 300, ±8 points à n = 150. En Kano, 10 fonctions sur 30 par personne donnent environ 50 avis par fonction à n = 150. Comparer des segments exige au moins 50 répondant·es par segment ; sinon, on ne publie que le résultat global.                                                                                                                                                                                                |
+| Utilisabilité formative        | 2 rounds × 8      | Avec 5 participant·es, on détecte en moyenne environ 85 % des problèmes fréquents (Nielsen & Landauer, 1993), mais cette moyenne masque une forte variabilité d'un échantillon à l'autre (Faulkner, 2003). 8 par round couvrent plateformes et profils, et limitent le risque de rater un problème propre à un segment.                                                                                                                                                                                |
+| Utilisabilité sommative (bêta) | ≥ 20              | Pour des taux de réussite et un SUS avec des intervalles de confiance exploitables (Sauro & Lewis, 2016).                                                                                                                                                                                                                                                                                                                                                                                              |
+| Étude journal 14 jours         | 16 (12 au bout)   | Hypothèse de planification : 20 à 30 % d'abandons sur deux semaines. 12 personnes au bout donnent environ 3 personnes par proto-persona prioritaire.                                                                                                                                                                                                                                                                                                                                                   |
+| Mesures longitudinales         | 40–60 par cohorte | Suffisant pour des tendances descriptives et pour repérer un décrochage massif ; insuffisant pour des inférences fines.                                                                                                                                                                                                                                                                                                                                                                                |
 
 ---
 
@@ -443,32 +443,32 @@ cartes ouvert avec 15 à 20 personnes (ordre de grandeur recommandé par Tullis 
 
 ### 6.1 Canaux
 
-| Canal                                                         | Public attendu                                  | Mode                                                                    | Précautions                                                                                                            |
-| ------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| YouTube K13 Studios (onglet communauté, commentaire épinglé, mention en fin de vidéo) | Créateur·ices, étudiant·es, designers | Lien vers le screener                                                   | Biais de complaisance ; au plus 60 % de l'échantillon de chaque phase                                                 |
-| Discord (serveur communautaire)                               | Abonné·es engagé·es, devs                       | Salon `#panel-recherche`, rôle « Panel » attribué sur demande          | Annonces publiques seulement, aucun message privé non sollicité                                                       |
-| Reddit                                                        | Productivité, TDAH, créateur·ices, freelances, devs, vie privée | Publication transparente, lien vers le screener          | Lire et respecter le règlement de chaque communauté ; demander l'accord des modérateur·ices avant toute publication dans les communautés TDAH (par ex. r/ADHD, r/ADHD_Programmers) ; communautés souvent anglophones |
-| GitHub (Discussions du dépôt, README)                         | Devs, contributeur·ices potentiel·les           | Annonce épinglée                                                        | Les contributeur·ices actif·ves sont exclu·es des tests d'utilisabilité (leur connaissance du produit biaise)          |
-| Fediverse / Mastodon, réseaux du fondateur                    | Public sensible à la vie privée, open source    | Publication                                                             | Quotas pour éviter la surreprésentation du profil « vie privée »                                                      |
-| Écoles et universités (associations étudiantes, écoles d'art et de design, services d'accompagnement du handicap) | Étudiant·es, dont neurodivergent·es | Partenariat, affiche, mail relayé par l'institution | Jamais de démarchage individuel ; accord de l'institution                                                              |
-| Associations TDAH (par ex. HyperSupers – TDAH France, TDA/H Belgique) | Personnes concernées                     | Partenariat ; relecture des documents par l'association                | Pas d'allégation de soin ; retour des résultats à l'association                                                        |
-| Communautés freelances et studios créatifs                    | Designers, petites équipes                      | Relais, bouche-à-oreille                                                | Varier les villes et les secteurs                                                                                      |
+| Canal                                                                                                             | Public attendu                                                  | Mode                                                          | Précautions                                                                                                                                                                                                          |
+| ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| YouTube K13 Studios (onglet communauté, commentaire épinglé, mention en fin de vidéo)                             | Créateur·ices, étudiant·es, designers                           | Lien vers le screener                                         | Biais de complaisance ; au plus 60 % de l'échantillon de chaque phase                                                                                                                                                |
+| Discord (serveur communautaire)                                                                                   | Abonné·es engagé·es, devs                                       | Salon `#panel-recherche`, rôle « Panel » attribué sur demande | Annonces publiques seulement, aucun message privé non sollicité                                                                                                                                                      |
+| Reddit                                                                                                            | Productivité, TDAH, créateur·ices, freelances, devs, vie privée | Publication transparente, lien vers le screener               | Lire et respecter le règlement de chaque communauté ; demander l'accord des modérateur·ices avant toute publication dans les communautés TDAH (par ex. r/ADHD, r/ADHD_Programmers) ; communautés souvent anglophones |
+| GitHub (Discussions du dépôt, README)                                                                             | Devs, contributeur·ices potentiel·les                           | Annonce épinglée                                              | Les contributeur·ices actif·ves sont exclu·es des tests d'utilisabilité (leur connaissance du produit biaise)                                                                                                        |
+| Fediverse / Mastodon, réseaux du fondateur                                                                        | Public sensible à la vie privée, open source                    | Publication                                                   | Quotas pour éviter la surreprésentation du profil « vie privée »                                                                                                                                                     |
+| Écoles et universités (associations étudiantes, écoles d'art et de design, services d'accompagnement du handicap) | Étudiant·es, dont neurodivergent·es                             | Partenariat, affiche, mail relayé par l'institution           | Jamais de démarchage individuel ; accord de l'institution                                                                                                                                                            |
+| Associations TDAH (par ex. HyperSupers – TDAH France, TDA/H Belgique)                                             | Personnes concernées                                            | Partenariat ; relecture des documents par l'association       | Pas d'allégation de soin ; retour des résultats à l'association                                                                                                                                                      |
+| Communautés freelances et studios créatifs                                                                        | Designers, petites équipes                                      | Relais, bouche-à-oreille                                      | Varier les villes et les secteurs                                                                                                                                                                                    |
 
 Sessions en français par défaut. Des sessions en anglais sont possibles si une personne modératrice
 anglophone est disponible ; elles sont signalées comme telles dans l'analyse.
 
 ### 6.2 Quotas par phase qualitative
 
-| Critère                                                      | Quota                                                                                 |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| Proto-personas `PP1`–`PP4`                                   | Au moins 3 chacun en phase 1 ; au moins 1 par round de test                          |
-| `PP5` petite équipe créative                                 | Au moins 2 équipes en phase 1 (2 membres par équipe ou entretiens individuels)       |
-| Neurodivergent·es auto-identifié·es                          | Au moins 30 %                                                                         |
-| Hors audience K13 Studios                                    | Au moins 40 %                                                                         |
-| Plateformes                                                  | Au moins 30 % Android et au moins 30 % Windows ; plusieurs écosystèmes mélangés       |
-| Technologies d'assistance (lecteur d'écran, zoom, clavier seul, commande vocale) | Au moins 2 par round de test                                  |
-| Aisance numérique                                            | Au moins un tiers d'utilisateur·ices d'agenda natif ou papier (pas que des « power users ») |
-| Genre et âge                                                 | Mélange ; 18 à 55 ans et plus                                                         |
+| Critère                                                                          | Quota                                                                                       |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Proto-personas `PP1`–`PP4`                                                       | Au moins 3 chacun en phase 1 ; au moins 1 par round de test                                 |
+| `PP5` petite équipe créative                                                     | Au moins 2 équipes en phase 1 (2 membres par équipe ou entretiens individuels)              |
+| Neurodivergent·es auto-identifié·es                                              | Au moins 30 %                                                                               |
+| Hors audience K13 Studios                                                        | Au moins 40 %                                                                               |
+| Plateformes                                                                      | Au moins 30 % Android et au moins 30 % Windows ; plusieurs écosystèmes mélangés             |
+| Technologies d'assistance (lecteur d'écran, zoom, clavier seul, commande vocale) | Au moins 2 par round de test                                                                |
+| Aisance numérique                                                                | Au moins un tiers d'utilisateur·ices d'agenda natif ou papier (pas que des « power users ») |
+| Genre et âge                                                                     | Mélange ; 18 à 55 ans et plus                                                               |
 
 **Exclusions.** Moins de 18 ans. Personnes ayant travaillé dans les 12 derniers mois pour un éditeur
 d'applications de productivité, d'agenda ou de notes. Plus de 2 études rémunérées dans les 6 derniers
@@ -484,25 +484,25 @@ Durée cible : 5 minutes. Texte d'introduction proposé :
 > sont supprimées au plus tard 30 jours après la fin du recrutement. Elles ne sont ni vendues ni
 > partagées.
 
-| #   | Question                                                                                                                                                                                                                   | Réponses                                                                                                                                                                                                                       | Usage                                       |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| S1  | Quel âge avez-vous ?                                                                                                                                                                                                       | Moins de 18 ans · 18–24 · 25–34 · 35–44 · 45–54 · 55 et plus                                                                                                                                                                  | Moins de 18 ans : fin polie du questionnaire |
-| S2  | Dans quel pays résidez-vous ?                                                                                                                                                                                              | Liste                                                                                                                                                                                                                          | RGPD, versement des incitations             |
-| S3  | Dans quelle(s) langue(s) êtes-vous à l'aise pour une discussion d'une heure ?                                                                                                                                              | Français · Anglais · Autre                                                                                                                                                                                                     | Logistique                                  |
-| S4  | Quelle description correspond le mieux à votre activité principale ? (une seule)                                                                                                                                           | Création de contenu (vidéo, podcast, streaming, écriture en ligne) · Design (graphique, UI/UX, illustration, motion) · Développement logiciel · Études (préciser le domaine) · Membre d'un studio ou d'une agence créative de 15 personnes ou moins · Salarié·e de bureau dans une organisation de plus de 50 personnes · Autre (préciser) | Proto-persona ; options leurres incluses     |
-| S5  | Quel est votre statut ?                                                                                                                                                                                                    | Indépendant·e ou freelance · Salarié·e · Étudiant·e · Étudiant·e avec un emploi · En recherche d'emploi · Autre                                                                                                               | Proto-persona                               |
-| S6  | Avec combien de personnes travaillez-vous régulièrement sur vos projets ?                                                                                                                                                  | Seul·e · 2 à 5 · 6 à 15 · Plus de 15                                                                                                                                                                                          | `PP5`                                       |
-| S7  | Quels appareils utilisez-vous au moins une fois par semaine ? (plusieurs choix)                                                                                                                                            | iPhone · Téléphone Android · iPad · Tablette Android · Mac · PC Windows · PC Linux · Liseuse ou tablette à encre électronique · Autre                                                                                          | `R7`, quotas plateformes                    |
-| S8  | Qu'utilisez-vous aujourd'hui pour organiser vos tâches et votre temps ? (plusieurs choix)                                                                                                                                  | Agenda ou carnet papier · Agenda numérique (Google, Apple, Outlook…) · Application de tâches (Todoist, Things, TickTick, Microsoft To Do…) · Outil de notes (Notion, Obsidian, Apple Notes…) · Planificateur visuel (Tiimo, Structured…) · Tableur · Rien de particulier · Autre | Contexte, aisance numérique                 |
-| S9  | À quand remonte la dernière fois que vous avez changé d'outil d'organisation, ou sérieusement essayé de le faire ?                                                                                                        | Moins de 3 mois · 3 à 12 mois · Plus d'un an · Jamais                                                                                                                                                                          | Entretiens « switch » (privilégier moins de 12 mois) |
-| S10 | En 2 ou 3 phrases, décrivez un moment récent où votre organisation vous a fait défaut.                                                                                                                                    | Texte libre                                                                                                                                                                                                                    | Capacité à raconter ; pas de « bonne réponse » |
-| S11 | Combien de temps par semaine consacrez-vous à des projets créatifs (personnels ou professionnels) ?                                                                                                                       | Aucun · Moins de 2 h · 2 à 10 h · Plus de 10 h                                                                                                                                                                                | `PP1`, `PP2`, `R6`                          |
-| S12 | Connaissez-vous la chaîne YouTube K13 Studios ?                                                                                                                                                                            | Non · J'en ai entendu parler · Je la regarde de temps en temps · Je suis abonné·e et la regarde régulièrement                                                                                                                 | Quota audience / hors audience              |
-| S13 | Au cours des 12 derniers mois, avez-vous travaillé pour une entreprise qui développe une application de productivité, d'agenda ou de notes ? Combien d'études utilisateurs rémunérées avez-vous faites ces 6 derniers mois ? | Oui · Non ; nombre                                                                                                                                                                                                            | Exclusions                                  |
-| S14 | (Facultatif) Utilisez-vous une technologie d'assistance ou des réglages particuliers ? Avez-vous besoin d'aménagements pour participer ?                                                                                 | Lecteur d'écran · Zoom ou agrandissement · Commande vocale · Clavier uniquement · Sous-titres · Autre · Je préfère ne pas répondre ; texte libre                                                                              | Quotas, préparation des sessions (§ 8)      |
-| S15 | (Facultatif, section séparée, voir ci-dessous) Neurodivergence                                                                                                                                                             | Voir ci-dessous                                                                                                                                                                                                                | `R4`, quota                                 |
-| S16 | Quelles modalités préférez-vous ? Quelles sont vos disponibilités ?                                                                                                                                                        | Visio · Téléphone · Présentiel (ville) · Écrit asynchrone ; créneaux                                                                                                                                                           | Logistique, accessibilité                   |
-| S17 | Acceptez-vous d'être recontacté·e pour de futures études (pendant 24 mois au plus) ? Adresse e-mail.                                                                                                                      | Oui · Non                                                                                                                                                                                                                      | Panel                                       |
+| #   | Question                                                                                                                                                                                                                     | Réponses                                                                                                                                                                                                                                                                                                                                   | Usage                                                |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| S1  | Quel âge avez-vous ?                                                                                                                                                                                                         | Moins de 18 ans · 18–24 · 25–34 · 35–44 · 45–54 · 55 et plus                                                                                                                                                                                                                                                                               | Moins de 18 ans : fin polie du questionnaire         |
+| S2  | Dans quel pays résidez-vous ?                                                                                                                                                                                                | Liste                                                                                                                                                                                                                                                                                                                                      | RGPD, versement des incitations                      |
+| S3  | Dans quelle(s) langue(s) êtes-vous à l'aise pour une discussion d'une heure ?                                                                                                                                                | Français · Anglais · Autre                                                                                                                                                                                                                                                                                                                 | Logistique                                           |
+| S4  | Quelle description correspond le mieux à votre activité principale ? (une seule)                                                                                                                                             | Création de contenu (vidéo, podcast, streaming, écriture en ligne) · Design (graphique, UI/UX, illustration, motion) · Développement logiciel · Études (préciser le domaine) · Membre d'un studio ou d'une agence créative de 15 personnes ou moins · Salarié·e de bureau dans une organisation de plus de 50 personnes · Autre (préciser) | Proto-persona ; options leurres incluses             |
+| S5  | Quel est votre statut ?                                                                                                                                                                                                      | Indépendant·e ou freelance · Salarié·e · Étudiant·e · Étudiant·e avec un emploi · En recherche d'emploi · Autre                                                                                                                                                                                                                            | Proto-persona                                        |
+| S6  | Avec combien de personnes travaillez-vous régulièrement sur vos projets ?                                                                                                                                                    | Seul·e · 2 à 5 · 6 à 15 · Plus de 15                                                                                                                                                                                                                                                                                                       | `PP5`                                                |
+| S7  | Quels appareils utilisez-vous au moins une fois par semaine ? (plusieurs choix)                                                                                                                                              | iPhone · Téléphone Android · iPad · Tablette Android · Mac · PC Windows · PC Linux · Liseuse ou tablette à encre électronique · Autre                                                                                                                                                                                                      | `R7`, quotas plateformes                             |
+| S8  | Qu'utilisez-vous aujourd'hui pour organiser vos tâches et votre temps ? (plusieurs choix)                                                                                                                                    | Agenda ou carnet papier · Agenda numérique (Google, Apple, Outlook…) · Application de tâches (Todoist, Things, TickTick, Microsoft To Do…) · Outil de notes (Notion, Obsidian, Apple Notes…) · Planificateur visuel (Tiimo, Structured…) · Tableur · Rien de particulier · Autre                                                           | Contexte, aisance numérique                          |
+| S9  | À quand remonte la dernière fois que vous avez changé d'outil d'organisation, ou sérieusement essayé de le faire ?                                                                                                           | Moins de 3 mois · 3 à 12 mois · Plus d'un an · Jamais                                                                                                                                                                                                                                                                                      | Entretiens « switch » (privilégier moins de 12 mois) |
+| S10 | En 2 ou 3 phrases, décrivez un moment récent où votre organisation vous a fait défaut.                                                                                                                                       | Texte libre                                                                                                                                                                                                                                                                                                                                | Capacité à raconter ; pas de « bonne réponse »       |
+| S11 | Combien de temps par semaine consacrez-vous à des projets créatifs (personnels ou professionnels) ?                                                                                                                          | Aucun · Moins de 2 h · 2 à 10 h · Plus de 10 h                                                                                                                                                                                                                                                                                             | `PP1`, `PP2`, `R6`                                   |
+| S12 | Connaissez-vous la chaîne YouTube K13 Studios ?                                                                                                                                                                              | Non · J'en ai entendu parler · Je la regarde de temps en temps · Je suis abonné·e et la regarde régulièrement                                                                                                                                                                                                                              | Quota audience / hors audience                       |
+| S13 | Au cours des 12 derniers mois, avez-vous travaillé pour une entreprise qui développe une application de productivité, d'agenda ou de notes ? Combien d'études utilisateurs rémunérées avez-vous faites ces 6 derniers mois ? | Oui · Non ; nombre                                                                                                                                                                                                                                                                                                                         | Exclusions                                           |
+| S14 | (Facultatif) Utilisez-vous une technologie d'assistance ou des réglages particuliers ? Avez-vous besoin d'aménagements pour participer ?                                                                                     | Lecteur d'écran · Zoom ou agrandissement · Commande vocale · Clavier uniquement · Sous-titres · Autre · Je préfère ne pas répondre ; texte libre                                                                                                                                                                                           | Quotas, préparation des sessions (§ 8)               |
+| S15 | (Facultatif, section séparée, voir ci-dessous) Neurodivergence                                                                                                                                                               | Voir ci-dessous                                                                                                                                                                                                                                                                                                                            | `R4`, quota                                          |
+| S16 | Quelles modalités préférez-vous ? Quelles sont vos disponibilités ?                                                                                                                                                          | Visio · Téléphone · Présentiel (ville) · Écrit asynchrone ; créneaux                                                                                                                                                                                                                                                                       | Logistique, accessibilité                            |
+| S17 | Acceptez-vous d'être recontacté·e pour de futures études (pendant 24 mois au plus) ? Adresse e-mail.                                                                                                                         | Oui · Non                                                                                                                                                                                                                                                                                                                                  | Panel                                                |
 
 **S15 — Section séparée, facultative (donnée de santé, article 9 du RGPD).**
 
@@ -520,13 +520,13 @@ La réponse S15 est stockée séparément du reste du screener, avec un accès r
 
 **Règles de qualification.**
 
-| Profil | Critères                                                                                     |
-| ------ | -------------------------------------------------------------------------------------------- |
-| `PP1`  | S4 = création de contenu ; S6 = seul·e ou 2 à 5 ; S11 ≥ 2 h                                  |
-| `PP2`  | S4 = design ; S5 = indépendant·e ou freelance                                               |
-| `PP3`  | S4 = développement ; S5 = indépendant·e, ou projet personnel mentionné en S10               |
+| Profil | Critères                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------- |
+| `PP1`  | S4 = création de contenu ; S6 = seul·e ou 2 à 5 ; S11 ≥ 2 h                                             |
+| `PP2`  | S4 = design ; S5 = indépendant·e ou freelance                                                           |
+| `PP3`  | S4 = développement ; S5 = indépendant·e, ou projet personnel mentionné en S10                           |
 | `PP4`  | S5 = étudiant·e ; S15 = TDAH pour le cœur du segment, plus quelques étudiant·es non TDAH en comparaison |
-| `PP5`  | S4 = studio ou agence ; S6 = 2 à 15                                                          |
+| `PP5`  | S4 = studio ou agence ; S6 = 2 à 15                                                                     |
 
 **Signaux d'alerte.** Toutes les options cochées en S7 et S8 ; réponse S10 vide, générique ou
 copiée ; incohérences entre S4, S5 et S6.
@@ -542,26 +542,26 @@ Principes :
 - le traitement fiscal et comptable des incitations est à vérifier (ce document n'est pas un conseil
   fiscal).
 
-| Activité                                    | Durée                      | Montant proposé (à ajuster au budget)                       |
-| ------------------------------------------- | -------------------------- | ----------------------------------------------------------- |
-| Entretien de découverte                     | 45 min                     | 40 €                                                        |
-| Atelier de co-conception                    | 90 min                     | 60 €                                                        |
-| Test de concept                             | 60 min                     | 50 €                                                        |
-| Test d'utilisabilité                        | 75 min                     | 55 €                                                        |
-| Étude journal                               | 14 jours + 3 rendez-vous   | 120 € (au prorata en cas d'arrêt : 30 € dès J0, puis par semaine) |
-| Enquête                                     | 10–12 min                  | Pas d'incitation individuelle ; option : don collectif plafonné à une association choisie par vote |
-| Panel longitudinal                          | 8–12 semaines              | Accès anticipé et mention dans les remerciements (sur option) ; non monétaire, donc à surveiller : risque d'attirer surtout des fans |
+| Activité                 | Durée                    | Montant proposé (à ajuster au budget)                                                                                                |
+| ------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Entretien de découverte  | 45 min                   | 40 €                                                                                                                                 |
+| Atelier de co-conception | 90 min                   | 60 €                                                                                                                                 |
+| Test de concept          | 60 min                   | 50 €                                                                                                                                 |
+| Test d'utilisabilité     | 75 min                   | 55 €                                                                                                                                 |
+| Étude journal            | 14 jours + 3 rendez-vous | 120 € (au prorata en cas d'arrêt : 30 € dès J0, puis par semaine)                                                                    |
+| Enquête                  | 10–12 min                | Pas d'incitation individuelle ; option : don collectif plafonné à une association choisie par vote                                   |
+| Panel longitudinal       | 8–12 semaines            | Accès anticipé et mention dans les remerciements (sur option) ; non monétaire, donc à surveiller : risque d'attirer surtout des fans |
 
 **Budget indicatif.**
 
-| Poste                       | Plan complet                     | Plan minimal viable              |
-| --------------------------- | -------------------------------- | -------------------------------- |
-| Entretiens                  | 18 × 40 € = 720 €                | 12 × 40 € = 480 €                |
-| Co-conception               | 10 × 60 € = 600 €                | 5 × 60 € = 300 €                 |
-| Tests de concept            | 12 × 50 € = 600 €                | 8 × 50 € = 400 €                 |
-| Tests d'utilisabilité       | 16 × 55 € = 880 €                | 12 × 55 € = 660 €                |
-| Étude journal               | 16 × 120 € = 1 920 €             | 10 × 120 € = 1 200 €             |
-| **Total incitations**       | **4 720 €**                      | **3 040 €**                      |
+| Poste                 | Plan complet         | Plan minimal viable  |
+| --------------------- | -------------------- | -------------------- |
+| Entretiens            | 18 × 40 € = 720 €    | 12 × 40 € = 480 €    |
+| Co-conception         | 10 × 60 € = 600 €    | 5 × 60 € = 300 €     |
+| Tests de concept      | 12 × 50 € = 600 €    | 8 × 50 € = 400 €     |
+| Tests d'utilisabilité | 16 × 55 € = 880 €    | 12 × 55 € = 660 €    |
+| Étude journal         | 16 × 120 € = 1 920 € | 10 × 120 € = 1 200 € |
+| **Total incitations** | **4 720 €**          | **3 040 €**          |
 
 Le plan minimal réduit la puissance de chaque phase : il faut alors l'assumer dans les rapports
 (« signaux » plutôt qu'« insights » quand la convergence est faible).
@@ -606,6 +606,9 @@ Le plan minimal réduit la puissance de chaque phase : il faut alors l'assumer d
 
 ### 7.4 Enregistrements
 
+- Chaque usage fait l'objet d'une case distincte, codée `C1` à `C6` dans le
+  [formulaire de consentement](./templates/formulaire-consentement.md) (participation, audio, écran
+  et vidéo, recontact, citations anonymes publiées, extraits publics).
 - Audio par défaut (avec consentement). Vidéo du visage facultative. Option « prise de notes
   seulement » toujours proposée.
 - Usage **interne** par défaut.
@@ -625,16 +628,16 @@ Le plan minimal réduit la puissance de chaque phase : il faut alors l'assumer d
 
 ### 7.6 Durées de conservation (proposition à valider)
 
-| Donnée                                                   | Durée proposée                                                                       |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Réponses au screener (personnes non retenues)            | 30 jours après la fin du recrutement                                                |
-| Réponse facultative S15 (neurodivergence)                | Supprimée à la fin du recrutement ; pour les personnes retenues, remplacée par un code de segment pseudonymisé conservé jusqu'à la fin de l'analyse |
-| Enregistrements audio et vidéo bruts                     | Supprimés dès transcription et vérification, et au plus tard 6 mois après la session |
-| Transcriptions pseudonymisées                            | Fin du programme + 12 mois, 3 ans au maximum                                        |
-| Synthèses anonymisées (insights, rapports)               | Sans limite (ce ne sont plus des données personnelles si l'anonymisation est effective) |
-| Preuves de consentement                                  | Durée du traitement, puis durée de preuve à fixer avec le juriste                   |
-| Coordonnées du panel (recontact)                         | 24 mois après le dernier contact, sauf renouvellement                               |
-| Données de paiement des incitations                      | Selon les obligations comptables (à confirmer)                                      |
+| Donnée                                        | Durée proposée                                                                                                                                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Réponses au screener (personnes non retenues) | 30 jours après la fin du recrutement                                                                                                                |
+| Réponse facultative S15 (neurodivergence)     | Supprimée à la fin du recrutement ; pour les personnes retenues, remplacée par un code de segment pseudonymisé conservé jusqu'à la fin de l'analyse |
+| Enregistrements audio et vidéo bruts          | Supprimés dès transcription et vérification, et au plus tard 6 mois après la session                                                                |
+| Transcriptions pseudonymisées                 | Fin du programme + 12 mois, 3 ans au maximum                                                                                                        |
+| Synthèses anonymisées (insights, rapports)    | Sans limite (ce ne sont plus des données personnelles si l'anonymisation est effective)                                                             |
+| Preuves de consentement                       | Durée du traitement, puis durée de preuve à fixer avec le juriste                                                                                   |
+| Coordonnées du panel (recontact)              | 24 mois après le dernier contact, sauf renouvellement                                                                                               |
+| Données de paiement des incitations           | Selon les obligations comptables (à confirmer)                                                                                                      |
 
 ### 7.7 Droits et retrait
 
@@ -717,26 +720,26 @@ navigation clavier complète, voir `CLAUDE.md`).
 
 ### 9.1 Chaîne de traitement
 
-| Étape | Quoi                                                                                                                                                         | Quand                     | Outil                                                                 |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | --------------------------------------------------------------------- |
-| 1     | Débrief à chaud : 3 surprises, 3 confirmations, questions à creuser                                                                                          | Dans l'heure              | Grille du guide d'entretien                                           |
-| 2     | Transcription (locale de préférence) et pseudonymisation                                                                                                     | Sous 72 h                 | Outil de transcription local                                          |
-| 3     | Découpage en observations atomiques `OBS-###` (un fait, une source, une citation éventuelle)                                                                 | Sous 1 semaine            | [`tableau-de-synthese.md`](./templates/tableau-de-synthese.md)        |
-| 4     | Diagramme d'affinités (méthode KJ, Kawakita) : regroupement ascendant, en équipe d'au moins 2 personnes dont une qui n'a pas modéré ; libellés de groupes formulés à la première personne (« Je ne fais pas confiance à ce que je ne peux pas défaire ») | Fin de phase | Tableau blanc puis tableau de synthèse |
-| 5     | Analyse thématique des entretiens (Braun & Clarke, 2006) ; double codage d'au moins 20 % des transcriptions, désaccords discutés et consignés                | Fin de phase              | Grille de codes                                                       |
-| 6     | Jobs to be done : job stories « Quand…, je veux…, afin de… » et forces du progrès (poussée, attraction, anxiété, habitude)                                  | Fin de phase              | Tableau de synthèse                                                   |
-| 7     | Insights : une carte par insight, **avec contre-preuves** et niveau de confiance                                                                            | Fin de phase              | [`carte-insight.md`](./templates/carte-insight.md)                    |
-| 8     | Opportunités : arbre opportunités-solutions (Torres, 2021) et matrice impact / effort                                                                        | Atelier de restitution    | Tableau de synthèse                                                   |
-| 9     | Mise à jour du registre des risques `R1`–`R7` : soutenu, affaibli, non concluant                                                                             | Atelier de restitution    | Tableau de synthèse                                                   |
-| 10    | Décisions `DEC-###` et diffusion (synthèse d'une page + rapport)                                                                                             | Sous 1 semaine            | § 10                                                                  |
+| Étape | Quoi                                                                                                                                                                                                                                                     | Quand                  | Outil                                                          |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------------- |
+| 1     | Débrief à chaud : 3 surprises, 3 confirmations, questions à creuser                                                                                                                                                                                      | Dans l'heure           | Grille du guide d'entretien                                    |
+| 2     | Transcription (locale de préférence) et pseudonymisation                                                                                                                                                                                                 | Sous 72 h              | Outil de transcription local                                   |
+| 3     | Découpage en observations atomiques `OBS-###` (un fait, une source, une citation éventuelle)                                                                                                                                                             | Sous 1 semaine         | [`tableau-de-synthese.md`](./templates/tableau-de-synthese.md) |
+| 4     | Diagramme d'affinités (méthode KJ, Kawakita) : regroupement ascendant, en équipe d'au moins 2 personnes dont une qui n'a pas modéré ; libellés de groupes formulés à la première personne (« Je ne fais pas confiance à ce que je ne peux pas défaire ») | Fin de phase           | Tableau blanc puis tableau de synthèse                         |
+| 5     | Analyse thématique des entretiens (Braun & Clarke, 2006) ; double codage d'au moins 20 % des transcriptions, désaccords discutés et consignés                                                                                                            | Fin de phase           | Grille de codes                                                |
+| 6     | Jobs to be done : job stories « Quand…, je veux…, afin de… » et forces du progrès (poussée, attraction, anxiété, habitude)                                                                                                                               | Fin de phase           | Tableau de synthèse                                            |
+| 7     | Insights : une carte par insight, **avec contre-preuves** et niveau de confiance                                                                                                                                                                         | Fin de phase           | [`carte-insight.md`](./templates/carte-insight.md)             |
+| 8     | Opportunités : arbre opportunités-solutions (Torres, 2021) et matrice impact / effort                                                                                                                                                                    | Atelier de restitution | Tableau de synthèse                                            |
+| 9     | Mise à jour du registre des risques `R1`–`R7` : soutenu, affaibli, non concluant                                                                                                                                                                         | Atelier de restitution | Tableau de synthèse                                            |
+| 10    | Décisions `DEC-###` et diffusion (synthèse d'une page + rapport)                                                                                                                                                                                         | Sous 1 semaine         | § 10                                                           |
 
 ### 9.2 Niveaux de confiance d'un insight
 
-| Niveau  | Critère                                                                                                   |
-| ------- | --------------------------------------------------------------------------------------------------------- |
-| Faible  | Une seule source ou 1 à 2 participant·es ; à traiter comme un signal                                      |
-| Moyen   | Au moins 3 participant·es, une seule méthode ou un seul segment                                           |
-| Fort    | Au moins 2 méthodes convergentes (dire / faire / traces), au moins 5 participant·es issu·es de plusieurs segments, pas de contre-preuve majeure |
+| Niveau | Critère                                                                                                                                         |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Faible | Une seule source ou 1 à 2 participant·es ; à traiter comme un signal                                                                            |
+| Moyen  | Au moins 3 participant·es, une seule méthode ou un seul segment                                                                                 |
+| Fort   | Au moins 2 méthodes convergentes (dire / faire / traces), au moins 5 participant·es issu·es de plusieurs segments, pas de contre-preuve majeure |
 
 ### 9.3 Format du rapport de synthèse
 
@@ -769,9 +772,9 @@ déplacé dans un fichier dédié.
 
 ### 10.1 Index
 
-| ID  | Date | Décision | Risque | Confiance | Statut |
-| --- | ---- | -------- | ------ | --------- | ------ |
-| —   | —    | Aucune décision enregistrée à ce jour | — | — | — |
+| ID  | Date | Décision                              | Risque | Confiance | Statut |
+| --- | ---- | ------------------------------------- | ------ | --------- | ------ |
+| —   | —    | Aucune décision enregistrée à ce jour | —      | —         | —      |
 
 Statuts possibles : Proposée · Actée · Révisée · Abandonnée.
 
@@ -809,8 +812,7 @@ Statuts possibles : Proposée · Actée · Révisée · Abandonnée.
 - **Contre-preuves connues :** (fictif) les 3 participant·es TDAH ayant gardé le routage le
   décrivent comme un soulagement.
 - **Niveau de confiance :** Moyen
-- **Options :** 1. Routage par défaut avec explication ; 2. Suggestion à valider chaque matin ;
-  3. Routage par défaut uniquement pour les tâches flottantes (1.10).
+- **Options :** 1. Routage par défaut avec explication ; 2. Suggestion à valider chaque matin ; 3. Routage par défaut uniquement pour les tâches flottantes (1.10).
 - **Décision :** (fictif) option 2 pour tous, option 1 proposée après 7 jours d'usage.
 - **Critère de réouverture :** plus de 60 % d'acceptations sans modification sur 4 semaines.
 ```
@@ -822,36 +824,36 @@ Statuts possibles : Proposée · Actée · Révisée · Abandonnée.
 Les semaines sont relatives (S0 = lancement du programme) et dépendent de la disponibilité des
 prototypes et du MVP.
 
-| Semaines | S0–S2 | S2–S6 | S6–S10 | S10–S14 | S14–S18 | S18+ |
-| -------- | ----- | ----- | ------ | ------- | ------- | ---- |
-| Phase    | 0 Cadrage | 1 Découverte | 2 Concept et priorisation | 3 Utilisabilité MVP | 4 Journal 14 jours | 5 Longitudinal |
-| Prérequis | Instruments, consentement validé | Panel ≥ 60 | Stimuli des 7 modules ; liste des ~30 candidates | Build de test avec données fictives | Alpha stable sur 4 plateformes | Export d'agrégats volontaire |
+| Semaines  | S0–S2                            | S2–S6        | S6–S10                                           | S10–S14                             | S14–S18                        | S18+                         |
+| --------- | -------------------------------- | ------------ | ------------------------------------------------ | ----------------------------------- | ------------------------------ | ---------------------------- |
+| Phase     | 0 Cadrage                        | 1 Découverte | 2 Concept et priorisation                        | 3 Utilisabilité MVP                 | 4 Journal 14 jours             | 5 Longitudinal               |
+| Prérequis | Instruments, consentement validé | Panel ≥ 60   | Stimuli des 7 modules ; liste des ~30 candidates | Build de test avec données fictives | Alpha stable sur 4 plateformes | Export d'agrégats volontaire |
 
-| Rôle                              | Responsabilités                                                                 |
-| --------------------------------- | ------------------------------------------------------------------------------- |
-| Responsable de la recherche       | Plan, instruments, modération, synthèse, journal des décisions                 |
-| Co-modérateur·ice / preneur·se de notes | Grille d'observation, débrief à chaud, double codage                       |
-| Fondateur                         | Observation silencieuse, arbitrage des décisions ; ne modère pas les sessions avec l'audience K13 |
-| Design                            | Stimuli de concept, prototypes, participation aux ateliers d'affinités         |
-| Ingénierie                        | Builds de test, données fictives, export d'agrégats                            |
-| Juriste / DPO                     | Validation du consentement, des durées et des sous-traitants                   |
-| Partenaire associatif (TDAH)      | Relecture des documents, retour des résultats                                  |
+| Rôle                                    | Responsabilités                                                                                   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Responsable de la recherche             | Plan, instruments, modération, synthèse, journal des décisions                                    |
+| Co-modérateur·ice / preneur·se de notes | Grille d'observation, débrief à chaud, double codage                                              |
+| Fondateur                               | Observation silencieuse, arbitrage des décisions ; ne modère pas les sessions avec l'audience K13 |
+| Design                                  | Stimuli de concept, prototypes, participation aux ateliers d'affinités                            |
+| Ingénierie                              | Builds de test, données fictives, export d'agrégats                                               |
+| Juriste / DPO                           | Validation du consentement, des durées et des sous-traitants                                      |
+| Partenaire associatif (TDAH)            | Relecture des documents, retour des résultats                                                     |
 
 ---
 
 ## 12. Dépendances avec les autres équipes
 
-| Besoin                                                                                                   | Pour     | Phase |
-| -------------------------------------------------------------------------------------------------------- | -------- | ----- |
-| Feuille de route (`docs/product/ROADMAP.md`) utilisant les identifiants `m.n` et définissant le périmètre MVP | Produit  | 0, 2  |
-| Présélection des ~30 fonctionnalités candidates et estimation d'effort (« prix » du buy-a-feature)      | Produit, ingénierie | 2 |
-| Stimuli de concept pour les 7 modules (planches, maquettes basse fidélité, vidéos courtes)               | Design   | 2     |
-| Build de test : chargement et réinitialisation d'un jeu de données fictif, horloge accélérée pour les sessions focus | Ingénierie | 3 |
-| Distribution de builds alpha (iOS, Android, macOS, Windows) aux participant·es                           | Ingénierie | 4   |
-| Export volontaire d'agrégats sans contenu (panel longitudinal)                                           | Vie privée, sync | 5 |
-| Relecture du formulaire de consentement, des durées de conservation et des sous-traitants               | Juridique | 0    |
-| Salon Discord `#panel-recherche`, relais YouTube                                                          | Communauté | 0   |
-| Audit d'accessibilité des formulaires et questionnaires                                                  | Accessibilité | 0 |
+| Besoin                                                                                                               | Pour                | Phase |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| Feuille de route (`docs/product/ROADMAP.md`) utilisant les identifiants `m.n` et définissant le périmètre MVP        | Produit             | 0, 2  |
+| Présélection des ~30 fonctionnalités candidates et estimation d'effort (« prix » du buy-a-feature)                   | Produit, ingénierie | 2     |
+| Stimuli de concept pour les 7 modules (planches, maquettes basse fidélité, vidéos courtes)                           | Design              | 2     |
+| Build de test : chargement et réinitialisation d'un jeu de données fictif, horloge accélérée pour les sessions focus | Ingénierie          | 3     |
+| Distribution de builds alpha (iOS, Android, macOS, Windows) aux participant·es                                       | Ingénierie          | 4     |
+| Export volontaire d'agrégats sans contenu (panel longitudinal)                                                       | Vie privée, sync    | 5     |
+| Relecture du formulaire de consentement, des durées de conservation et des sous-traitants                            | Juridique           | 0     |
+| Salon Discord `#panel-recherche`, relais YouTube                                                                     | Communauté          | 0     |
+| Audit d'accessibilité des formulaires et questionnaires                                                              | Accessibilité       | 0     |
 
 ---
 

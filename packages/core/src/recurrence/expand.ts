@@ -4,15 +4,17 @@
  * Periods (year, month, week, day) are walked from the series start; each period's candidate
  * days are filtered by the BYxxx parts in local calendar space, holidays are dropped, times of
  * day are expanded, BYSETPOS selects positions, and only then are wall-clock values converted
- * to instants with `fromZoned` — so 09:00 stays 09:00 across DST changes. A wall-clock time
- * skipped by a DST jump resolves forward (as `fromZoned` does); duplicates are removed.
+ * to instants — so 09:00 stays 09:00 across DST changes. A wall-clock time skipped by a DST
+ * jump resolves forward (as `fromZoned` does). A time repeated by a fall-back resolves to its
+ * first instant (RFC 5545 §3.3.5), except for hourly/minutely rules, which emit both instants
+ * so that no hour of real time is lost. Duplicates are removed.
  *
  * Termination: calendar patterns repeat every 400 Gregorian years, so after a full cycle of
  * consecutive empty periods the rule can never match again (e.g. 31 February) and expansion
  * stops with what it has.
  */
 import type { TimeZone, Timestamp } from '../model.ts';
-import { fromZoned, startOfDay, zonedParts } from '../time.ts';
+import { DAY, fromZoned, startOfDay, tzOffset, zonedParts } from '../time.ts';
 import {
   daysInMonth,
   daysInYear,
@@ -242,7 +244,9 @@ function periodIndexOf(plan: Plan, day: number): number {
       return Math.floor((monthIndex(c.year, c.month) - plan.monthIdx) / interval);
     }
     case 'weekly':
-      return Math.floor((weekStart(day, weekdayOfStart(plan)) - plan.weekStartDay) / (7 * interval));
+      return Math.floor(
+        (weekStart(day, weekdayOfStart(plan)) - plan.weekStartDay) / (7 * interval),
+      );
     case 'daily':
       return Math.floor((day - anchor.day) / interval);
     default:
@@ -279,7 +283,13 @@ function periodInstants(plan: Plan, k: number, tz: TimeZone): Timestamp[] {
   if (days.length === 0) return [];
   let instances = expandTimes(plan, days);
   if (plan.setPos) instances = applySetPos(plan, instances);
-  const instants = instances.map((i) => toInstant(i, tz)).sort((a, b) => a - b);
+  const both = plan.freq === 'hourly' || plan.freq === 'minutely';
+  const instants = instances
+    .flatMap((i) => {
+      const all = toInstants(i, tz);
+      return both ? all : all.slice(0, 1);
+    })
+    .sort((a, b) => a - b);
   return instants.filter((ts, i) => i === 0 || ts !== instants[i - 1]);
 }
 
@@ -409,9 +419,21 @@ function applySetPos(plan: Plan, instances: readonly LocalInstance[]): LocalInst
   return out;
 }
 
-function toInstant(i: LocalInstance, tz: TimeZone): Timestamp {
+/**
+ * Every instant showing wall-clock instance `i` in `tz`, ascending: one normally, two when a
+ * fall-back repeats it, and — when spring-forward skips it — the next valid instant.
+ */
+function toInstants(i: LocalInstance, tz: TimeZone): Timestamp[] {
   const { year, month, day } = fromDayNum(i.day);
   const hour = Math.floor(i.sec / 3600);
   const minute = Math.floor((i.sec % 3600) / 60);
-  return fromZoned({ year, month, day, hour, minute, second: i.sec % 60 }, tz);
+  const wall = Date.UTC(year, month - 1, day, hour, minute, i.sec % 60);
+  // Offsets a day either side bracket any single DST transition around this wall time.
+  const offsets = new Set([tzOffset(wall - DAY, tz), tzOffset(wall + DAY, tz)]);
+  const valid = [...offsets]
+    .map((offset) => wall - offset)
+    .filter((ts) => wall - tzOffset(ts, tz) === ts)
+    .sort((a, b) => a - b);
+  if (valid.length > 0) return valid;
+  return [fromZoned({ year, month, day, hour, minute, second: i.sec % 60 }, tz)];
 }

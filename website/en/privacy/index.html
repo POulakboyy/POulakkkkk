@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Privacy — POuxis</title>
+    <meta
+      name="description"
+      content="What POuxis does with your data: on-device storage, optional end-to-end encrypted sync, no tracking."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <!-- PLACEHOLDER DOMAIN: replace https://pouxis.example with the production domain. -->
+    <link rel="canonical" href="https://pouxis.example/en/privacy/" />
+    <link rel="alternate" hreflang="fr" href="https://pouxis.example/confidentialite/" />
+    <link rel="alternate" hreflang="en" href="https://pouxis.example/en/privacy/" />
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="../" aria-label="POuxis, home">
+          <picture>
+            <source
+              srcset="../../assets/logotype-reversed.svg"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img src="../../assets/logotype.svg" alt="POuxis" width="100" height="27" />
+          </picture>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+          <a href="../../confidentialite/" hreflang="fr" lang="fr">Français</a>
+          <a href="https://github.com/POulakboyy/POulakkkkk">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main id="content" class="prose">
+      <div class="wrap">
+        <h1>Privacy policy</h1>
+        <p class="callout">
+          Draft dated 4 November 2026, published before the app's release. It will be reviewed by a
+          legal professional and completed (data controller, contact details) before the first
+          public version.
+        </p>
+
+        <h2>In short</h2>
+        <ul>
+          <li>Your tasks, events, notes and canvases are stored and processed on your device.</li>
+          <li>You can use POuxis without an account.</li>
+          <li>The app contains no ads, no analytics and no trackers.</li>
+          <li>Syncing between devices is optional and end-to-end encrypted.</li>
+        </ul>
+
+        <h2>Sync</h2>
+        <p>
+          If you turn it on, content is encrypted on your device (AES-256-GCM) before it's sent to a
+          relay. The relay holds no decryption key and can't read your data. To route the encrypted
+          envelopes, it sees:
+        </p>
+        <ul>
+          <li>the ID of the synced space;</li>
+          <li>a random device ID, unrelated to any advertising identifier;</li>
+          <li>a logical clock that orders changes;</li>
+          <li>the approximate size of each envelope, rounded to limit what it reveals;</li>
+          <li>the space's access token.</li>
+        </ul>
+        <p>
+          The relay included in the repository doesn't log IP addresses. A host or proxy in front of
+          it might, so check before using a third-party relay. You can also run your own.
+        </p>
+
+        <h2>This website</h2>
+        <p>
+          This site sets no cookies, uses no analytics and loads no third-party resources (fonts,
+          scripts or images). The site's host may keep technical connection logs.
+        </p>
+
+        <h2>Questions</h2>
+        <p>
+          Until there's a dedicated contact address, please ask in the
+          <a href="https://github.com/POulakboyy/POulakkkkk/issues">GitHub repository's issues</a>.
+          For security matters, follow the repository's reporting process instead of opening a
+          public issue.
+        </p>
+        <p><a href="../">Back to home</a></p>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="legal">
+          Text under CC-BY-4.0. The POuxis name and logo are not covered by this licence.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

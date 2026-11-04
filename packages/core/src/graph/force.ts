@@ -195,12 +195,12 @@ class BarnesHutTree {
     const needed = base + cells;
     if (needed > this.#cap) {
       const cap = Math.max(needed, this.#cap * 2, 64);
-      const grow = (a: Float64Array): Float64Array => {
+      const grow = (a: Float64Array<ArrayBuffer>): Float64Array<ArrayBuffer> => {
         const b = new Float64Array(cap);
         b.set(a.subarray(0, base));
         return b;
       };
-      const growInt = (a: Int32Array): Int32Array => {
+      const growInt = (a: Int32Array<ArrayBuffer>): Int32Array<ArrayBuffer> => {
         const b = new Int32Array(cap);
         b.set(a.subarray(0, base));
         return b;

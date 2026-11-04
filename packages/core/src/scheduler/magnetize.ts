@@ -8,7 +8,7 @@
  */
 import type { Interval } from '../model.ts';
 import { dayKey } from '../time.ts';
-import { alignUp, localDate, localDay, workingWindow } from './calendar.ts';
+import { localDate, localDay, workingWindow } from './calendar.ts';
 import {
   compareTasks,
   dependenciesDone,
@@ -58,7 +58,7 @@ export function magnetize(input: MagnetizeInput): MagnetizeResult {
   const slots = tasks.flatMap((t) => occupiedSlot(t) ?? []);
   const now = input.now ?? Number.NEGATIVE_INFINITY;
   const bounds: Interval = {
-    start: Number.isFinite(now) ? Math.max(window.start, alignUp(now, settings.stepMs)) : window.start,
+    start: Number.isFinite(now) ? Math.max(window.start, now) : window.start,
     end: window.end,
   };
   const plan = buildPlanDay({

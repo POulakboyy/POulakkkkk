@@ -276,7 +276,8 @@ export const tasks = {
     placeholder: 'Nom ou e-mail',
     webhook: 'Prévenir via un webhook',
     sent: 'Envoyé à {name}',
-    failed: 'Impossible de prévenir {name} pour l’instant. Nouvel essai automatique dans quelques minutes.',
+    failed:
+      'Impossible de prévenir {name} pour l’instant. Nouvel essai automatique dans quelques minutes.',
   },
 
   focusMode: {

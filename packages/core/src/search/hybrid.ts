@@ -246,10 +246,7 @@ export function createHybridSearch(options: HybridSearchOptions): HybridSearch {
 
     const lexicalById = new Map(lexical.map((hit, i) => [hit.id, { hit, rank: i + 1 }]));
     const semanticById = new Map(semantic.map((s, i) => [s.id, { ...s, rank: i + 1 }]));
-    const fused = reciprocalRankFusion(
-      [lexical.map((h) => h.id), semantic.map((s) => s.id)],
-      rrfK,
-    );
+    const fused = reciprocalRankFusion([lexical.map((h) => h.id), semantic.map((s) => s.id)], rrfK);
 
     const out: HybridHit[] = [];
     for (const { id, score } of fused.slice(0, limit)) {

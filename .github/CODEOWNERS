@@ -1,0 +1,17 @@
+# Propriétaires du code : leur revue est demandée automatiquement sur les pull requests.
+# Remplacez @POulakboyy par les équipes réelles (ex. @organisation/core) quand elles existent.
+# La dernière règle correspondante l'emporte.
+
+*                         @POulakboyy
+
+/packages/core/           @POulakboyy
+/apps/pouxis/             @POulakboyy
+/apps/pouxis/src-tauri/   @POulakboyy
+/apps/sync-server/        @POulakboyy
+/apps/cli/                @POulakboyy
+/docs/                    @POulakboyy
+/website/                 @POulakboyy
+
+# CI/CD, publication et secrets : revue obligatoire d'un mainteneur.
+/.github/                 @POulakboyy
+/docs/operations/         @POulakboyy

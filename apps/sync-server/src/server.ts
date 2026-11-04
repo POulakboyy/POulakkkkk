@@ -191,11 +191,12 @@ function handleHttp(
       return json(405, { error: 'method_not_allowed' });
     }
     if (pathname === '/healthz') {
-      return relay.draining
-        ? json(503, { status: 'draining' })
-        : json(200, { status: 'ok' });
+      return relay.draining ? json(503, { status: 'draining' }) : json(200, { status: 'ok' });
     }
-    if (config.metricsToken !== null && !bearerMatches(req.headers.authorization, config.metricsToken)) {
+    if (
+      config.metricsToken !== null &&
+      !bearerMatches(req.headers.authorization, config.metricsToken)
+    ) {
       res.setHeader('www-authenticate', 'Bearer');
       return json(401, { error: 'unauthorized' });
     }
@@ -221,7 +222,10 @@ function requestPath(url: string | undefined): string | null {
  * against cross-site WebSocket use from web pages); absent origins are allowed, since
  * authentication relies on the hello token, never on ambient credentials.
  */
-export function originAllowed(origin: string | undefined, allowed: readonly string[] | null): boolean {
+export function originAllowed(
+  origin: string | undefined,
+  allowed: readonly string[] | null,
+): boolean {
   if (allowed === null || origin === undefined) return true;
   return allowed.includes(origin);
 }

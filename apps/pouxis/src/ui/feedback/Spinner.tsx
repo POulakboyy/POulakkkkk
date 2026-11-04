@@ -24,7 +24,15 @@ export function Spinner({ size = 18, label, className }: SpinnerProps) {
       aria-label={label}
       aria-hidden={label ? undefined : true}
     >
-      <circle className={s.track} cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor" strokeWidth={stroke} />
+      <circle
+        className={s.track}
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={stroke}
+      />
       <circle
         cx={size / 2}
         cy={size / 2}

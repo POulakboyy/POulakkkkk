@@ -156,8 +156,7 @@ export function buchheim(
     if (kids.length > 0) defaultAncestor[v] = kids[0] as number;
   }
 
-  const sep = (a: number, b: number): number =>
-    parent[a] === parent[b] ? 1 : subtreeSeparation;
+  const sep = (a: number, b: number): number => (parent[a] === parent[b] ? 1 : subtreeSeparation);
   const leftBrother = (v: number): number => {
     const p = parent[v] as number;
     const i = number[v] as number;
@@ -211,7 +210,8 @@ export function buchheim(
       vol = nextLeft(vol);
       vor = nextRight(vor);
       ancestor[vor] = v;
-      const amount = (prelim[vil] as number) + sil - ((prelim[vir] as number) + sir) + sep(vil, vir);
+      const amount =
+        (prelim[vil] as number) + sil - ((prelim[vir] as number) + sir) + sep(vil, vir);
       if (amount > 0) {
         const a = ancestor[vil] as number;
         moveSubtree(parent[a] === p ? a : result, v, amount);
@@ -255,7 +255,8 @@ export function buchheim(
     } else {
       executeShifts(v);
       const mid =
-        ((prelim[kids[0] as number] as number) + (prelim[kids[kids.length - 1] as number] as number)) /
+        ((prelim[kids[0] as number] as number) +
+          (prelim[kids[kids.length - 1] as number] as number)) /
         2;
       if (lb >= 0) {
         prelim[v] = (prelim[lb] as number) + sep(lb, v);

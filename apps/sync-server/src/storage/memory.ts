@@ -58,7 +58,10 @@ class MemorySpaceLog implements SpaceLog {
     return this.data.bytes;
   }
 
-  async append(envelopes: readonly Envelope[], options: AppendOptions = {}): Promise<AppendOutcome> {
+  async append(
+    envelopes: readonly Envelope[],
+    options: AppendOptions = {},
+  ): Promise<AppendOutcome> {
     this.assertOpen();
     const stored: StoredEnvelope[] = [];
     const sizes: number[] = [];

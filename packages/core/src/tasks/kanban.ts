@@ -131,7 +131,9 @@ export function hierarchyBoard(tasks: readonly Task[], rootId?: Id): Board {
   const live = tasks.filter((t) => t.status !== 'archived');
   const byId = indexById(live);
   const isColumn = (t: Task): boolean =>
-    rootId === undefined ? t.parentId === undefined || !byId.has(t.parentId) : t.parentId === rootId;
+    rootId === undefined
+      ? t.parentId === undefined || !byId.has(t.parentId)
+      : t.parentId === rootId;
   const columns: BoardColumn[] = live
     .filter((t) => t.id !== rootId && isColumn(t))
     .map((parent) => ({ key: parent.id, parent, tasks: [] }));
@@ -200,7 +202,12 @@ export function moveCardPatch(
     case 'quadrant': {
       const target = QUADRANTS.find((q): q is Quadrant => q === toColumn);
       if (target === undefined) return refuse('unknown-column');
-      return quadrantPatch(task, target, requireNow(opts.now, 'move across quadrants'), opts.eisenhower);
+      return quadrantPatch(
+        task,
+        target,
+        requireNow(opts.now, 'move across quadrants'),
+        opts.eisenhower,
+      );
     }
     case 'parent':
       return moveParent(task, toColumn, opts.tasks);

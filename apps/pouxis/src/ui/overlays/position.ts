@@ -35,7 +35,13 @@ export function splitPlacement(p: Placement): [Side, Align] {
   return [side, align ?? 'center'];
 }
 
-function place(anchor: Rect, size: { width: number; height: number }, side: Side, align: Align, offset: number) {
+function place(
+  anchor: Rect,
+  size: { width: number; height: number },
+  side: Side,
+  align: Align,
+  offset: number,
+) {
   let x = 0;
   let y = 0;
   if (side === 'top' || side === 'bottom') {
@@ -106,7 +112,12 @@ export function computePosition(
     pos.y = clamp(pos.y, padding, viewport.height - padding - size.height);
   }
   const finalPlacement = (align === 'center' ? side : `${side}-${align}`) as Placement;
-  return { x: Math.round(pos.x), y: Math.round(pos.y), placement: finalPlacement, origin: originFor(side, align) };
+  return {
+    x: Math.round(pos.x),
+    y: Math.round(pos.y),
+    placement: finalPlacement,
+    origin: originFor(side, align),
+  };
 }
 
 function clamp(v: number, min: number, max: number): number {

@@ -41,7 +41,9 @@ export class Metrics {
 
   constructor(now: () => number = Date.now) {
     this.startedAt = now();
-    this.gauges.set('pouxis_sync_uptime_seconds', () => Math.floor((now() - this.startedAt) / 1000));
+    this.gauges.set('pouxis_sync_uptime_seconds', () =>
+      Math.floor((now() - this.startedAt) / 1000),
+    );
   }
 
   inc(name: CounterName, by = 1, label?: { key: string; value: string }): void {

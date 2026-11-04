@@ -24,8 +24,7 @@ export interface DataFile {
 }
 
 export type SchemaProblem =
-  | { kind: 'too-new'; version: number }
-  | { kind: 'invalid'; detail: string };
+  { kind: 'too-new'; version: number } | { kind: 'invalid'; detail: string };
 
 export class SchemaError extends Error {
   override name = 'SchemaError';
@@ -71,7 +70,10 @@ export function normalizePrefs(raw: unknown): UserPrefs {
   const end = int(wh.end, DEFAULT_PREFS.workingHours.end);
   const validHours = start < end && end <= 24 * 60;
   return {
-    timeZone: typeof p.timeZone === 'string' && isValidTimeZone(p.timeZone) ? p.timeZone : DEFAULT_PREFS.timeZone,
+    timeZone:
+      typeof p.timeZone === 'string' && isValidTimeZone(p.timeZone)
+        ? p.timeZone
+        : DEFAULT_PREFS.timeZone,
     locale: p.locale === 'en' || p.locale === 'fr' ? p.locale : DEFAULT_PREFS.locale,
     workingHours: validHours ? { start, end, days } : { ...DEFAULT_PREFS.workingHours, days },
     bufferMin: int(p.bufferMin, DEFAULT_PREFS.bufferMin),
@@ -97,7 +99,10 @@ export function isValidTimeZone(zone: string): boolean {
 export function normalizeData(raw: unknown): DataFile {
   if (!isObject(raw)) throw new SchemaError({ kind: 'invalid', detail: 'not a JSON object' });
   if (raw.format !== DATA_FORMAT) {
-    throw new SchemaError({ kind: 'invalid', detail: `unexpected format ${JSON.stringify(raw.format)}` });
+    throw new SchemaError({
+      kind: 'invalid',
+      detail: `unexpected format ${JSON.stringify(raw.format)}`,
+    });
   }
   const version = raw.schemaVersion;
   if (typeof version !== 'number' || !Number.isInteger(version) || version < 1) {
@@ -119,7 +124,8 @@ export function normalizeData(raw: unknown): DataFile {
     }
     list.forEach((record, i) => {
       const problem = recordProblem(name, record);
-      if (problem) throw new SchemaError({ kind: 'invalid', detail: `collections.${name}[${i}]: ${problem}` });
+      if (problem)
+        throw new SchemaError({ kind: 'invalid', detail: `collections.${name}[${i}]: ${problem}` });
       fillDefaults(name, record as Record<string, unknown>);
     });
   }
@@ -128,7 +134,8 @@ export function normalizeData(raw: unknown): DataFile {
     ...migrated,
     format: DATA_FORMAT,
     schemaVersion: SCHEMA_VERSION,
-    revision: typeof migrated.revision === 'number' && migrated.revision >= 0 ? migrated.revision : 0,
+    revision:
+      typeof migrated.revision === 'number' && migrated.revision >= 0 ? migrated.revision : 0,
     savedAt: typeof migrated.savedAt === 'number' ? migrated.savedAt : 0,
     prefs: normalizePrefs(migrated.prefs),
     collections: collections as unknown as CollectionsData,
@@ -154,14 +161,17 @@ export function recordProblem(collection: CollectionName, value: unknown): strin
   switch (collection) {
     case 'tasks':
       if (typeof value.title !== 'string') return 'missing title';
-      if (typeof value.status !== 'string' || !TASK_STATUSES.has(value.status)) return 'invalid status';
+      if (typeof value.status !== 'string' || !TASK_STATUSES.has(value.status))
+        return 'invalid status';
       return undefined;
     case 'events':
       if (typeof value.title !== 'string') return 'missing title';
-      if (typeof value.start !== 'number' || typeof value.end !== 'number') return 'missing start/end';
+      if (typeof value.start !== 'number' || typeof value.end !== 'number')
+        return 'missing start/end';
       return undefined;
     case 'notes':
-      if (typeof value.title !== 'string' || typeof value.body !== 'string') return 'missing title/body';
+      if (typeof value.title !== 'string' || typeof value.body !== 'string')
+        return 'missing title/body';
       return undefined;
     case 'journal':
       if (typeof value.text !== 'string') return 'missing text';

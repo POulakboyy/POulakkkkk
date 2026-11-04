@@ -359,7 +359,11 @@ export class Session {
         this.logger.warn('session.rate_limit_close');
         this.fail('rate_limited', 'rate limit exceeded repeatedly', CloseCode.policyViolation);
       } else {
-        this.send({ t: 'error', code: 'rate_limited', message: 'rate limit exceeded, frame dropped' });
+        this.send({
+          t: 'error',
+          code: 'rate_limited',
+          message: 'rate limit exceeded, frame dropped',
+        });
       }
       return;
     }
@@ -595,11 +599,19 @@ export class Session {
     this.cursor_ = last.seq;
     if (fromNode === this.node_) return;
     const fresh = (entries[0]?.seq ?? 0) > cursor ? entries : entries.filter((e) => e.seq > cursor);
-    const data = encodeServerMessage({ t: 'ops', envelopes: [...fresh], cursor: encodeCursor(last.seq) });
+    const data = encodeServerMessage({
+      t: 'ops',
+      envelopes: [...fresh],
+      cursor: encodeCursor(last.seq),
+    });
     if (this.peer.bufferedAmount + data.length > this.relay.config.maxBufferedBytes) {
       this.relay.metrics.inc('pouxis_sync_slow_consumers_total');
       this.logger.warn('session.slow_consumer', { buffered: this.peer.bufferedAmount });
-      this.fail('slow_consumer', 'connection too slow, resume from your last cursor', CloseCode.tryAgainLater);
+      this.fail(
+        'slow_consumer',
+        'connection too slow, resume from your last cursor',
+        CloseCode.tryAgainLater,
+      );
       return;
     }
     this.relay.metrics.inc('pouxis_sync_envelopes_delivered_total', fresh.length);

@@ -100,7 +100,13 @@ export function payloadAad(context: PayloadContext): Bytes {
     throw new CryptoError('invalid-argument', 'payload context: node is required');
   }
   return utf8Encode(
-    canonicalJson(['pouxis.sync-payload/v1', context.spaceId, context.id, context.hlc, context.node]),
+    canonicalJson([
+      'pouxis.sync-payload/v1',
+      context.spaceId,
+      context.id,
+      context.hlc,
+      context.node,
+    ]),
   );
 }
 

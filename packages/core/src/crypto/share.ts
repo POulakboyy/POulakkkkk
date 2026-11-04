@@ -259,10 +259,11 @@ export async function decryptSharedContent(
 export async function generateShareSigningKey(
   options: { extractable?: boolean } = {},
 ): Promise<CryptoKey> {
-  return subtle().generateKey({ name: 'HMAC', hash: 'SHA-256', length: 256 }, options.extractable ?? false, [
-    'sign',
-    'verify',
-  ]);
+  return subtle().generateKey(
+    { name: 'HMAC', hash: 'SHA-256', length: 256 },
+    options.extractable ?? false,
+    ['sign', 'verify'],
+  );
 }
 
 /** Imports a raw secret (≥ 32 bytes, e.g. from a secrets manager) as a share-signing key. */
@@ -310,8 +311,7 @@ export type ShareTokenFailure =
   | 'revoked';
 
 export type ShareTokenVerification =
-  | { ok: true; kid: string; claims: ShareTokenClaims }
-  | { ok: false; reason: ShareTokenFailure };
+  { ok: true; kid: string; claims: ShareTokenClaims } | { ok: false; reason: ShareTokenFailure };
 
 /** Signing keys by id: a map, or a lookup function (lets the server rotate keys). */
 export type ShareKeyring =
@@ -459,11 +459,7 @@ function parseClaims(bytes: Uint8Array): ShareTokenClaims {
   if (c.v !== 1) throw bad('version');
   if (typeof c.lid !== 'string') throw bad('lid');
   fromBase64UrlExact(c.lid, LINK_ID_BYTES, 'Link id');
-  if (
-    typeof c.rid !== 'string' ||
-    c.rid.length === 0 ||
-    c.rid.length > MAX_RESOURCE_ID_LENGTH
-  ) {
+  if (typeof c.rid !== 'string' || c.rid.length === 0 || c.rid.length > MAX_RESOURCE_ID_LENGTH) {
     throw bad('rid');
   }
   if (c.perm !== 'read' && c.perm !== 'comment') throw bad('perm');
@@ -528,7 +524,9 @@ async function deriveShareKeys(
 ): Promise<{ contentKey: CryptoKey; proof?: Bytes }> {
   const info = canonicalJson(['pouxis.share-content-key/v1', claims.rid, claims.lid]);
   if (!claims.pw) {
-    return { contentKey: await hkdfAesKey(secret, new Uint8Array(0), info, ['encrypt', 'decrypt']) };
+    return {
+      contentKey: await hkdfAesKey(secret, new Uint8Array(0), info, ['encrypt', 'decrypt']),
+    };
   }
   if (password === undefined) {
     throw new CryptoError('password-required', 'This share link is password-protected');

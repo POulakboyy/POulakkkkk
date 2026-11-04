@@ -40,11 +40,12 @@ jobs:
       - name: Detect Tauri project
         id: tauri
         run: |
-          if [ -f "$TAURI_DIR/Cargo.toml" ]; then
+          # tauri-build needs both files; a half-scaffolded shell is skipped, not failed.
+          if [ -f "$TAURI_DIR/Cargo.toml" ] && [ -f "$TAURI_DIR/tauri.conf.json" ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice title=Rust ignoré::$TAURI_DIR/Cargo.toml n'existe pas encore."
+            echo "::notice title=Rust ignoré::Cargo.toml ou tauri.conf.json absent de $TAURI_DIR."
           fi
 
       - name: Install Rust (stable)

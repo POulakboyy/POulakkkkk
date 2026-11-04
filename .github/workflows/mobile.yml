@@ -1,0 +1,201 @@
+# Builds mobiles Android (APK + AAB) et iOS (IPA), déclenchés à la main.
+# Prérequis : les projets natifs générés par `tauri android init` et `tauri ios init`
+# (apps/pouxis/src-tauri/gen/android et gen/apple) doivent être commités une fois.
+# Documentation : docs/operations/CI_CD.md et docs/operations/SECRETS.md
+name: Mobile
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Plateforme à construire'
+        type: choice
+        options: [both, android, ios]
+        default: both
+      ios-export-method:
+        description: 'Méthode d’export iOS'
+        type: choice
+        options: [app-store-connect, release-testing, debugging]
+        default: app-store-connect
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  APP_DIR: apps/pouxis
+  TAURI_DIR: apps/pouxis/src-tauri
+  npm_config_audit: 'false'
+  npm_config_fund: 'false'
+
+jobs:
+  android:
+    name: Android
+    if: inputs.platform != 'ios'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      NDK_VERSION: '27.2.12479018'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check committed Android project
+        run: |
+          if [ ! -d "$TAURI_DIR/gen/android" ]; then
+            echo "::error title=Projet Android absent::Lancez « npm run tauri android init -w @pouxis/app » et commitez $TAURI_DIR/gen/android."
+            exit 1
+          fi
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install Android NDK
+        run: |
+          sdkmanager --install "ndk;$NDK_VERSION"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/$NDK_VERSION" >> "$GITHUB_ENV"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Rust (stable, Android targets)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: 'apps/pouxis/src-tauri -> target'
+          key: android
+
+      - name: Install dependencies
+        run: npm ci
+
+      # keystore.properties is read by gen/android/app/build.gradle.kts (Tauri's documented
+      # signing setup). Without the secrets the release build is produced unsigned.
+      - name: Configure Android signing
+        env:
+          ANDROID_KEY_BASE64: ${{ secrets.ANDROID_KEY_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$ANDROID_KEY_BASE64" ]; then
+            echo "::warning title=Android non signé::ANDROID_KEY_BASE64 absent : artefacts non signés."
+            exit 0
+          fi
+          base64 -d <<< "$ANDROID_KEY_BASE64" > "$RUNNER_TEMP/upload-keystore.jks"
+          {
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "password=$ANDROID_KEY_PASSWORD"
+            echo "storeFile=$RUNNER_TEMP/upload-keystore.jks"
+          } > "$TAURI_DIR/gen/android/keystore.properties"
+
+      - name: Build APK and AAB
+        run: npm run tauri -w @pouxis/app -- android build --apk --aab
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: pouxis-android
+          path: |
+            apps/pouxis/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+            apps/pouxis/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+          retention-days: 30
+
+  ios:
+    name: iOS
+    if: inputs.platform != 'android'
+    runs-on: macos-15
+    timeout-minutes: 75
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check committed iOS project
+        run: |
+          if [ ! -d "$TAURI_DIR/gen/apple" ]; then
+            echo "::error title=Projet iOS absent::Lancez « npm run tauri ios init -w @pouxis/app » sur macOS et commitez $TAURI_DIR/gen/apple."
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Rust (stable, iOS target)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: 'apps/pouxis/src-tauri -> target'
+          key: ios
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Tauri reads IOS_CERTIFICATE / IOS_CERTIFICATE_PASSWORD / IOS_MOBILE_PROVISION for manual
+      # signing, or APPLE_API_ISSUER / APPLE_API_KEY / APPLE_API_KEY_PATH for automatic signing.
+      # Only the variables that are set are exported.
+      - name: Configure iOS signing
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+        run: |
+          for name in APPLE_DEVELOPMENT_TEAM IOS_CERTIFICATE IOS_CERTIFICATE_PASSWORD \
+            IOS_MOBILE_PROVISION APPLE_API_ISSUER APPLE_API_KEY; do
+            value="${!name}"
+            [ -z "$value" ] && continue
+            delimiter="EOF_$(openssl rand -hex 8)"
+            printf '%s<<%s\n%s\n%s\n' "$name" "$delimiter" "$value" "$delimiter" >> "$GITHUB_ENV"
+          done
+          if [ -n "$APPLE_API_KEY_P8" ]; then
+            key_path="$RUNNER_TEMP/AuthKey_${APPLE_API_KEY}.p8"
+            printf '%s\n' "$APPLE_API_KEY_P8" > "$key_path"
+            echo "APPLE_API_KEY_PATH=$key_path" >> "$GITHUB_ENV"
+          fi
+          if [ -z "$IOS_CERTIFICATE" ] && [ -z "$APPLE_API_KEY_P8" ]; then
+            echo "::warning title=iOS sans signature::Aucun secret de signature : le build échouera à l’export si Xcode ne peut pas signer."
+          fi
+
+      - name: Build IPA
+        env:
+          EXPORT_METHOD: ${{ inputs.ios-export-method }}
+        run: npm run tauri -w @pouxis/app -- ios build --export-method "$EXPORT_METHOD"
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: pouxis-ios
+          path: apps/pouxis/src-tauri/gen/apple/build/**/*.ipa
+          if-no-files-found: error
+          retention-days: 30

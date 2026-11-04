@@ -6,7 +6,7 @@
 > **Aucune donnée utilisateur POuxis n'a encore été collectée.** Ils servent à cadrer le
 > recrutement et les questions de recherche, pas à justifier des décisions. Chaque affirmation est à
 > lire comme « nous supposons que… ».
-> Plan de validation : § 8 et [`USER_RESEARCH.md`](./USER_RESEARCH.md).
+> Plan de validation : § 10 et [`USER_RESEARCH.md`](./USER_RESEARCH.md).
 
 Conventions : les identifiants `m.n` renvoient aux fonctionnalités du [brief](../BRIEF.md) (module
 m, fonctionnalité n). `R1`–`R7` renvoient aux risques produit de
@@ -30,13 +30,13 @@ fictifs.
 
 ## 1. Vue d'ensemble
 
-| ID    | Proto-persona                       | Job principal (hypothèse)                                         | Appareils (hypothèse)                 | Confiance a priori | Priorité MVP (hypothèse) |
-| ----- | ----------------------------------- | ----------------------------------------------------------------- | ------------------------------------- | ------------------ | ------------------------ |
-| `PP1` | Inès, créatrice de contenu solo     | Ne perdre aucune idée et publier à l'heure sans nuits blanches    | iPhone, MacBook, iPad                 | Moyenne            | Haute                    |
-| `PP2` | Malik, designer freelance           | Protéger le temps de création et facturer le temps réel           | PC Windows, Android, tablette graphique | Moyenne          | Haute                    |
-| `PP3` | Sam, développeur·se indé            | Capturer sans quitter le clavier et garder la maîtrise des données | Linux, Mac (mission), Android        | Moyenne            | Moyenne                  |
-| `PP4` | Léa, étudiante avec un TDAH         | Voir le temps qui reste, démarrer, et ne pas abandonner l'outil   | Android milieu de gamme, PC Windows   | Faible             | Haute                    |
-| `PP5` | Studio Lumen, 4 personnes           | Coordonner charge, retours clients et confidentialité             | Mac et Windows mêlés, iPhone et Android | Faible           | Basse (MVP solo)         |
+| ID    | Proto-persona                   | Job principal (hypothèse)                                          | Appareils (hypothèse)                   | Confiance a priori | Priorité MVP (hypothèse) |
+| ----- | ------------------------------- | ------------------------------------------------------------------ | --------------------------------------- | ------------------ | ------------------------ |
+| `PP1` | Inès, créatrice de contenu solo | Ne perdre aucune idée et publier à l'heure sans nuits blanches     | iPhone, MacBook, iPad                   | Moyenne            | Haute                    |
+| `PP2` | Malik, designer freelance       | Protéger le temps de création et facturer le temps réel            | PC Windows, Android, tablette graphique | Moyenne            | Haute                    |
+| `PP3` | Sam, développeur·se indé        | Capturer sans quitter le clavier et garder la maîtrise des données | Linux, Mac (mission), Android           | Moyenne            | Moyenne                  |
+| `PP4` | Léa, étudiante avec un TDAH     | Voir le temps qui reste, démarrer, et ne pas abandonner l'outil    | Android milieu de gamme, PC Windows     | Faible             | Haute                    |
+| `PP5` | Studio Lumen, 4 personnes       | Coordonner charge, retours clients et confidentialité              | Mac et Windows mêlés, iPhone et Android | Faible             | Basse (MVP solo)         |
 
 « Confiance a priori » : notre degré de certitude que ce segment existe dans l'audience atteignable
 et a bien ce besoin. Elle est faible pour `PP4` parce que nous ne voulons pas projeter une
@@ -66,11 +66,11 @@ comportementaux (§ 10).
 
 ### Appareils et outils actuels (hypothèse)
 
-| Appareil       | Usage                                       |
-| -------------- | ------------------------------------------- |
-| iPhone         | Capture d'idées, tournage, réseaux          |
-| MacBook Pro    | Script, montage, planning éditorial         |
-| iPad           | Storyboard, lecture                         |
+| Appareil    | Usage                               |
+| ----------- | ----------------------------------- |
+| iPhone      | Capture d'idées, tournage, réseaux  |
+| MacBook Pro | Script, montage, planning éditorial |
+| iPad        | Storyboard, lecture                 |
 
 Outils : Notion (calendrier éditorial), Apple Notes (idées), Google Agenda (partenaires), messages
 envoyés à soi-même. Variante probable chez les créateur·ices débutant·es : Android et PC Windows.
@@ -96,9 +96,9 @@ envoyés à soi-même. Variante probable chez les créateur·ices débutant·es 
 
 ### Forces du progrès (hypothèse)
 
-| Poussée (ce qui ne va plus)                | Attraction (ce qui séduit)                              | Anxiété (ce qui fait hésiter)                         | Habitude (ce qui retient)                     |
-| ------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------- |
-| Échéances ratées, idées perdues            | Une seule app de la capture au planning ; esthétique soignée | Migrer depuis Notion ; fiabilité de la synchronisation | Notion configuré, modèles achetés          |
+| Poussée (ce qui ne va plus)     | Attraction (ce qui séduit)                                   | Anxiété (ce qui fait hésiter)                          | Habitude (ce qui retient)         |
+| ------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ | --------------------------------- |
+| Échéances ratées, idées perdues | Une seule app de la capture au planning ; esthétique soignée | Migrer depuis Notion ; fiabilité de la synchronisation | Notion configuré, modèles achetés |
 
 ### Critères de succès (de son point de vue)
 
@@ -109,30 +109,30 @@ envoyés à soi-même. Variante probable chez les créateur·ices débutant·es 
 
 ### Fonctionnalités qui comptent (hypothèse, classées)
 
-| Rang | ID   | Fonctionnalité                        | Pourquoi (hypothèse)                                         |
-| ---- | ---- | ------------------------------------- | ------------------------------------------------------------ |
-| 1    | 2.7  | Parser vocal avec auto-catégorisation | Capture en marchant ou en tournage                           |
-| 2    | 5.14 | Brain dump ultra-rapide               | Vider sa tête sans choisir où ranger                         |
-| 3    | 1.8  | Analyseur de langage naturel          | « Montage épisode 12 jeudi 4 h » sans formulaire             |
-| 4    | 1.1  | Routage dynamique des tâches          | Répartir le montage autour des contraintes                   |
-| 5    | 1.2  | Propagation des retards               | Le planning survit au tournage qui déborde                   |
-| 6    | 5.1  | Moteur de sérendipité                 | Nouveaux angles à partir d'idées anciennes                   |
-| 7    | 7.9  | Bilan hebdomadaire                    | Voir ses victoires, pas seulement ses retards                |
-| 8    | 2.6  | Pomodoro par tâche                    | Mesurer le temps réel de montage pour mieux estimer          |
-| 9    | 7.2  | Équilibre création / organisation     | Vérifier qu'elle crée plus qu'elle n'organise                |
-| 10   | 5.2  | Moodboard paramétrique                | Direction visuelle des miniatures et des décors              |
+| Rang | ID   | Fonctionnalité                        | Pourquoi (hypothèse)                                |
+| ---- | ---- | ------------------------------------- | --------------------------------------------------- |
+| 1    | 2.7  | Parser vocal avec auto-catégorisation | Capture en marchant ou en tournage                  |
+| 2    | 5.14 | Brain dump ultra-rapide               | Vider sa tête sans choisir où ranger                |
+| 3    | 1.8  | Analyseur de langage naturel          | « Montage épisode 12 jeudi 4 h » sans formulaire    |
+| 4    | 1.1  | Routage dynamique des tâches          | Répartir le montage autour des contraintes          |
+| 5    | 1.2  | Propagation des retards               | Le planning survit au tournage qui déborde          |
+| 6    | 5.1  | Moteur de sérendipité                 | Nouveaux angles à partir d'idées anciennes          |
+| 7    | 7.9  | Bilan hebdomadaire                    | Voir ses victoires, pas seulement ses retards       |
+| 8    | 2.6  | Pomodoro par tâche                    | Mesurer le temps réel de montage pour mieux estimer |
+| 9    | 7.2  | Équilibre création / organisation     | Vérifier qu'elle crée plus qu'elle n'organise       |
+| 10   | 5.2  | Moodboard paramétrique                | Direction visuelle des miniatures et des décors     |
 
 **Fonctionnalités à risque pour ce profil** : 2.15 (limiteur de charge) bloquant les jours de
 publication chargés ; 7.3 (séries) si le rythme de publication est irrégulier par nature.
 
 ### Hypothèses à valider
 
-| ID       | Hypothèse                                                                          | Risque | Méthode                    |
-| -------- | ---------------------------------------------------------------------------------- | ------ | -------------------------- |
-| PP1-H1   | La sous-estimation du montage est la première cause de dérapage du planning        | R3     | Entretiens, journal        |
-| PP1-H2   | En mobilité, elle préfère dicter plutôt que taper                                  | R3, R7 | Journal (J2), test F1      |
-| PP1-H3   | L'esthétique de l'application pèse autant que les fonctions dans l'adoption        | R2     | Tests de concept           |
-| PP1-H4   | La confidentialité est un faible moteur d'adoption pour ce profil                  | R5     | Entretiens « switch », MaxDiff |
+| ID     | Hypothèse                                                                   | Risque | Méthode                        |
+| ------ | --------------------------------------------------------------------------- | ------ | ------------------------------ |
+| PP1-H1 | La sous-estimation du montage est la première cause de dérapage du planning | R3     | Entretiens, journal            |
+| PP1-H2 | En mobilité, elle préfère dicter plutôt que taper                           | R3, R7 | Journal (J2), test F1          |
+| PP1-H3 | L'esthétique de l'application pèse autant que les fonctions dans l'adoption | R2     | Tests de concept               |
+| PP1-H4 | La confidentialité est un faible moteur d'adoption pour ce profil           | R5     | Entretiens « switch », MaxDiff |
 
 ---
 
@@ -149,11 +149,11 @@ publication chargés ; 7.3 (séries) si le rythme de publication est irrégulier
 
 ### Appareils et outils actuels (hypothèse)
 
-| Appareil                   | Usage                                       |
-| -------------------------- | ------------------------------------------- |
-| PC Windows fixe            | Création (suite graphique, Figma)           |
-| Smartphone Android         | Appels, messages clients, agenda            |
-| Tablette graphique ou iPad | Esquisses                                   |
+| Appareil                   | Usage                             |
+| -------------------------- | --------------------------------- |
+| PC Windows fixe            | Création (suite graphique, Figma) |
+| Smartphone Android         | Appels, messages clients, agenda  |
+| Tablette graphique ou iPad | Esquisses                         |
 
 Outils : Google Agenda, un tableau Trello ou Notion par client, un outil de suivi du temps, des
 moodboards en ligne, beaucoup de mails. Combinaison Windows + Android : précisément celle que les
@@ -178,9 +178,9 @@ outils centrés sur l'écosystème Apple servent mal (`R7`).
 
 ### Forces du progrès (hypothèse)
 
-| Poussée                                   | Attraction                                                       | Anxiété                                                  | Habitude                                   |
-| ----------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------ |
-| Sous-facturation, soirées de travail      | Suivi du temps intégré à la tâche ; protection du temps de création | Perdre des données clients ; confidentialité (accords de confidentialité) | Outil de suivi du temps et agenda en place |
+| Poussée                              | Attraction                                                          | Anxiété                                                                   | Habitude                                   |
+| ------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------ |
+| Sous-facturation, soirées de travail | Suivi du temps intégré à la tâche ; protection du temps de création | Perdre des données clients ; confidentialité (accords de confidentialité) | Outil de suivi du temps et agenda en place |
 
 ### Critères de succès (de son point de vue)
 
@@ -190,18 +190,18 @@ outils centrés sur l'écosystème Apple servent mal (`R7`).
 
 ### Fonctionnalités qui comptent (hypothèse, classées)
 
-| Rang | ID   | Fonctionnalité                          | Pourquoi (hypothèse)                                     |
-| ---- | ---- | --------------------------------------- | -------------------------------------------------------- |
-| 1    | 1.15 | Protection de la « maker schedule »     | Alerte quand une réunion casse un bloc de travail profond |
-| 2    | 2.6  | Pomodoro par tâche (temps enregistré)   | Temps réel par client, base de facturation              |
-| 3    | 2.8  | Champs de métadonnées programmables     | `Temps passé * Taux horaire`                             |
-| 4    | 1.6  | Buffers entre réunions                  | Respirer entre deux appels                               |
-| 5    | 1.1  | Routage dynamique des tâches            | Caser les tâches autour des réunions                     |
-| 6    | 5.2  | Moodboard paramétrique                  | Palette extraite des références                          |
-| 7    | 3.10 | Partage granulaire par lien             | Envoyer une maquette au client avec commentaires         |
-| 8    | 3.7  | Aperçus natifs universels               | Voir SVG et fichiers sans ouvrir la suite graphique      |
-| 9    | 5.9  | Banques d'assets intégrées              | Typographies et icônes sans quitter l'outil              |
-| 10   | 3.5  | Vaults chiffrés                         | Documents clients sous accord de confidentialité        |
+| Rang | ID   | Fonctionnalité                        | Pourquoi (hypothèse)                                      |
+| ---- | ---- | ------------------------------------- | --------------------------------------------------------- |
+| 1    | 1.15 | Protection de la « maker schedule »   | Alerte quand une réunion casse un bloc de travail profond |
+| 2    | 2.6  | Pomodoro par tâche (temps enregistré) | Temps réel par client, base de facturation                |
+| 3    | 2.8  | Champs de métadonnées programmables   | `Temps passé * Taux horaire`                              |
+| 4    | 1.6  | Buffers entre réunions                | Respirer entre deux appels                                |
+| 5    | 1.1  | Routage dynamique des tâches          | Caser les tâches autour des réunions                      |
+| 6    | 5.2  | Moodboard paramétrique                | Palette extraite des références                           |
+| 7    | 3.10 | Partage granulaire par lien           | Envoyer une maquette au client avec commentaires          |
+| 8    | 3.7  | Aperçus natifs universels             | Voir SVG et fichiers sans ouvrir la suite graphique       |
+| 9    | 5.9  | Banques d'assets intégrées            | Typographies et icônes sans quitter l'outil               |
+| 10   | 3.5  | Vaults chiffrés                       | Documents clients sous accord de confidentialité          |
 
 **Fonctionnalité à risque pour ce profil** : 2.3 (usure des tâches). Une tâche qui attend le retour
 d'un client se « dégraderait » alors que le retard ne dépend pas de lui. Hypothèse : il faut un état
@@ -209,11 +209,11 @@ d'un client se « dégraderait » alors que le retard ne dépend pas de lui. Hyp
 
 ### Hypothèses à valider
 
-| ID       | Hypothèse                                                                              | Risque | Méthode                         |
-| -------- | -------------------------------------------------------------------------------------- | ------ | ------------------------------- |
-| PP2-H1   | Le suivi du temps par tâche est un moteur d'adoption plus fort que le routage automatique | R1, R2 | Concept, MaxDiff              |
-| PP2-H2   | La combinaison Windows + Android est fréquente dans ce segment et mal servie           | R7     | Screener, enquête               |
-| PP2-H3   | Les tâches bloquées par un client faussent l'usure (2.3) et la rendent injuste         | R4     | Entretiens, test F4             |
+| ID     | Hypothèse                                                                                 | Risque | Méthode             |
+| ------ | ----------------------------------------------------------------------------------------- | ------ | ------------------- |
+| PP2-H1 | Le suivi du temps par tâche est un moteur d'adoption plus fort que le routage automatique | R1, R2 | Concept, MaxDiff    |
+| PP2-H2 | La combinaison Windows + Android est fréquente dans ce segment et mal servie              | R7     | Screener, enquête   |
+| PP2-H3 | Les tâches bloquées par un client faussent l'usure (2.3) et la rendent injuste            | R4     | Entretiens, test F4 |
 
 ---
 
@@ -230,11 +230,11 @@ d'un client se « dégraderait » alors que le retard ne dépend pas de lui. Hyp
 
 ### Appareils et outils actuels (hypothèse)
 
-| Appareil                     | Usage                                      |
-| ---------------------------- | ------------------------------------------ |
-| PC Linux (personnel)         | Projet perso, terminal                     |
-| Mac portable (mission)       | Travail client                             |
-| Smartphone Android           | Capture rapide, notifications              |
+| Appareil               | Usage                         |
+| ---------------------- | ----------------------------- |
+| PC Linux (personnel)   | Projet perso, terminal        |
+| Mac portable (mission) | Travail client                |
+| Smartphone Android     | Capture rapide, notifications |
 
 Outils : notes Markdown locales (Obsidian ou équivalent), tickets GitHub, une application de tâches,
 scripts maison. Utilise des raccourcis façon Vim partout où c'est possible.
@@ -257,9 +257,9 @@ scripts maison. Utilise des raccourcis façon Vim partout où c'est possible.
 
 ### Forces du progrès (hypothèse)
 
-| Poussée                                       | Attraction                                          | Anxiété                                                        | Habitude                         |
-| --------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------- | -------------------------------- |
-| Enfermement propriétaire, prix des abonnements | Open source, local-first, CLI, API, extensions     | Maturité du projet ; perte de données en alpha ; conflits de synchronisation | Notes Markdown et scripts maison |
+| Poussée                                        | Attraction                                     | Anxiété                                                                      | Habitude                         |
+| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------- |
+| Enfermement propriétaire, prix des abonnements | Open source, local-first, CLI, API, extensions | Maturité du projet ; perte de données en alpha ; conflits de synchronisation | Notes Markdown et scripts maison |
 
 ### Critères de succès (de son point de vue)
 
@@ -269,18 +269,18 @@ scripts maison. Utilise des raccourcis façon Vim partout où c'est possible.
 
 ### Fonctionnalités qui comptent (hypothèse, classées)
 
-| Rang | ID   | Fonctionnalité                            | Pourquoi (hypothèse)                                  |
-| ---- | ---- | ----------------------------------------- | ----------------------------------------------------- |
-| 1    | 2.11 | Raccourci de capture universelle          | Capturer sans changer de fenêtre                      |
-| 2    | 3.15 | Client CLI                                | Tâches depuis le terminal                             |
-| 3    | 3.1  | Architecture local-first                  | Rapidité, hors-ligne, maîtrise des données            |
-| 4    | 6.11 | Exportation standardisée                  | Condition pour essayer : pouvoir partir              |
-| 5    | 2.1  | Graphe de dépendances                     | N'afficher que l'action débloquée                     |
-| 6    | 7.8  | Remapping clavier absolu (compatible Vim) | Ergonomie clavier                                     |
-| 7    | 3.5  | Vaults chiffrés                           | Secrets et documents sensibles                        |
-| 8    | 2.9  | Récurrence en syntaxe cron ou littérale   | Règles complexes                                      |
-| 9    | 6.2  | API publique GraphQL                      | Scripts et intégrations personnelles                  |
-| 10   | 6.3  | Commandes extensibles (plugins)           | Adapter l'outil plutôt que le subir                   |
+| Rang | ID   | Fonctionnalité                            | Pourquoi (hypothèse)                       |
+| ---- | ---- | ----------------------------------------- | ------------------------------------------ |
+| 1    | 2.11 | Raccourci de capture universelle          | Capturer sans changer de fenêtre           |
+| 2    | 3.15 | Client CLI                                | Tâches depuis le terminal                  |
+| 3    | 3.1  | Architecture local-first                  | Rapidité, hors-ligne, maîtrise des données |
+| 4    | 6.11 | Exportation standardisée                  | Condition pour essayer : pouvoir partir    |
+| 5    | 2.1  | Graphe de dépendances                     | N'afficher que l'action débloquée          |
+| 6    | 7.8  | Remapping clavier absolu (compatible Vim) | Ergonomie clavier                          |
+| 7    | 3.5  | Vaults chiffrés                           | Secrets et documents sensibles             |
+| 8    | 2.9  | Récurrence en syntaxe cron ou littérale   | Règles complexes                           |
+| 9    | 6.2  | API publique GraphQL                      | Scripts et intégrations personnelles       |
+| 10   | 6.3  | Commandes extensibles (plugins)           | Adapter l'outil plutôt que le subir        |
 
 Non classé mais structurant : le serveur de synchronisation auto-hébergeable (`apps/sync-server`).
 
@@ -289,11 +289,11 @@ Hypothèse : ce profil n'accepte l'automatisation que si les règles sont lisibl
 
 ### Hypothèses à valider
 
-| ID       | Hypothèse                                                                                     | Risque | Méthode                          |
-| -------- | --------------------------------------------------------------------------------------------- | ------ | -------------------------------- |
-| PP3-H1   | Local-first, chiffrement et open source sont des critères éliminatoires pour ce profil        | R5     | Entretiens « switch », MaxDiff   |
-| PP3-H2   | Le routage n'est accepté que s'il est inspectable (raison lisible, règles modifiables)        | R1     | Test F2, entretiens              |
-| PP3-H3   | Ce profil, très présent sur GitHub et Reddit, sera surreprésenté si l'on ne fixe pas de quotas | —      | Suivi des quotas                 |
+| ID     | Hypothèse                                                                                      | Risque | Méthode                        |
+| ------ | ---------------------------------------------------------------------------------------------- | ------ | ------------------------------ |
+| PP3-H1 | Local-first, chiffrement et open source sont des critères éliminatoires pour ce profil         | R5     | Entretiens « switch », MaxDiff |
+| PP3-H2 | Le routage n'est accepté que s'il est inspectable (raison lisible, règles modifiables)         | R1     | Test F2, entretiens            |
+| PP3-H3 | Ce profil, très présent sur GitHub et Reddit, sera surreprésenté si l'on ne fixe pas de quotas | —      | Suivi des quotas               |
 
 ---
 
@@ -319,10 +319,10 @@ Hypothèse : ce profil n'accepte l'automatisation que si les règles sont lisibl
 
 ### Appareils et outils actuels (hypothèse)
 
-| Appareil                         | Usage                                        |
-| -------------------------------- | -------------------------------------------- |
+| Appareil                           | Usage                                      |
+| ---------------------------------- | ------------------------------------------ |
 | Smartphone Android milieu de gamme | Appareil central : rappels, alarmes, cours |
-| PC portable Windows              | Devoirs, cours en ligne                      |
+| PC portable Windows                | Devoirs, cours en ligne                    |
 
 Outils : rappels et alarmes multiples du téléphone, agenda papier commencé puis abandonné plusieurs
 fois, applications de tâches essayées puis délaissées après deux semaines (« cimetière d'apps »),
@@ -347,9 +347,9 @@ agenda de l'université.
 
 ### Forces du progrès (hypothèse)
 
-| Poussée                               | Attraction                          | Anxiété                                         | Habitude                         |
-| ------------------------------------- | ----------------------------------- | ----------------------------------------------- | -------------------------------- |
-| Échéances ratées, stress, honte       | Visuel, doux, simple                | « Encore une app que je vais abandonner » ; coût | Alarmes du téléphone            |
+| Poussée                         | Attraction           | Anxiété                                          | Habitude             |
+| ------------------------------- | -------------------- | ------------------------------------------------ | -------------------- |
+| Échéances ratées, stress, honte | Visuel, doux, simple | « Encore une app que je vais abandonner » ; coût | Alarmes du téléphone |
 
 ### Critères de succès (de son point de vue)
 
@@ -359,18 +359,18 @@ agenda de l'université.
 
 ### Fonctionnalités qui comptent (hypothèse, classées)
 
-| Rang | ID   | Fonctionnalité                           | Pourquoi (hypothèse)                                        |
-| ---- | ---- | ---------------------------------------- | ----------------------------------------------------------- |
-| 1    | 1.14 | Barre de progression temporelle absolue  | Rendre visible le temps qui passe                           |
-| 2    | 2.2  | Décomposition IA en sous-tâches          | Une première étape minuscule pour démarrer                  |
-| 3    | 2.14 | Mode « Focus unique »                    | Une seule chose à l'écran                                   |
-| 4    | 1.10 | Tâches flottantes                        | Un jour sans heure imposée                                  |
-| 5    | 1.11 | Mode Hyperfocus (Ne pas déranger)        | Protéger la concentration, avec une sortie douce            |
-| 6    | 2.15 | Limiteur de charge (WIP limit)           | Moins de priorités, à condition d'être réglable             |
-| 7    | 7.3  | Séries sans culpabilisation              | Motivation sans punition, avec « jokers »                   |
-| 8    | 5.13 | Ambiance sonore générative               | S'isoler du bruit                                           |
-| 9    | 5.14 | Brain dump ultra-rapide                  | Vider sa tête avant de se lancer                            |
-| 10   | 7.4  | Interface zen (auto-fading)              | Moins de stimuli visuels                                    |
+| Rang | ID   | Fonctionnalité                          | Pourquoi (hypothèse)                             |
+| ---- | ---- | --------------------------------------- | ------------------------------------------------ |
+| 1    | 1.14 | Barre de progression temporelle absolue | Rendre visible le temps qui passe                |
+| 2    | 2.2  | Décomposition IA en sous-tâches         | Une première étape minuscule pour démarrer       |
+| 3    | 2.14 | Mode « Focus unique »                   | Une seule chose à l'écran                        |
+| 4    | 1.10 | Tâches flottantes                       | Un jour sans heure imposée                       |
+| 5    | 1.11 | Mode Hyperfocus (Ne pas déranger)       | Protéger la concentration, avec une sortie douce |
+| 6    | 2.15 | Limiteur de charge (WIP limit)          | Moins de priorités, à condition d'être réglable  |
+| 7    | 7.3  | Séries sans culpabilisation             | Motivation sans punition, avec « jokers »        |
+| 8    | 5.13 | Ambiance sonore générative              | S'isoler du bruit                                |
+| 9    | 5.14 | Brain dump ultra-rapide                 | Vider sa tête avant de se lancer                 |
+| 10   | 7.4  | Interface zen (auto-fading)             | Moins de stimuli visuels                         |
 
 **Fonctionnalités à risque pour ce profil** : 2.3 (usure, glissement vers le rouge : risque de honte),
 7.3 (séries mal conçues), 1.1 (routage : soulagement ou perte de contrôle selon les personnes),
@@ -378,12 +378,12 @@ volume de notifications. Voir `H4a`–`H4d`.
 
 ### Hypothèses à valider
 
-| ID       | Hypothèse                                                                                    | Risque | Méthode                          |
-| -------- | -------------------------------------------------------------------------------------------- | ------ | -------------------------------- |
-| PP4-H1   | La représentation visuelle du temps aide à démarrer plus tôt                                 | R4     | Co-conception, journal (J8)      |
-| PP4-H2   | L'usure rouge (2.3) et les séries (7.3) découragent une partie des personnes                 | R4     | Co-conception, test F4, journal (J10) |
-| PP4-H3   | Le routage automatique soulage certaines personnes et en inquiète d'autres                   | R1, R4 | Test F2, journal (J3, J4)        |
-| PP4-H4   | La version Android (milieu de gamme) est la condition d'accès principale à ce segment        | R7     | Screener, enquête                |
+| ID     | Hypothèse                                                                             | Risque | Méthode                               |
+| ------ | ------------------------------------------------------------------------------------- | ------ | ------------------------------------- |
+| PP4-H1 | La représentation visuelle du temps aide à démarrer plus tôt                          | R4     | Co-conception, journal (J8)           |
+| PP4-H2 | L'usure rouge (2.3) et les séries (7.3) découragent une partie des personnes          | R4     | Co-conception, test F4, journal (J10) |
+| PP4-H3 | Le routage automatique soulage certaines personnes et en inquiète d'autres            | R1, R4 | Test F2, journal (J3, J4)             |
+| PP4-H4 | La version Android (milieu de gamme) est la condition d'accès principale à ce segment | R7     | Screener, enquête                     |
 
 ---
 
@@ -401,11 +401,11 @@ volume de notifications. Voir `H4a`–`H4d`.
 
 ### Appareils et outils actuels (hypothèse)
 
-| Personne             | Appareils                         |
-| -------------------- | --------------------------------- |
-| Chloé                | Mac, iPhone                       |
-| Motion designers     | Mac et PC Windows                 |
-| Monteur à distance   | PC Windows, Android               |
+| Personne           | Appareils           |
+| ------------------ | ------------------- |
+| Chloé              | Mac, iPhone         |
+| Motion designers   | Mac et PC Windows   |
+| Monteur à distance | PC Windows, Android |
 
 Outils : messagerie d'équipe, Notion, suite bureautique en ligne, Figma, un tableau de tâches, un
 outil de validation vidéo.
@@ -429,9 +429,9 @@ outil de validation vidéo.
 
 ### Forces du progrès (hypothèse)
 
-| Poussée                                  | Attraction                                  | Anxiété                                                                   | Habitude                                  |
-| ---------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------- |
-| Coût cumulé, chaos des versions          | Tout-en-un, rapidité, prix                  | Migration collective (coût de changement élevé) ; maturité de la collaboration | Messagerie et Notion très ancrés     |
+| Poussée                         | Attraction                 | Anxiété                                                                        | Habitude                         |
+| ------------------------------- | -------------------------- | ------------------------------------------------------------------------------ | -------------------------------- |
+| Coût cumulé, chaos des versions | Tout-en-un, rapidité, prix | Migration collective (coût de changement élevé) ; maturité de la collaboration | Messagerie et Notion très ancrés |
 
 ### Critères de succès (de leur point de vue)
 
@@ -441,18 +441,18 @@ outil de validation vidéo.
 
 ### Fonctionnalités qui comptent (hypothèse, classées)
 
-| Rang | ID   | Fonctionnalité                           | Pourquoi (hypothèse)                                   |
-| ---- | ---- | ---------------------------------------- | ------------------------------------------------------ |
-| 1    | 6.4  | Commentaires par blocs                   | Retour attaché à l'élément précis                      |
-| 2    | 6.8  | Boîte de réception d'équipe unifiée      | Validations et mentions au même endroit                |
-| 3    | 3.10 | Partage granulaire par lien              | Partage client avec expiration et mot de passe         |
-| 4    | 1.5  | Gestion multi-fuseaux                    | Monteur à distance                                     |
-| 5    | 3.5  | Vaults chiffrés                          | Fichiers sous accord de confidentialité               |
-| 6    | 6.15 | Modèles d'espaces de travail             | Réutiliser la méthode du studio                        |
-| 7    | 6.6  | Statuts vidéo asynchrones                | Éviter des réunions                                    |
-| 8    | 4.14 | Multi-curseurs en temps réel             | Atelier sur la même toile                              |
-| 9    | 2.13 | Délégation avec webhook                  | Prévenir un freelance externe                          |
-| 10   | 6.10 | Sondages et votes pondérés               | Choisir une piste créative ensemble                    |
+| Rang | ID   | Fonctionnalité                      | Pourquoi (hypothèse)                           |
+| ---- | ---- | ----------------------------------- | ---------------------------------------------- |
+| 1    | 6.4  | Commentaires par blocs              | Retour attaché à l'élément précis              |
+| 2    | 6.8  | Boîte de réception d'équipe unifiée | Validations et mentions au même endroit        |
+| 3    | 3.10 | Partage granulaire par lien         | Partage client avec expiration et mot de passe |
+| 4    | 1.5  | Gestion multi-fuseaux               | Monteur à distance                             |
+| 5    | 3.5  | Vaults chiffrés                     | Fichiers sous accord de confidentialité        |
+| 6    | 6.15 | Modèles d'espaces de travail        | Réutiliser la méthode du studio                |
+| 7    | 6.6  | Statuts vidéo asynchrones           | Éviter des réunions                            |
+| 8    | 4.14 | Multi-curseurs en temps réel        | Atelier sur la même toile                      |
+| 9    | 2.13 | Délégation avec webhook             | Prévenir un freelance externe                  |
+| 10   | 6.10 | Sondages et votes pondérés          | Choisir une piste créative ensemble            |
 
 **Remarque de priorité.** Les flux du MVP sont solo. La collaboration combinée au chiffrement de bout
 en bout est coûteuse à construire. Ce profil est donc de priorité basse pour le MVP, mais important
@@ -462,11 +462,11 @@ inclus.
 
 ### Hypothèses à valider
 
-| ID       | Hypothèse                                                                                           | Risque | Méthode                   |
-| -------- | --------------------------------------------------------------------------------------------------- | ------ | ------------------------- |
-| PP5-H1   | L'adoption d'équipe est collective et lente ; un outil entre par une personne qui l'utilise seule   | R2     | Entretiens « switch »     |
-| PP5-H2   | La collaboration en temps réel est un prérequis (Kano « obligatoire ») pour envisager POuxis        | R2     | Kano                      |
-| PP5-H3   | Le chiffrement de bout en bout est un argument commercial face aux clients                          | R5     | Entretiens, MaxDiff       |
+| ID     | Hypothèse                                                                                         | Risque | Méthode               |
+| ------ | ------------------------------------------------------------------------------------------------- | ------ | --------------------- |
+| PP5-H1 | L'adoption d'équipe est collective et lente ; un outil entre par une personne qui l'utilise seule | R2     | Entretiens « switch » |
+| PP5-H2 | La collaboration en temps réel est un prérequis (Kano « obligatoire ») pour envisager POuxis      | R2     | Kano                  |
+| PP5-H3 | Le chiffrement de bout en bout est un argument commercial face aux clients                        | R5     | Entretiens, MaxDiff   |
 
 ---
 
@@ -476,33 +476,33 @@ Lecture : 3 = central pour ce profil, 2 = utile, 1 = secondaire, – = peu perti
 fonctionnalité à risque (peut nuire si mal conçue). **Tout est hypothèse** ; la matrice sert à
 construire les stimuli de la phase 2 et la présélection des ~30 candidates.
 
-| ID   | Fonctionnalité                       | PP1 | PP2 | PP3 | PP4 | PP5 | Flux MVP |
-| ---- | ------------------------------------ | --- | --- | --- | --- | --- | -------- |
-| 1.8  | Langage naturel                      | 3   | 2   | 2   | 2   | 1   | F1       |
-| 2.11 | Capture universelle                  | 2   | 2   | 3   | 1   | 1   | F1       |
-| 5.14 | Brain dump                           | 3   | 1   | 2   | 2   | –   | F1       |
-| 2.7  | Parser vocal                         | 3   | 1   | –   | 2   | –   | F1       |
-| 1.1  | Routage dynamique                    | 3   | 2   | R   | R   | 2   | F2       |
-| 1.2  | Propagation des retards              | 3   | 2   | 1   | 2   | 2   | F2       |
-| 1.10 | Tâches flottantes                    | 2   | 2   | 1   | 3   | 1   | F2       |
-| 1.15 | Protection maker schedule            | 1   | 3   | 2   | 1   | 2   | F2       |
-| 2.15 | Limiteur de charge                   | R   | 1   | 1   | 2/R | 1   | F2       |
-| 2.6  | Pomodoro par tâche                   | 2   | 3   | 2   | 2   | 1   | F3       |
-| 2.14 | Focus unique                         | 2   | 2   | 2   | 3   | 1   | F3       |
-| 1.11 | Hyperfocus (Ne pas déranger)         | 2   | 2   | 2   | 3   | 1   | F3       |
-| 5.13 | Ambiance sonore                      | 1   | 1   | 1   | 2   | –   | F3       |
-| 7.9  | Bilan hebdomadaire                   | 3   | 2   | 2   | 2   | 2   | F4       |
-| 1.9  | Snapshot prévu / réalisé             | 2   | 2   | 1   | 1   | 2   | F4       |
-| 2.3  | Usure des tâches                     | 1   | R   | 1   | R   | 1   | F4       |
-| 7.3  | Séries sans culpabilisation          | R   | 1   | 1   | 2/R | –   | F4       |
-| 5.1  | Sérendipité                          | 3   | 2   | 1   | 1   | 1   | F5       |
-| 1.14 | Barre de progression temporelle      | 1   | 1   | 1   | 3   | 1   | —        |
-| 2.2  | Décomposition IA                     | 1   | 1   | 1   | 3   | 1   | —        |
-| 3.1  | Local-first                          | 1   | 2   | 3   | 1   | 2   | Socle    |
-| 3.5  | Vaults chiffrés                      | 1   | 2   | 2   | –   | 3   | —        |
-| 6.11 | Export standardisé                   | 1   | 1   | 3   | –   | 2   | —        |
-| 3.15 | Client CLI                           | –   | –   | 3   | –   | –   | —        |
-| 6.4  | Commentaires par blocs               | –   | 2   | –   | –   | 3   | —        |
+| ID   | Fonctionnalité                  | PP1 | PP2 | PP3 | PP4 | PP5 | Flux MVP |
+| ---- | ------------------------------- | --- | --- | --- | --- | --- | -------- |
+| 1.8  | Langage naturel                 | 3   | 2   | 2   | 2   | 1   | F1       |
+| 2.11 | Capture universelle             | 2   | 2   | 3   | 1   | 1   | F1       |
+| 5.14 | Brain dump                      | 3   | 1   | 2   | 2   | –   | F1       |
+| 2.7  | Parser vocal                    | 3   | 1   | –   | 2   | –   | F1       |
+| 1.1  | Routage dynamique               | 3   | 2   | R   | R   | 2   | F2       |
+| 1.2  | Propagation des retards         | 3   | 2   | 1   | 2   | 2   | F2       |
+| 1.10 | Tâches flottantes               | 2   | 2   | 1   | 3   | 1   | F2       |
+| 1.15 | Protection maker schedule       | 1   | 3   | 2   | 1   | 2   | F2       |
+| 2.15 | Limiteur de charge              | R   | 1   | 1   | 2/R | 1   | F2       |
+| 2.6  | Pomodoro par tâche              | 2   | 3   | 2   | 2   | 1   | F3       |
+| 2.14 | Focus unique                    | 2   | 2   | 2   | 3   | 1   | F3       |
+| 1.11 | Hyperfocus (Ne pas déranger)    | 2   | 2   | 2   | 3   | 1   | F3       |
+| 5.13 | Ambiance sonore                 | 1   | 1   | 1   | 2   | –   | F3       |
+| 7.9  | Bilan hebdomadaire              | 3   | 2   | 2   | 2   | 2   | F4       |
+| 1.9  | Snapshot prévu / réalisé        | 2   | 2   | 1   | 1   | 2   | F4       |
+| 2.3  | Usure des tâches                | 1   | R   | 1   | R   | 1   | F4       |
+| 7.3  | Séries sans culpabilisation     | R   | 1   | 1   | 2/R | –   | F4       |
+| 5.1  | Sérendipité                     | 3   | 2   | 1   | 1   | 1   | F5       |
+| 1.14 | Barre de progression temporelle | 1   | 1   | 1   | 3   | 1   | —        |
+| 2.2  | Décomposition IA                | 1   | 1   | 1   | 3   | 1   | —        |
+| 3.1  | Local-first                     | 1   | 2   | 3   | 1   | 2   | Socle    |
+| 3.5  | Vaults chiffrés                 | 1   | 2   | 2   | –   | 3   | —        |
+| 6.11 | Export standardisé              | 1   | 1   | 3   | –   | 2   | —        |
+| 3.15 | Client CLI                      | –   | –   | 3   | –   | –   | —        |
+| 6.4  | Commentaires par blocs          | –   | 2   | –   | –   | 3   | —        |
 
 **« Top 10 » hypothétique (noyau commun, à valider en phase 2).** Retenu parce que ces fonctions
 reviennent chez au moins trois profils et composent la boucle capture → plan → focus → revue (`R3`) :
@@ -529,12 +529,12 @@ la phase 2b de [`USER_RESEARCH.md`](./USER_RESEARCH.md#phase-2--tests-de-concept
 Les anti-personas décrivent pour qui nous ne concevons **pas** maintenant. Ces personnes peuvent
 utiliser POuxis ; leurs demandes ne pilotent simplement pas les choix par défaut.
 
-| ID   | Anti-persona                                                   | Pourquoi pas maintenant                                                                                         | Risque si l'on conçoit pour elle                                     | Ce qui nous ferait changer d'avis                                |
-| ---- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `A1` | DSI d'une entreprise réglementée (SSO, piste d'audit, conformité : 6.14, 6.5) | Cycle d'achat long, exigences de conformité lourdes, éloigné de l'audience atteignable | La feuille de route serait capturée par des exigences d'entreprise | Demande récurrente et financée, après adéquation produit-marché solo |
-| `A2` | Chef·fe de projet d'une équipe de plus de 15 personnes cherchant un remplaçant d'outil de gestion de projet (Gantt, ressources, reporting) | Besoins de pilotage et de reporting hors de la boucle personnelle | Interface alourdie, perte de la simplicité « flow » | Croissance forte du segment `PP5` vers des équipes plus grandes |
-| `A3` | « Collectionneur·se de systèmes » : son but principal est de configurer son système d'organisation plutôt que de produire | Très présent dans les communautés productivité, surreprésenté dans les retours | Configurabilité infinie au détriment de l'expérience par défaut ; contradiction avec 7.2 | Preuve que la configurabilité avancée améliore la rétention des autres profils |
-| `A4` | Personne cherchant un soin ou un accompagnement thérapeutique du TDAH | POuxis n'est pas un dispositif médical (au sens du règlement (UE) 2017/745) et ne doit faire aucune allégation de soin | Promesses trompeuses, responsabilité, déception de personnes vulnérables | Aucun changement prévu ; on oriente vers des professionnel·les |
+| ID   | Anti-persona                                                                                                                               | Pourquoi pas maintenant                                                                                                | Risque si l'on conçoit pour elle                                                         | Ce qui nous ferait changer d'avis                                              |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `A1` | DSI d'une entreprise réglementée (SSO, piste d'audit, conformité : 6.14, 6.5)                                                              | Cycle d'achat long, exigences de conformité lourdes, éloigné de l'audience atteignable                                 | La feuille de route serait capturée par des exigences d'entreprise                       | Demande récurrente et financée, après adéquation produit-marché solo           |
+| `A2` | Chef·fe de projet d'une équipe de plus de 15 personnes cherchant un remplaçant d'outil de gestion de projet (Gantt, ressources, reporting) | Besoins de pilotage et de reporting hors de la boucle personnelle                                                      | Interface alourdie, perte de la simplicité « flow »                                      | Croissance forte du segment `PP5` vers des équipes plus grandes                |
+| `A3` | « Collectionneur·se de systèmes » : son but principal est de configurer son système d'organisation plutôt que de produire                  | Très présent dans les communautés productivité, surreprésenté dans les retours                                         | Configurabilité infinie au détriment de l'expérience par défaut ; contradiction avec 7.2 | Preuve que la configurabilité avancée améliore la rétention des autres profils |
+| `A4` | Personne cherchant un soin ou un accompagnement thérapeutique du TDAH                                                                      | POuxis n'est pas un dispositif médical (au sens du règlement (UE) 2017/745) et ne doit faire aucune allégation de soin | Promesses trompeuses, responsabilité, déception de personnes vulnérables                 | Aucun changement prévu ; on oriente vers des professionnel·les                 |
 
 ---
 
@@ -552,12 +552,12 @@ Signaux faibles possibles, à noter s'ils apparaissent en phase 1 :
 
 ## 10. Plan de validation
 
-| Étape                     | Ce qui change                                                                                                                                                         |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Avant la phase 1          | Les proto-personas servent uniquement aux quotas et au screener.                                                                                                      |
-| Après la phase 1          | Chaque proto-persona reçoit un statut : **confirmé**, **modifié**, **fusionné** ou **abandonné**, avec les `INS-###` qui le justifient. Les citations imaginées sont remplacées par de vrais verbatims anonymisés (avec consentement C5 ou C6). |
-| Après les phases 2 et 4   | Les colonnes « Fonctionnalités qui comptent » sont remplacées par les résultats MaxDiff et Kano par segment, puis par l'usage observé dans le journal.                 |
-| En continu                | Si les segments comportementaux expliquent mieux les données que les métiers (§ 1), les personas sont reconstruits sur ces segments.                                  |
+| Étape                   | Ce qui change                                                                                                                                                                                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Avant la phase 1        | Les proto-personas servent uniquement aux quotas et au screener.                                                                                                                                                                                |
+| Après la phase 1        | Chaque proto-persona reçoit un statut : **confirmé**, **modifié**, **fusionné** ou **abandonné**, avec les `INS-###` qui le justifient. Les citations imaginées sont remplacées par de vrais verbatims anonymisés (avec consentement C5 ou C6). |
+| Après les phases 2 et 4 | Les colonnes « Fonctionnalités qui comptent » sont remplacées par les résultats MaxDiff et Kano par segment, puis par l'usage observé dans le journal.                                                                                          |
+| En continu              | Si les segments comportementaux expliquent mieux les données que les métiers (§ 1), les personas sont reconstruits sur ces segments.                                                                                                            |
 
 Critère de validation d'un persona : au moins 3 participant·es de la phase 1 partagent son job
 principal **et** au moins 2 de ses douleurs principales, sans contre-preuve majeure. Sinon, le

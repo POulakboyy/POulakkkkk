@@ -46,15 +46,22 @@ const AES_GCM = 'AES-GCM';
  * the WebCrypto implementation. Pass `extractable: true` only when the key must be wrapped
  * (`wrapVaultKey`) — `createVault` handles that for you.
  */
-export async function generateVaultKey(options: { extractable?: boolean } = {}): Promise<CryptoKey> {
-  return subtle().generateKey({ name: AES_GCM, length: AES_KEY_BITS }, options.extractable ?? false, [
-    'encrypt',
-    'decrypt',
-  ]);
+export async function generateVaultKey(
+  options: { extractable?: boolean } = {},
+): Promise<CryptoKey> {
+  return subtle().generateKey(
+    { name: AES_GCM, length: AES_KEY_BITS },
+    options.extractable ?? false,
+    ['encrypt', 'decrypt'],
+  );
 }
 
 /** Encrypts `plaintext` and returns a `pxv1.…` envelope bound to `aad`. */
-export async function encrypt(key: CryptoKey, plaintext: BinaryLike, aad: BinaryLike): Promise<string> {
+export async function encrypt(
+  key: CryptoKey,
+  plaintext: BinaryLike,
+  aad: BinaryLike,
+): Promise<string> {
   return seal(ENVELOPE_PREFIX, key, plaintext, aad);
 }
 
@@ -67,7 +74,11 @@ export async function decrypt(key: CryptoKey, envelope: string, aad: BinaryLike)
 }
 
 /** `decrypt` + strict UTF-8 decoding. */
-export async function decryptText(key: CryptoKey, envelope: string, aad: BinaryLike): Promise<string> {
+export async function decryptText(
+  key: CryptoKey,
+  envelope: string,
+  aad: BinaryLike,
+): Promise<string> {
   const bytes = await decrypt(key, envelope, aad);
   try {
     return utf8Decode(bytes);

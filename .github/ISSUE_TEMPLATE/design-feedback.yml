@@ -1,0 +1,68 @@
+name: Retour sur le design
+description: Ergonomie, lisibilité, animations, accessibilité ou cohérence visuelle.
+title: '[Design] '
+labels: [design, à trier]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Les retours de design sont précieux : soyez précis·e sur l'écran, le contexte et
+        l'effet ressenti. Une capture annotée aide beaucoup.
+  - type: input
+    id: screen
+    attributes:
+      label: Écran ou composant
+      placeholder: Vue « Semaine », barre d'onglets, minuteur de focus…
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Nature du retour
+      multiple: true
+      options:
+        - Ergonomie / parcours
+        - Hiérarchie visuelle et lisibilité
+        - Animation et fluidité
+        - Accessibilité (contraste, clavier, lecteur d'écran, cibles tactiles)
+        - Cohérence avec le reste de l'application
+        - Textes et terminologie
+        - Thème clair / sombre
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: Ce que vous observez
+      description: Ce qui se passe et pourquoi cela gêne (effort, confusion, inconfort…).
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion
+      description: Ce qui vous semblerait plus clair, plus rapide ou plus agréable.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plateforme et format
+      multiple: true
+      options:
+        - Téléphone
+        - Tablette
+        - Ordinateur
+        - Web
+  - type: checkboxes
+    id: preferences
+    attributes:
+      label: Réglages système actifs
+      description: Ils changent le rendu ; cochez ceux qui s'appliquent.
+      options:
+        - label: Réduction des animations
+        - label: Taille de texte agrandie
+        - label: Contraste élevé
+        - label: Lecteur d'écran (VoiceOver, TalkBack, NVDA…)
+  - type: textarea
+    id: media
+    attributes:
+      label: Captures ou vidéo

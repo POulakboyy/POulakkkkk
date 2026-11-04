@@ -4,8 +4,8 @@
 
 /** Frequent French and English function words that carry no topic. */
 const STOPWORDS = new Set(
+  // French
   (
-    // French
     'les des une un le la de du et en au aux ce ces cet cette que qui quoi dont pour par sur ' +
     'dans avec sans sous entre vers chez mais donc car pas plus moins tres trop peu bien mal ' +
     'est sont ete etre etait avoir avait ai as avons avez ont fait faire fais ses son sa mes ' +
@@ -23,12 +23,19 @@ const STOPWORDS = new Set(
 
 /** Lower-case, strip diacritics. */
 export function fold(text: string): string {
-  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 }
 
-/** Very light stemming shared by FR/EN: drops a plural `s`/`x` on longer words. */
+/**
+ * Very light stemming shared by FR/EN: drops a plural `s` (not in `-ss`, `-us`, `-is`, so
+ * "focus", "access" and "analysis" survive) or the `x` of French `-ux` plurals on longer words.
+ */
 function stem(word: string): string {
-  return word.length > 4 && /[sx]$/.test(word) ? word.slice(0, -1) : word;
+  if (word.length <= 4) return word;
+  return /(?:[^siu]s|ux)$/.test(word) ? word.slice(0, -1) : word;
 }
 
 /** Topic keywords of a text: folded, stop words and short or numeric tokens removed, stemmed. */

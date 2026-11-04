@@ -41,7 +41,9 @@ export type CompileResult = { ok: true; formula: CompiledFormula } | FormulaFail
 export function compileFormula(source: string, limits: FormulaLimits = {}): CompileResult {
   const { maxLength, maxDepth } = { ...DEFAULT_FORMULA_LIMITS, ...limits };
   if (source.length > maxLength) {
-    return failure(new FormulaError('too-long', `Formula longer than ${maxLength} characters`, maxLength));
+    return failure(
+      new FormulaError('too-long', `Formula longer than ${maxLength} characters`, maxLength),
+    );
   }
   try {
     const root = parse(tokenize(source), maxDepth);

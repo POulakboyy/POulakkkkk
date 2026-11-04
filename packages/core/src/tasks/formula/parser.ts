@@ -9,20 +9,7 @@ import { FormulaError } from './types.ts';
 import type { FormulaValue } from './types.ts';
 
 export type BinaryOp =
-  | '||'
-  | '&&'
-  | '=='
-  | '!='
-  | '<'
-  | '<='
-  | '>'
-  | '>='
-  | '+'
-  | '-'
-  | '*'
-  | '/'
-  | '%'
-  | '^';
+  '||' | '&&' | '==' | '!=' | '<' | '<=' | '>' | '>=' | '+' | '-' | '*' | '/' | '%' | '^';
 export type UnaryOp = '-' | '+' | '!';
 
 interface NodeBase {
@@ -169,10 +156,18 @@ export function parse(tokens: readonly Token[], maxDepth: number): Node {
 
 function unexpected(token: Token, expected: string): FormulaError {
   if (token.type === 'eof') {
-    return new FormulaError('unexpected-end', `Formula ends early: expected ${expected}`, token.pos);
+    return new FormulaError(
+      'unexpected-end',
+      `Formula ends early: expected ${expected}`,
+      token.pos,
+    );
   }
   const shown = token.type === 'string' ? JSON.stringify(token.text) : `"${token.text}"`;
-  return new FormulaError('unexpected-token', `Unexpected ${shown}: expected ${expected}`, token.pos);
+  return new FormulaError(
+    'unexpected-token',
+    `Unexpected ${shown}: expected ${expected}`,
+    token.pos,
+  );
 }
 
 function arityMessage(name: string, min: number, max: number): string {

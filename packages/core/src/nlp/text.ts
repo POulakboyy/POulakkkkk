@@ -9,7 +9,7 @@
 const SPECIAL: Readonly<Record<string, string>> = {
   '’': "'",
   '‘': "'",
-  'ʼ': "'",
+  ʼ: "'",
   '`': "'",
   '´': "'",
   '‐': '-',
@@ -100,9 +100,9 @@ export function execAt(re: RegExp, s: string, pos: number): RegExpExecArray | nu
   return re.exec(s);
 }
 
-/** Upper-cases the first letter of `s` when its first word is entirely lower case. */
+/** Upper-cases `s`'s first letter when it opens the text and its word is entirely lower case. */
 export function capitalizeFirst(s: string): string {
-  const m = /^[^\p{L}]*([\p{L}][\p{L}\p{N}'’-]*)/u.exec(s);
+  const m = /^[\s"'«“(¿¡]*([\p{L}][\p{L}\p{N}'’-]*)/u.exec(s);
   if (!m || !m[1]) return s;
   const word = m[1];
   if (word !== word.toLowerCase()) return s;

@@ -194,7 +194,8 @@ class FileSpaceLog implements SpaceLog {
     envelopes: readonly Envelope[],
     options: AppendOptions,
   ): Promise<AppendOutcome> {
-    if (this.broken) throw new StorageUnavailableError('space log is unavailable', { cause: this.broken });
+    if (this.broken)
+      throw new StorageUnavailableError('space log is unavailable', { cause: this.broken });
 
     const stored: StoredEnvelope[] = [];
     const duplicates: string[] = [];

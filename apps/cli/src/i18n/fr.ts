@@ -19,6 +19,7 @@ export const fr = {
     tagline:
       'POuxis en ligne de commande : tâches, agenda, planification et recherche depuis le terminal.',
     usage: 'Utilisation',
+    synopsis: 'pouxis <commande> [arguments] [options]',
     commands: 'Commandes',
     options: 'Options',
     globalOptions: 'Options globales',
@@ -47,10 +48,13 @@ export const fr = {
   commands: {
     add: {
       summary: 'Ajoute une tâche ou un événement en langage naturel',
-      usage: 'pouxis add <texte…> [--dry-run]',
+      usage: 'pouxis add <texte…> [--inbox] [--dry-run]',
       description:
         'Le texte est analysé : date, heure, durée, #étiquettes, !priorité, @personnes.\nUne plage horaire (« 14h-16h ») crée un événement, sinon c’est une tâche.',
-      options: [['--dry-run', 'montre ce qui a été compris sans rien enregistrer']],
+      options: [
+        ['--inbox', 'range la tâche dans la boîte de réception (à trier plus tard)'],
+        ['--dry-run', 'montre ce qui a été compris sans rien enregistrer'],
+      ],
       examples: [
         'pouxis add "Appeler le plombier demain 9h #maison"',
         'pouxis add "Réunion projet X mardi prochain 14h-16h avec @paul"',
@@ -72,7 +76,7 @@ export const fr = {
       examples: [
         'pouxis ls --today',
         'pouxis ls --tag travail --status todo,doing',
-        'pouxis ls --json | jq -r \'.[] | select(.priority == 3) | .title\'',
+        "pouxis ls --json | jq -r '.[] | select(.priority == 3) | .title'",
       ],
     },
     done: {
@@ -143,7 +147,11 @@ export const fr = {
         ['--dir <dossier>', 'écrit les fichiers dans un dossier'],
         ['--force', 'écrase un fichier ou un dossier non vide existant'],
       ],
-      examples: ['pouxis export', 'pouxis export --dir ~/sauvegardes/pouxis', 'unzip -l pouxis-export-*.zip'],
+      examples: [
+        'pouxis export',
+        'pouxis export --dir ~/sauvegardes/pouxis',
+        'unzip -l pouxis-export-*.zip',
+      ],
     },
     import: {
       summary: 'Importe un export POuxis (ZIP ou dossier)',
@@ -154,7 +162,10 @@ export const fr = {
         ['--replace', 'remplace toutes les données locales (préférences comprises)'],
         ['--dry-run', 'affiche ce qui changerait sans rien modifier'],
       ],
-      examples: ['pouxis import pouxis-export-2026-10-08.zip --dry-run', 'pouxis import ~/sauvegardes/pouxis'],
+      examples: [
+        'pouxis import pouxis-export-2026-10-08.zip --dry-run',
+        'pouxis import ~/sauvegardes/pouxis',
+      ],
     },
     config: {
       summary: 'Lit ou modifie les préférences',
@@ -199,7 +210,13 @@ export const fr = {
     start: 'Début',
     end: 'Fin',
   },
-  kinds: { tasks: 'tâche', events: 'événement', notes: 'note', journal: 'journal', graphs: 'graphe' },
+  kinds: {
+    tasks: 'tâche',
+    events: 'événement',
+    notes: 'note',
+    journal: 'journal',
+    graphs: 'graphe',
+  },
   collections: {
     tasks: 'tâches',
     events: 'événements',
@@ -224,8 +241,6 @@ export const fr = {
     savedTask: 'Tâche ajoutée',
     savedEvent: 'Événement ajouté',
     preview: 'Aperçu — rien n’a été enregistré',
-    fallbackParser:
-      'Analyse simplifiée : le module nlp de @pouxis/core n’est pas encore disponible.',
     emptyText: 'Que faut-il ajouter ? Écrivez le texte après « add ».',
     emptyTitle: 'Le texte ne contient pas de titre une fois la date et les étiquettes retirées.',
   },
@@ -261,24 +276,30 @@ export const fr = {
     now: '◂ maintenant',
     unplaced: (n: number) => `Non placées (${n}) :`,
     nothing: 'Journée libre : aucun événement ni tâche à placer.',
-    saved: (n: number) => (n === 0 ? 'Aucun créneau à enregistrer.' : `${plural(n, 'créneau enregistré', 'créneaux enregistrés')}.`),
+    saved: (n: number) =>
+      n === 0
+        ? 'Aucun créneau à enregistrer.'
+        : `${plural(n, 'créneau enregistré', 'créneaux enregistrés')}.`,
     saveHint: 'Pour enregistrer ces créneaux : pouxis plan --save',
-    fallbackScheduler:
-      'Planification simplifiée : le module scheduler de @pouxis/core n’est pas encore disponible.',
     reasons: {
-      'no-time': 'pas assez de temps libre',
       blocked: 'en attente d’une autre tâche',
-      'non-working-day': 'jour non travaillé',
-      other: 'non placée',
+      'too-long': 'plus longue que toute plage de travail',
+      'over-capacity': 'plafond de travail du jour atteint',
+      'no-slot': 'pas de créneau libre assez long',
     } as Record<string, string>,
     buffer: 'tampon',
+    warnings: {
+      'deadline-missed': (title: string) => `« ${title} » finira après son échéance.`,
+      overload: (day: string) => `Journée surchargée : ${day}.`,
+      'no-working-hours': 'Aucune heure de travail définie : voir pouxis config.',
+    },
   },
   search: {
     results: (n: number, q: string) =>
-      n === 0 ? `Aucun résultat pour « ${q} ».` : `${plural(n, 'résultat', 'résultats')} pour « ${q} »`,
+      n === 0
+        ? `Aucun résultat pour « ${q} ».`
+        : `${plural(n, 'résultat', 'résultats')} pour « ${q} »`,
     emptyQuery: 'Que faut-il chercher ? Écrivez la requête après « search ».',
-    fallbackSearch:
-      'Recherche simplifiée : le module search de @pouxis/core n’est pas encore disponible.',
   },
   export: {
     done: (path: string) => `Export créé : ${path}`,
@@ -291,7 +312,8 @@ export const fr = {
   },
   import: {
     done: (source: string, mode: string) => `Import terminé depuis ${source} (${mode})`,
-    dryRun: (source: string, mode: string) => `Simulation d’import depuis ${source} (${mode}) — rien n’a été modifié`,
+    dryRun: (source: string, mode: string) =>
+      `Simulation d’import depuis ${source} (${mode}) — rien n’a été modifié`,
     merge: 'fusion',
     replace: 'remplacement',
     row: (added: number, updated: number, unchanged: number) =>
@@ -299,6 +321,7 @@ export const fr = {
     removedRow: (n: number) => `${n} supprimé(s)`,
     prefsReplaced: 'Préférences remplacées.',
     backup: (path: string) => `Copie des données précédentes : ${path}`,
+    missingSource: 'Précisez le fichier .zip ou le dossier à importer.',
     notFound: (path: string) => `« ${path} » est introuvable.`,
     notExport: (path: string) => `« ${path} » n’est pas un export POuxis (manifest.json manquant).`,
     badManifest: (detail: string) => `manifest.json invalide : ${detail}`,
@@ -306,7 +329,8 @@ export const fr = {
       `Cet export utilise le schéma ${version}, cette version du CLI ne lit que jusqu’au schéma ${supported}.`,
     tooNewHint: 'Mettez à jour POuxis puis réessayez.',
     badFile: (file: string, detail: string) => `${file} : ${detail}`,
-    badRecords: (file: string, n: number) => `${file} : ${plural(n, 'élément invalide', 'éléments invalides')}`,
+    badRecords: (file: string, n: number) =>
+      `${file} : ${plural(n, 'élément invalide', 'éléments invalides')}`,
     badZip: (path: string, detail: string) => `Archive illisible « ${path} » : ${detail}`,
   },
   config: {
@@ -329,7 +353,7 @@ export const fr = {
   version: (v: string, schema: number) => `pouxis ${v} (schéma de données ${schema})`,
 
   errors: {
-    prefix: 'Erreur',
+    prefix: 'Erreur :',
     unknownCommand: (name: string) => `Commande inconnue : « ${name} ».`,
     didYouMean: (s: string) => `Vouliez-vous dire « ${s} » ?`,
     seeHelp: (cmd?: string) => (cmd ? `Voir : pouxis help ${cmd}` : 'Voir : pouxis help'),
@@ -345,13 +369,16 @@ export const fr = {
       `L’identifiant « ${prefix} » est ambigu (${n} correspondances) :`,
     ambiguousHint: 'Ajoutez des caractères pour le rendre unique.',
     invalidDate: (v: string) => `Date invalide : « ${v} ».`,
-    dateHint: 'Formats acceptés : AAAA-MM-JJ, « AAAA-MM-JJ HH:MM », aujourd’hui, demain, +3j, vendredi.',
+    dateHint:
+      'Formats acceptés : AAAA-MM-JJ, « AAAA-MM-JJ HH:MM », aujourd’hui, demain, +3j, vendredi.',
     invalidDuration: (v: string) => `Durée invalide : « ${v} » (ex. 45, 45m, 1h30).`,
-    invalidPriority: (v: string) => `Priorité invalide : « ${v} » (0-3, none, basse, moyenne, haute).`,
+    invalidPriority: (v: string) =>
+      `Priorité invalide : « ${v} » (0-3, none, basse, moyenne, haute).`,
     invalidStatus: (v: string) =>
       `Statut invalide : « ${v} » (inbox, todo, doing, done, archived).`,
     invalidMode: (v: string) => `Mode invalide : « ${v} » (create ou organize).`,
-    invalidNumber: (opt: string, v: string) => `${opt} attend un nombre entier positif, pas « ${v} ».`,
+    invalidNumber: (opt: string, v: string) =>
+      `${opt} attend un nombre entier positif, pas « ${v} ».`,
     invalidStep: (v: string) => `Pas invalide : « ${v} » (15, 30 ou 60).`,
     invalidLang: (v: string) => `Langue inconnue : « ${v} » (fr ou en).`,
     dataCorrupt: (file: string, detail: string) =>
@@ -360,7 +387,8 @@ export const fr = {
       `Rien n’a été modifié. Une copie précédente existe peut-être : ${backup}`,
     dataTooNew: (file: string, version: number) =>
       `${file} a été écrit par une version plus récente de POuxis (schéma ${version}).`,
-    locked: (pid: string) => `Les données sont verrouillées par un autre processus POuxis (pid ${pid}).`,
+    locked: (pid: string) =>
+      `Les données sont verrouillées par un autre processus POuxis (pid ${pid}).`,
     lockedHint: 'Réessayez dans un instant.',
     conflict: 'Les données ont été modifiées par un autre programme pendant l’opération.',
     conflictHint: 'Relancez la commande : elle repartira de la version à jour.',

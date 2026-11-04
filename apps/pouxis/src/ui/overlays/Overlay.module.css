@@ -1,0 +1,458 @@
+/*
+ * Overlays: Dialog, Sheet (bottom sheet / side panel), Popover, Menu, Tooltip.
+ * Enter = keyframes on [data-state='open']; exit = keyframes on [data-state='closed'] —
+ * usePresence keeps the node mounted until they finish. Transform and opacity only.
+ */
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+}
+
+.layer[data-state='closed'] {
+  pointer-events: none;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  animation: fade-in var(--dur-base) var(--ease-out) both;
+}
+
+.layer[data-state='closed'] .backdrop {
+  animation: fade-out var(--dur-base) var(--ease-exit) both;
+}
+
+/* ---------- Dialog ---------- */
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(var(--space-4), var(--safe-top)) var(--space-4)
+    max(var(--space-4), var(--safe-bottom));
+  pointer-events: none;
+}
+
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100dvh - 2 * var(--space-6));
+  padding: var(--space-6);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--radius-xl);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  box-shadow: var(--shadow-3);
+  pointer-events: auto;
+  outline: none;
+  animation: dialog-in var(--dur-base) var(--ease-out) both;
+}
+
+.dialog[data-state='closed'] {
+  animation: dialog-out var(--dur-fast) var(--ease-exit) both;
+}
+
+.dialog.sm {
+  max-width: 380px;
+}
+
+.dialog.lg {
+  max-width: 640px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.close {
+  flex: none;
+  margin: calc(var(--space-1) * -1) calc(var(--space-2) * -1) 0 0;
+}
+
+.description {
+  color: var(--ink-2);
+  line-height: var(--leading-normal);
+}
+
+.body {
+  min-width: 0;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-block-start: var(--space-3);
+}
+
+@media (max-width: 479px) {
+  .dialog .footer > * {
+    flex: 1 1 auto;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Sheet (bottom) ---------- */
+.sheet {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  height: var(--sheet-h, 92dvh);
+  max-height: calc(100dvh - var(--safe-top) - var(--space-3));
+  margin-inline: auto;
+  max-width: 640px;
+  border-start-start-radius: var(--radius-xl);
+  border-start-end-radius: var(--radius-xl);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  box-shadow: var(--shadow-3);
+  outline: none;
+  transition: transform var(--dur-slow) var(--ease-out);
+  /* `backwards`, not `both`: once in, inline transforms must transition (snap, drag). */
+  animation: sheet-in var(--dur-slow) var(--ease-out) backwards;
+  will-change: transform;
+}
+
+.sheet[data-dragging] {
+  transition: none;
+}
+
+.sheet[data-state='closed'] {
+  animation: none;
+  transition: transform var(--dur-base) var(--ease-exit);
+}
+
+.sheetHeader {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 var(--space-5) var(--space-3);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.grabber {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: 64px;
+  height: 24px;
+  margin-block-end: calc(var(--space-1) * -1);
+  border-radius: var(--radius-pill);
+  cursor: grab;
+}
+
+button.grabber {
+  height: var(--tap-min);
+  margin-block-end: calc(var(--space-3) * -1);
+}
+
+.grabberBar {
+  width: 40px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--line-strong);
+}
+
+.sheetBody {
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--space-5) var(--space-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sheetFooter {
+  flex: none;
+  margin: 0;
+  padding: var(--space-3) var(--space-5) max(var(--space-4), var(--safe-bottom));
+  border-block-start: var(--border-width) solid var(--line);
+}
+
+.sheet .sheetBody:last-child {
+  padding-block-end: max(var(--space-5), var(--safe-bottom));
+}
+
+/* ---------- Side panel (≥ 768 px) ---------- */
+.side {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 100vw);
+  padding-block-start: max(var(--space-5), var(--safe-top));
+  background: var(--bg-elevated);
+  color: var(--ink);
+  box-shadow: var(--shadow-3);
+  outline: none;
+  animation: side-in var(--dur-slow) var(--ease-out) both;
+}
+
+.side[data-state='closed'] {
+  animation: side-out var(--dur-base) var(--ease-exit) both;
+}
+
+.side:dir(rtl) {
+  animation-name: side-in-rtl;
+}
+
+.side:dir(rtl)[data-state='closed'] {
+  animation-name: side-out-rtl;
+}
+
+.side .sheetHeader {
+  touch-action: auto;
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+/* ---------- Popover & Menu ---------- */
+.floating {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-overlay);
+}
+
+.popover {
+  min-width: 200px;
+  max-width: min(360px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(480px, 70dvh);
+  padding: var(--space-4);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  box-shadow:
+    var(--shadow-3),
+    inset 0 0 0 var(--border-width) var(--line);
+  outline: none;
+  animation: pop-in var(--dur-base) var(--ease-out) both;
+}
+
+.popover[data-state='closed'] {
+  animation: pop-out var(--dur-fast) var(--ease-exit) both;
+}
+
+.menu {
+  min-width: 220px;
+  padding: var(--space-1);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--row-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.item:focus {
+  background: var(--state-pressed);
+  outline: none;
+}
+
+.item:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
+.item:active {
+  background: var(--state-pressed);
+}
+
+.item[aria-disabled='true'] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.itemIcon {
+  display: inline-flex;
+  flex: none;
+  width: 20px;
+  color: var(--ink-2);
+}
+
+.danger .itemIcon {
+  color: inherit;
+}
+
+.itemIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.itemLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemShortcut {
+  flex: none;
+  margin-inline-start: var(--space-4);
+}
+
+.separator {
+  height: var(--border-width);
+  margin: var(--space-1) var(--space-2);
+  background: var(--line);
+}
+
+/* ---------- Tooltip ---------- */
+.tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 280px;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  box-shadow: var(--shadow-2);
+  animation: pop-in var(--dur-fast) var(--ease-out) both;
+}
+
+.tooltip[data-state='closed'] {
+  animation: fade-out var(--dur-instant) var(--ease-exit) both;
+}
+
+.tooltipKbd > kbd {
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--border-width) currentColor;
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-offset-sm)) scale(var(--motion-scale-from));
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes side-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes side-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes side-in-rtl {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes side-out-rtl {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+
+@keyframes pop-out {
+  to {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+
+/* Reduced motion: fade only, no travel. Tokens already shorten durations. */
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .side,
+  .side[data-state='closed'] {
+    animation-name: fade-in;
+  }
+}

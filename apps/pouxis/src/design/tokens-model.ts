@@ -232,7 +232,7 @@ export const DAYLIGHT_PAPER_TOKENS = [
 ] as const;
 
 /** Max share of the dark value mixed into light paper at the switch point (dusk). */
-export const DAYLIGHT_DIM = 0.05;
+export const DAYLIGHT_DIM = 0.04;
 /** Max share of the light value mixed into dark paper right after the switch. */
 export const DAYLIGHT_LIFT = 0.05;
 

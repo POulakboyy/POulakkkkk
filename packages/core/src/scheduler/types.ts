@@ -297,3 +297,10 @@ export interface ProgressOptions {
   /** First day of the week, 0 = Sunday … 6 = Saturday (default 1, Monday). */
   weekStartsOn?: number;
 }
+
+export interface FocusBlock {
+  /** Length of the largest free block of the day's working window. */
+  minutes: Minutes;
+  /** The block itself; absent when the day has no free working time. */
+  block?: Interval;
+}

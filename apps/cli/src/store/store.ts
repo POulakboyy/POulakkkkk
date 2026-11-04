@@ -103,7 +103,11 @@ export class DataStore {
     const onDisk = await this.readText();
     const currentRevision = onDisk === undefined ? 0 : this.parse(onDisk).revision;
     if (currentRevision !== baseRevision) {
-      throw new StoreError('conflict', this.file, `expected revision ${baseRevision}, found ${currentRevision}`);
+      throw new StoreError(
+        'conflict',
+        this.file,
+        `expected revision ${baseRevision}, found ${currentRevision}`,
+      );
     }
     data.revision = baseRevision + 1;
     data.savedAt = this.now();

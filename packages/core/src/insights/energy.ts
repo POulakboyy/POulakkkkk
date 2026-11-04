@@ -32,11 +32,7 @@ export const CHRONOTYPES: readonly Chronotype[] = ['morning', 'intermediate', 'e
 
 /** The five categories of the Morningness–Eveningness Questionnaire (Horne & Östberg, 1976). */
 export type MeqCategory =
-  | 'definite-morning'
-  | 'moderate-morning'
-  | 'neither'
-  | 'moderate-evening'
-  | 'definite-evening';
+  'definite-morning' | 'moderate-morning' | 'neither' | 'moderate-evening' | 'definite-evening';
 
 /**
  * MEQ category of a total score (16–86), using the cut-offs of Horne & Östberg (1976):
@@ -442,7 +438,9 @@ function shrink(prior: readonly number[], acc: Accumulated, priorStrength: numbe
   const observedRates = acc.e.map((e, c) => (e > 0 ? (acc.x[c] as number) / e : null));
   let maxObserved = 0;
   for (const r of observedRates) if (r !== null && r > maxObserved) maxObserved = r;
-  const observed = observedRates.map((r) => (r === null ? null : maxObserved > 0 ? r / maxObserved : 0));
+  const observed = observedRates.map((r) =>
+    r === null ? null : maxObserved > 0 ? r / maxObserved : 0,
+  );
   return { values, observed, confidence, dataWeight };
 }
 

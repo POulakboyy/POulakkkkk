@@ -60,7 +60,8 @@ export const today = {
     placed: 'Placée à {time}',
     placedMany: '{count, plural, one {# tâche placée} other {# tâches placées}}',
     noRoom: 'Plus de créneau libre aujourd’hui. Elle reste ici, sans pression.',
-    noRoomMany: 'La journée est pleine. Les autres restent ici ; vous pourrez les reprendre demain.',
+    noRoomMany:
+      'La journée est pleine. Les autres restent ici ; vous pourrez les reprendre demain.',
     dragHint: 'Glissez une tâche sur la frise pour lui donner une heure.',
     empty: 'Rien n’attend de créneau.',
   },
@@ -121,7 +122,8 @@ export const today = {
     propagated: '{count, plural, one {# tâche décalée} other {# tâches décalées}} de {duration}',
     overflow:
       '{count, plural, one {# tâche ne rentre plus aujourd’hui} other {# tâches ne rentrent plus aujourd’hui}}',
-    overflowHint: 'Elles passent dans les tâches flottantes de demain, sauf si vous choisissez autre chose.',
+    overflowHint:
+      'Elles passent dans les tâches flottantes de demain, sauf si vous choisissez autre chose.',
     toTomorrow: 'Les prévoir demain',
     choose: 'Choisir pour chacune',
   },
@@ -149,7 +151,8 @@ export const today = {
 
   /** Tasks planned on a previous day and not done. Never « en retard » / « manqué ». */
   carryOver: {
-    title: '{count, plural, one {Une tâche d’hier attend encore} other {# tâches d’hier attendent encore}}',
+    title:
+      '{count, plural, one {Une tâche d’hier attend encore} other {# tâches d’hier attendent encore}}',
     body: 'Les journées ne se déroulent pas toujours comme prévu. Que voulez-vous en faire ?',
     toToday: 'Les prévoir aujourd’hui',
     toInbox: 'Les renvoyer à trier',

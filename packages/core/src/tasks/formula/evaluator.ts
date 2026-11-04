@@ -119,7 +119,8 @@ function call(node: CallNode, scope: FormulaScope): FormulaValue {
     return evaluateNode(test ? then : otherwise, scope);
   }
   const spec = FUNCTIONS.get(node.name);
-  if (!spec?.apply) throw new FormulaError('unknown-function', `Unknown function "${node.name}"`, node.pos);
+  if (!spec?.apply)
+    throw new FormulaError('unknown-function', `Unknown function "${node.name}"`, node.pos);
   const args = node.args.map((arg) => evaluateNode(arg, scope));
   const result = spec.apply(node.name, args, node.args);
   return typeof result === 'number' ? finite(result, node) : result;
@@ -136,7 +137,8 @@ function booleanOf(value: FormulaValue, op: string, at: { pos: number }): boolea
 }
 
 function finite(value: number, at: { pos: number }): number {
-  if (!Number.isFinite(value)) throw new FormulaError('not-finite', 'Result is not a finite number', at.pos);
+  if (!Number.isFinite(value))
+    throw new FormulaError('not-finite', 'Result is not a finite number', at.pos);
   return value === 0 ? 0 : value;
 }
 

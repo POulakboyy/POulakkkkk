@@ -102,7 +102,10 @@ export function buildHierarchy(graph: GraphLike, options: HierarchyOptions = {})
  * Depth-first pre-order walk (parent before children, siblings in order) from `roots`
  * (default: every root). Iterative, so arbitrarily deep trees are safe.
  */
-export function preorder(hierarchy: Hierarchy, roots: readonly Id[] = hierarchy.roots): HierarchyEntry[] {
+export function preorder(
+  hierarchy: Hierarchy,
+  roots: readonly Id[] = hierarchy.roots,
+): HierarchyEntry[] {
   const out: HierarchyEntry[] = [];
   const stack: HierarchyEntry[] = [];
   for (let i = roots.length - 1; i >= 0; i--) stack.push({ id: roots[i] as Id, depth: 0 });

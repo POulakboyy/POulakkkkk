@@ -89,11 +89,7 @@ export function verifyToken(
   if (dot <= 0 || dot !== token.lastIndexOf('.')) return { ok: false, reason: 'malformed' };
   const encoded = token.slice(0, dot);
   const signature = token.slice(dot + 1);
-  if (
-    encoded.length > MAX_CLAIMS_CHARS ||
-    !B64URL_RE.test(encoded) ||
-    !B64URL_RE.test(signature)
-  ) {
+  if (encoded.length > MAX_CLAIMS_CHARS || !B64URL_RE.test(encoded) || !B64URL_RE.test(signature)) {
     return { ok: false, reason: 'malformed' };
   }
   const given = Buffer.from(signature, 'base64url');

@@ -47,7 +47,10 @@ export function useModal({
     const panel = panelRef.current;
     if (!node || !panel) return;
     const { initialFocus: initial, returnFocus: back } = focusRef.current;
-    const trap = createFocusTrap(panel, { restoreFocus: false, ...(initial ? { initialFocus: initial } : {}) });
+    const trap = createFocusTrap(panel, {
+      restoreFocus: false,
+      ...(initial ? { initialFocus: initial } : {}),
+    });
     const pop = pushLayer({
       node,
       modal,
@@ -58,7 +61,10 @@ export function useModal({
       trap.release();
       pop();
       unlock();
-      restoreFocusTo(focusRef.current.returnFocus?.current ?? back?.current ?? trap.previous, panel);
+      restoreFocusTo(
+        focusRef.current.returnFocus?.current ?? back?.current ?? trap.previous,
+        panel,
+      );
     };
   }, [open, modal, closeOnEscape, layerRef, panelRef]);
 }

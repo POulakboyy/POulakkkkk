@@ -31,7 +31,8 @@ export function createFocusTrap(container: HTMLElement, options: FocusTrapOption
   trapStack.push(token);
 
   const { initialFocus } = options;
-  const initial = typeof initialFocus === 'function' ? initialFocus() : initialFocus?.current ?? null;
+  const initial =
+    typeof initialFocus === 'function' ? initialFocus() : (initialFocus?.current ?? null);
   if (!container.contains(document.activeElement)) {
     focusElement(initial ?? getTabbable(container)[0] ?? container);
   }
@@ -49,7 +50,10 @@ export function createFocusTrap(container: HTMLElement, options: FocusTrapOption
     const first = tabbable[0]!;
     const last = tabbable[tabbable.length - 1]!;
     const current = document.activeElement;
-    if (e.shiftKey && (current === first || current === container || !container.contains(current))) {
+    if (
+      e.shiftKey &&
+      (current === first || current === container || !container.contains(current))
+    ) {
       e.preventDefault();
       focusElement(last);
     } else if (!e.shiftKey && (current === last || !container.contains(current))) {
@@ -90,7 +94,10 @@ export function createFocusTrap(container: HTMLElement, options: FocusTrapOption
 }
 
 /** Moves focus back to `target` if focus is currently lost (inside `container` or on `<body>`). */
-export function restoreFocusTo(target: HTMLElement | null | undefined, container: HTMLElement): void {
+export function restoreFocusTo(
+  target: HTMLElement | null | undefined,
+  container: HTMLElement,
+): void {
   const active = document.activeElement;
   if (!target || !target.isConnected) return;
   if (!active || active === document.body || container.contains(active)) focusElement(target);

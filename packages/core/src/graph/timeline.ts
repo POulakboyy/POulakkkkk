@@ -88,9 +88,11 @@ export function createTimeScale(options: TimeScaleOptions): TimeScale {
     pxPerMs,
     toX: (ts) => x0 + (ts - start) * pxPerMs,
     toTime: (x) => Math.round(start + (x - x0) / pxPerMs),
-    ticks: (count = 8) => timeTicks(Math.min(start, end), Math.max(start, end), count, timeZone).map(
-      (tick) => ({ ...tick, x: x0 + (tick.ts - start) * pxPerMs }),
-    ),
+    ticks: (count = 8) =>
+      timeTicks(Math.min(start, end), Math.max(start, end), count, timeZone).map((tick) => ({
+        ...tick,
+        x: x0 + (tick.ts - start) * pxPerMs,
+      })),
   };
 }
 
@@ -113,15 +115,17 @@ export function timeTicks(
     interval = { unit: 'year', step: niceYears(target / YEAR_APPROX), approx: YEAR_APPROX };
   }
   const out: TimeTick[] = [];
-  let k = 0;
+  const base = floorTo(from, interval, timeZone);
   let previous = -Infinity;
-  for (let ts = floorTo(from, interval, timeZone); ts <= to && out.length < MAX_TICKS; ) {
+  for (
+    let k = 0, ts = base;
+    ts <= to && out.length < MAX_TICKS;
+    ts = advance(base, interval, ++k, timeZone)
+  ) {
     if (ts >= from && ts > previous) {
       out.push({ ts, x: 0, unit: interval.unit, major: isMajor(ts, interval, timeZone) });
     }
     previous = ts;
-    k++;
-    ts = advance(floorTo(from, interval, timeZone), interval, k, timeZone);
   }
   return out;
 }
@@ -140,7 +144,13 @@ function floorTo(ts: Timestamp, interval: Interval_, timeZone: TimeZone): Timest
   switch (interval.unit) {
     case 'minute':
       return fromZoned(
-        { year: p.year, month: p.month, day: p.day, hour: p.hour, minute: p.minute - (p.minute % step) },
+        {
+          year: p.year,
+          month: p.month,
+          day: p.day,
+          hour: p.hour,
+          minute: p.minute - (p.minute % step),
+        },
         timeZone,
       );
     case 'hour':
@@ -159,10 +169,16 @@ function floorTo(ts: Timestamp, interval: Interval_, timeZone: TimeZone): Timest
     case 'month': {
       const monthIndex = p.year * 12 + (p.month - 1);
       const aligned = monthIndex - (monthIndex % step);
-      return fromZoned({ year: Math.floor(aligned / 12), month: (aligned % 12) + 1, day: 1 }, timeZone);
+      return fromZoned(
+        { year: Math.floor(aligned / 12), month: (aligned % 12) + 1, day: 1 },
+        timeZone,
+      );
     }
     case 'year':
-      return fromZoned({ year: p.year - (((p.year % step) + step) % step), month: 1, day: 1 }, timeZone);
+      return fromZoned(
+        { year: p.year - (((p.year % step) + step) % step), month: 1, day: 1 },
+        timeZone,
+      );
   }
 }
 

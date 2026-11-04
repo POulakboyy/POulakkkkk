@@ -1,0 +1,74 @@
+# Mises à jour automatiques des dépendances, regroupées chaque semaine pour limiter le bruit.
+# Documentation : docs/operations/CI_CD.md
+version: 2
+
+updates:
+  # One entry at the root covers every npm workspace (single package-lock.json).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10
+    labels: [dependencies, javascript]
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      tauri-js:
+        patterns: ['@tauri-apps/*']
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      testing:
+        patterns: ['vitest', 'jsdom', '@testing-library/*', '@playwright/test']
+      tooling:
+        patterns: ['typescript', 'prettier', 'vite', '@vitejs/*', '@types/*']
+      npm-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: cargo
+    directory: /apps/pouxis/src-tauri
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    labels: [dependencies, rust]
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      # tauri crates must move together with the @tauri-apps/* JS packages (same minor).
+      tauri:
+        patterns: ['tauri', 'tauri-*']
+      cargo-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Paris
+    labels: [dependencies, ci]
+    commit-message:
+      prefix: 'ci(deps)'
+    groups:
+      actions:
+        patterns: ['*']
+
+  - package-ecosystem: docker
+    directory: /apps/sync-server
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: Europe/Paris
+    labels: [dependencies, docker]
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      docker-images:
+        patterns: ['*']

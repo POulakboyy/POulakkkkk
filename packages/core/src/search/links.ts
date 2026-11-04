@@ -61,7 +61,12 @@ function codeRanges(text: string): Array<[number, number]> {
       fence = marker;
       fenceStart = offset;
       outside.push([outsideStart, offset]);
-    } else if (fence !== null && marker && marker[0] === fence[0] && marker.length >= fence.length) {
+    } else if (
+      fence !== null &&
+      marker &&
+      marker[0] === fence[0] &&
+      marker.length >= fence.length
+    ) {
       if (line.trim() === marker) {
         ranges.push([fenceStart, lineEnd]);
         fence = null;
@@ -240,7 +245,8 @@ export function backlinks<R extends LinkSource>(
       const links = extractWikiLinks(text);
       const hits = links.filter(pointsToTarget);
       if (hits.length === 0) continue;
-      if (mentions === 0) snippet = renderSnippet(text, links, hits[0] as WikiLink, resolver, radius);
+      if (mentions === 0)
+        snippet = renderSnippet(text, links, hits[0] as WikiLink, resolver, radius);
       mentions += hits.length;
     }
     if (mentions > 0) via.push('wikilink');

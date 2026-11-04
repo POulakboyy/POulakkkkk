@@ -2,7 +2,16 @@
  * Dates on the command line: parsing option values (`--due vendredi`, `--date 2026-10-14`)
  * and formatting instants for humans, always in the user's configured IANA zone.
  */
-import { addDays, atMinutes, daysInMonth, fromZoned, minutesOfDay, startOfDay, weekday, zonedParts } from '@pouxis/core';
+import {
+  addDays,
+  atMinutes,
+  daysInMonth,
+  fromZoned,
+  minutesOfDay,
+  startOfDay,
+  weekday,
+  zonedParts,
+} from '@pouxis/core';
 import type { Minutes, TimeZone, Timestamp } from '@pouxis/core';
 import type { Messages } from '../i18n/index.ts';
 
@@ -53,7 +62,11 @@ function hm(h: number, m: number): Minutes | undefined {
  * hier/yesterday, `+3d`/`+3j`/`+2w`/`+2s`, weekday names (next occurrence, today excluded),
  * a bare time (today), each optionally followed by a time. `undefined` when unparseable.
  */
-export function parseDateInput(input: string, now: Timestamp, timeZone: TimeZone): DateInput | undefined {
+export function parseDateInput(
+  input: string,
+  now: Timestamp,
+  timeZone: TimeZone,
+): DateInput | undefined {
   const s = input.trim().toLowerCase().replace(/\s+/g, ' ');
   if (s === '') return undefined;
   if (CLEAR.has(s)) return 'clear';
@@ -100,7 +113,7 @@ function resolveDayWord(word: string, now: Timestamp, timeZone: TimeZone): Times
   }
   const target = WEEKDAYS[word.replace(/\.$/, '')];
   if (target !== undefined) {
-    const delta = ((target - weekday(today, timeZone) + 7) % 7) || 7;
+    const delta = (target - weekday(today, timeZone) + 7) % 7 || 7;
     return addDays(today, delta, timeZone);
   }
   return undefined;
@@ -146,7 +159,12 @@ export interface DateFormatter {
 }
 
 export function dateFormatter(m: Messages, timeZone: TimeZone, now: Timestamp): DateFormatter {
-  const short = new Intl.DateTimeFormat(m.intlLocale, { timeZone, weekday: 'short', day: 'numeric', month: 'short' });
+  const short = new Intl.DateTimeFormat(m.intlLocale, {
+    timeZone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
   const shortYear = new Intl.DateTimeFormat(m.intlLocale, {
     timeZone,
     weekday: 'short',

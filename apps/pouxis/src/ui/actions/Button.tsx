@@ -32,7 +32,7 @@ export function buttonClassName({
   size = 'md',
   fullWidth = false,
 }: Pick<ButtonProps, 'variant' | 'size' | 'fullWidth'> = {}): string {
-  return cx(s.button, fullWidth && s.full) + ` ${variant} ${size}`.replace(/ \S+ \S+$/, '');
+  return cx(s.button, s[variant], s[size], fullWidth && s.full);
 }
 
 /**
@@ -59,9 +59,7 @@ export function Button({
     <button
       ref={ref}
       type={type}
-      className={cx(s.button, fullWidth && s.full, className)}
-      data-variant={variant}
-      data-size={size}
+      className={cx(buttonClassName({ variant, size, fullWidth }), className)}
       disabled={disabled}
       aria-busy={loading || undefined}
       aria-disabled={loading || undefined}

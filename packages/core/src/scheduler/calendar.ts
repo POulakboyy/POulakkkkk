@@ -135,8 +135,21 @@ function mod(a: number, n: number): number {
 /* Intervals                                                                                   */
 /* ------------------------------------------------------------------------------------------ */
 
-export function alignUp(ts: Timestamp, stepMs: number): Timestamp {
-  return Math.ceil(ts / stepMs) * stepMs;
+/**
+ * Rounds instants up to the next multiple of a step on the local wall clock of `timeZone`
+ * (e.g. 09:00 in Asia/Kolkata for a 60 min step, not 09:30 as an epoch grid would give).
+ * Tuned for one interval: the zone offset is looked up once when it is constant over it.
+ */
+export function localAligner(
+  span: Interval,
+  timeZone: TimeZone,
+): (ts: Timestamp, stepMs: number) => Timestamp {
+  const offset = tzOffset(span.start, timeZone);
+  const constant = offset === tzOffset(Math.max(span.start, span.end - 1), timeZone);
+  return (ts, stepMs) => {
+    const off = constant ? offset : tzOffset(ts, timeZone);
+    return Math.ceil((ts + off) / stepMs) * stepMs - off;
+  };
 }
 
 export function floorToMinute(ms: number): number {

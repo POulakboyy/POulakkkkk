@@ -14,13 +14,7 @@
  */
 import type { Interval, Task } from '../model.ts';
 import { DAY, contains } from '../time.ts';
-import {
-  alignUp,
-  hasWorkingHours,
-  localDays,
-  workingWindow,
-  type LocalDay,
-} from './calendar.ts';
+import { hasWorkingHours, localDays, workingWindow, type LocalDay } from './calendar.ts';
 import {
   compareTasks,
   dependenciesDone,
@@ -50,10 +44,8 @@ export function route(input: RouteInput): RouteResult {
   const settings = resolveSettings(input.options, readEnergyProfile(input.energyProfile, warnings));
   if (!hasWorkingHours(prefs.workingHours)) warnings.push({ kind: 'no-working-hours' });
 
-  const bounds: Interval = {
-    start: alignUp(Math.max(range.start, now), settings.stepMs),
-    end: range.end,
-  };
+  // Starts are snapped to the local step grid by the planner.
+  const bounds: Interval = { start: Math.max(range.start, now), end: range.end };
   const verdicts = classify(input);
   const candidates = tasks.filter((t) => verdicts.get(t.id) === 'candidate').sort(compareTasks);
   const blocked: Unplaced[] = tasks

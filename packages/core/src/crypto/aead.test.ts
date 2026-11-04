@@ -93,7 +93,11 @@ describe('encrypt / decrypt', () => {
       decrypt(key, envelope, recordAad({ ...context, field: 'body' })),
       decrypt(key, flipBit(envelope, 1), aad),
       decrypt(key, flipBit(envelope, 2), aad),
-      decrypt(key, flipBit(envelope, 2, fromBase64Url(envelope.split('.')[2] ?? '').length - 1), aad),
+      decrypt(
+        key,
+        flipBit(envelope, 2, fromBase64Url(envelope.split('.')[2] ?? '').length - 1),
+        aad,
+      ),
     ];
     for (const attempt of attempts) expect(await failureCode(attempt)).toBe('decrypt-failed');
   });

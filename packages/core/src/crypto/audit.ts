@@ -150,7 +150,11 @@ export async function verifyAuditChain(
       // The checkpoint predates the verified range: it cannot vouch for these records.
       return { ok: false, reason: 'checkpoint-mismatch', index: -1 };
     }
-    if (options.from && checkpoint.seq === options.from.seq && checkpoint.hash !== options.from.hash) {
+    if (
+      options.from &&
+      checkpoint.seq === options.from.seq &&
+      checkpoint.hash !== options.from.hash
+    ) {
       return { ok: false, reason: 'checkpoint-mismatch', index: -1 };
     }
   }
@@ -191,7 +195,11 @@ export async function signCheckpoint(
 ): Promise<AuditCheckpoint> {
   assertHead(head);
   if (!Number.isSafeInteger(at)) throw new CryptoError('invalid-argument', 'Invalid timestamp');
-  const sig = await subtle().sign(ECDSA_SHA256, privateKey, checkpointBytes(head.seq, head.hash, at));
+  const sig = await subtle().sign(
+    ECDSA_SHA256,
+    privateKey,
+    checkpointBytes(head.seq, head.hash, at),
+  );
   return { v: 1, seq: head.seq, hash: head.hash, at, sig: toBase64Url(new Uint8Array(sig)) };
 }
 

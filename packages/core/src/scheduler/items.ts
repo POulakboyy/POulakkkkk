@@ -1,5 +1,13 @@
 /** Internal predicates and extractors over tasks and events. */
-import type { CalendarEvent, Id, Interval, Minutes, Task, TaskStatus, Timestamp } from '../model.ts';
+import type {
+  CalendarEvent,
+  Id,
+  Interval,
+  Minutes,
+  Task,
+  TaskStatus,
+  Timestamp,
+} from '../model.ts';
 import { MINUTE, mergeIntervals } from '../time.ts';
 import { compareIds, isValidInterval } from './calendar.ts';
 

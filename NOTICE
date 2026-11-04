@@ -1,0 +1,74 @@
+POuxis
+Copyright (C) 2026 [COPYRIGHT HOLDER - to be completed: legal name of the founder or of the
+legal entity that publishes POuxis] and the POuxis contributors.
+
+This repository contains several works under different licences. Unless a file or a package
+states otherwise, the licence that applies is determined by the directory it lives in:
+
+  Directory                Licence (SPDX)          Full text
+  ----------------------   ---------------------   -------------------------------------------
+  packages/core/           MPL-2.0                 packages/core/LICENSE
+                                                   (copy: docs/legal/licenses/MPL-2.0.txt)
+  apps/pouxis/             AGPL-3.0-or-later       LICENSE, plus the additional permission below
+  apps/sync-server/        AGPL-3.0-or-later       LICENSE
+  apps/cli/                AGPL-3.0-or-later       LICENSE
+  website/ (code)          AGPL-3.0-or-later       LICENSE
+  docs/, website/ (text)   CC-BY-4.0               https://creativecommons.org/licenses/by/4.0/legalcode
+  anything else            AGPL-3.0-or-later       LICENSE
+
+The rationale for this scheme is documented (in French) in docs/legal/LICENSING.md.
+
+Until packages/core is relicensed as described in docs/legal/LICENSING.md, its package.json
+declares AGPL-3.0-or-later and that declaration prevails.
+
+-------------------------------------------------------------------------------------------
+Additional permission under section 7 of the GNU Affero General Public License, version 3,
+for the POuxis client application (apps/pouxis/)
+-------------------------------------------------------------------------------------------
+
+As an additional permission under section 7 of the GNU Affero General Public License,
+version 3 ("AGPLv3"), the copyright holders of POuxis give you permission to convey object
+code of the POuxis client application, with or without modifications, through an application
+distribution service (such as the Apple App Store, the Google Play Store, the Microsoft Store
+or an equivalent service) whose terms of service or usage rules impose restrictions on the
+recipients' exercise of the rights granted by the AGPLv3, provided that all of the following
+conditions are met:
+
+  a) the Corresponding Source of the conveyed object code is made available, at no charge
+     and under the terms of the AGPLv3, through a publicly accessible network server, and the
+     listing of the application in that service, or the application's "About" screen, states
+     where to obtain it;
+
+  b) no restriction is imposed by you, in your own terms, on the recipients' exercise of the
+     rights granted by the AGPLv3 beyond those imposed by the distribution service itself;
+
+  c) the Appropriate Legal Notices remain displayed in the application.
+
+This permission applies only to material for which the POuxis copyright holders have or can
+give appropriate copyright permission. It does not apply to third-party material that is
+licensed under the GNU GPL or AGPL without an equivalent permission. If you modify the
+application, you may extend this permission to your modifications, but you are not obliged to
+do so; if you do not wish to do so, delete this permission from your version.
+
+-------------------------------------------------------------------------------------------
+Trademarks
+-------------------------------------------------------------------------------------------
+
+"POuxis" and the POuxis logos are trademarks (registration pending or planned) of the
+copyright holder named above. Under section 7(e) of the AGPLv3, and consistently with
+section 2.3 of the MPL-2.0, none of the licences listed in this file grants any right to use
+these names or logos, except as needed to describe the origin of the software truthfully.
+The copyright in the logo files is licensed together with the files that contain them; their
+use as a trademark is governed by docs/legal/TRADEMARK_POLICY.md. Modified versions that are
+distributed to the public must not be called "POuxis" and must replace the official logos.
+
+-------------------------------------------------------------------------------------------
+Third-party software
+-------------------------------------------------------------------------------------------
+
+POuxis includes or depends on third-party software distributed under its own licences
+(MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause, MPL-2.0 and others). Each release build
+ships a machine-readable Software Bill of Materials (SPDX or CycloneDX) and a generated
+third-party notices file listing every component, its version, its licence and its copyright
+notices. The process is described in docs/legal/COMPLIANCE.md, section "Licences des
+dependances".

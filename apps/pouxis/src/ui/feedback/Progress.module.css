@@ -1,0 +1,140 @@
+.ring,
+.bar {
+  --tone: var(--accent);
+}
+
+.accent {
+  --tone: var(--accent);
+}
+
+.mode {
+  --tone: var(--mode-accent);
+}
+
+.success {
+  --tone: var(--success);
+}
+
+.create {
+  --tone: var(--create);
+}
+
+.execute {
+  --tone: var(--execute);
+}
+
+/* ---------- Ring ---------- */
+.ring {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.svg:dir(rtl) {
+  transform: rotate(-90deg) scaleY(-1);
+}
+
+.track {
+  fill: none;
+  stroke: var(--surface-3);
+}
+
+.value {
+  fill: none;
+  stroke: var(--tone);
+  animation: ring-in var(--dur-slow) var(--ease-out) backwards;
+}
+
+.center {
+  position: relative;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes ring-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Bar ---------- */
+.barRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.barLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+}
+
+.barValue {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+}
+
+.bar-sm {
+  height: 4px;
+}
+
+.bar-lg {
+  height: 10px;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--tone);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.bar:dir(rtl) .fill {
+  transform-origin: right center;
+}
+
+.indeterminate .fill {
+  width: 40%;
+  transform: translateX(-100%);
+  animation: indeterminate calc(var(--dur-slower) * 3) var(--ease-standard) infinite;
+}
+
+@keyframes indeterminate {
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indeterminate .fill {
+    width: 100%;
+    transform: none;
+    animation: none;
+    opacity: 0.5;
+  }
+}

@@ -9,6 +9,7 @@ export const en: Messages = {
   help: {
     tagline: 'POuxis on the command line: tasks, calendar, planning and search from your terminal.',
     usage: 'Usage',
+    synopsis: 'pouxis <command> [arguments] [options]',
     commands: 'Commands',
     options: 'Options',
     globalOptions: 'Global options',
@@ -37,10 +38,13 @@ export const en: Messages = {
   commands: {
     add: {
       summary: 'Add a task or an event in natural language',
-      usage: 'pouxis add <text…> [--dry-run]',
+      usage: 'pouxis add <text…> [--inbox] [--dry-run]',
       description:
         'The text is parsed for date, time, duration, #tags, !priority and @people.\nA time range ("2pm-4pm") creates an event, anything else a task.',
-      options: [['--dry-run', 'show what was understood without saving anything']],
+      options: [
+        ['--inbox', 'file the task in the inbox (to triage later)'],
+        ['--dry-run', 'show what was understood without saving anything'],
+      ],
       examples: [
         'pouxis add "Call the plumber tomorrow 9am #home"',
         'pouxis add "Project X meeting next Tuesday 2pm-4pm with @paul"',
@@ -133,7 +137,11 @@ export const en: Messages = {
         ['--dir <dir>', 'write the files into a directory'],
         ['--force', 'overwrite an existing file or non-empty directory'],
       ],
-      examples: ['pouxis export', 'pouxis export --dir ~/backups/pouxis', 'unzip -l pouxis-export-*.zip'],
+      examples: [
+        'pouxis export',
+        'pouxis export --dir ~/backups/pouxis',
+        'unzip -l pouxis-export-*.zip',
+      ],
     },
     import: {
       summary: 'Import a POuxis export (ZIP or directory)',
@@ -144,7 +152,10 @@ export const en: Messages = {
         ['--replace', 'replace all local data (preferences included)'],
         ['--dry-run', 'show what would change without modifying anything'],
       ],
-      examples: ['pouxis import pouxis-export-2026-10-08.zip --dry-run', 'pouxis import ~/backups/pouxis'],
+      examples: [
+        'pouxis import pouxis-export-2026-10-08.zip --dry-run',
+        'pouxis import ~/backups/pouxis',
+      ],
     },
     config: {
       summary: 'Read or change preferences',
@@ -198,7 +209,13 @@ export const en: Messages = {
     graphs: 'graphs',
   },
   priorities: ['none', 'low', 'medium', 'high'],
-  statuses: { inbox: 'inbox', todo: 'to do', doing: 'in progress', done: 'done', archived: 'archived' },
+  statuses: {
+    inbox: 'inbox',
+    todo: 'to do',
+    doing: 'in progress',
+    done: 'done',
+    archived: 'archived',
+  },
   modes: { create: 'creation', organize: 'organisation' },
   relativeDays: { today: 'today', tomorrow: 'tomorrow', yesterday: 'yesterday' },
   minutes: (n) => `${n} min`,
@@ -208,7 +225,6 @@ export const en: Messages = {
     savedTask: 'Task added',
     savedEvent: 'Event added',
     preview: 'Preview — nothing was saved',
-    fallbackParser: 'Simplified parsing: the @pouxis/core nlp module is not available yet.',
     emptyText: 'What should be added? Write the text after "add".',
     emptyTitle: 'The text has no title left once the date and tags are removed.',
   },
@@ -245,20 +261,23 @@ export const en: Messages = {
     nothing: 'Free day: no event and no task to place.',
     saved: (n) => (n === 0 ? 'No slot to save.' : `${plural(n, 'slot', 'slots')} saved.`),
     saveHint: 'To store these slots: pouxis plan --save',
-    fallbackScheduler:
-      'Simplified planning: the @pouxis/core scheduler module is not available yet.',
     reasons: {
-      'no-time': 'not enough free time',
       blocked: 'waiting for another task',
-      'non-working-day': 'non-working day',
-      other: 'not placed',
+      'too-long': 'longer than any working window',
+      'over-capacity': 'daily work cap reached',
+      'no-slot': 'no free slot long enough',
     },
     buffer: 'buffer',
+    warnings: {
+      'deadline-missed': (title: string) => `“${title}” will end after its deadline.`,
+      overload: (day: string) => `Overloaded day: ${day}.`,
+      'no-working-hours': 'No working hours defined: see pouxis config.',
+    },
   },
   search: {
-    results: (n, q) => (n === 0 ? `No results for "${q}".` : `${plural(n, 'result', 'results')} for "${q}"`),
+    results: (n, q) =>
+      n === 0 ? `No results for "${q}".` : `${plural(n, 'result', 'results')} for "${q}"`,
     emptyQuery: 'What should be searched? Write the query after "search".',
-    fallbackSearch: 'Simplified search: the @pouxis/core search module is not available yet.',
   },
   export: {
     done: (path) => `Export written: ${path}`,
@@ -270,11 +289,13 @@ export const en: Messages = {
     readmeTitle: 'POuxis export',
   },
   import: {
+    missingSource: 'Specify the .zip file or folder to import.',
     done: (source, mode) => `Imported from ${source} (${mode})`,
     dryRun: (source, mode) => `Import simulation from ${source} (${mode}) — nothing was changed`,
     merge: 'merge',
     replace: 'replace',
-    row: (added, updated, unchanged) => `+${added} added · ${updated} updated · ${unchanged} unchanged`,
+    row: (added, updated, unchanged) =>
+      `+${added} added · ${updated} updated · ${unchanged} unchanged`,
     removedRow: (n) => `${n} removed`,
     prefsReplaced: 'Preferences replaced.',
     backup: (path) => `Copy of the previous data: ${path}`,
@@ -293,7 +314,8 @@ export const en: Messages = {
     unset: (key, value) => `${key} reset to its default (${value})`,
     unknownKey: (key) => `Unknown configuration key: "${key}".`,
     keys: (keys) => `Available keys: ${keys}`,
-    invalid: (key, value, expected) => `Invalid value for ${key}: "${value}" (expected ${expected}).`,
+    invalid: (key, value, expected) =>
+      `Invalid value for ${key}: "${value}" (expected ${expected}).`,
     expected: {
       timeZone: 'an IANA time zone, e.g. Europe/Paris',
       locale: 'fr or en',
@@ -307,7 +329,7 @@ export const en: Messages = {
   version: (v, schema) => `pouxis ${v} (data schema ${schema})`,
 
   errors: {
-    prefix: 'Error',
+    prefix: 'Error:',
     unknownCommand: (name) => `Unknown command: "${name}".`,
     didYouMean: (s) => `Did you mean "${s}"?`,
     seeHelp: (cmd) => (cmd ? `See: pouxis help ${cmd}` : 'See: pouxis help'),

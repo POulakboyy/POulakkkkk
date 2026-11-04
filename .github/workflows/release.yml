@@ -1,0 +1,226 @@
+# Publication des installateurs de bureau (macOS universel, Windows, Linux) dans une
+# release GitHub en brouillon. Procédure : docs/operations/RELEASE_CHECKLIST.md
+# Secrets : docs/operations/SECRETS.md
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branche, tag ou commit à construire (défaut : la référence sélectionnée)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+# Never cancel a release mid-flight: a half-uploaded draft is worse than a queued run.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '22'
+  APP_DIR: apps/pouxis
+  npm_config_audit: 'false'
+  npm_config_fund: 'false'
+
+jobs:
+  prepare:
+    name: Version and draft release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      release_id: ${{ steps.draft.outputs.release_id }}
+      ref: ${{ steps.ref.outputs.ref }}
+    steps:
+      - name: Resolve ref
+        id: ref
+        env:
+          INPUT_REF: ${{ inputs.ref }}
+        run: echo "ref=${INPUT_REF:-$GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.ref.outputs.ref }}
+          persist-credentials: false
+
+      # On a tag push the tag must equal `v<app version>`, otherwise installers would carry a
+      # version that contradicts the release name.
+      - name: Resolve application version
+        id: version
+        env:
+          EXPECT_TAG: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        run: |
+          if [ -n "$EXPECT_TAG" ]; then
+            node .github/scripts/app-version.mjs --expect-tag "$EXPECT_TAG"
+          else
+            node .github/scripts/app-version.mjs
+          fi
+
+      - name: Create or reuse the draft release
+        id: draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.version.outputs.tag }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          TARGET: ${{ steps.ref.outputs.ref }}
+        run: |
+          id=$(gh api "repos/$GH_REPO/releases?per_page=100" \
+            --jq "map(select(.tag_name == \"$TAG\")) | first | .id // empty")
+          if [ -z "$id" ]; then
+            flags=(--draft --title "POuxis $TAG" --generate-notes)
+            [ "$PRERELEASE" = "true" ] && flags+=(--prerelease)
+            # For a dispatch the tag does not exist yet; it is created when the draft is published.
+            [ "$GITHUB_REF_TYPE" != "tag" ] && flags+=(--target "$TARGET")
+            gh release create "$TAG" "${flags[@]}"
+            id=$(gh api "repos/$GH_REPO/releases?per_page=100" \
+              --jq "map(select(.tag_name == \"$TAG\")) | first | .id")
+          else
+            draft=$(gh api "repos/$GH_REPO/releases/$id" --jq .draft)
+            if [ "$draft" != "true" ]; then
+              echo "::error title=Release déjà publiée::$TAG est publiée ; créez une nouvelle version."
+              exit 1
+            fi
+          fi
+          echo "release_id=$id" >> "$GITHUB_OUTPUT"
+
+  desktop:
+    name: Build (${{ matrix.name }})
+    needs: prepare
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS universal
+            os: macos-15
+            rust-targets: aarch64-apple-darwin,x86_64-apple-darwin
+            args: --target universal-apple-darwin
+          - name: Windows x64
+            os: windows-2025
+            rust-targets: ''
+            args: ''
+          # 22.04 keeps the glibc baseline low so the AppImage/.deb run on older distributions.
+          - name: Linux x64
+            os: ubuntu-22.04
+            rust-targets: ''
+            args: ''
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.prepare.outputs.ref }}
+          persist-credentials: false
+
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libxdo-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: 'apps/pouxis/src-tauri -> target'
+          key: release
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Exports only the signing secrets that are actually set: an empty APPLE_CERTIFICATE (for
+      # instance) makes the bundler try, and fail, to import a certificate. Unsigned builds stay
+      # possible for forks and dry runs.
+      - name: Configure signing
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          names=(TAURI_SIGNING_PRIVATE_KEY TAURI_SIGNING_PRIVATE_KEY_PASSWORD)
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            names+=(APPLE_CERTIFICATE APPLE_CERTIFICATE_PASSWORD APPLE_SIGNING_IDENTITY \
+              APPLE_ID APPLE_PASSWORD APPLE_TEAM_ID)
+          fi
+          for name in "${names[@]}"; do
+            value="${!name}"
+            [ -z "$value" ] && continue
+            delimiter="EOF_$(openssl rand -hex 8)"
+            printf '%s<<%s\n%s\n%s\n' "$name" "$delimiter" "$value" "$delimiter" >> "$GITHUB_ENV"
+          done
+          if [ "$RUNNER_OS" = "macOS" ] && [ -z "$APPLE_CERTIFICATE" ]; then
+            echo "::warning title=macOS non signé::APPLE_CERTIFICATE absent : build non signé et non notarisé."
+          fi
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+            echo "::warning title=Mises à jour non signées::TAURI_SIGNING_PRIVATE_KEY absent."
+          fi
+
+      # Windows Authenticode: imports the PFX into the user store and points the bundler at its
+      # thumbprint through a config overlay, so tauri.conf.json never holds signing details.
+      - name: Configure Windows code signing
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          WINDOWS_TIMESTAMP_URL: ${{ vars.WINDOWS_TIMESTAMP_URL }}
+        run: |
+          if (-not $env:WINDOWS_CERTIFICATE) {
+            Write-Output "::warning title=Windows non signé::WINDOWS_CERTIFICATE absent : installateurs non signés."
+            exit 0
+          }
+          $pfx = Join-Path $env:RUNNER_TEMP 'signing.pfx'
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
+          $password = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -Force -AsPlainText
+          $cert = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
+          Remove-Item $pfx
+          $timestamp = if ($env:WINDOWS_TIMESTAMP_URL) { $env:WINDOWS_TIMESTAMP_URL } else { 'http://timestamp.digicert.com' }
+          $overlay = @{ bundle = @{ windows = @{
+            certificateThumbprint = $cert.Thumbprint; digestAlgorithm = 'sha256'; timestampUrl = $timestamp
+          } } } | ConvertTo-Json -Depth 5
+          $overlayPath = Join-Path $env:RUNNER_TEMP 'tauri.signing.json'
+          Set-Content -Path $overlayPath -Value $overlay -Encoding utf8
+          "TAURI_SIGNING_OVERLAY=--config $($overlayPath -replace '\\','/')" >> $env:GITHUB_ENV
+
+      - name: Build and upload installers
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          projectPath: ${{ env.APP_DIR }}
+          tauriScript: npm run tauri --
+          releaseId: ${{ needs.prepare.outputs.release_id }}
+          args: ${{ matrix.args }} ${{ env.TAURI_SIGNING_OVERLAY }}
+          retryAttempts: 2

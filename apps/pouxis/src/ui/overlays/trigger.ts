@@ -1,4 +1,10 @@
-import { cloneElement, isValidElement, type ReactElement, type Ref, type SyntheticEvent } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type Ref,
+  type SyntheticEvent,
+} from 'react';
 import { mergeRefs } from '../utils/refs.ts';
 
 type AnyProps = Record<string, unknown> & { ref?: Ref<HTMLElement> };
@@ -21,7 +27,9 @@ export function cloneTrigger(child: ReactElement, props: AnyProps): ReactElement
       };
     }
   }
-  const describedBy = [childProps['aria-describedby'], props['aria-describedby']].filter(Boolean).join(' ');
+  const describedBy = [childProps['aria-describedby'], props['aria-describedby']]
+    .filter(Boolean)
+    .join(' ');
   if (describedBy) merged['aria-describedby'] = describedBy;
   merged.ref = mergeRefs(childProps.ref, props.ref);
   return cloneElement(child, merged);

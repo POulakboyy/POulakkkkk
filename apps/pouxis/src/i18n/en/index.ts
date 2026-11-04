@@ -9,6 +9,9 @@ import { insights } from './insights.ts';
 import { command } from './command.ts';
 import { settings } from './settings.ts';
 import { onboarding } from './onboarding.ts';
+import { errors } from './errors.ts';
+import { empty } from './empty.ts';
+import { a11y } from './a11y.ts';
 
 export const en = {
   common,
@@ -22,4 +25,7 @@ export const en = {
   command,
   settings,
   onboarding,
+  errors,
+  empty,
+  a11y,
 };

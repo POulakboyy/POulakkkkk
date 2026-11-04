@@ -1,0 +1,82 @@
+name: Signaler un bug
+description: Un comportement incorrect, un plantage ou une perte de données.
+title: '[Bug] '
+labels: [bug, à trier]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce problème. Vérifiez d'abord qu'une issue
+        similaire n'existe pas déjà. **Faille de sécurité ?** N'utilisez pas ce formulaire :
+        suivez la [politique de sécurité](https://github.com/POulakboyy/POulakkkkk/security/policy).
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Que se passe-t-il ? Qu'attendiez-vous à la place ?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: |
+        1. Ouvrir la vue « Aujourd'hui »
+        2. Glisser une tâche vers 14 h
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plateforme
+      multiple: true
+      options:
+        - Web (navigateur)
+        - macOS
+        - Windows
+        - Linux
+        - iOS / iPadOS
+        - Android
+        - Serveur de synchronisation
+        - CLI
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version de POuxis
+      description: Visible dans Réglages → À propos, ou via `pouxis --version`.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Système et navigateur
+      placeholder: macOS 26.1, Safari 26 — ou Android 16, Pixel 9
+  - type: dropdown
+    id: data-loss
+    attributes:
+      label: Des données ont-elles été perdues ou corrompues ?
+      options:
+        - Non
+        - Oui
+        - Je ne sais pas
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Journaux, captures ou vidéo
+      description: Retirez toute donnée personnelle (titres de tâches, adresses, jetons).
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Vérifications
+      options:
+        - label: J'ai cherché parmi les issues existantes.
+          required: true
+        - label: J'accepte de respecter le [code de conduite](https://github.com/POulakboyy/POulakkkkk/blob/main/CODE_OF_CONDUCT.md).
+          required: true

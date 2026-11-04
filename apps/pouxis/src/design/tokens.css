@@ -95,10 +95,10 @@
    * marks ≥ 3:1 on paper. Scatter/maps: first 3 slots only. Labels/legend always present.
    */
   --viz-1: #2a78d6;
-  --viz-2: #e15f2a;
-  --viz-3: #009b67;
-  --viz-4: #c07600;
-  --viz-5: #ce648d;
+  --viz-2: #dd5c26;
+  --viz-3: #009764;
+  --viz-4: #bd7300;
+  --viz-5: #cb628b;
   --viz-6: #008300;
   --viz-7: #4a3aa7;
   --viz-8: #e34948;
@@ -193,6 +193,26 @@
 
   /* Daylight level (7.6): 1 = full day, 0 = night. Set by daylight.ts. */
   --daylight: 1;
+
+  /* Zen UI (7.4): opacity of .px-chrome while the interface is idle (zen.ts). */
+  --zen-chrome-opacity: 0.08;
+  /* Press feedback: scale of a pressed control (motion.css .px-press). */
+  --press-scale: 0.97;
+
+  /* Iconography — 24 px grid, outline, round caps; sizes follow the text they sit next to */
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+  --icon-stroke: 1.75;
+
+  /*
+   * Breakpoints — reference values (CSS custom properties cannot drive @media; JS reads them,
+   * media queries repeat the numbers). < sm phone, ≥ md sidebar layout (Shell), ≥ lg wide desktop.
+   */
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1200px;
 
   /* Layout */
   --sidebar-w: 264px;
@@ -443,12 +463,77 @@
   --motion-offset-sm: 0px;
   --motion-offset-md: 0px;
   --motion-scale-from: 1;
+  --press-scale: 1;
+  --zen-chrome-opacity: 0;
+  --icon-stroke: 2.25;
   color-scheme: light;
   -webkit-font-smoothing: none;
   font-smooth: never;
 }
 
-/* @generated daylight:start */
+/* @generated daylight:start — run `node apps/pouxis/src/design/build-tokens.mjs` */
+/*
+ * Progressive dark mode (7.6). `applyDaylight()` (daylight.ts) sets --daylight (1 = full day,
+ * 0 = night), data-theme-auto="daylight" and data-daylight-phase="day|night". Paper tokens
+ * dim by up to 4% toward their dark value as dusk approaches; at the switch
+ * (level 0.5) the dark theme takes over, starting slightly lifted and deepening into the night.
+ * Ink and semantic colours switch once, so text contrast never crosses a grey middle.
+ */
+@supports (color: color-mix(in oklab, red, blue)) {
+  :root[data-theme-auto='daylight']:not([data-theme]) {
+    --_daylight-dusk: clamp(0, (1 - var(--daylight, 1)) * 2, 1);
+    --_daylight-deep: clamp(0, (0.5 - var(--daylight, 1)) * 2, 1);
+    --_daylight-dim: calc(var(--_daylight-dusk) * 4%);
+    --_daylight-lift: calc((1 - var(--_daylight-deep)) * 5%);
+    --bg: color-mix(in oklab, #121211 var(--_daylight-dim), #f6f4ef);
+    --bg-elevated: color-mix(in oklab, #1a1a18 var(--_daylight-dim), #fbfaf7);
+    --surface: color-mix(in oklab, #1f1e1c var(--_daylight-dim), #ffffff);
+    --surface-2: color-mix(in oklab, #272623 var(--_daylight-dim), #f0ede6);
+    --surface-3: color-mix(in oklab, #312f2b var(--_daylight-dim), #e8e4db);
+    --line: color-mix(in oklab, #2e2d29 var(--_daylight-dim), #e6e2d8);
+    --line-strong: color-mix(in oklab, #3d3b36 var(--_daylight-dim), #d3cec2);
+    --accent-soft: color-mix(in oklab, #3a2620 var(--_daylight-dim), #ffe5dc);
+    --create-soft: color-mix(in oklab, #1e2547 var(--_daylight-dim), #e3e8ff);
+    --execute-soft: color-mix(in oklab, #362113 var(--_daylight-dim), #ffead7);
+    --success-soft: color-mix(in oklab, #16301f var(--_daylight-dim), #dbf6e7);
+    --warning-soft: color-mix(in oklab, #33280f var(--_daylight-dim), #fdf0d5);
+    --danger-soft: color-mix(in oklab, #3a1a17 var(--_daylight-dim), #fbe0dd);
+    --cat-1: color-mix(in oklab, #4a3029 var(--_daylight-dim), #ffd8cc);
+    --cat-2: color-mix(in oklab, #453c23 var(--_daylight-dim), #ffe9a8);
+    --cat-3: color-mix(in oklab, #24402d var(--_daylight-dim), #cdefd6);
+    --cat-4: color-mix(in oklab, #23364f var(--_daylight-dim), #cfe3ff);
+    --cat-5: color-mix(in oklab, #362c4f var(--_daylight-dim), #e3d5ff);
+    --cat-6: color-mix(in oklab, #4a2a39 var(--_daylight-dim), #ffd3e6);
+    --cat-7: color-mix(in oklab, #20403f var(--_daylight-dim), #d4f0ef);
+    --cat-8: color-mix(in oklab, #3a352d var(--_daylight-dim), #ede6da);
+    --heat-0: color-mix(in oklab, #272623 var(--_daylight-dim), #f0ede6);
+  }
+
+  :root[data-theme-auto='daylight'][data-daylight-phase='night']:not([data-theme]) {
+    --bg: color-mix(in oklab, #f6f4ef var(--_daylight-lift), #121211);
+    --bg-elevated: color-mix(in oklab, #fbfaf7 var(--_daylight-lift), #1a1a18);
+    --surface: color-mix(in oklab, #ffffff var(--_daylight-lift), #1f1e1c);
+    --surface-2: color-mix(in oklab, #f0ede6 var(--_daylight-lift), #272623);
+    --surface-3: color-mix(in oklab, #e8e4db var(--_daylight-lift), #312f2b);
+    --line: color-mix(in oklab, #e6e2d8 var(--_daylight-lift), #2e2d29);
+    --line-strong: color-mix(in oklab, #d3cec2 var(--_daylight-lift), #3d3b36);
+    --accent-soft: color-mix(in oklab, #ffe5dc var(--_daylight-lift), #3a2620);
+    --create-soft: color-mix(in oklab, #e3e8ff var(--_daylight-lift), #1e2547);
+    --execute-soft: color-mix(in oklab, #ffead7 var(--_daylight-lift), #362113);
+    --success-soft: color-mix(in oklab, #dbf6e7 var(--_daylight-lift), #16301f);
+    --warning-soft: color-mix(in oklab, #fdf0d5 var(--_daylight-lift), #33280f);
+    --danger-soft: color-mix(in oklab, #fbe0dd var(--_daylight-lift), #3a1a17);
+    --cat-1: color-mix(in oklab, #ffd8cc var(--_daylight-lift), #4a3029);
+    --cat-2: color-mix(in oklab, #ffe9a8 var(--_daylight-lift), #453c23);
+    --cat-3: color-mix(in oklab, #cdefd6 var(--_daylight-lift), #24402d);
+    --cat-4: color-mix(in oklab, #cfe3ff var(--_daylight-lift), #23364f);
+    --cat-5: color-mix(in oklab, #e3d5ff var(--_daylight-lift), #362c4f);
+    --cat-6: color-mix(in oklab, #ffd3e6 var(--_daylight-lift), #4a2a39);
+    --cat-7: color-mix(in oklab, #d4f0ef var(--_daylight-lift), #20403f);
+    --cat-8: color-mix(in oklab, #ede6da var(--_daylight-lift), #3a352d);
+    --heat-0: color-mix(in oklab, #f0ede6 var(--_daylight-lift), #272623);
+  }
+}
 /* @generated daylight:end */
 
 /* Reduced motion: no travel, no springs; state changes stay instant and legible. */
@@ -464,5 +549,6 @@
     --motion-offset-sm: 0px;
     --motion-offset-md: 0px;
     --motion-scale-from: 1;
+    --press-scale: 1;
   }
 }

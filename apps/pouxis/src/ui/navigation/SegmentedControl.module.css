@@ -1,0 +1,111 @@
+.root {
+  --seg-h: 40px;
+  --pad: 3px;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  padding: var(--pad);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 var(--border-width) var(--line);
+}
+
+.full {
+  display: grid;
+  width: 100%;
+}
+
+.sm {
+  --seg-h: 32px;
+}
+
+/* One segment wide; slides by whole segments (translateX percentages are of its own width). */
+.indicator {
+  position: absolute;
+  z-index: -1;
+  inset-block: var(--pad);
+  inset-inline-start: var(--pad);
+  width: calc((100% - 2 * var(--pad)) / var(--count));
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow:
+    var(--shadow-1),
+    inset 0 0 0 var(--border-width) var(--line);
+  transform: translateX(calc(var(--index) * 100%));
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.root:dir(rtl) .indicator {
+  transform: translateX(calc(var(--index) * -100%));
+}
+
+.segment {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: var(--tap-min);
+  min-height: var(--seg-h);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.text,
+.icon {
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+/* Hit area ≥ 44 px even for the small variant. */
+.segment::before {
+  content: '';
+  position: absolute;
+  inset: min(0px, calc((var(--seg-h) - var(--tap-min)) / 2)) 0;
+}
+
+.segment[aria-checked='true'] {
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+@media (hover: hover) {
+  .segment:hover:not(:disabled, [aria-checked='true']) {
+    color: var(--ink);
+  }
+}
+
+.segment:active:not(:disabled) .text,
+.segment:active:not(:disabled) .icon {
+  opacity: 0.6;
+}
+
+.segment:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.segment:focus-visible {
+  outline-offset: -2px;
+  border-radius: var(--radius-pill);
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

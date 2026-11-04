@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>POuxis — temps, tâches et idées, au même endroit</title>
+    <meta
+      name="description"
+      content="POuxis place vos tâches dans votre journée, protège vos heures de concentration et garde vos idées à portée de main. Open source, local-first, chiffré de bout en bout. iOS, Android, macOS, Windows et Linux."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)" />
+    <!-- PLACEHOLDER DOMAIN: replace https://pouxis.example with the production domain everywhere. -->
+    <link rel="canonical" href="https://pouxis.example/" />
+    <link rel="alternate" hreflang="fr" href="https://pouxis.example/" />
+    <link rel="alternate" hreflang="en" href="https://pouxis.example/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://pouxis.example/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/styles.css" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="POuxis" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:title" content="POuxis — planifiez moins, créez davantage" />
+    <meta
+      property="og:description"
+      content="Une application open source et local-first pour organiser son temps, ses tâches et ses idées. Chiffrée de bout en bout."
+    />
+    <meta property="og:url" content="https://pouxis.example/" />
+    <meta property="og:image" content="https://pouxis.example/assets/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Logo POuxis et la phrase « Planifiez moins. Créez davantage. » à côté d'un aperçu de la journée."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="POuxis — planifiez moins, créez davantage" />
+    <meta
+      name="twitter:description"
+      content="Open source, local-first, chiffré de bout en bout. Pour iOS, Android, macOS, Windows et Linux."
+    />
+    <meta name="twitter:image" content="https://pouxis.example/assets/og.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "POuxis",
+        "description": "Application open source et local-first de gestion du temps, des tâches et des idées, chiffrée de bout en bout.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "iOS, Android, macOS, Windows, Linux",
+        "inLanguage": ["fr", "en"],
+        "url": "https://pouxis.example/",
+        "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+        "isAccessibleForFree": true,
+        "sameAs": ["https://github.com/POulakboyy/POulakkkkk"]
+      }
+    </script>
+    <script src="assets/main.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="./" aria-label="POuxis, accueil">
+          <picture>
+            <source srcset="assets/logotype-reversed.svg" media="(prefers-color-scheme: dark)" />
+            <img src="assets/logotype.svg" alt="POuxis" width="100" height="27" />
+          </picture>
+        </a>
+        <nav class="nav" aria-label="Navigation principale">
+          <a class="nav-section" href="#modules">Modules</a>
+          <a class="nav-section" href="#recherche">Recherche</a>
+          <a class="nav-section" href="#confiance">Vie privée</a>
+          <a class="nav-section" href="#faq">FAQ</a>
+          <a href="en/" hreflang="en" lang="en">English</a>
+          <a href="https://github.com/POulakboyy/POulakkkkk">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenu">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap">
+          <div class="hero-copy">
+            <p class="status">En développement · bêta bientôt</p>
+            <h1 id="hero-title">Planifiez moins. Créez davantage<span class="dot">.</span></h1>
+            <p class="lede">
+              POuxis place vos tâches dans votre journée, protège vos heures de concentration et
+              garde vos idées à portée de main. Open source, local-first et chiffré de bout en bout.
+            </p>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://github.com/POulakboyy/POulakkkkk/releases">
+                Rejoindre la bêta
+              </a>
+              <a class="btn btn-secondary" href="https://github.com/POulakboyy/POulakkkkk">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m8 7-5 5 5 5M16 7l5 5-5 5" />
+                </svg>
+                Voir le code sur GitHub
+              </a>
+            </div>
+            <p class="hero-note">
+              Les versions de test seront publiées sur GitHub. Suivez le dépôt pour être averti.
+            </p>
+            <h2 class="visually-hidden">Plateformes</h2>
+            <ul class="platforms">
+              <li>
+                <a class="platform" href="#" aria-disabled="true">iOS <span>bientôt</span></a>
+              </li>
+              <li>
+                <a class="platform" href="#" aria-disabled="true">Android <span>bientôt</span></a>
+              </li>
+              <li>
+                <a class="platform" href="#" aria-disabled="true">macOS <span>bientôt</span></a>
+              </li>
+              <li>
+                <a class="platform" href="#" aria-disabled="true">Windows <span>bientôt</span></a>
+              </li>
+              <li>
+                <a class="platform" href="#" aria-disabled="true">Linux <span>bientôt</span></a>
+              </li>
+            </ul>
+          </div>
+
+          <figure class="mock-figure">
+            <div
+              class="mock"
+              role="img"
+              aria-label="Aperçu de la vue Aujourd'hui : une frise de la matinée avec un bloc d'écriture en cours, une transition de 10 minutes avant une réunion fixe, deux tâches flottantes, et un lecteur de concentration indiquant 12 minutes restantes."
+            >
+              <div class="mock-top">
+                <div>
+                  <div class="mock-title">Aujourd'hui</div>
+                  <div class="mock-date">mercredi 4 novembre · Europe/Paris</div>
+                </div>
+                <div class="mock-seg"><span class="on">Jour</span><span>Semaine</span></div>
+              </div>
+
+              <div class="timeline">
+                <span class="hour" style="--at: 0">08:00</span>
+                <span class="hour" style="--at: 60">09:00</span>
+                <span class="hour" style="--at: 120">10:00</span>
+                <span class="hour" style="--at: 180">11:00</span>
+                <span class="hour" style="--at: 240">12:00</span>
+                <span class="hour" style="--at: 300">13:00</span>
+
+                <div class="block compact" style="--start: 0; --len: 30; --tint: var(--cat-7)">
+                  <span class="ico"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path d="M5 12h14M12 5v14" /></svg
+                  ></span>
+                  <span><b>Plan du jour</b></span>
+                </div>
+                <div class="block is-now" style="--start: 30; --len: 90; --tint: var(--cat-1)">
+                  <span class="ico"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M4 20h4L19 9l-4-4L4 16z" /></svg
+                  ></span>
+                  <span
+                    ><b>Écrire l'intro du chapitre 3</b
+                    ><small>08:30 – 10:00 · Concentration</small></span
+                  >
+                </div>
+                <div class="block buffer" style="--start: 120; --len: 10">Transition · 10 min</div>
+                <div class="block" style="--start: 130; --len: 50; --tint: var(--cat-4)">
+                  <span class="ico"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="5" y="11" width="14" height="9" rx="2" />
+                      <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+                  ></span>
+                  <span><b>Point projet Atlas</b><small>10:10 – 11:00 · Fixe</small></span>
+                </div>
+                <div class="block" style="--start: 180; --len: 45; --tint: var(--cat-2)">
+                  <span class="ico"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M4 6h16v12H4z" />
+                      <path d="m4 7 8 6 8-6" /></svg
+                  ></span>
+                  <span
+                    ><b>Répondre aux messages</b><small>11:00 – 11:45 · Lot du matin</small></span
+                  >
+                </div>
+                <div class="block" style="--start: 240; --len: 60; --tint: var(--cat-3)">
+                  <span class="ico"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path d="M7 4v16M17 4c-2 2-2 6 0 8v8" /></svg
+                  ></span>
+                  <span><b>Déjeuner</b><small>12:00 – 13:00</small></span>
+                </div>
+                <div class="now" style="--at: 72"></div>
+              </div>
+
+              <div class="floating">
+                <span class="floating-label">Tâches flottantes · 2</span>
+                <div class="chips">
+                  <span class="chip">Rappeler la banque · 10 min</span>
+                  <span class="chip">Relire le devis · 20 min</span>
+                </div>
+              </div>
+
+              <div class="player" data-player data-total="1500" data-start="761">
+                <span class="artwork"
+                  ><svg viewBox="5.5 2.5 13 19">
+                    <path
+                      d="M7 20V4h5a5 5 0 0 1 0 10"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+                    <circle cx="12" cy="9" r="1.9" style="fill: var(--accent)" /></svg
+                ></span>
+                <span class="player-text"
+                  ><b>Écrire l'intro du chapitre 3</b
+                  ><small>Concentration · Ne pas déranger activé</small></span
+                >
+                <span class="controls">
+                  <span
+                    ><svg viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="5" width="4" height="14" rx="1" />
+                      <rect x="14" y="5" width="4" height="14" rx="1" /></svg
+                  ></span>
+                  <span
+                    ><svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M5 6v12l8-6zM13 6v12l8-6z" /></svg
+                  ></span>
+                </span>
+                <span class="track">
+                  <span class="bar"><i data-bar style="--p: 0.5073"></i></span>
+                  <span class="times"
+                    ><span data-elapsed>12:41</span><span data-remaining>−12:19</span></span
+                  >
+                </span>
+              </div>
+            </div>
+            <figcaption class="mock-caption">
+              Aperçu illustratif. L'interface est en cours de conception.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section alt" id="modules" aria-labelledby="modules-title">
+        <div class="wrap">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Sept modules</p>
+            <h2 id="modules-title">Une seule application pour le temps, les tâches et les idées</h2>
+            <p class="lede">
+              Chaque module répond à un moment de votre journée. Ils partagent les mêmes données :
+              une idée devient une tâche, une tâche trouve sa place dans le calendrier.
+            </p>
+          </div>
+          <ul class="modules">
+            <li class="module lead" data-reveal>
+              <span class="pill" style="--tint: var(--cat-1)">Temps</span>
+              <h3>Un calendrier qui se réorganise pour vous</h3>
+              <p>
+                Les tâches se placent dans les créneaux libres selon leur durée. Quand un bloc
+                déborde, la suite se décale sans toucher aux rendez-vous fixes.
+              </p>
+              <ul>
+                <li>Transitions de 5 à 15 minutes entre les réunions</li>
+                <li>Saisie en langage naturel : « Réunion projet mardi 14h-16h »</li>
+                <li>Blocs de travail profond protégés des réunions</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-2)">Tâches</span>
+              <h3>Exécution</h3>
+              <p>Dépendances, récurrences fines et minuteur intégré à chaque tâche.</p>
+              <ul>
+                <li>Mode Focus unique</li>
+                <li>Limite de priorités par jour</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-3)">Fichiers</span>
+              <h3>Stockage local-first</h3>
+              <p>Vos données vivent sur l'appareil et se synchronisent en arrière-plan.</p>
+              <ul>
+                <li>Coffres chiffrés</li>
+                <li>Recherche par concept</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-4)">Toiles</span>
+              <h3>Graphes et organigrammes</h3>
+              <p>Une toile infinie pour relier idées, tâches et documents.</p>
+              <ul>
+                <li>Mise en page automatique</li>
+                <li>Minimap et repli des branches</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-5)">Idées</span>
+              <h3>Idéation</h3>
+              <p>Des outils pour écrire sans se censurer et provoquer des associations.</p>
+              <ul>
+                <li>Capture d'idée instantanée</li>
+                <li>Contraintes tirées au sort</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-6)">Équipe</span>
+              <h3>Collaboration</h3>
+              <p>Commentaires sur un bloc précis, votes et une boîte de réception commune.</p>
+              <ul>
+                <li>Webhooks et API publique</li>
+                <li>Export complet en JSON</li>
+              </ul>
+            </li>
+            <li class="module" data-reveal>
+              <span class="pill" style="--tint: var(--cat-7)">Bien-être</span>
+              <h3>Interface et bilan</h3>
+              <p>Une interface qui s'efface pendant le travail et un bilan sans reproche.</p>
+              <ul>
+                <li>Séries avec joker</li>
+                <li>Thème E-Ink</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="roadmap-note" data-reveal>
+            Le projet compte 100 fonctionnalités, livrées par étapes. Leur avancement est public :
+            <a href="https://github.com/POulakboyy/POulakkkkk/blob/main/docs/product/ROADMAP.md"
+              >consulter la feuille de route</a
+            >.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="recherche" aria-labelledby="recherche-title">
+        <div class="wrap">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Pensé avec la recherche</p>
+            <h2 id="recherche-title">
+              Des réglages par défaut appuyés sur des études, pas sur des slogans
+            </h2>
+            <p class="lede">
+              Nous lisons les études avant de choisir un comportement par défaut, et nous indiquons
+              le niveau de confiance de chacune. Tout reste réglable.
+            </p>
+          </div>
+          <ul class="evidence">
+            <li data-reveal>
+              <h3>Une note « prêt à reprendre » en fin de bloc</h3>
+              <p>
+                Passer à autre chose en laissant une tâche inachevée laisse un résidu attentionnel
+                qui pèse sur la suivante. Écrire en une ligne où l'on en est et ce qu'il faut faire
+                ensuite réduit cet effet.
+              </p>
+              <p class="meta">
+                <span>Leroy, 2009 ; Leroy et Glomb, 2018</span
+                ><span>Confiance : <strong>modérée</strong></span>
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>« Quand ? Où ? » pour les tâches importantes</h3>
+              <p>
+                Selon une méta-analyse, formuler un plan précis (« quand X, je fais Y ») aide à
+                atteindre ses objectifs. POuxis vous propose un créneau, sans l'imposer.
+              </p>
+              <p class="meta">
+                <span>Gollwitzer et Sheeran, 2006</span
+                ><span>Confiance : <strong>forte</strong> pour le principe</span>
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>Des notifications regroupées</h3>
+              <p>
+                Consulter ses courriels trois fois par jour a réduit le stress des participants
+                d'une étude, et différer les alertes jusqu'à une pause naturelle réduit la
+                frustration. Par défaut : un résumé trois fois par jour, rien pendant un bloc de
+                concentration.
+              </p>
+              <p class="meta">
+                <span>Kushlev et Dunn, 2015 ; Iqbal et Bailey, 2008</span
+                ><span>Confiance : <strong>modérée</strong></span>
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>Des séries qui pardonnent</h3>
+              <p>
+                Une série interrompue fait baisser l'engagement, sauf si l'on peut la réparer ; et
+                sauter un jour ne compromet pas une habitude en formation. D'où un joker par
+                semaine, et aucun message de reproche.
+              </p>
+              <p class="meta">
+                <span>Silverman et Barasch, 2022 ; Lally et al., 2010</span
+                ><span>Confiance : <strong>modérée</strong></span>
+              </p>
+            </li>
+          </ul>
+          <div class="not-supported" data-reveal>
+            <p>
+              Nous publions aussi ce que la recherche ne soutient pas. Par exemple, aucune couleur
+              ne « booste » la créativité, et 25 minutes n'est pas une durée de concentration
+              optimale démontrée : c'est une convention.
+            </p>
+            <p>
+              <a
+                href="https://github.com/POulakboyy/POulakkkkk/blob/main/docs/research/SCIENTIFIC_BASIS.md"
+                >Lire la base scientifique complète et ses références</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="confiance" aria-labelledby="confiance-title">
+        <div class="wrap">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Confiance</p>
+            <h2 id="confiance-title">Vos données restent les vôtres</h2>
+          </div>
+          <ul class="trust">
+            <li data-reveal>
+              <svg
+                class="trust-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
+                <path d="M10.5 18.5h3" />
+              </svg>
+              <h3>Local-first</h3>
+              <p>
+                Vos tâches, notes et toiles sont enregistrées sur votre appareil. L'application
+                fonctionne hors ligne, sans compte ; la synchronisation est facultative.
+              </p>
+            </li>
+            <li data-reveal>
+              <svg
+                class="trust-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+                <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+              </svg>
+              <h3>Chiffré de bout en bout</h3>
+              <p>
+                Le contenu est chiffré sur l'appareil (AES-256-GCM) avant d'être envoyé. Le relais
+                de synchronisation transporte des enveloppes qu'il ne peut pas lire ; il ne voit que
+                les informations nécessaires à leur acheminement.
+              </p>
+            </li>
+            <li data-reveal>
+              <svg
+                class="trust-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />
+              </svg>
+              <h3>Open source</h3>
+              <p>
+                L'application est sous licence AGPL-3.0, le moteur sous MPL-2.0. Vous pouvez lire et
+                auditer le code, et héberger votre propre relais.
+              </p>
+            </li>
+          </ul>
+          <p class="trust-footnote" data-reveal>
+            Ni publicité, ni traceur. Ce site non plus : aucun cookie, aucune ressource externe.
+            <a href="confidentialite/">Politique de confidentialité</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="fonctionnement" aria-labelledby="fonctionnement-title">
+        <div class="wrap">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Comment ça marche</p>
+            <h2 id="fonctionnement-title">Quatre gestes, chaque jour</h2>
+          </div>
+          <ol class="steps">
+            <li data-reveal>
+              <h3>Capturer</h3>
+              <p>
+                Notez une tâche ou une idée en une phrase, depuis n'importe quel écran.
+                <code>Appeler Inès jeudi 10h</code> devient une tâche datée.
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>Planifier</h3>
+              <p>
+                POuxis propose un créneau selon la durée estimée et votre journée. Vous validez,
+                déplacez ou laissez la tâche flotter.
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>Se concentrer</h3>
+              <p>
+                Un bloc de concentration active Ne pas déranger sur l'appareil et met les
+                notifications en attente jusqu'à la fin.
+              </p>
+            </li>
+            <li data-reveal>
+              <h3>Faire le bilan</h3>
+              <p>
+                En fin de semaine, comparez ce qui était prévu et ce qui a été fait : les victoires
+                d'abord, les points de blocage ensuite.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section alt" id="faq" aria-labelledby="faq-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">FAQ</p>
+            <h2 id="faq-title">Questions fréquentes</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Quand POuxis sera-t-il disponible ?</summary>
+              <div>
+                <p>
+                  POuxis est en développement. Les premières versions de test seront publiées sur
+                  GitHub, puis via TestFlight et les pistes de test des stores. Suivez le dépôt pour
+                  être averti.
+                </p>
+              </div>
+            </details>
+            <details>
+              <summary>Faut-il créer un compte ?</summary>
+              <div>
+                <p>
+                  Non. POuxis fonctionne sur votre appareil, sans compte. La synchronisation entre
+                  vos appareils est facultative.
+                </p>
+              </div>
+            </details>
+            <details>
+              <summary>Le serveur de synchronisation peut-il lire mes notes ?</summary>
+              <div>
+                <p>
+                  Non. Le contenu est chiffré sur votre appareil avec une clé que le relais ne
+                  détient pas. Le relais voit des métadonnées d'acheminement : identifiant de
+                  l'espace, identifiant aléatoire de l'appareil, horloge logique et taille
+                  approximative des enveloppes.
+                </p>
+              </div>
+            </details>
+            <details>
+              <summary>Puis-je héberger mon propre relais ?</summary>
+              <div>
+                <p>
+                  Oui. Le relais de synchronisation fait partie du dépôt et se lance avec Node.js.
+                  Il est publié sous AGPL-3.0.
+                </p>
+              </div>
+            </details>
+            <details>
+              <summary>POuxis promet-il de me rendre plus productif ?</summary>
+              <div>
+                <p>
+                  Non. Nous nous appuyons sur la recherche pour choisir des réglages par défaut
+                  raisonnables, et nous publions le niveau de confiance de chaque choix. Les effets
+                  varient d'une personne à l'autre ; tout reste réglable.
+                </p>
+              </div>
+            </details>
+            <details>
+              <summary>Comment contribuer ?</summary>
+              <div>
+                <p>
+                  Ouvrez une issue ou une pull request sur GitHub. Les contributions sont signées
+                  avec un <code>Signed-off-by</code> (DCO), sans contrat de cession.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band" aria-labelledby="cta-title">
+        <div class="wrap">
+          <h2 id="cta-title">Suivez la bêta de POuxis</h2>
+          <p class="lede">Les versions de test arriveront d'abord sur GitHub.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://github.com/POulakboyy/POulakkkkk/releases"
+              >Rejoindre la bêta</a
+            >
+            <a class="btn btn-secondary" href="https://github.com/POulakboyy/POulakkkkk"
+              >Voir le code sur GitHub</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <picture>
+          <source srcset="assets/logotype-reversed.svg" media="(prefers-color-scheme: dark)" />
+          <img src="assets/logotype.svg" alt="POuxis" width="82" height="22" />
+        </picture>
+        <nav aria-label="Liens de pied de page">
+          <ul class="footer-links">
+            <li><a href="https://github.com/POulakboyy/POulakkkkk">GitHub</a></li>
+            <li>
+              <a href="https://github.com/POulakboyy/POulakkkkk/blob/main/LICENSE">Licence</a>
+            </li>
+            <li><a href="confidentialite/">Confidentialité</a></li>
+            <li>
+              <a href="https://github.com/POulakboyy/POulakkkkk/blob/main/docs/product/ROADMAP.md"
+                >Feuille de route</a
+              >
+            </li>
+            <li><a href="en/" hreflang="en" lang="en">English</a></li>
+          </ul>
+        </nav>
+        <p class="legal">
+          Code sous AGPL-3.0 et MPL-2.0, textes sous CC-BY-4.0. Le nom et le logo POuxis ne sont pas
+          couverts par ces licences.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

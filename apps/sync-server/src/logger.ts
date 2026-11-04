@@ -40,7 +40,8 @@ export function createLogger(options: LoggerOptions = {}): Logger {
       if (LEVELS[level] < threshold) return;
       const record: LogFields = { ts: now().toISOString(), level, msg };
       for (const [key, value] of Object.entries(base)) record[key] = sanitize(key, value);
-      if (fields) for (const [key, value] of Object.entries(fields)) record[key] = sanitize(key, value);
+      if (fields)
+        for (const [key, value] of Object.entries(fields)) record[key] = sanitize(key, value);
       let line: string;
       try {
         line = JSON.stringify(record);

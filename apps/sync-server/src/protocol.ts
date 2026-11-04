@@ -2,8 +2,8 @@
  * Wire protocol of the POuxis sync relay (JSON text frames over WebSocket at `/v1/sync`).
  *
  * The relay orders and fans out opaque envelopes. It never interprets `payload`, which is
- * usually ciphertext produced by `@pouxis/core/crypto`. This file is the single source of
- * truth for the server side of the contract and mirrors `packages/core/src/sync`.
+ * usually ciphertext produced by the client. This file is the single source of truth for
+ * the wire contract; clients must implement exactly these messages.
  *
  * Cursor semantics: a cursor is `String(seq)` where `seq` is the position in the per-space
  * append-only log (`'0'` = before the first envelope). Every cursor the server sends to a
@@ -153,7 +153,10 @@ export function parseCursor(cursor: string | null): number | undefined {
 }
 
 /** Parses and validates one text frame. Never throws. */
-export function parseClientMessage(raw: string, limits: ProtocolLimits = DEFAULT_LIMITS): ParseResult {
+export function parseClientMessage(
+  raw: string,
+  limits: ProtocolLimits = DEFAULT_LIMITS,
+): ParseResult {
   let value: unknown;
   try {
     value = JSON.parse(raw);

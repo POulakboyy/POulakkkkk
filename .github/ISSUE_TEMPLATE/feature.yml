@@ -1,0 +1,55 @@
+name: Proposer une fonctionnalité
+description: Une nouvelle capacité ou l'amélioration d'une capacité existante.
+title: '[Fonctionnalité] '
+labels: [fonctionnalité, à trier]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Décrivez d'abord le **problème** que vous rencontrez : une bonne description du besoin
+        vaut plus qu'une solution détaillée. La vision du produit est dans
+        [docs/BRIEF.md](https://github.com/POulakboyy/POulakkkkk/blob/main/docs/BRIEF.md).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème ou besoin
+      description: Dans quelle situation êtes-vous gêné·e ? À quelle fréquence ?
+      placeholder: Quand je planifie ma semaine le dimanche soir, je dois…
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Solution envisagée
+      description: Comment imaginez-vous la fonctionnalité ? Croquis bienvenus.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considérées
+      description: Contournements actuels, autres applications, autres approches.
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module concerné
+      options:
+        - Moteur temporel et calendrier
+        - Exécution et tâches
+        - Stockage, fichiers et multi-plateforme
+        - Organigrammes, graphes et spatialisation
+        - Idéation et outils créatifs
+        - Collaboration et écosystème connecté
+        - Interfaces, bien-être et télémétrie personnelle
+        - Autre / transversal
+    validations:
+      required: true
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Principes du projet
+      description: POuxis est local-first et respecte la vie privée.
+      options:
+        - label: Cette proposition fonctionne hors ligne, ou dégrade proprement sans réseau.
+        - label: Elle n'exige pas d'envoyer des données personnelles à un tiers.
+        - label: Je suis prêt·e à contribuer à sa conception ou à son implémentation.

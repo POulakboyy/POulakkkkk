@@ -98,7 +98,9 @@ for (const rel of ['package.json', 'packages/core/package.json', 'apps/pouxis/pa
   if (!existsSync(path)) continue;
   const other = readJson(path).version;
   if (other !== version) {
-    console.log(`::warning title=Versions désalignées::${rel} est en ${other}, l'app en ${version}.`);
+    console.log(
+      `::warning title=Versions désalignées::${rel} est en ${other}, l'app en ${version}.`,
+    );
   }
 }
 

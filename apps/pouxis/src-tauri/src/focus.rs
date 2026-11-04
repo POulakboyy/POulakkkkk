@@ -16,6 +16,9 @@
 //! The decision logic is written against a [`Runner`] so it compiles and is unit-tested on
 //! every host, whatever OS the binary targets.
 
+// Each target calls only its own OS helpers; the others stay compiled for the tests.
+#![allow(dead_code)]
+
 use std::io::Read;
 use std::process::{Command, Stdio};
 use std::sync::Mutex;
@@ -129,8 +132,7 @@ pub enum RunError {
 
 /// Runs a program with fixed arguments (never through a shell).
 pub trait Runner {
-    fn run(&self, program: &str, args: &[&str], timeout: Duration)
-        -> Result<CmdOutput, RunError>;
+    fn run(&self, program: &str, args: &[&str], timeout: Duration) -> Result<CmdOutput, RunError>;
 }
 
 /// Bounded output read, so a chatty helper cannot exhaust memory.
@@ -139,12 +141,7 @@ const MAX_OUTPUT: u64 = 1 << 20;
 pub struct SystemRunner;
 
 impl Runner for SystemRunner {
-    fn run(
-        &self,
-        program: &str,
-        args: &[&str],
-        timeout: Duration,
-    ) -> Result<CmdOutput, RunError> {
+    fn run(&self, program: &str, args: &[&str], timeout: Duration) -> Result<CmdOutput, RunError> {
         let mut child = Command::new(program)
             .args(args)
             .stdin(Stdio::null())
@@ -198,7 +195,9 @@ const RUN_TIMEOUT: Duration = Duration::from_secs(15);
 fn mac_failure(err: RunError) -> FocusModeResult {
     match err {
         RunError::NotFound => FocusModeResult::unsupported(FocusReason::ShortcutsCliMissing),
-        RunError::Timeout => FocusModeResult::failed(FocusMethod::MacosShortcuts, FocusReason::Timeout),
+        RunError::Timeout => {
+            FocusModeResult::failed(FocusMethod::MacosShortcuts, FocusReason::Timeout)
+        }
         RunError::Io => {
             FocusModeResult::failed(FocusMethod::MacosShortcuts, FocusReason::CommandFailed)
         }
@@ -228,7 +227,11 @@ fn mac_check(runner: &dyn Runner, names: &[&str]) -> Result<(), FocusModeResult>
 }
 
 pub fn macos_apply(on: bool, runner: &dyn Runner) -> FocusModeResult {
-    let name = if on { MAC_SHORTCUT_ON } else { MAC_SHORTCUT_OFF };
+    let name = if on {
+        MAC_SHORTCUT_ON
+    } else {
+        MAC_SHORTCUT_OFF
+    };
     if let Err(result) = mac_check(runner, &[name]) {
         return result;
     }
@@ -264,7 +267,9 @@ fn is_gnome(xdg_current_desktop: Option<&str>) -> bool {
 fn gnome_failure(err: RunError) -> FocusModeResult {
     match err {
         RunError::NotFound => FocusModeResult::unsupported(FocusReason::GsettingsMissing),
-        RunError::Timeout => FocusModeResult::failed(FocusMethod::GnomeGsettings, FocusReason::Timeout),
+        RunError::Timeout => {
+            FocusModeResult::failed(FocusMethod::GnomeGsettings, FocusReason::Timeout)
+        }
         RunError::Io => {
             FocusModeResult::failed(FocusMethod::GnomeGsettings, FocusReason::CommandFailed)
         }
@@ -280,7 +285,11 @@ fn gnome_read_banners(
         return Err(FocusModeResult::unsupported(FocusReason::DesktopNotGnome));
     }
     let out = runner
-        .run(GSETTINGS, &["get", GNOME_SCHEMA, GNOME_KEY], GSETTINGS_TIMEOUT)
+        .run(
+            GSETTINGS,
+            &["get", GNOME_SCHEMA, GNOME_KEY],
+            GSETTINGS_TIMEOUT,
+        )
         .map_err(gnome_failure)?;
     if !out.success {
         return Err(FocusModeResult::unsupported(FocusReason::SchemaMissing));
@@ -398,13 +407,11 @@ pub async fn set_focus_mode<R: tauri::Runtime>(
     on: bool,
 ) -> FocusModeResult {
     use tauri::Manager;
-    let result = tauri::async_runtime::spawn_blocking(move || {
-        apply(on, app.state::<FocusState>().inner())
-    })
-    .await;
-    result.unwrap_or_else(|_| {
-        FocusModeResult::failed(FocusMethod::None, FocusReason::CommandFailed)
-    })
+    let result =
+        tauri::async_runtime::spawn_blocking(move || apply(on, app.state::<FocusState>().inner()))
+            .await;
+    result
+        .unwrap_or_else(|_| FocusModeResult::failed(FocusMethod::None, FocusReason::CommandFailed))
 }
 
 /// Says whether `set_focus_mode` can work (for the settings screen), without changing anything.
@@ -539,7 +546,10 @@ mod tests {
     #[test]
     fn gnome_hides_banners_then_restores_the_user_value() {
         let state = FocusState::default();
-        let on = Fake::new(vec![("gsettings get", ok("true\n")), ("gsettings set", ok(""))]);
+        let on = Fake::new(vec![
+            ("gsettings get", ok("true\n")),
+            ("gsettings set", ok("")),
+        ]);
         assert!(gnome_apply(true, Some("GNOME"), &state, &on).applied);
         assert_eq!(
             on.calls()[1],
@@ -551,7 +561,10 @@ mod tests {
         assert!(gnome_apply(true, Some("GNOME"), &state, &again).applied);
         assert_eq!(again.calls().len(), 1, "already hidden: no set");
 
-        let off = Fake::new(vec![("gsettings get", ok("false\n")), ("gsettings set", ok(""))]);
+        let off = Fake::new(vec![
+            ("gsettings get", ok("false\n")),
+            ("gsettings set", ok("")),
+        ]);
         assert!(gnome_apply(false, Some("GNOME"), &state, &off).applied);
         assert_eq!(
             off.calls()[1],
@@ -582,7 +595,10 @@ mod tests {
             gnome_apply(true, Some("GNOME"), &state, &no_schema).reason,
             Some(FocusReason::SchemaMissing)
         );
-        let read_only = Fake::new(vec![("gsettings get", ok("true")), ("gsettings set", failed())]);
+        let read_only = Fake::new(vec![
+            ("gsettings get", ok("true")),
+            ("gsettings set", failed()),
+        ]);
         assert_eq!(
             gnome_apply(true, Some("GNOME"), &state, &read_only).reason,
             Some(FocusReason::CommandFailed)
@@ -604,8 +620,8 @@ mod tests {
             json,
             r#"{"applied":false,"method":"none","reason":"no-public-api"}"#
         );
-        let json = serde_json::to_string(&FocusModeResult::applied(FocusMethod::MacosShortcuts))
-            .unwrap();
+        let json =
+            serde_json::to_string(&FocusModeResult::applied(FocusMethod::MacosShortcuts)).unwrap();
         assert_eq!(
             json,
             r#"{"applied":true,"method":"macos-shortcuts","reason":null}"#

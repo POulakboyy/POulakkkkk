@@ -19,10 +19,12 @@ import {
   type RelativeDayOptions,
 } from './format.ts';
 import { formatMessage, type MessageVars } from './message.ts';
+import { typesetDict } from './typography.ts';
 
 export * from './format.ts';
 export { formatMessage, MessageSyntaxError, parseMessage } from './message.ts';
 export type { MessageVars } from './message.ts';
+export { NBSP, NNBSP, typeset } from './typography.ts';
 
 /** French is the canonical dictionary; every other locale must have the same shape. */
 export type Dict = typeof fr;
@@ -38,7 +40,11 @@ export type Namespace = keyof Dict;
 /** Supported UI languages, in the order shown in Settings. */
 export const LOCALES: readonly Locale[] = ['fr', 'en'];
 
-const dictionaries: Record<Locale, Dict> = { fr, en };
+/** Dictionaries as served: typeset once at load (non-breaking spaces, see `typography.ts`). */
+const dictionaries: Record<Locale, Dict> = {
+  fr: typesetDict(fr, 'fr'),
+  en: typesetDict(en, 'en'),
+};
 
 /**
  * Looks up `key` (`'today.title'`) and formats it with `vars`: `{name}` placeholders plus ICU-lite
@@ -51,7 +57,7 @@ const dictionaries: Record<Locale, Dict> = { fr, en };
  * ```
  */
 export function translate(locale: Locale, key: MessageKey, vars?: MessageVars): string {
-  const raw = lookup(dictionaries[locale], key) ?? lookup(fr, key) ?? key;
+  const raw = lookup(dictionaries[locale], key) ?? lookup(dictionaries.fr, key) ?? key;
   return formatMessage(locale, raw, vars);
 }
 

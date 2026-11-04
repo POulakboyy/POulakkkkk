@@ -1,5 +1,178 @@
 import type { today as fr } from '../fr/today.ts';
 
 export const today: typeof fr = {
-  title: 'today',
+  title: 'Today',
+
+  greeting: {
+    morning: 'Good morning',
+    afternoon: 'Good afternoon',
+    evening: 'Good evening',
+  },
+
+  summary: {
+    a11y: 'Day summary',
+    planned: '{count, plural, =0 {Nothing planned} one {# thing planned} other {# things planned}}',
+    free: '{duration} free',
+    focus: '{duration} of focus',
+  },
+
+  timeline: {
+    label: 'Day timeline',
+    now: 'Now',
+    nowA11y: 'It’s {time}',
+    jumpToNow: 'Back to now',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    allDay: 'All day',
+    outsideHours: 'Outside your working hours',
+    dayStart: 'Day starts · {time}',
+    dayEnd: 'Day ends · {time}',
+    freeSlot: 'Free · {duration}',
+    freeSlotHint: 'Drag a task here, or tap to add one',
+    addAt: 'Add at {time}',
+    fixed: 'Fixed appointment',
+    fixedHint: 'Stays put when the plan shifts',
+    pinned: 'Pinned time',
+    pinnedHint: 'Auto-scheduling leaves it alone',
+    travel: 'Travel · {duration}',
+    leaveAt: 'Leave at {time}',
+    blockA11y: '{title}, from {start} to {end}',
+    blockDone: 'Done',
+    move: 'Move block',
+    resize: 'Adjust duration',
+    reroute: 'Rearrange the day',
+    rerouteHint: 'Fits tasks into free slots without touching fixed appointments',
+    rerouted: 'Day rearranged',
+  },
+
+  floating: {
+    title: 'Floating tasks',
+    hint: 'Planned for today, no set time: they slip into free slots.',
+    count: '{count, plural, =0 {No floating tasks} one {# floating task} other {# floating tasks}}',
+    expand: 'Show floating tasks',
+    collapse: 'Hide floating tasks',
+    place: 'Find a slot',
+    placeAll: 'Place all',
+    placed: 'Placed at {time}',
+    placedMany: '{count, plural, one {# task placed} other {# tasks placed}}',
+    noRoom: 'No free slot left today. It stays here, no pressure.',
+    noRoomMany: 'The day is full. The rest stay here; you can pick them up tomorrow.',
+    dragHint: 'Drag a task onto the timeline to give it a time.',
+    empty: 'Nothing is waiting for a slot.',
+  },
+
+  focus: {
+    a11y: 'Focus player',
+    start: 'Start focus',
+    startOn: 'Focus on “{title}”',
+    pause: 'Pause',
+    resume: 'Resume',
+    stop: 'End session',
+    skipBreak: 'Skip break',
+    extend: '{duration} more',
+    expand: 'Expand player',
+    collapse: 'Minimize player',
+    focusing: 'Focus',
+    onBreak: 'Break',
+    paused: 'Paused',
+    remaining: '{time} left',
+    remainingA11y: '{duration} left',
+    session: 'Session {current} of {total}',
+    pickTask: 'Pick a task to begin',
+    dndOn: 'Do Not Disturb is on',
+    dndOff: 'Do Not Disturb is off',
+    dndUnavailable:
+      'Do Not Disturb isn’t available here. Silence notifications manually if needed.',
+    sessionDone: 'Session complete · {duration} of focus',
+    breakDone: 'Break’s over',
+    breakIdeas: {
+      look: 'Look into the distance for a few seconds.',
+      stretch: 'Stand up and stretch.',
+      water: 'Glass of water?',
+      breathe: 'Three slow breaths.',
+      walk: 'A few steps away from the screen.',
+    },
+  },
+
+  unlocked: {
+    title: '“{title}” can start',
+    body: '“{blocker}” is done, so the next step is unlocked.',
+    many: '{count, plural, one {# task unlocked} other {# tasks unlocked}}',
+    view: 'View task',
+    addToToday: 'Add to today',
+  },
+
+  overrun: {
+    title: '“{title}” is running over',
+    body: 'It’s {duration} past its slot. Shift what comes next?',
+    propagate: 'Shift the rest',
+    propagateBy: 'Shift by {duration}',
+    extend: 'Extend by {duration}',
+    wrapUp: 'Finish now',
+    keep: 'Leave as is',
+    fixedNote: 'Fixed appointments won’t move.',
+    propagated: '{count, plural, one {# task shifted} other {# tasks shifted}} by {duration}',
+    overflow:
+      '{count, plural, one {# task no longer fits today} other {# tasks no longer fit today}}',
+    overflowHint: 'They move to tomorrow’s floating tasks, unless you choose otherwise.',
+    toTomorrow: 'Plan them for tomorrow',
+    choose: 'Choose for each',
+  },
+
+  buffers: {
+    label: 'Breather',
+    a11y: '{duration} breather',
+    hint: 'Time to breathe between two meetings',
+    remove: 'Remove this breather',
+    removed: 'Breather removed',
+    added:
+      '{count, plural, one {# breather added} other {# breathers added}} between your meetings',
+  },
+
+  maker: {
+    title: 'This meeting splits a maker block',
+    body: 'You’d have {before} before and {after} after. Deep work needs long, uninterrupted stretches.',
+    suggest: 'Suggest another time',
+    suggestion: '{time} would work without splitting the block',
+    keep: 'Keep this time',
+    protected: 'Protected maker block',
+    protectedA11y: 'Protected maker block from {start} to {end}',
+  },
+
+  carryOver: {
+    title:
+      '{count, plural, one {A task from yesterday is still waiting} other {# tasks from yesterday are still waiting}}',
+    body: 'Days don’t always go as planned. What would you like to do with them?',
+    toToday: 'Plan them for today',
+    toInbox: 'Send them back to sort',
+    oneByOne: 'Choose one by one',
+    done: 'All sorted.',
+  },
+
+  allDone: {
+    title: 'All done',
+    body: 'The rest of the day is yours.',
+    action: 'Look back on the day',
+  },
+
+  wrapUp: {
+    title: 'End of day',
+    completed:
+      '{count, plural, =0 {Nothing checked off today: thinking and resting count too.} one {# task done today.} other {# tasks done today.}}',
+    leftover: 'What’s left can wait until tomorrow.',
+    planTomorrow: 'Plan tomorrow',
+    close: 'Close the day',
+  },
+
+  dayOff: {
+    title: 'Day off',
+    body: 'No working hours today. Notifications stay quiet.',
+  },
+
+  empty: {
+    title: 'An open day',
+    body: 'Nothing planned yet. Add a task, or keep the space: that’s a choice too.',
+    action: 'Add a task',
+    secondary: 'Open inbox',
+  },
 };

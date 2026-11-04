@@ -82,7 +82,11 @@ export function estimateVelocity(samples: readonly Sample[], windowMs = 100, now
  * @param velocity px/ms
  * @param decelerationRate per-ms rate; 0.998 = "normal" (1 px/ms travels ~500 px), 0.99 = "fast" (~100 px).
  */
-export function projectPosition(position: number, velocity: number, decelerationRate = 0.998): number {
+export function projectPosition(
+  position: number,
+  velocity: number,
+  decelerationRate = 0.998,
+): number {
   return position + (velocity * decelerationRate) / (1 - decelerationRate);
 }
 
