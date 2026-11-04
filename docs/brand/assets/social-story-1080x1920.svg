@@ -2,7 +2,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-labelledby="t"><title id="t">POuxis — modèle de story verticale</title>
 <!-- Template: safe zone y 250–1670 (platform UI covers the rest). Dark ground, one coral dot. -->
 <rect width="1080" height="1920" fill="#121211"/>
-<circle cx="132" cy="420" r="36" fill="#FF9C80"/>
 <text x="96" y="700" fill="#F3F1EC" font-family="ui-serif, 'New York', 'Iowan Old Style', Charter, Georgia, serif" font-size="112" letter-spacing="-2">Une phrase</text>
 <text x="96" y="830" fill="#F3F1EC" font-family="ui-serif, 'New York', 'Iowan Old Style', Charter, Georgia, serif" font-size="112" letter-spacing="-2">suffit pour</text>
 <text x="96" y="960" fill="#F3F1EC" font-family="ui-serif, 'New York', 'Iowan Old Style', Charter, Georgia, serif" font-size="112" letter-spacing="-2">planifier.</text>

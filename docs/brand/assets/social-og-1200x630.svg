@@ -7,5 +7,4 @@
 <text x="80" y="484" fill="#1C1B18" font-family="ui-serif, 'New York', 'Iowan Old Style', Charter, Georgia, serif" font-size="88" letter-spacing="-1.5">en clair.</text>
 <text x="80" y="556" fill="#4F4B44" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26">Agenda, tâches et idées · open source · local d’abord</text>
 <line x1="80" y1="586" x2="1120" y2="586" stroke="#D3CEC2" stroke-width="2"/>
-<circle cx="1072" cy="128" r="28" fill="#FF8F70"/>
 </svg>
