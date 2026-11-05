@@ -20,19 +20,28 @@ export interface ViewDef {
   label: MessageKey;
   icon: ComponentType<{ size?: number }>;
   component: LazyExoticComponent<ComponentType>;
+  /** Fetches and evaluates the view's chunk without rendering it (hover / idle prefetch). */
+  preload: () => Promise<unknown>;
   /** Shown in the mobile tab bar (max 4 + the central capture button). */
   mobileTab: boolean;
   /** Sidebar group: main views first, then secondary ones pinned at the bottom. */
   group: 'main' | 'secondary';
 }
 
-/** Views are code-split: each one loads on first visit. */
+type ViewModule = { default: ComponentType };
+
+/** One loader shared by `lazy()` and prefetching, so both hit the same module request. */
+function split(load: () => Promise<ViewModule>): Pick<ViewDef, 'component' | 'preload'> {
+  return { component: lazy(load), preload: load };
+}
+
+/** Views are code-split: each one loads on first visit, or earlier when prefetched. */
 export const VIEWS: readonly ViewDef[] = [
   {
     id: 'today',
     label: 'nav.today',
     icon: IconToday,
-    component: lazy(() => import('../views/today/index.tsx')),
+    ...split(() => import('../views/today/index.tsx')),
     mobileTab: true,
     group: 'main',
   },
@@ -40,7 +49,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'tasks',
     label: 'nav.tasks',
     icon: IconTasks,
-    component: lazy(() => import('../views/tasks/index.tsx')),
+    ...split(() => import('../views/tasks/index.tsx')),
     mobileTab: true,
     group: 'main',
   },
@@ -48,7 +57,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'calendar',
     label: 'nav.calendar',
     icon: IconCalendar,
-    component: lazy(() => import('../views/calendar/index.tsx')),
+    ...split(() => import('../views/calendar/index.tsx')),
     mobileTab: true,
     group: 'main',
   },
@@ -56,7 +65,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'canvas',
     label: 'nav.canvas',
     icon: IconCanvas,
-    component: lazy(() => import('../views/canvas/index.tsx')),
+    ...split(() => import('../views/canvas/index.tsx')),
     mobileTab: false,
     group: 'main',
   },
@@ -64,7 +73,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'ideas',
     label: 'nav.ideas',
     icon: IconIdeas,
-    component: lazy(() => import('../views/ideas/index.tsx')),
+    ...split(() => import('../views/ideas/index.tsx')),
     mobileTab: true,
     group: 'main',
   },
@@ -72,7 +81,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'insights',
     label: 'nav.insights',
     icon: IconInsights,
-    component: lazy(() => import('../views/insights/index.tsx')),
+    ...split(() => import('../views/insights/index.tsx')),
     mobileTab: false,
     group: 'main',
   },
@@ -80,7 +89,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'settings',
     label: 'nav.settings',
     icon: IconSettings,
-    component: lazy(() => import('../views/settings/index.tsx')),
+    ...split(() => import('../views/settings/index.tsx')),
     mobileTab: false,
     group: 'secondary',
   },
@@ -88,7 +97,7 @@ export const VIEWS: readonly ViewDef[] = [
     id: 'lab',
     label: 'nav.lab',
     icon: IconLayers,
-    component: lazy(() => import('./LabView.tsx')),
+    ...split(() => import('./LabView.tsx')),
     mobileTab: false,
     group: 'secondary',
   },

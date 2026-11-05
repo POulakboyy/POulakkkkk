@@ -1,5 +1,5 @@
-import { Suspense, useCallback, useRef, type MouseEvent } from 'react';
-import { CommandBar, openCommandBar } from '../features/command/index.tsx';
+import { Suspense, useCallback, useEffect, useMemo, useRef, type MouseEvent } from 'react';
+import { openCommandBar } from '../features/command/state.ts';
 import { FocusMiniPlayer } from '../features/focus/index.tsx';
 import { useT } from '../i18n/index.ts';
 import { useSyncStatus } from '../store/index.ts';
@@ -15,6 +15,8 @@ import {
   type MenuItem,
 } from '../ui/index.ts';
 import { useAppPrefs } from './appPrefs.ts';
+import { DeferredCommandBar, loadCommandBar } from './deferred.tsx';
+import { prefetch, prefetchWhenIdle, shouldSaveData } from './prefetch.ts';
 import { navigate, useRoute } from './router.ts';
 import { VIEWS, viewDef, type ViewDef } from './routes.ts';
 import { useDocumentMeta, usePlatformRouting, useShellKeymap } from './useShellEffects.ts';
@@ -34,10 +36,14 @@ export function Shell() {
   const View = active.component;
   const mainRef = useRef<HTMLElement>(null);
   const getMain = useCallback(() => mainRef.current, []);
+  // Same element while the view stays: shell re-renders (preferences, keymap) skip the view,
+  // which subscribes to the route and the store on its own.
+  const content = useMemo(() => <View />, [View]);
 
   useShellKeymap(prefs, getMain);
   useDocumentMeta(active.label);
   usePlatformRouting();
+  useIdlePrefetch();
 
   const main = VIEWS.filter((v) => v.group === 'main');
   const secondary = VIEWS.filter((v) => v.group === 'secondary');
@@ -104,7 +110,7 @@ export function Shell() {
 
       <main id="main" ref={mainRef} className={s.main} tabIndex={-1}>
         <Suspense fallback={<ViewFallback label={t('common.loading')} />}>
-          <View />
+          {content}
         </Suspense>
       </main>
 
@@ -116,10 +122,27 @@ export function Shell() {
         ))}
       </nav>
 
-      <CommandBar />
+      <DeferredCommandBar />
       <Toaster />
     </div>
   );
+}
+
+/**
+ * After the first paint, warms the command bar then every view, one per idle period, so later
+ * navigations render from cache. Skipped when the user asked to save data.
+ */
+function useIdlePrefetch(): void {
+  useEffect(() => {
+    if (shouldSaveData()) return;
+    return prefetchWhenIdle([loadCommandBar, ...VIEWS.map((v) => v.preload)]);
+  }, []);
+}
+
+/** Hover, focus or touch on a link starts loading its view before the click lands. */
+function warmProps(def: ViewDef) {
+  const warm = () => void prefetch(def.preload);
+  return { onPointerEnter: warm, onFocus: warm, onTouchStart: warm };
 }
 
 function skipToMain(e: MouseEvent) {
@@ -148,6 +171,7 @@ function NavList({ views, current }: { views: readonly ViewDef[]; current: strin
             href={`#/${v.id}`}
             className={s.navItem}
             aria-current={v.id === current ? 'page' : undefined}
+            {...warmProps(v)}
             onClick={(e) => {
               e.preventDefault();
               navigate(v.id);
@@ -200,6 +224,7 @@ function TabItem({
         href={`#/${def.id}`}
         className={s.tab}
         aria-current={active ? 'page' : undefined}
+        {...warmProps(def)}
         onClick={(e) => {
           e.preventDefault();
           navigate(def.id);

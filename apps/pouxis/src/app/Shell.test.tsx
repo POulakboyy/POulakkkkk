@@ -16,10 +16,15 @@ vi.mock('./routes.ts', async (importOriginal) => {
     VIEWS: actual.VIEWS.map((v) => ({
       ...v,
       component: lazy(async () => stub(`view:${v.id}`)),
+      preload: async () => undefined,
     })),
     viewDef: (id: string) => {
       const def = actual.VIEWS.find((v) => v.id === id) ?? actual.VIEWS[0]!;
-      return { ...def, component: lazy(async () => stub(`view:${def.id}`)) };
+      return {
+        ...def,
+        component: lazy(async () => stub(`view:${def.id}`)),
+        preload: async () => undefined,
+      };
     },
   };
 });

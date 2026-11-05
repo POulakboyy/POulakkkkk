@@ -18,5 +18,13 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    rolldownOptions: {
+      treeshake: {
+        // `@pouxis/core` is a pure engine imported through its namespace barrel. Without this,
+        // every engine module the barrel re-exports counts as having side effects and lands in
+        // the initial chunk, even when only a lazy view uses it (docs/performance/UI.md).
+        moduleSideEffects: [{ test: /[\\/]packages[\\/]core[\\/]src[\\/]/, sideEffects: false }],
+      },
+    },
   },
 });

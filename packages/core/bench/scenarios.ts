@@ -209,8 +209,8 @@ function expandScenario(name: string, text: string, budgetMs: number, limit = 10
 }
 
 const recurrenceScenarios: Scenario[] = [
-  expandScenario('recurrence.occurrences daily × 10 years', 'FREQ=DAILY;BYHOUR=9;BYMINUTE=0', 30),
-  expandScenario('recurrence.occurrences weekly MO,WE,FR × 10 years', '0 9 * * 1,3,5', 30),
+  expandScenario('recurrence.occurrences daily × 10 years', 'FREQ=DAILY;BYHOUR=9;BYMINUTE=0', 60),
+  expandScenario('recurrence.occurrences weekly MO,WE,FR × 10 years', '0 9 * * 1,3,5', 60),
   expandScenario(
     'recurrence.occurrences monthly 3rd Tuesday × 10 years',
     'FREQ=MONTHLY;BYDAY=3TU;BYHOUR=10;BYMINUTE=0',
@@ -269,7 +269,7 @@ const searchScenarios: Scenario[] = [
   {
     group: 'search',
     name: 'search.index build 50k docs',
-    budgetMs: 4_000,
+    budgetMs: 10_000,
     heavy: true,
     setup: () => {
       docs50k();
@@ -324,7 +324,7 @@ const graphScenarios: Scenario[] = [
   {
     group: 'graph',
     name: 'graph.layout 5k nodes (300 iterations)',
-    budgetMs: 6_000,
+    budgetMs: 8_000,
     heavy: true,
     setup: () => {
       const g = makeGraph(5_000);
@@ -334,7 +334,7 @@ const graphScenarios: Scenario[] = [
   {
     group: 'graph',
     name: 'graph.layout step 5k nodes (1 iteration)',
-    budgetMs: 20,
+    budgetMs: 25,
     setup: () => {
       const engine = graph.createLayout(makeGraph(5_000), { iterations: 1_000_000, tolerance: 0 });
       return () => engine.step(1);

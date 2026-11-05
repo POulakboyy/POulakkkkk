@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { openCommandBar } from '../features/command/index.tsx';
+import { openCommandBar } from '../features/command/state.ts';
 import { translate, type MessageKey } from '../i18n/index.ts';
 import { deepLinkRoute, platform, type Unsubscribe } from '../platform/index.ts';
 import { usePrefs } from '../store/index.ts';
@@ -22,6 +22,7 @@ export function shellHandlers(main: () => HTMLElement | null): KeymapHandlers {
     'nav.settings': () => appActions.go('settings'),
     'nav.lab': () => appActions.go('lab'),
     'note.new': () => appActions.newNote(),
+    'ideas.brainDump': () => void appActions.brainDump(),
     'focus.start': () => appActions.startFocus(),
     'theme.cycle': () => void appActions.cycleTheme(),
     'zen.toggle': () => appActions.toggleZen(),

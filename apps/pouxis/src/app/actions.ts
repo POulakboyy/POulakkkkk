@@ -1,9 +1,9 @@
 import { translate } from '../i18n/index.ts';
 import { store } from '../store/index.ts';
 import { toast } from '../ui/index.ts';
-import { exportAll, type ExportFormat } from '../views/settings/export.ts';
+import type { ExportFormat } from '../views/settings/export.ts';
 import { getAppPrefs, setAppPrefs, type ThemePref } from './appPrefs.ts';
-import { navigate, type ViewId } from './router.ts';
+import { getRoute, navigate, type ViewId } from './router.ts';
 import { nextTheme } from './theme.ts';
 
 /** Fired on window to start a focus session; the focus feature listens for it. */
@@ -66,7 +66,16 @@ export const appActions = {
     navigate('canvas', { graph: graph.id });
   },
 
-  exportData(format: ExportFormat = 'zip'): void {
+  /** Brain dump (5.14) from anywhere: opens the ideas view with the dump overlay on top. */
+  async brainDump(): Promise<void> {
+    if (getRoute().view !== 'ideas') navigate('ideas');
+    const { brainDump } = await import('../views/ideas/dump/brainDump.ts');
+    brainDump.open();
+  },
+
+  /** The exporters load on demand: they are only needed when the user exports. */
+  async exportData(format: ExportFormat = 'zip'): Promise<void> {
+    const { exportAll } = await import('../views/settings/export.ts');
     const file = exportAll(store, format);
     toast({ title: t('settings.data.export.done'), description: file, tone: 'success' });
   },

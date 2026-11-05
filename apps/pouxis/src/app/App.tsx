@@ -1,12 +1,22 @@
-import { lazy, Suspense, useMemo } from 'react';
-import { QuickCapture } from '../features/command/index.tsx';
-import { useCollection } from '../store/index.ts';
+import { lazy, memo, Suspense, useSyncExternalStore } from 'react';
+import { store } from '../store/index.ts';
 import { setAppPrefs, useAppPrefs } from './appPrefs.ts';
+import { QuickCapture } from './deferred.tsx';
 import { useRoute } from './router.ts';
 import { Shell } from './Shell.tsx';
-import { modeForView, useAppearance } from './theme.ts';
+import { doingMode, modeForView, useAppearance } from './theme.ts';
 
 const Onboarding = lazy(() => import('../features/onboarding/index.tsx'));
+
+/** Memoised: the root re-renders on appearance changes, which must not cascade into the views. */
+const MemoShell = memo(Shell);
+
+const doingSnapshot = () => doingMode(store.all('tasks'));
+
+/** Mode of the running task; re-renders only when that mode changes, not on every task edit. */
+function useDoingMode() {
+  return useSyncExternalStore(store.subscribe, doingSnapshot, doingSnapshot);
+}
 
 /**
  * Root: applies appearance to <html> (theme, daylight, zen, work mode), then shows the
@@ -15,11 +25,16 @@ const Onboarding = lazy(() => import('../features/onboarding/index.tsx'));
 export function App() {
   const { view } = useRoute();
   const prefs = useAppPrefs();
-  const tasks = useCollection('tasks');
-  const doing = useMemo(() => tasks.find((task) => task.status === 'doing')?.mode, [tasks]);
+  const doing = useDoingMode();
   useAppearance(prefs, modeForView(view, doing));
 
-  if (view === 'capture') return <QuickCapture />;
+  if (view === 'capture') {
+    return (
+      <Suspense fallback={null}>
+        <QuickCapture />
+      </Suspense>
+    );
+  }
   if (!prefs.onboarded) {
     return (
       <Suspense fallback={null}>
@@ -27,5 +42,5 @@ export function App() {
       </Suspense>
     );
   }
-  return <Shell />;
+  return <MemoShell />;
 }
