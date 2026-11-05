@@ -58,6 +58,7 @@ function args(argv) {
     keep: argv.includes('--keep'),
     checkHooks: argv.includes('--check-hooks'),
     scenes: get('--scenes')?.split(','),
+    reuse: argv.includes('--reuse'),
   };
 }
 
@@ -108,6 +109,12 @@ async function filmFormat(browser, doc, plan, ctx) {
     const scene = clips[0].scene;
     const win = recordWindow(clips);
     const t = Date.now();
+    const index = join(ctx.work, plan.format.id, sceneId, 'frames.json');
+    if (ctx.reuse && existsSync(index)) {
+      recordings.set(sceneId, JSON.parse(readFileSync(index, 'utf8')));
+      console.log(`  ↺ ${sceneId}: reused`);
+      continue;
+    }
     const rec = await recordScene(browser, {
       scene,
       geo,
@@ -129,6 +136,7 @@ async function filmFormat(browser, doc, plan, ctx) {
     });
     for (const [hook, how] of rec.usage) ctx.hooks.set(hook, how);
     recordings.set(sceneId, rec.frames);
+    writeFileSync(index, JSON.stringify(rec.frames));
     console.log(
       `  ✓ ${sceneId}: ${rec.frames.length} frames (${((Date.now() - t) / 1000).toFixed(0)} s)`,
     );
@@ -276,6 +284,7 @@ async function main() {
     work: WORK_DIR,
     hooks: new Map(),
     scenes: opts.scenes,
+    reuse: opts.reuse,
   };
   try {
     if (opts.checkHooks) {

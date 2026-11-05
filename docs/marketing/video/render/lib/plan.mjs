@@ -124,7 +124,7 @@ export function joinGraph(segs, { fps }) {
   const parts = [];
   for (let i = 0; i < segs.length; i += 1) {
     parts.push(
-      `[${i}:v]settb=1/${fps * 1000},fps=${fps},format=yuv420p,setpts=PTS-STARTPTS[s${i}]`,
+      `[${i}:v]fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,settb=AVTB[s${i}]`,
     );
   }
   let label = 's0';
