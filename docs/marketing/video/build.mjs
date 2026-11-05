@@ -3,7 +3,7 @@
 //  - subtitles/<format>.<lang>.srt for every format with voice-over;
 //  - the shot tables of STORYBOARD.md, between <!-- shots:<format>:begin/end --> markers.
 // Usage: node docs/marketing/video/build.mjs [--check]   (--check: fail if files are stale)
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { loadShotlist, validate } from './validate-shotlist.mjs';
 
@@ -201,15 +201,15 @@ async function main() {
     }
   }
   const storyboardPath = `${DIR}STORYBOARD.md`;
-  if (existsSync(storyboardPath)) {
-    let md = readFileSync(storyboardPath, 'utf8');
+  let md = readIfExists(storyboardPath);
+  if (md !== null) {
     for (const format of doc.formats)
       md = replaceBetween(md, format.id, storyboardTable(format, sceneById));
     outputs.set(storyboardPath, await formatMarkdown(md, storyboardPath));
   }
   let stale = 0;
   for (const [path, content] of outputs) {
-    const current = existsSync(path) ? readFileSync(path, 'utf8') : '';
+    const current = readIfExists(path) ?? '';
     if (current === content) continue;
     stale += 1;
     if (check) console.error(`✗ stale: ${path}`);
@@ -217,6 +217,16 @@ async function main() {
   }
   if (check && stale > 0) process.exit(1);
   console.log(check ? '✓ derived files up to date' : `✓ wrote ${stale} file(s)`);
+}
+
+/** File contents, or `null` when it does not exist (one read, no separate existence check). */
+function readIfExists(path) {
+  try {
+    return readFileSync(path, 'utf8');
+  } catch (error) {
+    if (error.code === 'ENOENT') return null;
+    throw error;
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) await main();
