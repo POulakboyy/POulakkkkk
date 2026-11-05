@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { Markdown, parseBlocks } from '../markdown.tsx';
+import { Markdown, parseBlocks, safeHttpUrl } from '../markdown.tsx';
 
 afterEach(cleanup);
 
@@ -30,5 +30,15 @@ describe('Markdown', () => {
     expect(links).toHaveLength(1);
     expect(links[0]!.getAttribute('rel')).toBe('noopener noreferrer');
     expect(container.querySelector('b')).toBeNull();
+  });
+});
+
+describe('safeHttpUrl', () => {
+  it('accepts only absolute http(s) addresses', () => {
+    expect(safeHttpUrl('https://example.org/a?b=1')).toBe('https://example.org/a?b=1');
+    expect(safeHttpUrl('HTTP://Example.org')).toBe('http://example.org/');
+    expect(safeHttpUrl('javascript:alert(1)')).toBeNull();
+    expect(safeHttpUrl('data:text/html,<b>x</b>')).toBeNull();
+    expect(safeHttpUrl('/relative')).toBeNull();
   });
 });

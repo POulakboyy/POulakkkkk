@@ -75,12 +75,24 @@ export function renderInline(text: string): ReactNode[] {
 
 function renderLink(token: string, key: string): ReactNode {
   const [, label = '', href = ''] = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(token) ?? [];
-  if (!/^https?:\/\//i.test(href)) return token;
+  const url = safeHttpUrl(href);
+  if (!url) return token;
   return (
-    <a key={key} href={href} target="_blank" rel="noopener noreferrer">
+    <a key={key} href={url} target="_blank" rel="noopener noreferrer">
       {label}
     </a>
   );
+}
+
+/** Returns the normalised address when `raw` is an absolute http(s) URL, otherwise null. */
+export function safeHttpUrl(raw: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
 }
 
 export function Markdown({ source, className }: { source: string; className?: string }) {
