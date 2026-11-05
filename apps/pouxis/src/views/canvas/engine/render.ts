@@ -406,6 +406,8 @@ function drawFull(
     ctx.lineWidth = 1;
     ctx.strokeStyle = n.id === state.hover ? theme.ink3 : theme.line;
     ctx.stroke();
+    // Only the box recedes on locked nodes: faded text would fall below 4.5:1 (WCAG 1.4.3).
+    ctx.globalAlpha = 1;
 
     let textX = x + NODE_PAD_X;
     if (n.node.kind === 'task' || n.locked) {
@@ -414,7 +416,7 @@ function drawFull(
     }
     const weight = n.hasChildren ? 600 : 500;
     ctx.font = `${weight} ${LABEL_FONT_SIZE}px ${font}`;
-    ctx.fillStyle = n.done ? theme.ink3 : theme.ink;
+    ctx.fillStyle = n.done ? theme.ink3 : n.locked ? theme.ink2 : theme.ink;
     ctx.fillText(n.text, textX, n.y + 0.5);
     if (n.done) {
       const w = ctx.measureText(n.text).width;
