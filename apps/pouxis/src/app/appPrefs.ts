@@ -75,12 +75,21 @@ function bool(value: unknown, fallback: boolean): boolean {
   return typeof value === 'boolean' ? value : fallback;
 }
 
+/**
+ * Sun position only needs city-level precision, so coordinates are kept at 0.1° (~11 km):
+ * the device never stores where the user actually is.
+ */
+export function coarsen(c: Coordinates): Coordinates {
+  const round = (v: number) => Math.round(v * 10) / 10;
+  return { latitude: round(c.latitude), longitude: round(c.longitude) };
+}
+
 function coordinates(value: unknown): Coordinates | null {
   if (typeof value !== 'object' || value === null) return null;
   const { latitude, longitude } = value as Record<string, unknown>;
   if (typeof latitude !== 'number' || typeof longitude !== 'number') return null;
   if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return null;
-  return { latitude, longitude };
+  return coarsen({ latitude, longitude });
 }
 
 /** Coerces untrusted stored data into valid preferences, field by field. */
@@ -118,7 +127,8 @@ function load(): AppPrefs {
 
 function save(): void {
   try {
-    globalThis.localStorage?.setItem(APP_PREFS_KEY, JSON.stringify(current));
+    const stored = { ...current, location: current.location && coarsen(current.location) };
+    globalThis.localStorage?.setItem(APP_PREFS_KEY, JSON.stringify(stored));
   } catch {
     // Private mode or quota: preferences still apply for this session.
   }
