@@ -3,7 +3,7 @@
  * (`/v1/sync`) on the same port. Transport concerns live here (upgrade checks, frame size,
  * heartbeat, graceful shutdown); protocol logic lives in `relay.ts`.
  */
-import { timingSafeEqual } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import type { Duplex } from 'node:stream';
@@ -72,6 +72,7 @@ export async function startServer(
   });
 
   const alive = new Map<WebSocket, { alive: boolean; session: Session }>();
+  const perAddress = new AddressCounter(config.maxConnectionsPerIp);
 
   httpServer.on('upgrade', (req: http.IncomingMessage, socket: Duplex, head: Buffer) => {
     socket.on('error', () => socket.destroy());
@@ -83,10 +84,13 @@ export async function startServer(
     if (relay.draining) return reject(503, 'draining');
     if (relay.sessions.size >= config.maxConnections) return reject(503, 'capacity');
     if (!originAllowed(req.headers.origin, config.allowedOrigins)) return reject(403, 'origin');
-    wss.handleUpgrade(req, socket, head, (ws) => attach(ws));
+    const address = clientAddress(req, config.trustProxy);
+    if (!perAddress.allows(address)) return reject(429, 'address');
+    wss.handleUpgrade(req, socket, head, (ws) => attach(ws, address));
   });
 
-  const attach = (ws: WebSocket): void => {
+  const attach = (ws: WebSocket, address: string): void => {
+    perAddress.add(address);
     const session = relay.connect(ws);
     const state = { alive: true, session };
     alive.set(ws, state);
@@ -108,6 +112,7 @@ export async function startServer(
       logger.debug('ws.error', { conn: session.id, code: error.code });
     });
     ws.on('close', (code: number) => {
+      perAddress.remove(address);
       alive.delete(ws);
       session.onClosed(code);
     });
@@ -230,15 +235,62 @@ export function originAllowed(
   return allowed.includes(origin);
 }
 
-function bearerMatches(header: string | undefined, expected: string): boolean {
+/**
+ * Constant-time bearer check. Both sides are hashed first so the comparison has a fixed
+ * length and its timing reveals neither the token nor its length.
+ */
+export function bearerMatches(header: string | undefined, expected: string): boolean {
   if (header === undefined || !header.startsWith('Bearer ')) return false;
-  const given = Buffer.from(header.slice('Bearer '.length), 'utf8');
-  const wanted = Buffer.from(expected, 'utf8');
-  if (given.length !== wanted.length) {
-    timingSafeEqual(wanted, wanted);
-    return false;
-  }
+  const given = createHash('sha256').update(header.slice('Bearer '.length), 'utf8').digest();
+  const wanted = createHash('sha256').update(expected, 'utf8').digest();
   return timingSafeEqual(given, wanted);
+}
+
+/**
+ * Address the per-address connection cap applies to. Behind a trusted reverse proxy, the
+ * last `X-Forwarded-For` entry is the one that proxy appended (earlier entries are
+ * client-controlled). Never logged (privacy rule of `logger.ts`).
+ */
+export function clientAddress(req: http.IncomingMessage, trustProxy: boolean): string {
+  if (trustProxy) {
+    const header = req.headers['x-forwarded-for'];
+    const raw = Array.isArray(header) ? header[header.length - 1] : header;
+    const last = raw?.split(',').pop()?.trim();
+    if (last) return last;
+  }
+  return req.socket.remoteAddress ?? 'unknown';
+}
+
+/** Live connection count per client address, bounded by `limit` (0 = unlimited). */
+export class AddressCounter {
+  private readonly counts = new Map<string, number>();
+  private readonly limit: number;
+
+  constructor(limit: number) {
+    this.limit = limit;
+  }
+
+  /** True when `address` may open one more connection. */
+  allows(address: string): boolean {
+    return this.limit === 0 || (this.counts.get(address) ?? 0) < this.limit;
+  }
+
+  add(address: string): void {
+    if (this.limit === 0) return;
+    this.counts.set(address, (this.counts.get(address) ?? 0) + 1);
+  }
+
+  remove(address: string): void {
+    if (this.limit === 0) return;
+    const next = (this.counts.get(address) ?? 0) - 1;
+    if (next > 0) this.counts.set(address, next);
+    else this.counts.delete(address);
+  }
+
+  /** Addresses currently tracked (tests, metrics). */
+  get size(): number {
+    return this.counts.size;
+  }
 }
 
 function rejectUpgrade(socket: Duplex, status: number): void {

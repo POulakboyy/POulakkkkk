@@ -39,6 +39,17 @@ export interface ServerConfig {
   maxFrameBytes: number;
   maxConnections: number;
   maxConnectionsPerSpace: number;
+  /**
+   * Concurrent connections per client address (authenticated or not); 0 disables the cap.
+   * Bounds what one host can hold before authenticating (pre-auth exhaustion).
+   */
+  maxConnectionsPerIp: number;
+  /**
+   * Take the client address from the last `X-Forwarded-For` entry (set by exactly one trusted
+   * reverse proxy) instead of the socket peer. Never enable without such a proxy: the header
+   * is client-controlled otherwise.
+   */
+  trustProxy: boolean;
   /** Per-space storage quota in bytes; 0 disables it. */
   maxSpaceBytes: number;
   rateLimit: RateLimitConfig;
@@ -91,6 +102,11 @@ export function resolveSecrets(env: Env): { secrets: string[]; insecure: boolean
   }
   if (problems.length > 0) throw new ConfigError(problems);
   return { secrets: previous === '' ? [current] : [current, previous], insecure: false };
+}
+
+/** True for listen addresses only reachable from this machine. */
+export function isLoopback(host: string): boolean {
+  return host === 'localhost' || host === '::1' || /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host);
 }
 
 export function loadConfig(env: Env = process.env): ServerConfig {
@@ -193,6 +209,8 @@ export function loadConfig(env: Env = process.env): ServerConfig {
     maxFrameBytes,
     maxConnections: int('POUXIS_MAX_CONNECTIONS', 10_000, 1, 10_000_000),
     maxConnectionsPerSpace: int('POUXIS_MAX_CONNECTIONS_PER_SPACE', 64, 1, 1_000_000),
+    maxConnectionsPerIp: int('POUXIS_MAX_CONNECTIONS_PER_IP', 0, 0, 1_000_000),
+    trustProxy: oneOf('POUXIS_TRUST_PROXY', 'false', ['true', 'false']) === 'true',
     maxSpaceBytes: int('POUXIS_MAX_SPACE_BYTES', 1024 * 1024 * 1024, 0, Number.MAX_SAFE_INTEGER),
     rateLimit,
     heartbeatMs: int('POUXIS_HEARTBEAT_MS', 30_000, 10, 3_600_000),

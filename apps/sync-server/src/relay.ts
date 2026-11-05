@@ -524,6 +524,17 @@ export class Session {
       return;
     }
     const { metrics } = this.relay;
+    // The authenticated node is the only one a connection may write for: otherwise a token
+    // holder could attribute envelopes to another device (and defeat node-bound tokens).
+    if (message.envelopes.some((envelope) => envelope.node !== this.node_)) {
+      metrics.inc('pouxis_sync_protocol_errors_total');
+      this.fail(
+        'bad_message',
+        'envelope node differs from the hello node',
+        CloseCode.policyViolation,
+      );
+      return;
+    }
     let outcome: AppendOutcome;
     try {
       outcome = await space.append(this, message.envelopes);
