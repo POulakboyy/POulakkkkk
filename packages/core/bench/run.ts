@@ -127,7 +127,10 @@ function printTable(results: readonly Result[], baseline?: Report): void {
     const row = [r.name, ms(r.medianMs), ms(r.p95Ms), r.budgetMs?.toString() ?? '', status];
     if (baseline) {
       const old = before.get(r.name);
-      row.push(old ? ms(old.medianMs) : '', old ? `×${(old.medianMs / r.medianMs).toFixed(1)}` : '');
+      row.push(
+        old ? ms(old.medianMs) : '',
+        old ? `×${(old.medianMs / r.medianMs).toFixed(1)}` : '',
+      );
     }
     console.log(`| ${row.join(' | ')} |`);
   }

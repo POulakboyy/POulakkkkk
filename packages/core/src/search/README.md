@@ -29,3 +29,11 @@ Records referencing the target through `links`, a graph node `refId`, or inline
 case- and accent-insensitively; links inside Markdown code are ignored). Each `Backlink` has
 `via`, `mentions` and a snippet with links rendered as labels; most recently updated first.
 Also: `extractWikiLinks`, `createLinkResolver`, `outgoingLinks`, `linkGraph`.
+
+## Performance
+
+Documents get a dense integer slot; posting lists are unordered arrays with O(1) swap removal,
+queries accumulate scores in typed arrays and keep the top `limit` hits with a bounded heap,
+and word analysis (folding + stemming) is memoised. `lexical.equivalence.test.ts` checks hit
+for hit against the straightforward reference implementation. Figures and budgets:
+`docs/performance/BENCHMARKS.md`.

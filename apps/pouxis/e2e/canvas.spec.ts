@@ -6,7 +6,10 @@ test.describe('canvas', () => {
     const board = page.getByRole('application', { name: /^Toile « Lancement du nouveau site »/ });
     await expect(board).toHaveAccessibleName(/12 nœuds$/);
 
-    await page.getByRole('toolbar', { name: 'Outils' }).getByRole('button', { name: 'Nœud' }).click();
+    await page
+      .getByRole('toolbar', { name: 'Outils' })
+      .getByRole('button', { name: 'Nœud' })
+      .click();
     const box = await board.boundingBox();
     if (!box) throw new Error('canvas has no layout box');
     // Lower-left corner of the board: clear of the seeded mind map and of the floating chrome.
@@ -19,7 +22,10 @@ test.describe('canvas', () => {
 
     await expect(board).toHaveAccessibleName(/13 nœuds$/);
     // The outline lists every node as text.
-    await page.getByRole('radiogroup', { name: 'Affichage' }).getByRole('radio', { name: 'Plan' }).click();
+    await page
+      .getByRole('radiogroup', { name: 'Affichage' })
+      .getByRole('radio', { name: 'Plan' })
+      .click();
     await expect(page.getByRole('main').getByText('Nœud e2e')).toBeVisible();
   });
 });

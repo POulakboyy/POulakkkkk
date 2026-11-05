@@ -108,12 +108,21 @@ export function makeTasks(n: number, options: TaskSetOptions = {}): Task[] {
 }
 
 /** `count` events spread over the working hours of `days` days starting at `start`. */
-export function makeEvents(count: number, start: Timestamp, days: number, seed = 2): CalendarEvent[] {
+export function makeEvents(
+  count: number,
+  start: Timestamp,
+  days: number,
+  seed = 2,
+): CalendarEvent[] {
   const rand = rng(seed);
   const events: CalendarEvent[] = [];
   for (let i = 0; i < count; i++) {
     const day = Math.floor(rand() * days);
-    const begin = start + day * DAY + (8 + Math.floor(rand() * 9)) * HOUR + 15 * MINUTE * Math.floor(rand() * 4);
+    const begin =
+      start +
+      day * DAY +
+      (8 + Math.floor(rand() * 9)) * HOUR +
+      15 * MINUTE * Math.floor(rand() * 4);
     const length = 15 * MINUTE * (1 + Math.floor(rand() * 6));
     events.push({
       id: `e${i}`,
@@ -171,12 +180,58 @@ export const CAPTURE_LINES: readonly string[] = [
 ];
 
 const WORDS = [
-  'projet', 'réunion', 'client', 'rapport', 'idée', 'design', 'tâche', 'calendrier', 'note',
-  'graphe', 'écriture', 'chapitre', 'roman', 'budget', 'facture', 'voyage', 'sport', 'lecture',
-  'musique', 'recherche', 'créativité', 'concentration', 'énergie', 'matin', 'soir', 'semaine',
-  'objectif', 'habitude', 'journal', 'brouillon', 'synthèse', 'priorité', 'équipe', 'produit',
-  'meeting', 'draft', 'review', 'focus', 'deadline', 'planning', 'sketch', 'outline', 'garden',
-  'kitchen', 'invoice', 'travel', 'family', 'health', 'reading', 'writing', 'music', 'growth',
+  'projet',
+  'réunion',
+  'client',
+  'rapport',
+  'idée',
+  'design',
+  'tâche',
+  'calendrier',
+  'note',
+  'graphe',
+  'écriture',
+  'chapitre',
+  'roman',
+  'budget',
+  'facture',
+  'voyage',
+  'sport',
+  'lecture',
+  'musique',
+  'recherche',
+  'créativité',
+  'concentration',
+  'énergie',
+  'matin',
+  'soir',
+  'semaine',
+  'objectif',
+  'habitude',
+  'journal',
+  'brouillon',
+  'synthèse',
+  'priorité',
+  'équipe',
+  'produit',
+  'meeting',
+  'draft',
+  'review',
+  'focus',
+  'deadline',
+  'planning',
+  'sketch',
+  'outline',
+  'garden',
+  'kitchen',
+  'invoice',
+  'travel',
+  'family',
+  'health',
+  'reading',
+  'writing',
+  'music',
+  'growth',
 ];
 
 /** A word drawn from a Zipf-like distribution over a synthetic vocabulary of `vocab` words. */
@@ -212,7 +267,13 @@ export function makeGraph(n: number, seed = 5, extraEdgeRatio = 0.5): Graph {
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
   for (let i = 0; i < n; i++) {
-    nodes.push({ id: `n${i}`, label: `Idée ${i}`, kind: 'idea', x: rand() * 2000, y: rand() * 2000 });
+    nodes.push({
+      id: `n${i}`,
+      label: `Idée ${i}`,
+      kind: 'idea',
+      x: rand() * 2000,
+      y: rand() * 2000,
+    });
     if (i > 0) edges.push({ id: `te${i}`, from: `n${Math.floor(rand() * i)}`, to: `n${i}` });
   }
   const extra = Math.floor(n * extraEdgeRatio);
@@ -228,7 +289,10 @@ export function makeGraph(n: number, seed = 5, extraEdgeRatio = 0.5): Graph {
  * One year of activity ending at `NOW`: ~`perDay` tasks created per day, most completed with
  * one to three focus logs inside waking hours, plus one journal entry per day.
  */
-export function makeYearOfLogs(perDay = 8, seed = 6): { tasks: Task[]; journal: JournalEntry[]; events: CalendarEvent[] } {
+export function makeYearOfLogs(
+  perDay = 8,
+  seed = 6,
+): { tasks: Task[]; journal: JournalEntry[]; events: CalendarEvent[] } {
   const rand = rng(seed);
   const tasks: Task[] = [];
   const journal: JournalEntry[] = [];
@@ -240,7 +304,11 @@ export function makeYearOfLogs(perDay = 8, seed = 6): { tasks: Task[]; journal: 
       const logs = 1 + Math.floor(rand() * 3);
       for (let l = 0; l < logs; l++) {
         const begin = dayStart + (7 + Math.floor(rand() * 14)) * HOUR;
-        timeLogs.push({ start: begin, end: begin + (10 + Math.floor(rand() * 50)) * MINUTE, kind: 'focus' });
+        timeLogs.push({
+          start: begin,
+          end: begin + (10 + Math.floor(rand() * 50)) * MINUTE,
+          kind: 'focus',
+        });
       }
       const done = rand() < 0.75;
       const id = `y${d}-${k}`;

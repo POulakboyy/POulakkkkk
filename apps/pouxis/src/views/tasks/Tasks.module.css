@@ -97,6 +97,13 @@
   color: var(--ink-3);
 }
 
+/* Phones: the syntax tip only appears while typing — the header stays short (progressive disclosure). */
+@media (max-width: 767px) {
+  .quickAdd:not(:focus-within) .quickHint:not(:has(.parsed)) {
+    display: none;
+  }
+}
+
 .parsed {
   display: flex;
   flex-wrap: wrap;
@@ -386,7 +393,6 @@
   scroll-snap-align: start;
   outline: var(--border-width-strong) dashed transparent;
   outline-offset: -2px;
-  transition: outline-color var(--dur-fast) var(--ease-standard);
 }
 
 .column[data-over='true'],

@@ -3,7 +3,13 @@ import { DAY, MINUTE, dayKey, endOfDay, fromZoned, startOfDay } from '../time.ts
 import { createDayLookup } from './internal.ts';
 
 describe('createDayLookup', () => {
-  for (const zone of ['Europe/Paris', 'America/Santiago', 'Asia/Kathmandu', 'Pacific/Apia', 'UTC']) {
+  for (const zone of [
+    'Europe/Paris',
+    'America/Santiago',
+    'Asia/Kathmandu',
+    'Pacific/Apia',
+    'UTC',
+  ]) {
     it(`matches dayKey/startOfDay/endOfDay over 2026 in ${zone}`, () => {
       const localDay = createDayLookup(zone);
       const start = fromZoned({ year: 2026, month: 1, day: 1 }, 'UTC');

@@ -4,7 +4,13 @@
  */
 import type { Id } from '../model.ts';
 import { docFilter, makeSnippet } from './lexical.ts';
-import type { SearchDoc, SearchHit, SearchIndex, SearchIndexOptions, SearchOptions } from './lexical.ts';
+import type {
+  SearchDoc,
+  SearchHit,
+  SearchIndex,
+  SearchIndexOptions,
+  SearchOptions,
+} from './lexical.ts';
 import { tokenize, type Token } from './text.ts';
 
 const TITLE = 0;
@@ -279,4 +285,3 @@ export function createReferenceIndex(options: SearchIndexOptions = {}): SearchIn
     search,
   };
 }
-

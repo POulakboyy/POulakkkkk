@@ -100,7 +100,11 @@ export function MatrixView({ visible }: { visible: readonly Task[] }) {
           );
         })}
       </div>
-      <DragGhost drag={dnd.drag} task={dnd.drag ? byId.get(dnd.drag.id) : undefined} />
+      <DragGhost
+        drag={dnd.drag}
+        task={dnd.drag ? byId.get(dnd.drag.id) : undefined}
+        ghostRef={dnd.ghostRef}
+      />
     </div>
   );
 }

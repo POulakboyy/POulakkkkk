@@ -280,12 +280,7 @@ function periodStart(plan: Plan, k: number): number {
 }
 
 /** Sorted, deduplicated instants of period `k`. */
-function periodInstants(
-  plan: Plan,
-  k: number,
-  tz: TimeZone,
-  offsetAt: OffsetLookup,
-): Timestamp[] {
+function periodInstants(plan: Plan, k: number, tz: TimeZone, offsetAt: OffsetLookup): Timestamp[] {
   const days = candidateDays(plan, k).filter((d) => !plan.holidays?.has(d));
   if (days.length === 0) return [];
   let instances = expandTimes(plan, days);

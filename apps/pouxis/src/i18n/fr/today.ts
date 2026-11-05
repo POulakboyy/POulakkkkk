@@ -120,10 +120,9 @@ export const today = {
     nextFocus: 'Ensuite : focus de {duration}',
     ready: 'Prêt pour la session suivante',
     pickTask: 'Choisissez une tâche pour commencer',
-    dndOn: 'Ne pas déranger est activé',
-    dndOff: 'Ne pas déranger est désactivé',
-    dndUnavailable:
-      'Ne pas déranger n’est pas disponible ici. Coupez les notifications à la main si besoin.',
+    dndOn: 'Notifications coupées pendant la session',
+    dndOff: 'Les notifications restent actives',
+    dndUnavailable: 'Indisponible sur cet appareil : coupez les notifications à la main.',
     sessionDone: 'Session terminée · {duration} de focus',
     breakDone: 'Fin de la pause',
     breakIdeas: {
@@ -186,7 +185,7 @@ export const today = {
 
   /** WIP limiter (2.15): high-priority tasks planned today vs. the limit. */
   wip: {
-    label: '{count}/{limit} priorités',
+    label: '{count} sur {limit} priorités',
     a11y: '{count} tâches prioritaires prévues aujourd’hui, pour une limite de {limit}',
     exceeded:
       'Plus de {limit} priorités aujourd’hui : la mémoire de travail ne retient que quelques éléments à la fois.',

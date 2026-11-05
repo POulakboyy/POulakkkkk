@@ -36,7 +36,10 @@ test.describe('navigation', () => {
     }
     for (const view of MORE_VIEWS) {
       await page.getByRole('banner').getByRole('button', { name: 'Plus', exact: true }).click();
-      await page.getByRole('menu', { name: 'Plus' }).getByRole('menuitem', { name: VIEW_LABELS[view] }).click();
+      await page
+        .getByRole('menu', { name: 'Plus' })
+        .getByRole('menuitem', { name: VIEW_LABELS[view] })
+        .click();
       await expectView(page, view);
       await expect(page.getByRole('menu')).toBeHidden();
     }

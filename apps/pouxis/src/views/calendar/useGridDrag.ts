@@ -43,7 +43,8 @@ export interface GridDragOptions {
 }
 
 export function useGridDrag(options: GridDragOptions) {
-  const [preview, setPreview] = useState<GridPreview | null>(null);
+  const [previewState, setPreview] = useState<GridPreview | null>(null);
+  const preview = useRef<GridPreview | null>(null);
   const active = useRef<Active | null>(null);
   const suppressClick = useRef(false);
   const opts = useRef(options);
@@ -57,19 +58,25 @@ export function useGridDrag(options: GridDragOptions) {
       a.started = true;
     }
     const o = opts.current;
+    const wasStarted = preview.current !== null;
+    let slot: Slot;
     if (a.key === null) {
-      a.slot = drawSlot(a.origin.day, a.anchorMin, o.minuteAt(e.clientY));
-      setPreview({ slot: a.slot });
+      slot = drawSlot(a.origin.day, a.anchorMin, o.minuteAt(e.clientY));
     } else {
       const deltaMin = (dy / o.hourHeight) * 60;
       const deltaDay = a.gesture === 'move' ? o.columnAt(e.clientX) - a.origin.day : 0;
-      a.slot = applyGesture(a.gesture, a.origin, deltaMin, deltaDay, o.dayCount);
-      setPreview({ key: a.key, slot: a.slot });
+      slot = applyGesture(a.gesture, a.origin, deltaMin, deltaDay, o.dayCount);
     }
+    // Slots snap to steps: most pointer moves land on the same one, skip those re-renders.
+    if (wasStarted && sameSlot(slot, a.slot)) return;
+    a.slot = slot;
+    preview.current = a.key === null ? { slot } : { key: a.key, slot };
+    setPreview(preview.current);
   };
 
   const finish = (a: Active, commit: boolean) => {
     active.current = null;
+    preview.current = null;
     setPreview(null);
     if (!a.started) return;
     suppressClick.current = true;
@@ -129,5 +136,8 @@ export function useGridDrag(options: GridDragOptions) {
     return was;
   };
 
-  return { preview, startEvent, startDraw, consumeClick };
+  return { preview: previewState, startEvent, startDraw, consumeClick };
 }
+
+const sameSlot = (a: Slot, b: Slot): boolean =>
+  a.day === b.day && a.startMin === b.startMin && a.endMin === b.endMin;

@@ -26,14 +26,7 @@ import {
 } from './fixtures.ts';
 
 export type Group =
-  | 'tasks'
-  | 'scheduler'
-  | 'recurrence'
-  | 'nlp'
-  | 'search'
-  | 'graph'
-  | 'sync'
-  | 'insights';
+  'tasks' | 'scheduler' | 'recurrence' | 'nlp' | 'search' | 'graph' | 'sync' | 'insights';
 
 export interface Scenario {
   group: Group;
@@ -146,7 +139,13 @@ function taskScenarios(size: string, data: () => Task[], budgetScale: number): S
 /* Scheduler                                                                                   */
 /* ------------------------------------------------------------------------------------------ */
 
-function routeScenario(name: string, days: number, events: number, count: number, budgetMs: number): Scenario {
+function routeScenario(
+  name: string,
+  days: number,
+  events: number,
+  count: number,
+  budgetMs: number,
+): Scenario {
   return {
     group: 'scheduler',
     name,
@@ -178,7 +177,13 @@ const schedulerScenarios: Scenario[] = [
     setup: () => {
       const day = startOfDay(NOW, ZONE);
       const floating = makeRoutableTasks(200).map((t) => ({ ...t, floatingDay: day }));
-      const input = { day: NOW, tasks: floating, events: makeEvents(20, day, 1), prefs: PREFS, now: NOW };
+      const input = {
+        day: NOW,
+        tasks: floating,
+        events: makeEvents(20, day, 1),
+        prefs: PREFS,
+        now: NOW,
+      };
       return () => scheduler.magnetize(input);
     },
   },
@@ -217,7 +222,12 @@ const recurrenceScenarios: Scenario[] = [
     name: 'recurrence.parseRule × 1000 (literal, cron, RRULE)',
     budgetMs: 50,
     setup: () => {
-      const texts = ['tous les lundis à 9h', '0 9 * * 1-5', 'FREQ=WEEKLY;BYDAY=MO,TH', 'every 2 weeks on friday'];
+      const texts = [
+        'tous les lundis à 9h',
+        '0 9 * * 1-5',
+        'FREQ=WEEKLY;BYDAY=MO,TH',
+        'every 2 weeks on friday',
+      ];
       return () => {
         for (let i = 0; i < 1000; i++) recurrence.parseRule(texts[i % texts.length] as string);
       };
@@ -237,7 +247,8 @@ const nlpScenarios: Scenario[] = [
     setup: () => {
       const ctx = { now: NOW, timeZone: ZONE, locale: 'fr' as const };
       return () => {
-        for (let i = 0; i < 1000; i++) nlp.parse(CAPTURE_LINES[i % CAPTURE_LINES.length] as string, ctx);
+        for (let i = 0; i < 1000; i++)
+          nlp.parse(CAPTURE_LINES[i % CAPTURE_LINES.length] as string, ctx);
       };
     },
   },
@@ -489,7 +500,14 @@ const insightScenarios: Scenario[] = [
       const { tasks: list, events, journal } = year();
       const weekStart = startOfWeek(NOW - 7 * DAY, ZONE);
       return () =>
-        insights.weeklyReview({ tasks: list, events, journal, weekStart, timeZone: ZONE, now: NOW + HOUR });
+        insights.weeklyReview({
+          tasks: list,
+          events,
+          journal,
+          weekStart,
+          timeZone: ZONE,
+          now: NOW + HOUR,
+        });
     },
   },
   {

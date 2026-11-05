@@ -4,7 +4,7 @@ import type { Task } from '@pouxis/core';
 import { IconGrip, Portal, cx } from '../../ui/index.ts';
 import { useTasks } from './context.ts';
 import { TaskMeta } from './TaskMeta.tsx';
-import type { DragState, useDragDrop } from './useDragDrop.ts';
+import { ghostTransform, type DragState, type useDragDrop } from './useDragDrop.ts';
 import s from './Tasks.module.css';
 
 type Dnd = ReturnType<typeof useDragDrop>;
@@ -47,17 +47,23 @@ export function TaskCard({ task, zone, dnd, instructionsId, footer }: TaskCardPr
 }
 
 /** Floating copy of the card under the pointer while dragging. */
-export function DragGhost({ drag, task }: { drag: DragState | null; task: Task | undefined }) {
+export function DragGhost({
+  drag,
+  task,
+  ghostRef,
+}: {
+  drag: DragState | null;
+  task: Task | undefined;
+  ghostRef: Dnd['ghostRef'];
+}) {
   if (!drag || drag.via !== 'pointer' || !task) return null;
   return (
     <Portal>
       <div
+        ref={ghostRef}
         className={s.ghost}
         aria-hidden="true"
-        style={{
-          width: drag.width,
-          transform: `translate3d(${drag.x - drag.dx}px, ${drag.y - drag.dy}px, 0) rotate(-1.5deg)`,
-        }}
+        style={{ width: drag.width, transform: ghostTransform(drag) }}
       >
         <span className={s.cardTitle}>{task.title}</span>
       </div>

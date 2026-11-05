@@ -27,12 +27,16 @@ afterEach(() => {
 });
 
 describe('labFeatures', () => {
-  it('exposes five features with localised copy', () => {
+  it('exposes nine features with localised copy', () => {
     expect(labFeatures.map((f) => f.id)).toEqual([
       'intention',
+      'premortem',
       'energy',
+      'transition',
       'breaks',
+      'incubation',
       'wins',
+      'freshstart',
       'shutdown',
     ]);
     expect(labFeatures[0]!.title).toBe('Intention du jour');

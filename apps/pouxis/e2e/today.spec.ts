@@ -12,12 +12,16 @@ test.describe('today', () => {
 
     const summary = page.getByRole('listitem').filter({ hasText: 'Journée planifiée' });
     await expect(summary).toContainText(/\d+ tâches? placées?/);
-    await expect(timeline.getByRole('checkbox', { name: new RegExp(`^${task}, de `) })).toBeVisible();
+    await expect(
+      timeline.getByRole('checkbox', { name: new RegExp(`^${task}, de `) }),
+    ).toBeVisible();
     await expect(tray.getByText(task)).toBeHidden();
 
     await summary.getByRole('button', { name: 'Annuler' }).click();
     await expect(tray.getByText(task)).toBeVisible();
-    await expect(timeline.getByRole('checkbox', { name: new RegExp(`^${task}, de `) })).toBeHidden();
+    await expect(
+      timeline.getByRole('checkbox', { name: new RegExp(`^${task}, de `) }),
+    ).toBeHidden();
   });
 
   test('focus player starts, collapses with Escape and expands again', async ({ page }) => {
@@ -27,7 +31,9 @@ test.describe('today', () => {
 
     const player = page.getByRole('dialog', { name: task });
     await expect(player).toBeVisible();
-    await expect(player.getByRole('progressbar', { name: /^Focus, il reste 25 minutes/ })).toBeVisible();
+    await expect(
+      player.getByRole('progressbar', { name: /^Focus, il reste 25 minutes/ }),
+    ).toBeVisible();
     await expect(player.getByRole('button', { name: 'Mettre en pause' })).toBeVisible();
 
     await page.keyboard.press('Escape');

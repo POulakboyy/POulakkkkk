@@ -16,18 +16,28 @@ test.describe('ideas', () => {
 
     await page.goto('/#/tasks');
     const inbox = page.getByRole('region', { name: /^À trier/ });
-    await expect(inbox.getByRole('checkbox', { name: 'Terminer « Appeler le plombier »' })).toBeVisible();
-    await expect(inbox.getByRole('checkbox', { name: 'Terminer « Idée de podcast e2e »' })).toBeVisible();
+    await expect(
+      inbox.getByRole('checkbox', { name: 'Terminer « Appeler le plombier »' }),
+    ).toBeVisible();
+    await expect(
+      inbox.getByRole('checkbox', { name: 'Terminer « Idée de podcast e2e »' }),
+    ).toBeVisible();
   });
 
-  test('a new note can be written and found again', async ({ page }) => {
+  test('a new note can be written and found again', async ({ page, isMobile }) => {
     await openView(page, 'ideas');
     await page.getByRole('button', { name: 'Nouvelle note' }).click();
     const title = page.getByRole('textbox', { name: 'Titre de la note' });
     await expect(title).toBeFocused();
     await title.fill('Note e2e');
-    await page.getByRole('textbox', { name: 'Contenu de la note' }).fill('Écrite par la suite e2e.');
+    // The body is a custom editor (role="textbox"), driven like a user would.
+    await page.getByRole('textbox', { name: 'Contenu de la note' }).click();
+    await page.keyboard.type('Écrite par la suite e2e.');
+    // Phones show the list and the editor one at a time.
+    if (isMobile) await page.getByRole('button', { name: 'Toutes les notes' }).click();
     await page.getByRole('searchbox', { name: 'Rechercher dans les notes' }).fill('Note e2e');
-    await expect(page.getByRole('button', { name: /^Note e2e/ })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /^Note e2e Écrite par la suite e2e\./ }),
+    ).toBeVisible();
   });
 });

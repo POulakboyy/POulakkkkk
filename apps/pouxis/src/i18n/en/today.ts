@@ -111,10 +111,9 @@ export const today: typeof fr = {
     nextFocus: 'Up next: {duration} of focus',
     ready: 'Ready for the next session',
     pickTask: 'Pick a task to begin',
-    dndOn: 'Do Not Disturb is on',
-    dndOff: 'Do Not Disturb is off',
-    dndUnavailable:
-      'Do Not Disturb isn’t available here. Silence notifications manually if needed.',
+    dndOn: 'Notifications are silenced during the session',
+    dndOff: 'Notifications stay on',
+    dndUnavailable: 'Not available on this device: silence notifications manually.',
     sessionDone: 'Session complete · {duration} of focus',
     breakDone: 'Break’s over',
     breakIdeas: {
@@ -174,7 +173,7 @@ export const today: typeof fr = {
 
   /** WIP limiter (2.15): high-priority tasks planned today vs. the limit. */
   wip: {
-    label: '{count}/{limit} priorities',
+    label: '{count} of {limit} priorities',
     a11y: '{count} high-priority tasks planned today, against a limit of {limit}',
     exceeded: 'More than {limit} priorities today: working memory only holds a few items at once.',
   },

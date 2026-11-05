@@ -125,7 +125,9 @@ export function Timeline(props: TimelineProps) {
                   lane={lanes.get(entry.item.id)}
                   now={now}
                   landed={props.landed.has(entry.item.task?.id ?? entry.item.id)}
-                  focused={entry.item.task !== undefined && entry.item.task.id === props.focusTaskId}
+                  focused={
+                    entry.item.task !== undefined && entry.item.task.id === props.focusTaskId
+                  }
                   decay={props.decayOf(entry.item)}
                   onToggle={props.onToggle}
                   onFocus={props.onFocus}
@@ -236,30 +238,30 @@ function Gap(props: {
 
   return (
     <li className={s.gapItem} style={pos(props.window, props.gap)}>
-    <button
-      type="button"
-      className={cx(s.gap, over && s.gapOver)}
-      onClick={() => props.onGap(props.gap)}
-      onDragOver={(e) => {
-        if (!accepts(e)) return;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        setOver(true);
-      }}
-      onDragLeave={() => setOver(false)}
-      onDrop={(e) => {
-        setOver(false);
-        const id = e.dataTransfer.getData(TASK_DRAG_TYPE);
-        if (!id) return;
-        e.preventDefault();
-        props.onDrop(id, props.gap);
-      }}
-      aria-label={`${t('today.timeline.freeSlot', { duration: f.duration(minutes) })}, ${f.timeRange(props.gap.start, props.gap.end)}. ${t('today.timeline.freeSlotHint')}`}
-    >
-      <span className={s.gapLabel}>
-        {t('today.timeline.freeSlot', { duration: f.duration(minutes) })}
-      </span>
-    </button>
+      <button
+        type="button"
+        className={cx(s.gap, over && s.gapOver)}
+        onClick={() => props.onGap(props.gap)}
+        onDragOver={(e) => {
+          if (!accepts(e)) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          setOver(true);
+        }}
+        onDragLeave={() => setOver(false)}
+        onDrop={(e) => {
+          setOver(false);
+          const id = e.dataTransfer.getData(TASK_DRAG_TYPE);
+          if (!id) return;
+          e.preventDefault();
+          props.onDrop(id, props.gap);
+        }}
+        aria-label={`${t('today.timeline.freeSlot', { duration: f.duration(minutes) })}, ${f.timeRange(props.gap.start, props.gap.end)}. ${t('today.timeline.freeSlotHint')}`}
+      >
+        <span className={s.gapLabel}>
+          {t('today.timeline.freeSlot', { duration: f.duration(minutes) })}
+        </span>
+      </button>
     </li>
   );
 }

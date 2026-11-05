@@ -35,7 +35,9 @@ test.describe('tasks', () => {
     const form = page.getByRole('form', { name: 'Nouvelle tâche' });
     await form.getByRole('textbox', { name: 'Nouvelle tâche' }).fill('Ranger le bureau');
     await form.getByRole('button', { name: 'Ajouter' }).click();
-    await expect(page.getByRole('checkbox', { name: 'Terminer « Ranger le bureau »' })).toBeVisible();
+    await expect(
+      page.getByRole('checkbox', { name: 'Terminer « Ranger le bureau »' }),
+    ).toBeVisible();
   });
 
   test('completing a task can be undone from the toast', async ({ page }) => {

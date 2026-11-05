@@ -44,6 +44,10 @@ export interface DragState {
   width: number;
 }
 
+/** Ghost position: the card follows the pointer, keeping the grab offset. */
+export const ghostTransform = (d: DragState): string =>
+  `translate3d(${d.x - d.dx}px, ${d.y - d.dy}px, 0) rotate(-1.5deg)`;
+
 export interface DragDropOptions {
   zones: readonly string[];
   onDrop: (id: string, zone: string) => void;
@@ -82,6 +86,8 @@ export function useDragDrop(opts: DragDropOptions) {
   const suppressClick = useRef(false);
   const dragRef = useRef<DragState | null>(null);
   dragRef.current = drag;
+  /** The floating ghost: moved directly (transform only) so pointer moves skip React. */
+  const ghostRef = useRef<HTMLDivElement | null>(null);
 
   const begin = useCallback((x: number, y: number) => {
     const p = pending.current;
@@ -138,8 +144,11 @@ export function useDragDrop(opts: DragDropOptions) {
       const p = pending.current;
       const current = dragRef.current;
       if (current && current.via === 'pointer') {
-        const over = zoneAt(e.clientX, e.clientY);
-        setDrag({ ...current, x: e.clientX, y: e.clientY, over });
+        const next = { ...current, x: e.clientX, y: e.clientY, over: zoneAt(e.clientX, e.clientY) };
+        dragRef.current = next;
+        // Re-render only when the target zone changes; otherwise just move the ghost.
+        if (next.over !== current.over || !ghostRef.current) setDrag(next);
+        else ghostRef.current.style.transform = ghostTransform(next);
         return;
       }
       if (!p) return;
@@ -212,5 +221,5 @@ export function useDragDrop(opts: DragDropOptions) {
     'data-over': drag?.over === zone ? 'true' : undefined,
   });
 
-  return { drag, itemPointerProps, handleKeyProps, zoneProps };
+  return { drag, ghostRef, itemPointerProps, handleKeyProps, zoneProps };
 }

@@ -15,9 +15,34 @@ function rng(seed: number): () => number {
 }
 
 const WORDS = [
-  'idée', 'idées', 'projet', 'projets', 'planning', 'planned', 'plan', 'jardin', 'écrire',
-  'roman', 'story', 'stories', 'note', 'notes', 'concentration', 'concert', 'concevoir', 'le',
-  'the', 'and', 'réunion', 'client', 'Œuvre', 'rapport', 'v2', '2026', 'conception', 'idéal',
+  'idée',
+  'idées',
+  'projet',
+  'projets',
+  'planning',
+  'planned',
+  'plan',
+  'jardin',
+  'écrire',
+  'roman',
+  'story',
+  'stories',
+  'note',
+  'notes',
+  'concentration',
+  'concert',
+  'concevoir',
+  'le',
+  'the',
+  'and',
+  'réunion',
+  'client',
+  'Œuvre',
+  'rapport',
+  'v2',
+  '2026',
+  'conception',
+  'idéal',
 ];
 
 function sentence(rand: () => number, min: number, spread: number): string {
@@ -38,7 +63,18 @@ function randomDoc(rand: () => number, id: string): SearchDoc {
   };
 }
 
-const QUERIES = ['idée', 'projet plan ', 'con', 'conc', 'story ', 'le the', 'jard', 'écrire roman', 'zzz', 'i'];
+const QUERIES = [
+  'idée',
+  'projet plan ',
+  'con',
+  'conc',
+  'story ',
+  'le the',
+  'jard',
+  'écrire roman',
+  'zzz',
+  'i',
+];
 
 describe('createSearchIndex matches the reference implementation', () => {
   for (const seed of [1, 2, 3, 4, 5]) {

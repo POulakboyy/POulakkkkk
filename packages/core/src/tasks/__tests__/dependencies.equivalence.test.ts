@@ -27,7 +27,9 @@ function randomTasks(seed: number, n: number): Task[] {
       rand() < 0.1 ? `ghost${i}` : `t${Math.floor(rand() * n)}`,
     );
     const id = rand() < 0.05 ? `t${Math.floor(rand() * n)}` : `t${i}`;
-    list.push(task(id, { dependsOn: deps, status: STATUSES[Math.floor(rand() * 5)] as TaskStatus }));
+    list.push(
+      task(id, { dependsOn: deps, status: STATUSES[Math.floor(rand() * 5)] as TaskStatus }),
+    );
   }
   return list;
 }

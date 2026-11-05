@@ -125,7 +125,13 @@ class LoadClient {
     const exp = Math.floor(Date.now() / 1000) + 3600;
     const welcome = client.next();
     client.ws.send(
-      JSON.stringify({ t: 'hello', space, node, since: null, token: signToken({ space, exp }, SECRET) }),
+      JSON.stringify({
+        t: 'hello',
+        space,
+        node,
+        since: null,
+        token: signToken({ space, exp }, SECRET),
+      }),
     );
     const message = await welcome;
     if (message.t !== 'welcome') throw new Error(`expected welcome, got ${message.t}`);
@@ -215,7 +221,12 @@ function percentiles(values: number[]) {
   const at = (q: number) =>
     sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil(q * sorted.length) - 1))] ?? 0;
   const r = (v: number) => Math.round(v * 100) / 100;
-  return { p50: r(at(0.5)), p95: r(at(0.95)), p99: r(at(0.99)), max: r(sorted[sorted.length - 1] ?? 0) };
+  return {
+    p50: r(at(0.5)),
+    p95: r(at(0.95)),
+    p99: r(at(0.99)),
+    max: r(sorted[sorted.length - 1] ?? 0),
+  };
 }
 
 const mib = (bytes: number): number => Math.round((bytes / 2 ** 20) * 10) / 10;
@@ -275,7 +286,12 @@ async function main(): Promise<void> {
           const envelopes = Array.from({ length: options.batch }, () => {
             counter++;
             const id = `${client.node}.${r}.${counter}`;
-            return { id, hlc: `${Date.now()}-${counter}-${client.node}`, node: client.node, payload };
+            return {
+              id,
+              hlc: `${Date.now()}-${counter}-${client.node}`,
+              node: client.node,
+              payload,
+            };
           });
           await client.push(envelopes);
         }

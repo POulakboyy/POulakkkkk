@@ -79,3 +79,9 @@ hourly/minutely rules, `count` together with `until`.
 FREQ (YEARLY…MINUTELY), INTERVAL, BYDAY (ordinals), BYMONTHDAY (negatives), BYMONTH, BYHOUR,
 BYMINUTE, BYSETPOS, COUNT, UNTIL (`YYYYMMDD`, floating or `Z` date-time), WKST. Any other
 part (SECONDLY, BYSECOND, BYYEARDAY, BYWEEKNO…) makes `parseRRule` return `null`.
+
+## Performance
+
+UTC offsets are sampled once per UTC day during an expansion (`offsets.ts`) instead of three
+`Intl` calls per occurrence; the exact offset is still computed on days with a DST change.
+Figures and budgets: `docs/performance/BENCHMARKS.md`.

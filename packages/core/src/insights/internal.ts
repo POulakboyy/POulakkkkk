@@ -133,7 +133,11 @@ export function createDayLookup(timeZone: TimeZone): (ts: Timestamp) => LocalDay
     if (last && ts >= last.start && ts < last.end) return last;
     let day = find(ts);
     if (!day) {
-      day = { key: dayKey(ts, timeZone), start: startOfDay(ts, timeZone), end: endOfDay(ts, timeZone) };
+      day = {
+        key: dayKey(ts, timeZone),
+        start: startOfDay(ts, timeZone),
+        end: endOfDay(ts, timeZone),
+      };
       const lastBucket = Math.floor((day.end - 1) / DAY);
       for (let b = Math.floor(day.start / DAY); b <= lastBucket; b++) {
         const list = buckets.get(b);

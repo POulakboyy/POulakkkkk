@@ -111,3 +111,7 @@
   font-weight: var(--weight-semibold);
   color: var(--ink-2);
 }
+
+.toggle {
+  align-self: flex-start;
+}

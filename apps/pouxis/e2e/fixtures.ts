@@ -10,14 +10,7 @@ const APP_PREFS_KEY = 'pouxis:app-prefs:v1';
 export const FIXED_NOW = new Date('2026-11-05T07:30:00+01:00');
 
 export type ViewId =
-  | 'today'
-  | 'tasks'
-  | 'calendar'
-  | 'canvas'
-  | 'ideas'
-  | 'insights'
-  | 'settings'
-  | 'lab';
+  'today' | 'tasks' | 'calendar' | 'canvas' | 'ideas' | 'insights' | 'settings' | 'lab';
 
 /** French navigation labels (canonical locale), in sidebar order. */
 export const VIEW_LABELS: Record<ViewId, string> = {

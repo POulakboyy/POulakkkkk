@@ -155,7 +155,7 @@ describe('TodayView', () => {
 
   it('shows the WIP indicator and an empty state', () => {
     renderToday();
-    expect(screen.getByText('0/5 priorités')).toBeTruthy();
+    expect(screen.getByText('0 sur 5 priorités')).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Une journée ouverte' })).toBeTruthy();
   });
 });

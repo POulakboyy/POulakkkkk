@@ -34,7 +34,9 @@ test.describe('calendar', () => {
     await display.getByRole('radio', { name: 'Mois' }).click();
     const month = main.getByRole('grid', { name: 'Vue du mois' });
     await expect(month).toBeVisible();
-    await expect(month.getByRole('gridcell', { name: /^jeudi 5 novembre, 4 événements/ })).toBeVisible();
+    await expect(
+      month.getByRole('gridcell', { name: /^jeudi 5 novembre, 4 événements/ }),
+    ).toBeVisible();
 
     await display.getByRole('radio', { name: 'Spirale' }).click();
     await expect(main.getByRole('heading', { level: 1, name: 'Spirale du temps' })).toBeVisible();
