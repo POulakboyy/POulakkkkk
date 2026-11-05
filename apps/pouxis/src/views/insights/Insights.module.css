@@ -87,17 +87,17 @@
   height: 100%;
 }
 
+/* The table toggle stays top-right at every width: wrapping it under the hint made it float
+   at the left edge of narrow cards, detached from the chart it controls. */
 .cardHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-2) var(--space-4);
 }
 
 .cardTitles {
   display: grid;
-  flex: 1 1 15rem;
   gap: var(--space-1);
   min-width: 0;
 }
@@ -119,7 +119,8 @@
 }
 
 .cardAction {
-  flex: none;
+  /* Optical alignment: the ghost button's label lines up with the card's right edge. */
+  margin-inline-end: calc(-1 * var(--space-3));
 }
 
 .muted {
@@ -578,6 +579,11 @@
 }
 
 @media (max-width: 720px) {
+  /* Cards keep their generous padding on desktop; on phones it ate a fifth of the width. */
+  .card.reveal {
+    padding: var(--space-5);
+  }
+
   .columns {
     grid-template-columns: minmax(0, 1fr);
   }
