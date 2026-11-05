@@ -97,6 +97,10 @@ describe('SettingsView', () => {
     const nav = screen.getByRole('navigation', { name: 'Sections des réglages' });
     expect(within(nav).getAllByRole('link')).toHaveLength(8);
     expect(screen.getByRole('heading', { level: 2, name: 'Clavier' })).toBeTruthy();
+    const current = within(nav)
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('aria-current') === 'location');
+    expect(current.map((link) => link.textContent)).toEqual(['Apparence']);
   });
 
   it('switches theme and steps the priorities per day', async () => {

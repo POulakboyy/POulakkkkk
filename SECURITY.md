@@ -74,7 +74,8 @@ privilèges via l'IPC Tauri, XSS, injection, accès non autorisé à un espace d
 Le modèle de menaces ([`docs/security/THREAT_MODEL.md`](docs/security/THREAT_MODEL.md)) et
 l'architecture de sécurité
 ([`docs/security/SECURITY_ARCHITECTURE.md`](docs/security/SECURITY_ARCHITECTURE.md)) décrivent
-les garanties attendues et les limites connues.
+les garanties attendues et les limites connues. La dernière revue de sécurité est consignée dans
+[`docs/security/REVIEW-2026-11.md`](docs/security/REVIEW-2026-11.md).
 
 ## Sphère de sécurité (_safe harbour_)
 
