@@ -123,9 +123,7 @@ export function segments(plan) {
 export function joinGraph(segs, { fps }) {
   const parts = [];
   for (let i = 0; i < segs.length; i += 1) {
-    parts.push(
-      `[${i}:v]fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,settb=AVTB[s${i}]`,
-    );
+    parts.push(`[${i}:v]fps=${fps},format=yuv420p,setpts=PTS-STARTPTS,settb=AVTB[s${i}]`);
   }
   let label = 's0';
   let lengthMs = segs[0].lengthMs;
