@@ -16,6 +16,7 @@ export const settings: typeof fr = {
     privacy: 'Privacy',
     data: 'Data',
     about: 'About',
+    lab: 'Lab',
   },
 
   appearance: {
@@ -43,6 +44,15 @@ export const settings: typeof fr = {
       hint: 'Gentle vibrations when you complete a task or link two nodes.',
     },
     textSize: 'Text size',
+    location: {
+      label: 'Location for following the sun',
+      hint: 'Used only on this device, to work out sunrise and sunset.',
+      locate: 'Use my location',
+      set: 'Location saved · {latitude}, {longitude}',
+      missing: 'Without a location, the theme follows your system.',
+      denied: 'Location unavailable. The theme follows your system for now.',
+      clear: 'Forget location',
+    },
   },
 
   work: {
@@ -79,6 +89,13 @@ export const settings: typeof fr = {
       hint: 'A task changes appearance after this many postponements, as a nudge to decide.',
       value: '{count, plural, one {After # postponement} other {After # postponements}}',
     },
+    hoursInvalid: 'The end time needs to come after the start time.',
+    chronotype: {
+      label: 'Sharpest time of day',
+      hint: 'Starting point of the energy map in Insights, then refined by your real days.',
+      unset: 'Not specified',
+    },
+    minutes: '{count} min',
   },
 
   focus: {
@@ -101,21 +118,65 @@ export const settings: typeof fr = {
     timeZoneAuto: 'Detect automatically',
     weekStart: 'First day of the week',
     changed: 'Language changed',
+    hint: 'Dates, times and numbers follow the chosen language.',
   },
 
   keyboard: {
     title: 'Keyboard shortcuts',
-    hint: 'Change any shortcut here, or in the JSON config file.',
+    hint: 'Pick a layout, then fine-tune any shortcut in JSON if you need to.',
     capture: 'Universal capture',
     record: 'Press the new key combination…',
     conflict: 'Already used by “{action}”.',
     replace: 'Replace',
     vim: 'Vim mode',
-    vimHint: 'h j k l navigation, plus normal and insert modes in editors.',
+    vimHint: 'Vim: g then a letter to switch views, j and k to move between items, / to capture.',
     openFile: 'Open config file',
     invalidFile:
       'The config file has an error on line {line}: {reason}. Your previous shortcuts are still active.',
     resetAll: 'Restore all shortcuts',
+    preset: 'Layout',
+    presets: {
+      default: 'Standard',
+      vim: 'Vim',
+    },
+    editor: 'Custom shortcuts (JSON)',
+    editorHint:
+      'Map an action to one or more keys, for example “mod+k” or “g t”. null removes a shortcut.',
+    apply: 'Apply',
+    applied: 'Shortcuts applied',
+    valid: 'Configuration is valid',
+    template: 'Start from the current layout',
+    table: 'Active shortcuts',
+    action: 'Action',
+    keys: 'Keys',
+    none: 'None',
+    then: 'then',
+    errors: {
+      syntax: 'the JSON is malformed',
+      notObject: 'a JSON object is expected at the top level',
+      unknownAction: 'the action “{detail}” doesn’t exist',
+      invalidValue: 'a list of shortcuts is expected for “{detail}”',
+      invalidCombo: 'the shortcut “{detail}” isn’t recognized',
+      conflict: '“{detail}” is already used by “{other}”',
+    },
+    actions: {
+      commandOpen: 'Open the command bar',
+      commandPalette: 'Open commands',
+      navToday: 'Go to Today',
+      navTasks: 'Go to Tasks',
+      navCalendar: 'Go to Calendar',
+      navCanvas: 'Go to Canvas',
+      navIdeas: 'Go to Ideas',
+      navInsights: 'Go to Insights',
+      navSettings: 'Open settings',
+      navLab: 'Open the lab',
+      noteNew: 'New note',
+      focusStart: 'Start a focus',
+      themeCycle: 'Change theme',
+      zenToggle: 'Zen interface',
+      moveNext: 'Next item',
+      movePrevious: 'Previous item',
+    },
   },
 
   sync: {
@@ -140,6 +201,28 @@ export const settings: typeof fr = {
       removed: '“{name}” will no longer sync',
     },
     encryption: 'End-to-end encrypted: the server can’t read your data.',
+    url: 'Relay address',
+    urlHint: 'A POuxis server on https://, your own or one run by someone you trust.',
+    token: 'Access token',
+    tokenHint: 'Provided by whoever runs the relay.',
+    space: 'Space ID',
+    spaceHint: 'Leave empty on the first device, then copy the one shown here to the next ones.',
+    passphrase: 'Passphrase',
+    passphraseHint:
+      'At least 15 characters. It encrypts your data and never leaves this device. Without it, nobody can read them.',
+    passphraseShort: 'At least 15 characters, for strong encryption.',
+    show: 'Show passphrase',
+    hide: 'Hide passphrase',
+    connect: 'Connect this device',
+    connected: 'Sync turned on',
+    disable: 'Stop syncing',
+    disabled: 'Sync stopped. Your data stays on this device.',
+    unlock: 'Unlock',
+    locked: 'Enter the passphrase to resume syncing on this device.',
+    pending:
+      '{count, plural, =0 {Everything is sent} one {# change to send} other {# changes to send}}',
+    failed: 'Couldn’t connect: {reason}',
+    spaceValue: 'Space · {space}',
   },
 
   privacy: {
@@ -158,7 +241,7 @@ export const settings: typeof fr = {
   data: {
     export: {
       label: 'Export everything',
-      hint: 'A .zip archive with all your data as readable JSON, plus your files.',
+      hint: 'All your data as readable JSON, in a .zip archive or a single file.',
       action: 'Export my data',
       running: 'Preparing archive…',
       done: 'Archive ready',
@@ -194,5 +277,24 @@ export const settings: typeof fr = {
     changelog: 'What’s new',
     feedback: 'Report a problem',
     credits: 'Acknowledgements',
+    description: 'Time, task and idea management, designed for creative work and focus.',
+    licenceValue: 'GNU AGPL 3.0',
+    replay: 'Replay the intro',
+    gallery: 'Component library',
   },
+
+  nav: {
+    a11y: 'Settings sections',
+  },
+
+  exportFormat: {
+    label: 'Format',
+    zip: '.zip archive',
+    json: 'JSON file',
+  },
+  deleted: 'This device’s data has been deleted.',
+
+  decrease: 'Decrease',
+  increase: 'Increase',
+  backToSettings: 'Back to settings',
 };

@@ -20,4 +20,10 @@ export const nav: typeof fr = {
   closeSidebar: 'Hide sidebar',
   captureShortcut: 'Capture ({shortcut})',
   documentTitle: '{view} · POuxis',
+  lab: 'Lab',
+  labIntro: 'Experimental features to try freely. They may still change or go away.',
+  labEmpty: 'No experiments yet',
+  labEmptyHint: 'Experimental features will show up here as soon as they’re ready.',
+  gallery: 'Component library',
+  sidebarFooter: 'Settings and lab',
 };

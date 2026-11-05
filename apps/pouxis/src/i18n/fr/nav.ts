@@ -21,4 +21,11 @@ export const nav = {
   captureShortcut: 'Capturer ({shortcut})',
   /** Browser / window title: `{view}` is one of the labels above. */
   documentTitle: '{view} · POuxis',
+  lab: 'Labo',
+  labIntro:
+    'Des fonctions expérimentales, à essayer librement. Elles peuvent encore changer ou disparaître.',
+  labEmpty: 'Aucune expérience pour l’instant',
+  labEmptyHint: 'Les fonctions expérimentales apparaîtront ici dès qu’elles seront prêtes.',
+  gallery: 'Bibliothèque de composants',
+  sidebarFooter: 'Réglages et labo',
 };

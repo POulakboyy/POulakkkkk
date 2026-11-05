@@ -1,138 +1,212 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense, useCallback, useRef, type MouseEvent } from 'react';
 import { CommandBar, openCommandBar } from '../features/command/index.tsx';
 import { FocusMiniPlayer } from '../features/focus/index.tsx';
 import { useT } from '../i18n/index.ts';
-import { IconPlus } from '../ui/icons.tsx';
+import { useSyncStatus } from '../store/index.ts';
+import {
+  IconMore,
+  IconPlus,
+  IconSearch,
+  Kbd,
+  Menu,
+  Skeleton,
+  Toaster,
+  cx,
+  type MenuItem,
+} from '../ui/index.ts';
+import { useAppPrefs } from './appPrefs.ts';
 import { navigate, useRoute } from './router.ts';
-import { VIEWS } from './routes.ts';
+import { VIEWS, viewDef, type ViewDef } from './routes.ts';
+import { useDocumentMeta, usePlatformRouting, useShellKeymap } from './useShellEffects.ts';
 import s from './Shell.module.css';
 
+const MAX_TABS = 4;
+
 /**
- * App frame: a quiet sidebar on wide screens (Claude-like), a bottom tab bar with a central
- * capture button on phones (Instagram / Apple Music). The content area owns the rest.
+ * App frame: a quiet sidebar on wide screens (Claude-like), a glass header and a bottom tab bar
+ * with a central capture button on phones (Instagram / Apple Music). Views own the content.
  */
 export function Shell() {
   const t = useT();
   const { view } = useRoute();
-  const active = VIEWS.find((v) => v.id === view) ?? VIEWS[0]!;
+  const prefs = useAppPrefs();
+  const active = viewDef(view);
   const View = active.component;
+  const mainRef = useRef<HTMLElement>(null);
+  const getMain = useCallback(() => mainRef.current, []);
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        openCommandBar();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  useShellKeymap(prefs, getMain);
+  useDocumentMeta(active.label);
+  usePlatformRouting();
+
+  const main = VIEWS.filter((v) => v.group === 'main');
+  const secondary = VIEWS.filter((v) => v.group === 'secondary');
+  const tabs = VIEWS.filter((v) => v.mobileTab).slice(0, MAX_TABS);
+  const overflow = VIEWS.filter((v) => !tabs.includes(v));
 
   return (
     <div className={s.shell}>
-      <a className={s.skip} href="#main">
-        {t('nav.mainNavigation')}
+      <a className={s.skip} href="#main" onClick={skipToMain}>
+        {t('nav.skipToContent')}
       </a>
 
-      <nav className={s.sidebar} aria-label={t('nav.mainNavigation')}>
+      <nav className={cx(s.sidebar, 'px-chrome')} aria-label={t('nav.mainNavigation')}>
         <div className={s.brand}>
           <span className={s.logo} aria-hidden="true" />
           <span className={s.brandName}>{t('common.appName')}</span>
         </div>
-        <button type="button" className={s.capture} onClick={openCommandBar}>
+        <button type="button" className={s.capture} onClick={() => openCommandBar()}>
           <IconPlus size={18} />
           <span>{t('nav.capture')}</span>
-          <kbd className={s.kbd}>⌘K</kbd>
+          <Kbd keys="mod+k" className={s.kbd} />
         </button>
-        <ul role="list" className={s.navList}>
-          {VIEWS.map((v) => (
-            <li key={v.id}>
-              <a
-                href={`#/${v.id}`}
-                className={s.navItem}
-                aria-current={v.id === view ? 'page' : undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(v.id);
-                }}
-              >
-                <v.icon size={20} />
-                <span>{t(v.label)}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <button type="button" className={s.searchButton} onClick={() => openCommandBar()}>
+          <IconSearch size={18} />
+          <span>{t('nav.search')}</span>
+        </button>
+        <NavList views={main} current={view} />
+        <div className={s.sidebarFooter}>
+          <NavList views={secondary} current={view} />
+          <SyncIndicator />
+        </div>
       </nav>
 
-      <main id="main" className={s.main} tabIndex={-1}>
-        <Suspense
-          fallback={
-            <div className={s.loading} aria-busy="true">
-              {t('common.loading')}
-            </div>
-          }
-        >
+      <header className={cx(s.mobileHeader, 'px-chrome')}>
+        <span className={s.mobileBrand}>
+          <span className={s.logo} aria-hidden="true" />
+          <span className={s.brandName}>{t('common.appName')}</span>
+        </span>
+        <div className={s.mobileActions}>
+          <button
+            type="button"
+            className={s.headerButton}
+            aria-label={t('nav.search')}
+            onClick={() => openCommandBar()}
+          >
+            <IconSearch size={22} />
+          </button>
+          <Menu
+            label={t('nav.more')}
+            items={overflow.map((v): MenuItem => ({
+              id: v.id,
+              label: t(v.label),
+              icon: <v.icon size={18} />,
+              onSelect: () => navigate(v.id),
+            }))}
+            trigger={
+              <button type="button" className={s.headerButton} aria-label={t('nav.more')}>
+                <IconMore size={22} />
+              </button>
+            }
+          />
+        </div>
+      </header>
+
+      <main id="main" ref={mainRef} className={s.main} tabIndex={-1}>
+        <Suspense fallback={<ViewFallback label={t('common.loading')} />}>
           <View />
         </Suspense>
       </main>
 
       <FocusMiniPlayer />
 
-      <nav className={s.tabbar} aria-label={t('nav.mainNavigation')}>
-        {VIEWS.filter((v) => v.mobileTab).map((v, i) => (
-          <TabItem
-            key={v.id}
-            index={i}
-            id={v.id}
-            active={v.id === view}
-            label={t(v.label)}
-            Icon={v.icon}
-          />
+      <nav className={cx(s.tabbar, 'px-chrome')} aria-label={t('nav.mainNavigation')}>
+        {tabs.map((v, i) => (
+          <TabItem key={v.id} def={v} active={v.id === view} withCaptureBefore={i === 2} />
         ))}
       </nav>
 
       <CommandBar />
+      <Toaster />
     </div>
   );
 }
 
+function skipToMain(e: MouseEvent) {
+  // Hash routing owns `location.hash`: move focus without navigating.
+  e.preventDefault();
+  document.getElementById('main')?.focus();
+}
+
+function ViewFallback({ label }: { label: string }) {
+  return (
+    <div className={s.loading} aria-busy="true" aria-label={label}>
+      <Skeleton shape="text" width="40%" height={36} />
+      <Skeleton shape="rect" height={120} />
+      <Skeleton shape="rect" height={240} />
+    </div>
+  );
+}
+
+function NavList({ views, current }: { views: readonly ViewDef[]; current: string }) {
+  const t = useT();
+  return (
+    <ul role="list" className={s.navList}>
+      {views.map((v) => (
+        <li key={v.id}>
+          <a
+            href={`#/${v.id}`}
+            className={s.navItem}
+            aria-current={v.id === current ? 'page' : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(v.id);
+            }}
+          >
+            <v.icon size={20} />
+            <span>{t(v.label)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function SyncIndicator() {
+  const t = useT();
+  const status = useSyncStatus();
+  const label = t(`common.sync.${status}`);
+  return (
+    <p className={s.sync} data-status={status} title={t('common.sync.a11y', { status: label })}>
+      <span className={s.syncDot} aria-hidden="true" />
+      <span>{label}</span>
+    </p>
+  );
+}
+
 function TabItem({
-  id,
+  def,
   active,
-  label,
-  Icon,
-  index,
+  withCaptureBefore,
 }: {
-  id: (typeof VIEWS)[number]['id'];
+  def: ViewDef;
   active: boolean;
-  label: string;
-  Icon: (typeof VIEWS)[number]['icon'];
-  index: number;
+  withCaptureBefore: boolean;
 }) {
   const t = useT();
   return (
     <>
-      {index === 2 && (
+      {withCaptureBefore && (
         <button
           type="button"
           className={s.tabCapture}
-          onClick={openCommandBar}
+          onClick={() => openCommandBar()}
           aria-label={t('nav.capture')}
         >
           <IconPlus size={24} />
         </button>
       )}
       <a
-        href={`#/${id}`}
+        href={`#/${def.id}`}
         className={s.tab}
         aria-current={active ? 'page' : undefined}
         onClick={(e) => {
           e.preventDefault();
-          navigate(id);
+          navigate(def.id);
         }}
       >
-        <Icon size={24} />
-        <span className={s.tabLabel}>{label}</span>
+        <def.icon size={24} />
+        <span className={s.tabLabel}>{t(def.label)}</span>
       </a>
     </>
   );

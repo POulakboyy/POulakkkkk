@@ -2,6 +2,7 @@ import type { tasks as fr } from '../fr/tasks.ts';
 
 export const tasks: typeof fr = {
   title: 'Tasks',
+  summary: '{count, plural, =0 {Nothing to do for now} one {# open task} other {# open tasks}}',
 
   add: {
     placeholder: 'Add a task…',
@@ -19,6 +20,8 @@ export const tasks: typeof fr = {
     kanban: 'Board',
     matrix: 'Matrix',
     deps: 'Dependencies',
+    /** Narrow screens: the four segments share a phone width. */
+    depsShort: 'Links',
   },
 
   groups: {
@@ -129,6 +132,7 @@ export const tasks: typeof fr = {
       priority: 'Priority',
       tag: 'Tag',
       mode: 'Kind of work',
+      modeShort: 'Kind',
     },
     addCard: 'Add card',
     dropHere: 'Drop here',
@@ -177,6 +181,7 @@ export const tasks: typeof fr = {
     add: 'Add a prerequisite',
     remove: 'Remove dependency',
     cycle: 'Can’t do that: “{title}” already waits on this task, which would create a loop.',
+    cycleShort: 'would create a loop',
     a11y: 'Waiting on another task',
     hint: 'A task only shows up in Today once its prerequisites are done.',
     blocked: 'Blocked',
@@ -209,7 +214,7 @@ export const tasks: typeof fr = {
     swap: 'Swap with another',
     swapPick: 'Which one should wait?',
     tomorrow: 'Plan it for tomorrow',
-    withoutPriority: 'Add without priority',
+    withoutPriority: 'Keep it at medium priority',
     changeLimit: 'Change the limit',
     counter: '{count} of {limit} priorities',
     counterA11y: '{count} of {limit} priorities today',
@@ -245,6 +250,7 @@ export const tasks: typeof fr = {
     logged: '+{duration} on this task',
     total: 'Time spent: {duration}',
     estimateVsActual: 'Estimated {estimate} · actual {actual}',
+    sessionsLabel: 'Focus sessions',
     sessions: '{count, plural, one {# session} other {# sessions}}',
     noLogs: 'No time logged yet',
     history: 'Pomodoro sessions',
@@ -299,6 +305,14 @@ export const tasks: typeof fr = {
       monthly: 'Every month',
       yearly: 'Every year',
       custom: 'Custom…',
+    },
+    /** Rule text each preset writes into the field; must parse with `recurrence.parseRule`. */
+    presetRules: {
+      daily: 'every day',
+      weekdays: 'every weekday',
+      weekly: 'every week',
+      monthly: 'every month',
+      yearly: 'every year',
     },
     next: 'Next: {dates}',
     invalid: 'Rule not recognized. Try “every Monday” or “the 1st of every month”.',

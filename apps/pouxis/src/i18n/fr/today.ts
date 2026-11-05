@@ -133,6 +133,14 @@ export const today = {
       breathe: 'Trois respirations lentes.',
       walk: 'Quelques pas, loin de l’écran.',
     },
+    complete: 'Marquer comme terminée',
+    noise: {
+      white: 'Blanc',
+      pink: 'Rose',
+      brown: 'Brun',
+    },
+    soundHint: 'Généré sur l’appareil, sans fichier ni réseau.',
+    timerA11y: '{state}, il reste {duration}',
   },
 
   /** Toast when a dependency is completed and the next task appears in Today. */
@@ -169,9 +177,25 @@ export const today = {
     a11y: 'Transition de {duration}',
     hint: 'Un temps pour souffler entre deux réunions',
     remove: 'Retirer cette transition',
+    suggested: 'Transition suggérée',
+    add: 'Ajouter les transitions',
     removed: 'Transition retirée',
     added:
       '{count, plural, one {# transition ajoutée} other {# transitions ajoutées}} entre vos réunions',
+  },
+
+  /** WIP limiter (2.15): high-priority tasks planned today vs. the limit. */
+  wip: {
+    label: '{count}/{limit} priorités',
+    a11y: '{count} tâches prioritaires prévues aujourd’hui, pour une limite de {limit}',
+    exceeded:
+      'Plus de {limit} priorités aujourd’hui : la mémoire de travail ne retient que quelques éléments à la fois.',
+  },
+
+  /** Task decay (2.3): postponed tasks fade. Never guilt-tripping. */
+  decay: {
+    aging: 'Reportée plusieurs fois',
+    stale: 'Toujours utile ?',
   },
 
   /** Maker-schedule guard: a meeting would split a continuous deep-work stretch. */

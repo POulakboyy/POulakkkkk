@@ -1,6 +1,7 @@
 import {
   addDays,
   dayKey,
+  fromZoned,
   insights,
   startOfWeek,
   weekday,
@@ -51,6 +52,14 @@ export interface StripDay {
   today: boolean;
 }
 
+/** A recurring blocker, named by the user's own words (the engine's terms are stems). */
+export interface BlockerView {
+  key: string;
+  label: string;
+  count: number;
+  thisWeek: number;
+}
+
 export interface InsightsModel {
   week: { start: Timestamp; end: Timestamp };
   /** The review of the current week is "ready" on Sundays (7.9: Sunday evening report). */
@@ -60,6 +69,7 @@ export interface InsightsModel {
   streak: insights.Streak;
   strip: StripDay[];
   review: insights.WeeklyReview;
+  blockers: BlockerView[];
   skills: insights.SkillNode;
   deadEnds: StaleItem[];
   archive: StaleItem[];
@@ -75,6 +85,14 @@ export function computeInsights(input: InsightsInput): InsightsModel {
   const days = insights.activeDays({ tasks, timeZone });
   const today = dayKey(now, timeZone);
   const streak = insights.streak({ activeDays: days, today, rules: STREAK_RULES });
+  const review = insights.weeklyReview({
+    tasks,
+    events,
+    journal,
+    weekStart: start,
+    timeZone,
+    now: reviewNow,
+  });
 
   return {
     week: { start, end },
@@ -83,14 +101,8 @@ export function computeInsights(input: InsightsInput): InsightsModel {
     balance: insights.balance({ tasks, events, range: { start, end }, timeZone }),
     streak,
     strip: streakStrip(days, streak, now, timeZone, STREAK_STRIP_DAYS),
-    review: insights.weeklyReview({
-      tasks,
-      events,
-      journal,
-      weekStart: start,
-      timeZone,
-      now: reviewNow,
-    }),
+    review,
+    blockers: blockerViews(review.blockers, journal),
     skills: insights.skillTree(tasks),
     deadEnds: staleItems(insights.deadEnds(tasks, now), insights.deadEnds(notes, now)),
     archive: staleItems(insights.archiveCandidates(tasks, now, { timeZone }), []),
@@ -114,6 +126,26 @@ export function streakStrip(
     out.push({ day, state, today: i === 0 });
   }
   return out;
+}
+
+/** Labels each blocker with the text of its most recent journal entry. */
+export function blockerViews(
+  blockers: readonly insights.Blocker[],
+  journal: readonly JournalEntry[],
+): BlockerView[] {
+  const byId = new Map(journal.map((j) => [j.id, j]));
+  return blockers.map((b) => {
+    const latest = b.entryIds
+      .map((id) => byId.get(id))
+      .filter((j): j is JournalEntry => j !== undefined)
+      .sort((x, y) => y.createdAt - x.createdAt)[0];
+    return {
+      key: b.terms.join('|'),
+      label: latest?.text.trim() || b.terms.join(', '),
+      count: b.count,
+      thisWeek: b.thisWeek,
+    };
+  });
 }
 
 function staleItems(
@@ -169,10 +201,14 @@ export interface Message {
 export function suggestionMessage(
   s: insights.Suggestion,
   percent: (ratio: number) => string,
+  blockers: readonly BlockerView[] = [],
 ): Message {
   switch (s.kind) {
     case 'pad-estimates':
-      return { key: 'insights.weekly.suggestion.padEstimates', vars: { factor: percent(s.factor) } };
+      return {
+        key: 'insights.weekly.suggestion.padEstimates',
+        vars: { factor: percent(s.factor) },
+      };
     case 'trim-estimates':
       return {
         key: 'insights.weekly.suggestion.trimEstimates',
@@ -183,7 +219,10 @@ export function suggestionMessage(
     case 'address-blocker':
       return {
         key: 'insights.weekly.suggestion.addressBlocker',
-        vars: { terms: s.terms.join(', '), count: s.count },
+        vars: {
+          terms: blockers.find((b) => b.key === s.terms.join('|'))?.label ?? s.terms.join(', '),
+          count: s.count,
+        },
       };
     case 'protect-creation':
       return {
@@ -212,3 +251,38 @@ export function hourLabel(hour: number, locale: Locale): string {
 
 /** Display order of weekday rows: Monday first, Sunday last (ISO 8601). */
 export const WEEK_ROWS: readonly number[] = [1, 2, 3, 4, 5, 6, 0];
+
+export interface Segment {
+  x: number;
+  width: number;
+}
+
+/**
+ * Lays `values` end to end along `length`, proportionally, with a `gap` between visible
+ * segments only (a zero value takes no room and creates no gap).
+ */
+export function stackSegments(values: readonly number[], length: number, gap: number): Segment[] {
+  const total = values.reduce((sum, v) => sum + Math.max(0, v), 0);
+  const visible = values.filter((v) => v > 0).length;
+  if (total <= 0 || length <= 0) return values.map(() => ({ x: 0, width: 0 }));
+  const room = Math.max(0, length - gap * (visible - 1));
+  let x = 0;
+  return values.map((v) => {
+    if (!(v > 0)) return { x, width: 0 };
+    const seg = { x, width: (room * v) / total };
+    x += seg.width + gap;
+    return seg;
+  });
+}
+
+/** Local noon of a `YYYY-MM-DD` day key in `timeZone`: a safe timestamp to format that day. */
+export function dayNoon(day: string, timeZone: TimeZone): Timestamp {
+  const [year = 1970, month = 1, date = 1] = day.split('-').map(Number);
+  return fromZoned({ year, month, day: date, hour: 12 }, timeZone);
+}
+
+/** Weekday (0 = Sunday) of a `YYYY-MM-DD` day key: calendar arithmetic, zone-independent. */
+export function dayKeyWeekday(day: string): number {
+  const [year = 1970, month = 1, date = 1] = day.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, date)).getUTCDay();
+}

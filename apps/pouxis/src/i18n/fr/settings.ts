@@ -18,6 +18,7 @@ export const settings = {
     privacy: 'Confidentialité',
     data: 'Données',
     about: 'À propos',
+    lab: 'Labo',
   },
 
   appearance: {
@@ -46,6 +47,15 @@ export const settings = {
       hint: 'De légères vibrations quand vous terminez une tâche ou liez deux nœuds.',
     },
     textSize: 'Taille du texte',
+    location: {
+      label: 'Position pour suivre le soleil',
+      hint: 'Utilisée uniquement sur cet appareil, pour calculer le lever et le coucher du soleil.',
+      locate: 'Utiliser ma position',
+      set: 'Position enregistrée · {latitude}, {longitude}',
+      missing: 'Sans position, le thème suit celui du système.',
+      denied: 'Position indisponible. Le thème suit celui du système en attendant.',
+      clear: 'Oublier la position',
+    },
   },
 
   work: {
@@ -82,6 +92,13 @@ export const settings = {
       hint: 'Une tâche change d’apparence après ce nombre de reports, pour inviter à décider.',
       value: '{count, plural, one {Après # report} other {Après # reports}}',
     },
+    hoursInvalid: 'L’heure de fin doit venir après l’heure de début.',
+    chronotype: {
+      label: 'Moment de la journée le plus vif',
+      hint: 'Point de départ de la carte d’énergie du bilan, affinée ensuite par vos journées réelles.',
+      unset: 'Non précisé',
+    },
+    minutes: '{count} min',
   },
 
   focus: {
@@ -104,21 +121,66 @@ export const settings = {
     timeZoneAuto: 'Détecter automatiquement',
     weekStart: 'Premier jour de la semaine',
     changed: 'Langue changée',
+    hint: 'Les dates, heures et nombres suivent la langue choisie.',
   },
 
   keyboard: {
     title: 'Raccourcis clavier',
-    hint: 'Chaque raccourci se modifie ici, ou dans le fichier de configuration JSON.',
+    hint: 'Choisissez une disposition, puis ajustez chaque raccourci en JSON si besoin.',
     capture: 'Capture universelle',
     record: 'Appuyez sur la nouvelle combinaison…',
     conflict: 'Déjà utilisé par « {action} ».',
     replace: 'Remplacer',
     vim: 'Mode Vim',
-    vimHint: 'Navigation h j k l, et modes normal et insertion dans les éditeurs.',
+    vimHint:
+      'Vim : g puis une lettre pour changer de vue, j et k pour passer d’un élément à l’autre, / pour capturer.',
     openFile: 'Ouvrir le fichier de configuration',
     invalidFile:
       'Le fichier de configuration contient une erreur ligne {line} : {reason}. Les raccourcis précédents restent actifs.',
     resetAll: 'Rétablir tous les raccourcis',
+    preset: 'Disposition',
+    presets: {
+      default: 'Standard',
+      vim: 'Vim',
+    },
+    editor: 'Raccourcis personnalisés (JSON)',
+    editorHint:
+      'Associez une action à une ou plusieurs touches, par exemple « mod+k » ou « g t ». null retire un raccourci.',
+    apply: 'Appliquer',
+    applied: 'Raccourcis appliqués',
+    valid: 'Configuration valide',
+    template: 'Partir de la disposition actuelle',
+    table: 'Raccourcis actifs',
+    action: 'Action',
+    keys: 'Touches',
+    none: 'Aucun',
+    then: 'puis',
+    errors: {
+      syntax: 'le JSON est mal formé',
+      notObject: 'un objet JSON est attendu à la racine',
+      unknownAction: 'l’action « {detail} » n’existe pas',
+      invalidValue: 'une liste de raccourcis est attendue pour « {detail} »',
+      invalidCombo: 'le raccourci « {detail} » n’est pas reconnu',
+      conflict: '« {detail} » est déjà utilisé par « {other} »',
+    },
+    actions: {
+      commandOpen: 'Ouvrir la barre de commande',
+      commandPalette: 'Ouvrir les commandes',
+      navToday: 'Aller à Aujourd’hui',
+      navTasks: 'Aller aux Tâches',
+      navCalendar: 'Aller au Calendrier',
+      navCanvas: 'Aller à la Toile',
+      navIdeas: 'Aller aux Idées',
+      navInsights: 'Aller au Bilan',
+      navSettings: 'Ouvrir les réglages',
+      navLab: 'Ouvrir le labo',
+      noteNew: 'Nouvelle note',
+      focusStart: 'Commencer un focus',
+      themeCycle: 'Changer de thème',
+      zenToggle: 'Interface zen',
+      moveNext: 'Élément suivant',
+      movePrevious: 'Élément précédent',
+    },
   },
 
   sync: {
@@ -143,6 +205,29 @@ export const settings = {
       removed: '« {name} » ne se synchronisera plus',
     },
     encryption: 'Chiffré de bout en bout : le serveur ne peut pas lire vos données.',
+    url: 'Adresse du relais',
+    urlHint: 'Un serveur POuxis en https://, le vôtre ou celui d’une personne de confiance.',
+    token: 'Jeton d’accès',
+    tokenHint: 'Fourni par la personne qui gère le relais.',
+    space: 'Identifiant d’espace',
+    spaceHint:
+      'Laissez vide sur le premier appareil, puis recopiez celui qui s’affiche sur les suivants.',
+    passphrase: 'Phrase de passe',
+    passphraseHint:
+      'Au moins 15 caractères. Elle chiffre vos données et ne quitte jamais cet appareil. Sans elle, personne ne peut les lire.',
+    passphraseShort: 'Au moins 15 caractères, pour un chiffrement solide.',
+    show: 'Afficher la phrase de passe',
+    hide: 'Masquer la phrase de passe',
+    connect: 'Connecter cet appareil',
+    connected: 'Synchronisation activée',
+    disable: 'Arrêter la synchronisation',
+    disabled: 'Synchronisation arrêtée. Vos données restent sur cet appareil.',
+    unlock: 'Déverrouiller',
+    locked: 'Entrez la phrase de passe pour reprendre la synchronisation sur cet appareil.',
+    pending:
+      '{count, plural, =0 {Tout est envoyé} one {# modification à envoyer} other {# modifications à envoyer}}',
+    failed: 'Connexion impossible : {reason}',
+    spaceValue: 'Espace · {space}',
   },
 
   privacy: {
@@ -161,7 +246,7 @@ export const settings = {
   data: {
     export: {
       label: 'Tout exporter',
-      hint: 'Une archive .zip avec toutes vos données en JSON lisible et vos fichiers.',
+      hint: 'Toutes vos données en JSON lisible, dans une archive .zip ou un seul fichier.',
       action: 'Exporter mes données',
       running: 'Préparation de l’archive…',
       done: 'Archive prête',
@@ -197,5 +282,26 @@ export const settings = {
     changelog: 'Nouveautés',
     feedback: 'Signaler un problème',
     credits: 'Remerciements',
+    description:
+      'Gestion du temps, des tâches et des idées, conçue pour la création et la concentration.',
+    licenceValue: 'GNU AGPL 3.0',
+    replay: 'Revoir l’introduction',
+    gallery: 'Bibliothèque de composants',
   },
+
+  nav: {
+    a11y: 'Sections des réglages',
+  },
+
+  /** Export formats (data.export). */
+  exportFormat: {
+    label: 'Format',
+    zip: 'Archive .zip',
+    json: 'Fichier JSON',
+  },
+  deleted: 'Les données de cet appareil ont été supprimées.',
+
+  decrease: 'Diminuer',
+  increase: 'Augmenter',
+  backToSettings: 'Retour aux réglages',
 };

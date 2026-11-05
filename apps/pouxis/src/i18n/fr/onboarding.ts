@@ -3,41 +3,52 @@
  * shown *before* the OS prompt and always offer « Pas maintenant ».
  */
 export const onboarding = {
+  a11y: 'Introduction à POuxis',
   skip: 'Passer l’introduction',
   progress: 'Étape {current} sur {total}',
 
   welcome: {
     title: 'Bienvenue dans POuxis',
     body: 'Un seul endroit pour votre temps, vos tâches et vos idées. Tout reste sur votre appareil.',
+    language: 'Langue de l’interface',
+    example: 'Appeler Léa demain 15h #perso',
+    exampleCaption: 'Écrivez comme il vient : la date, l’heure et les étiquettes sont reconnues.',
     action: 'Commencer',
   },
 
-  capture: {
-    title: 'Capturez sans réfléchir',
-    body: 'Une tâche, une idée, un rendez-vous : écrivez-le comme il vient. POuxis reconnaît la date, l’heure et les étiquettes.',
-    example: 'Appeler Léa demain 15h #perso',
+  hours: {
+    title: 'Vos heures de travail',
+    body: 'POuxis place vos tâches dans ces horaires et garde le reste de la journée libre. Vous pourrez tout changer dans les réglages.',
+    start: 'Début',
+    end: 'Fin',
+    days: 'Jours travaillés',
+    summary: 'Je travaille de {start} à {end}',
+    invalid: 'L’heure de fin doit venir après l’heure de début.',
     action: 'Suivant',
   },
 
-  day: {
-    title: 'Une journée qui s’ajuste',
-    body: 'Vos tâches se placent dans les créneaux libres. Si quelque chose déborde, la suite se décale, et vos rendez-vous fixes ne bougent pas.',
+  rhythm: {
+    title: 'À quel moment êtes-vous le plus vif ?',
+    body: 'Une première estimation pour placer le travail exigeant au bon moment. Le bilan l’affine ensuite avec vos journées réelles.',
+    morning: 'Plutôt le matin',
+    morningHint: 'Les idées viennent tôt, l’énergie baisse en soirée.',
+    intermediate: 'Entre les deux',
+    intermediateHint: 'Pas de moment nettement meilleur qu’un autre.',
+    evening: 'Plutôt le soir',
+    eveningHint: 'Démarrage lent, pleine forme en fin de journée.',
+    unsure: 'Je ne sais pas encore',
     action: 'Suivant',
   },
 
-  setup: {
-    title: 'Vos heures, votre rythme',
-    body: 'Indiquez quand vous travaillez. Vous pourrez tout changer plus tard dans les réglages.',
-    hours: 'Je travaille de {start} à {end}',
-    language: 'Langue',
-    theme: 'Thème',
-    action: 'C’est parti',
+  ready: {
+    title: 'Deux autorisations, si vous le souhaitez',
+    body: 'Rien n’est obligatoire. Vous pourrez les accorder plus tard, au moment où elles servent.',
   },
 
   /** Shown before the system dialog. One benefit, honest scope, no pressure. */
   permissions: {
     notifications: {
-      title: 'Un petit signal au bon moment ?',
+      title: 'Un petit signal au bon moment',
       body: 'Pour vous prévenir quand un focus se termine ou qu’une tâche se débloque. Jamais de rappels insistants.',
       allow: 'Autoriser les notifications',
     },
@@ -46,17 +57,14 @@ export const onboarding = {
       body: 'POuxis peut activer Ne pas déranger pendant vos sessions et le désactiver juste après.',
       allow: 'Autoriser',
     },
-    location: {
-      title: 'Des rappels au bon endroit',
-      body: 'Pour vous rappeler la liste de courses en arrivant au magasin. Votre position reste sur l’appareil.',
-      allow: 'Autoriser la position',
-    },
     microphone: {
       title: 'Dicter vos idées',
-      body: 'Pour transformer un mémo vocal en tâche. L’audio est traité sur cet appareil.',
+      body: 'Pour transformer quelques phrases dites à voix haute en tâches. Selon le navigateur, la reconnaissance vocale peut passer par le service de son éditeur.',
       allow: 'Autoriser le micro',
     },
     notNow: 'Pas maintenant',
+    granted: 'Autorisé',
+    unavailable: 'Non disponible sur cet appareil',
     denied: 'Autorisation refusée. Vous pouvez la donner plus tard dans les réglages du système.',
     openSystemSettings: 'Ouvrir les réglages du système',
   },

@@ -34,7 +34,8 @@ export const calendar: typeof fr = {
     a11y: 'Spiral view. Use the arrow keys to move forward or back in time.',
     keys: '← →: move forward or back · + −: zoom',
     now: 'Now',
-    legend: 'The center is the past, the outside the future. Each turn sits on top of the previous one.',
+    legend:
+      'The center is the past, the outside the future. Each turn sits on top of the previous one.',
     upcoming: 'Coming up on the spiral',
     nothingUpcoming: 'Nothing planned on this stretch of the spiral.',
   },
@@ -69,8 +70,8 @@ export const calendar: typeof fr = {
     low: 'Low',
     high: 'High',
     peak: 'Usual peak: {day} around {hour}',
-    learning:
-      'Still a general estimate: it gets more personal as you log focus sessions.',
+    rail: 'The coloured band on the left of each day shows your usual energy, hour by hour.',
+    learning: 'Still a general estimate: it gets more personal as you log focus sessions.',
     cell: '{hour}: {level, select, 0 {very low} 1 {low} 2 {medium} 3 {high} other {very high}} energy',
   },
 
@@ -120,6 +121,9 @@ export const calendar: typeof fr = {
 
   progress: {
     label: 'Progress',
+    yearShort: 'Year',
+    quarterShort: 'Quarter',
+    weekShort: 'Week',
     year: '{percent} of the year',
     quarter: '{percent} of the quarter',
     sprint: '{percent} of the sprint',
@@ -144,14 +148,14 @@ export const calendar: typeof fr = {
     timeThere: '{time} in {name}',
     assumption: 'Working hours assumed to match yours.',
     pick: 'Pick a time zone',
+    invalid: 'Unknown time zone. Pick a city from the list, for example “Tokyo”.',
   },
 
   guard: {
     title: 'This slot cuts into your maker block',
     alternatives: 'Slots that keep it whole',
     keep: 'Keep this slot',
-    buffers:
-      '{count, plural, one {Add a buffer} other {Add # buffers}} of {duration}',
+    buffers: '{count, plural, one {Add a buffer} other {Add # buffers}} of {duration}',
     buffersHint: 'A breather between back-to-back meetings.',
   },
 
@@ -159,7 +163,6 @@ export const calendar: typeof fr = {
     title: 'Planned vs actual',
     take: 'Save a snapshot of the plan',
     taken: 'Plan snapshot saved',
-    auto: 'A snapshot is saved automatically every Monday morning.',
     compare: 'Compare with the planned week',
     planned: 'Planned',
     actual: 'Actual',
@@ -175,6 +178,7 @@ export const calendar: typeof fr = {
     kept: 'Kept',
     onTime: 'Done on time',
     slipped: 'Slipped',
+    accuracyLabel: 'Estimate accuracy',
     accuracy: 'Estimates: {percent} of actual time',
     ghosts: 'Dotted outlines show where things were planned.',
   },

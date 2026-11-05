@@ -100,7 +100,17 @@ function grow(
 
     const isTip = depth >= MAX_DEPTH || child.children.length === 0;
     out.leaves.push(leaf(child, b, depth, share, isTip));
-    if (!isTip) grow(child, b.x2, b.y2, a, Math.min(spread, Math.PI * 0.75) * 0.7, depth + 1, rootWeight, out);
+    if (!isTip)
+      grow(
+        child,
+        b.x2,
+        b.y2,
+        a,
+        Math.min(spread, Math.PI * 0.75) * 0.7,
+        depth + 1,
+        rootWeight,
+        out,
+      );
   }
 }
 
@@ -160,5 +170,62 @@ function leaf(
     depth,
     labelled: depth === 1 || share >= 0.12,
     anchor: Math.abs(dx) < 40 ? 'middle' : dx < 0 ? 'end' : 'start',
+  };
+}
+
+export interface Bounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/** Approximate advance of one label character, as a share of the font size. */
+const CHAR_EM = 0.54;
+
+/**
+ * Box around the drawn tree, labels included (their width estimated from their length), so
+ * the SVG viewBox fits a sapling as snugly as a full-grown tree.
+ */
+export function treeBounds(
+  layout: TreeLayout,
+  labelOf: (leaf: TreeLeaf) => string,
+  fontSize = 13,
+  pad = 12,
+): Bounds {
+  const charW = fontSize * CHAR_EM;
+  const half = fontSize * 0.8;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  const add = (x1: number, y1: number, x2: number, y2: number) => {
+    minX = Math.min(minX, x1);
+    minY = Math.min(minY, y1);
+    maxX = Math.max(maxX, x2);
+    maxY = Math.max(maxY, y2);
+  };
+  for (const b of layout.branches) {
+    add(
+      Math.min(b.x1, b.x2) - b.width,
+      Math.min(b.y1, b.y2),
+      Math.max(b.x1, b.x2) + b.width,
+      Math.max(b.y1, b.y2),
+    );
+  }
+  for (const l of layout.leaves) {
+    add(l.x - l.r, l.y - l.r, l.x + l.r, l.y + l.r);
+    if (!l.labelled) continue;
+    const w = labelOf(l).length * charW;
+    if (l.anchor === 'start') add(l.x, l.y - half, l.x + l.r + 6 + w, l.y + half);
+    else if (l.anchor === 'end') add(l.x - l.r - 6 - w, l.y - half, l.x, l.y + half);
+    else add(l.x - w / 2, l.y - l.r - 8 - fontSize * 1.4, l.x + w / 2, l.y);
+  }
+  if (!Number.isFinite(minX)) return { x: 0, y: 0, width: TREE_WIDTH, height: TREE_HEIGHT };
+  return {
+    x: round(minX - pad),
+    y: round(minY - pad),
+    width: round(maxX - minX + pad * 2),
+    height: round(maxY - minY + pad * 2),
   };
 }

@@ -4,6 +4,8 @@
  */
 export const tasks = {
   title: 'Tâches',
+  summary:
+    '{count, plural, =0 {Rien à faire pour l’instant} one {# tâche ouverte} other {# tâches ouvertes}}',
 
   add: {
     placeholder: 'Ajouter une tâche…',
@@ -21,6 +23,8 @@ export const tasks = {
     kanban: 'Tableau',
     matrix: 'Matrice',
     deps: 'Dépendances',
+    /** Narrow screens: the four segments share a phone width. */
+    depsShort: 'Liens',
   },
 
   groups: {
@@ -133,6 +137,7 @@ export const tasks = {
       priority: 'Priorité',
       tag: 'Étiquette',
       mode: 'Type de travail',
+      modeShort: 'Type',
     },
     addCard: 'Ajouter une carte',
     dropHere: 'Déposer ici',
@@ -182,6 +187,7 @@ export const tasks = {
     add: 'Ajouter une tâche préalable',
     remove: 'Retirer la dépendance',
     cycle: 'Impossible : « {title} » attend déjà cette tâche, cela créerait une boucle.',
+    cycleShort: 'créerait une boucle',
     a11y: 'En attente d’une autre tâche',
     hint: 'Une tâche n’apparaît dans Aujourd’hui qu’une fois ses tâches préalables terminées.',
     blocked: 'Bloquée',
@@ -193,7 +199,8 @@ export const tasks = {
     removed: 'Dépendance retirée',
     removeA11y: 'Retirer « {title} » des tâches préalables',
     emptyTitle: 'Aucun lien entre vos tâches',
-    emptyBody: 'Ouvrez une tâche et ajoutez une tâche préalable : elle attendra que l’autre soit terminée.',
+    emptyBody:
+      'Ouvrez une tâche et ajoutez une tâche préalable : elle attendra que l’autre soit terminée.',
   },
 
   /** Task decay (postponed ≥ threshold). Informational, never a reproach. */
@@ -216,7 +223,7 @@ export const tasks = {
     swap: 'Échanger avec une autre',
     swapPick: 'Laquelle garder pour plus tard ?',
     tomorrow: 'La prévoir demain',
-    withoutPriority: 'L’ajouter sans priorité',
+    withoutPriority: 'La garder en priorité moyenne',
     changeLimit: 'Modifier la limite',
     counter: '{count} sur {limit} priorités',
     counterA11y: '{count} priorités sur {limit} aujourd’hui',
@@ -252,6 +259,7 @@ export const tasks = {
     logged: '+{duration} sur cette tâche',
     total: 'Temps passé : {duration}',
     estimateVsActual: 'Estimé {estimate} · réel {actual}',
+    sessionsLabel: 'Sessions de focus',
     sessions: '{count, plural, one {# session} other {# sessions}}',
     noLogs: 'Aucun temps enregistré pour l’instant',
     history: 'Sessions pomodoro',
@@ -280,7 +288,8 @@ export const tasks = {
     remove: 'Retirer le champ {name}',
     invalidName: 'Lettres, chiffres et _ uniquement, sans espace.',
     duplicateName: 'Un champ porte déjà ce nom.',
-    empty: 'Aucun champ pour l’instant. Ajoutez par exemple un taux horaire, puis une formule de coût.',
+    empty:
+      'Aucun champ pour l’instant. Ajoutez par exemple un taux horaire, puis une formule de coût.',
     preview: 'Résultat : {value}',
     errors: {
       syntax: 'La formule ne se lit pas, près de « {near} ».',
@@ -307,6 +316,14 @@ export const tasks = {
       monthly: 'Chaque mois',
       yearly: 'Chaque année',
       custom: 'Personnaliser…',
+    },
+    /** Rule text each preset writes into the field; must parse with `recurrence.parseRule`. */
+    presetRules: {
+      daily: 'chaque jour',
+      weekdays: 'chaque jour ouvré',
+      weekly: 'chaque semaine',
+      monthly: 'chaque mois',
+      yearly: 'chaque année',
     },
     next: 'Prochaines : {dates}',
     invalid: 'Règle non reconnue. Essayez « chaque lundi » ou « le 1er de chaque mois ».',
@@ -393,7 +410,8 @@ export const tasks = {
 
   dnd: {
     handle: 'Déplacer « {title} »',
-    instructions: 'Espace pour saisir, flèches pour choisir la destination, Espace pour déposer, Échap pour annuler.',
+    instructions:
+      'Espace pour saisir, flèches pour choisir la destination, Espace pour déposer, Échap pour annuler.',
     grabbed: '« {title} » saisie, dans {zone}. Choisissez la destination avec les flèches.',
     over: '{zone}',
     dropped: '« {title} » déposée dans {zone}',

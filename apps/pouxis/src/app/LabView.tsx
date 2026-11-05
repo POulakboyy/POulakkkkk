@@ -64,8 +64,8 @@ export default function LabView() {
       ) : features.length === 0 ? (
         <EmptyState
           icon={<IconLayers size={32} />}
-          title={t("nav.labEmpty")}
-          description={t("nav.labEmptyHint")}
+          title={t('nav.labEmpty')}
+          description={t('nav.labEmptyHint')}
         />
       ) : (
         <ul role="list" className={s.grid}>

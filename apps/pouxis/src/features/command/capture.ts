@@ -1,6 +1,6 @@
 import { nlp } from '@pouxis/core';
 import type { CalendarEvent, Locale, Task, TimeZone, WorkMode } from '@pouxis/core';
-import type { NewRecord } from '../../store/index.ts';
+import type { NewRecord, Store } from '../../store/index.ts';
 
 export type CaptureKind = 'task' | 'event';
 
@@ -119,4 +119,81 @@ export function captureLines(text: string): string[] {
 export function transcriptToText(transcript: string, locale: Locale): string {
   const items = nlp.splitActions(transcript, locale);
   return items.length > 0 ? items.join('\n') : nlp.cleanTranscript(transcript, locale);
+}
+
+export interface PlannedText {
+  /** One item per non-empty line, in order. */
+  items: CaptureItem[];
+  /** Recognised tokens with offsets into the whole text (for highlighting). */
+  tokens: nlp.ParseToken[];
+}
+
+/**
+ * Plans a whole composer text: every non-empty line is one capture (brain dump). The kind
+ * override only applies to a single-line capture, where the user can see what it changes.
+ */
+export function planText(text: string, ctx: CaptureContext, override?: CaptureKind): PlannedText {
+  const items: CaptureItem[] = [];
+  const tokens: nlp.ParseToken[] = [];
+  const lines = text.split('\n');
+  const single = lines.filter((l) => l.trim() !== '').length === 1;
+  let offset = 0;
+  for (const line of lines) {
+    if (line.trim() !== '') {
+      const item = planCapture(line, ctx, single ? override : undefined);
+      items.push(item);
+      for (const tok of item.result.tokens) {
+        tokens.push({ ...tok, start: tok.start + offset, end: tok.end + offset });
+      }
+    }
+    offset += line.length + 1;
+  }
+  return { items, tokens };
+}
+
+export interface Segment {
+  text: string;
+  type?: nlp.TokenType;
+}
+
+/** Splits `text` into plain and token segments, for the highlight layer behind the input. */
+export function highlightSegments(text: string, tokens: readonly nlp.ParseToken[]): Segment[] {
+  const sorted = [...tokens].sort((a, b) => a.start - b.start);
+  const out: Segment[] = [];
+  let at = 0;
+  for (const tok of sorted) {
+    if (tok.start < at || tok.end > text.length || tok.end <= tok.start) continue;
+    if (tok.start > at) out.push({ text: text.slice(at, tok.start) });
+    out.push({ text: text.slice(tok.start, tok.end), type: tok.type });
+    at = tok.end;
+  }
+  if (at < text.length) out.push({ text: text.slice(at) });
+  return out;
+}
+
+export interface CreatedRecord {
+  collection: 'tasks' | 'events';
+  id: string;
+  title: string;
+}
+
+/** Creates every plannable item as one undo step; items without a title are skipped. */
+export function commitCapture(
+  target: Pick<Store, 'create' | 'batch'>,
+  items: readonly CaptureItem[],
+  label?: string,
+): CreatedRecord[] {
+  const drafts = items.flatMap((i) => (i.draft ? [i.draft] : []));
+  if (drafts.length === 0) return [];
+  return target.batch(
+    () =>
+      drafts.map((d) => {
+        const record =
+          d.collection === 'events'
+            ? target.create('events', d.data)
+            : target.create('tasks', d.data);
+        return { collection: d.collection, id: record.id, title: record.title };
+      }),
+    label,
+  );
 }

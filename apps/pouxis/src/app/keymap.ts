@@ -168,12 +168,7 @@ function hasModifier(combo: string): boolean {
 /* ------------------------------------------------------------------------------------------ */
 
 export type KeymapErrorCode =
-  | 'syntax'
-  | 'notObject'
-  | 'unknownAction'
-  | 'invalidValue'
-  | 'invalidCombo'
-  | 'conflict';
+  'syntax' | 'notObject' | 'unknownAction' | 'invalidValue' | 'invalidCombo' | 'conflict';
 
 export interface KeymapError {
   code: KeymapErrorCode;
@@ -186,8 +181,7 @@ export interface KeymapError {
 }
 
 export type KeymapParseResult =
-  | { ok: true; overrides: KeymapOverrides }
-  | { ok: false; error: KeymapError };
+  { ok: true; overrides: KeymapOverrides } | { ok: false; error: KeymapError };
 
 function lineAt(text: string, index: number): number {
   let line = 1;

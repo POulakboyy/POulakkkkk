@@ -17,6 +17,8 @@ export interface ReviewImage {
   winsEmpty: string;
   blockersTitle: string;
   blockers: readonly string[];
+  suggestionsTitle: string;
+  suggestions: readonly string[];
   footer: string;
   /** Mirrors the light / dark tokens (`--bg`, `--surface`, `--ink`, `--accent-strong`). */
   theme: 'light' | 'dark';
@@ -56,7 +58,12 @@ export function reviewImageSvg(r: ReviewImage): string {
     parts.push(`<text x="${x}" y="${y}" ${attrs}>${escapeXml(s)}</text>`);
 
   parts.push(`<rect width="${IMAGE_WIDTH}" height="${IMAGE_HEIGHT}" fill="${c.bg}"/>`);
-  text(pad, 150, r.eyebrow.toUpperCase(), `font-family="${SANS}" font-size="28" letter-spacing="3" font-weight="600" fill="${c.accent}"`);
+  text(
+    pad,
+    150,
+    r.eyebrow.toUpperCase(),
+    `font-family="${SANS}" font-size="28" letter-spacing="3" font-weight="600" fill="${c.accent}"`,
+  );
   text(pad, 236, truncate(r.title, 32), `font-family="${SERIF}" font-size="76" fill="${c.ink}"`);
 
   // Stat tiles.
@@ -66,33 +73,88 @@ export function reviewImageSvg(r: ReviewImage): string {
   stats.forEach((s, i) => {
     const x = pad + i * (tileW + gap);
     parts.push(`<rect x="${x}" y="300" width="${tileW}" height="168" rx="28" fill="${c.card}"/>`);
-    text(x + 32, 368, truncate(s.label, 18), `font-family="${SANS}" font-size="28" fill="${c.ink2}"`);
-    text(x + 32, 432, truncate(s.value, 10), `font-family="${SERIF}" font-size="56" fill="${c.ink}"`);
+    text(
+      x + 32,
+      368,
+      truncate(s.label, 18),
+      `font-family="${SANS}" font-size="28" fill="${c.ink2}"`,
+    );
+    text(
+      x + 32,
+      432,
+      truncate(s.value, 10),
+      `font-family="${SERIF}" font-size="56" fill="${c.ink}"`,
+    );
   });
 
   // Wins, ascending: the biggest one closes the list and is accented.
   let y = 570;
-  text(pad, y, r.winsTitle, `font-family="${SANS}" font-size="34" font-weight="600" fill="${c.ink}"`);
+  text(
+    pad,
+    y,
+    r.winsTitle,
+    `font-family="${SANS}" font-size="34" font-weight="600" fill="${c.ink}"`,
+  );
   y += 64;
   const wins = r.wins.slice(-6);
   if (wins.length === 0) {
-    text(pad, y, truncate(r.winsEmpty, 52), `font-family="${SANS}" font-size="32" fill="${c.ink2}"`);
+    text(
+      pad,
+      y,
+      truncate(r.winsEmpty, 52),
+      `font-family="${SANS}" font-size="32" fill="${c.ink2}"`,
+    );
     y += 60;
   }
   wins.forEach((w, i) => {
     const last = i === wins.length - 1;
-    parts.push(`<circle cx="${pad + 10}" cy="${y - 11}" r="${last ? 10 : 7}" fill="${last ? c.accent : c.ink2}"/>`);
-    text(pad + 44, y, truncate(w, 46), `font-family="${SANS}" font-size="34" ${last ? 'font-weight="600"' : ''} fill="${c.ink}"`);
+    parts.push(
+      `<circle cx="${pad + 10}" cy="${y - 11}" r="${last ? 10 : 7}" fill="${last ? c.accent : c.ink2}"/>`,
+    );
+    text(
+      pad + 44,
+      y,
+      truncate(w, 46),
+      `font-family="${SANS}" font-size="34" ${last ? 'font-weight="600"' : ''} fill="${c.ink}"`,
+    );
     y += 62;
   });
 
   if (r.blockers.length > 0) {
     y += 40;
-    text(pad, y, r.blockersTitle, `font-family="${SANS}" font-size="34" font-weight="600" fill="${c.ink}"`);
+    text(
+      pad,
+      y,
+      r.blockersTitle,
+      `font-family="${SANS}" font-size="34" font-weight="600" fill="${c.ink}"`,
+    );
     y += 64;
     for (const b of r.blockers.slice(0, 3)) {
       text(pad, y, `— ${truncate(b, 48)}`, `font-family="${SANS}" font-size="32" fill="${c.ink2}"`);
       y += 56;
+    }
+  }
+
+  if (r.suggestions.length > 0 && y < IMAGE_HEIGHT - 360) {
+    y += 40;
+    text(
+      pad,
+      y,
+      r.suggestionsTitle,
+      `font-family="${SANS}" font-size="34" font-weight="600" fill="${c.ink}"`,
+    );
+    y += 40;
+    for (const sug of r.suggestions.slice(0, 2)) {
+      parts.push(
+        `<rect x="${pad}" y="${y}" width="${IMAGE_WIDTH - pad * 2}" height="96" rx="24" fill="${c.card}"/>`,
+      );
+      text(
+        pad + 32,
+        y + 60,
+        truncate(sug, 50),
+        `font-family="${SANS}" font-size="30" fill="${c.ink}"`,
+      );
+      y += 116;
     }
   }
 
@@ -115,7 +177,10 @@ export async function svgToPng(svg: string): Promise<Blob> {
     if (!ctx) throw new Error('Canvas 2D is unavailable');
     ctx.drawImage(img, 0, 0);
     return await new Promise<Blob>((resolve, reject) =>
-      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('PNG encoding failed'))), 'image/png'),
+      canvas.toBlob(
+        (b) => (b ? resolve(b) : reject(new Error('PNG encoding failed'))),
+        'image/png',
+      ),
     );
   } finally {
     URL.revokeObjectURL(url);

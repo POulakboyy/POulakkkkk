@@ -30,6 +30,7 @@ export const insights = {
     tentative: 'encore peu de données',
     readoutHint: 'Survolez ou parcourez la carte pour lire un créneau.',
     hourColumn: 'Heure',
+    roledescription: 'carte de chaleur',
     notEnough: 'Encore quelques jours d’usage et la carte se précisera.',
     priorNote:
       'En attendant vos données, la carte part d’un profil horaire moyen et s’ajuste à chaque session.',
@@ -43,8 +44,12 @@ export const insights = {
     meetings: 'Réunions',
     share: '{label} · {percent}',
     a11y: '{create} de création, {organize} d’organisation, {meetings} de réunions',
-    total: '{duration} suivies cette semaine',
+    total: '{duration} suivies sur la semaine',
+    creationShare: 'du temps suivi consacré à la création',
+    daysLabel: 'Répartition jour par jour',
+    readoutHint: 'Survolez ou parcourez une colonne pour lire le détail du jour.',
     dayColumn: 'Jour',
+    day: '{day} : {summary}',
     totalColumn: 'Total',
     noData: 'Pas encore de temps suivi cette semaine. Lancez une session de focus pour commencer.',
   },
@@ -73,6 +78,7 @@ export const insights = {
     legendActive: 'Création',
     legendJoker: 'Joker',
     legendRest: 'Repos',
+    today: 'aujourd’hui',
   },
 
   weekly: {
@@ -102,8 +108,7 @@ export const insights = {
         'Vous finissez souvent plus vite que prévu : des estimations à {factor} suffiraient.',
       lightenPlan:
         '{rate} des créneaux planifiés ont abouti : un plan un peu plus léger laisserait de la marge.',
-      addressBlocker:
-        '« {terms} » revient {count} fois : un moment dédié pourrait le débloquer.',
+      addressBlocker: '« {terms} » revient {count} fois : un moment dédié pourrait le débloquer.',
       protectCreation:
         'La création a représenté {share} du temps suivi : bloquer une plage de création pourrait aider.',
       rescheduleSlipped:
@@ -123,7 +128,9 @@ export const insights = {
     node: '{name} · niveau {level} · {count, plural, one {# tâche} other {# tâches}}',
     a11y: 'Arbre de compétences : {count, plural, one {# branche} other {# branches}}. {top}',
     top: 'Branche principale : {name}.',
-    empty: 'Terminez une tâche étiquetée (par exemple « design/typo ») pour voir pousser la première branche.',
+    empty:
+      'Terminez une tâche étiquetée (par exemple « design/typo ») pour voir pousser la première branche.',
+    level: 'niv. {level}',
     skillColumn: 'Compétence',
     levelColumn: 'Niveau',
     tasksColumn: 'Tâches',
@@ -136,6 +143,7 @@ export const insights = {
       '{count, plural, =0 {Aucune piste en sommeil} one {# piste en sommeil} other {# pistes en sommeil}}',
     idle: 'Intacte depuis {count, plural, one {# jour} other {# jours}}',
     keep: 'Garder',
+    keepLabel: 'Garder : {title}',
     kept: 'Piste gardée',
     empty: 'Aucune piste en sommeil : chaque idée a été reprise au moins une fois.',
   },
@@ -145,8 +153,10 @@ export const insights = {
     hint: 'Sans activité depuis plus de deux ans. Rien n’est archivé sans votre accord.',
     idle: 'Sans activité depuis {count, plural, one {# jour} other {# jours}}',
     archive: 'Archiver',
+    archiveLabel: 'Archiver : {title}',
     archived: 'Tâche archivée',
     keep: 'Garder',
+    keepLabel: 'Garder : {title}',
     kept: 'Gardée en l’état',
     empty: 'Rien à archiver pour l’instant.',
   },

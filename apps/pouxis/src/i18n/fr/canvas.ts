@@ -1,40 +1,62 @@
 /**
- * Canvas: infinite graph / mind-map. Tools, auto layout, collapse, timeline mode, conditional
- * edges, minimap, presentation, export, text ↔ graph conversion.
+ * Canvas: infinite graph / mind map. Tools, auto layout, collapse, timeline mode, conditional
+ * links, minimap, presentation, export, text ↔ graph conversion.
  */
 export const canvas = {
   title: 'Toile',
   untitled: 'Toile sans titre',
   new: 'Nouvelle toile',
   list: 'Toutes les toiles',
+  titleLabel: 'Titre de la toile',
+  more: 'Plus d’actions',
+
+  mode: {
+    label: 'Affichage',
+    canvas: 'Toile',
+    outline: 'Plan',
+  },
 
   tools: {
     label: 'Outils',
     select: 'Sélection',
-    pan: 'Déplacer la vue',
+    pan: 'Main',
     node: 'Nœud',
-    text: 'Texte',
     edge: 'Lien',
-    draw: 'Dessin libre',
-    shape: 'Forme',
+    draw: 'Crayon',
     eraser: 'Gomme',
     /** Tool tooltip: `{tool}` is a label above, `{key}` its shortcut. */
     withKey: '{tool} ({key})',
   },
 
+  ink: {
+    label: 'Encre',
+    color: 'Couleur {n}',
+    ink: 'Noir d’encre',
+    thin: 'Trait fin',
+    medium: 'Trait moyen',
+    bold: 'Trait épais',
+  },
+
   node: {
     placeholder: 'Écrire…',
+    editLabel: 'Texte du nœud',
+    newIdea: 'Nouvelle idée',
     add: 'Ajouter un nœud',
     addChild: 'Ajouter un enfant',
     addSibling: 'Ajouter un voisin',
-    delete: 'Supprimer le nœud',
-    linkTo: 'Lier à…',
-    openTask: 'Ouvrir la tâche',
-    openNote: 'Ouvrir la note',
+    edit: 'Modifier le texte',
+    delete: 'Supprimer',
+    color: 'Couleur',
+    noColor: 'Sans couleur',
+    colorN: 'Couleur {n}',
     convertToTask: 'Transformer en tâche',
-    embed: 'Intégrer un contenu',
-    embedPlaceholder: 'Collez un lien vidéo, une page ou un bloc de code',
-    a11y: 'Nœud « {label} », {children, plural, =0 {sans enfant} one {# enfant} other {# enfants}}',
+    markDone: 'Marquer comme terminée',
+    reopen: 'Rouvrir la tâche',
+    a11y: '{label}, {children, plural, =0 {sans enfant} one {# enfant} other {# enfants}}',
+    task: 'tâche',
+    done: 'terminée',
+    locked: 'verrouillée',
+    selected: '{count, plural, one {# nœud sélectionné} other {# nœuds sélectionnés}}',
   },
 
   edge: {
@@ -42,21 +64,20 @@ export const canvas = {
     delete: 'Supprimer le lien',
     conditional: 'Lien conditionnel',
     conditionalHint: 'La cible se débloque quand la source est terminée.',
-    makeConditional: 'Débloquer seulement quand la source est terminée',
+    makeConditional: 'Débloquer à la fin de la source',
     makePlain: 'Lien simple',
     locked: 'Verrouillé · attend « {title} »',
-    unlocked: '« {title} » est débloquée',
-    a11y: 'Lien de « {from} » vers « {to} »',
+    unlocked: '{count, plural, one {# étape débloquée} other {# étapes débloquées}}',
   },
 
   layout: {
-    auto: 'Démêler',
-    autoHint: 'Réorganise les nœuds pour que les liens se croisent le moins possible.',
-    running: 'Organisation…',
-    done: 'Toile démêlée',
+    menu: 'Organiser',
+    force: 'Démêler',
+    forceHint: 'Les nœuds se repoussent et les liens se tendent jusqu’à l’équilibre.',
+    running: 'Organisation en cours…',
+    stop: 'Arrêter',
     tree: 'Arbre',
-    radial: 'Radial',
-    force: 'Libre',
+    mindmap: 'Carte mentale',
   },
 
   collapse: {
@@ -70,10 +91,10 @@ export const canvas = {
   /** X axis becomes a timeline: moving a node right changes its due date. */
   timeline: {
     toggle: 'Mode frise',
-    on: 'Mode frise activé · déplacer un nœud vers la droite repousse son échéance',
-    off: 'Mode frise désactivé',
-    dueChanged: 'Échéance déplacée {when}',
-    noDate: 'Sans échéance',
+    on: 'Frise activée · déplacer un nœud vers la droite repousse son échéance',
+    off: 'Frise désactivée',
+    dueChanged: 'Échéance fixée au {date}',
+    duesChanged: '{count, plural, one {# échéance mise à jour} other {# échéances mises à jour}}',
   },
 
   view: {
@@ -81,61 +102,75 @@ export const canvas = {
     zoomOut: 'Dézoomer',
     zoomLevel: 'Zoom {percent}',
     fit: 'Tout afficher',
-    center: 'Centrer sur la sélection',
     minimap: 'Mini-carte',
-    showMinimap: 'Afficher la mini-carte',
-    hideMinimap: 'Masquer la mini-carte',
-    minimapA11y: 'Mini-carte : la zone encadrée est la partie visible de la toile',
+    minimapA11y: 'Mini-carte : touchez un point pour y déplacer la vue',
+    canvasA11y: 'Toile « {title} », {count, plural, one {# nœud} other {# nœuds}}',
+    keyboardHelp:
+      'Flèches : passer d’un nœud à l’autre (ou déplacer la vue). Tab : ajouter un enfant. Entrée : ajouter un voisin. F2 : modifier. Suppr : supprimer. + et − : zoom. 0 : tout afficher.',
   },
 
   present: {
     start: 'Présenter',
     stop: 'Quitter la présentation',
-    addWaypoint: 'Ajouter une étape au parcours',
-    removeWaypoint: 'Retirer cette étape',
+    addWaypoint: 'Ajouter la vue au parcours',
+    waypointAdded: 'Étape {count} ajoutée au parcours',
+    clear: 'Effacer le parcours',
     step: 'Étape {current} sur {total}',
-    empty: 'Ajoutez des étapes pour composer un parcours de nœud en nœud.',
+    next: 'Étape suivante',
+    previous: 'Étape précédente',
+    empty: 'Cadrez une vue puis ajoutez-la au parcours pour composer une présentation.',
+    overview: 'Vue d’ensemble',
   },
 
   export: {
-    title: 'Exporter la toile',
-    format: 'Format',
-    svg: 'SVG',
-    png: 'PNG (fond transparent)',
-    pdf: 'PDF',
+    title: 'Exporter',
+    svg: 'Image vectorielle (SVG)',
+    png: 'Image PNG transparente',
     markdown: 'Plan Markdown',
     opml: 'OPML',
-    exporting: 'Export…',
-    done: 'Export prêt',
-    failed: 'L’export n’a pas abouti. Réessayez avec une zone plus petite.',
+    done: 'Export prêt : {file}',
+    failed: 'L’export n’a pas abouti. Réessayez avec une toile plus petite.',
   },
 
-  convert: {
-    toOutline: 'Voir en plan',
-    fromList: 'Déposez une liste pour la transformer en arbre',
-    converted: '{count, plural, one {# nœud créé} other {# nœuds créés}}',
+  import: {
+    tasks: 'Transformer mes tâches en arbre',
+    tasksDone:
+      '{count, plural, one {# tâche transformée en arbre} other {# tâches transformées en arbre}}',
+    noTasks: 'Aucune tâche à transformer pour l’instant.',
+    pasted:
+      '{count, plural, one {# nœud créé depuis le texte} other {# nœuds créés depuis le texte}}',
+    dropHint: 'Déposez une liste ou un fichier OPML pour en faire un arbre',
   },
 
-  templates: {
-    title: 'Modèles',
-    blank: 'Toile vierge',
-    mindmap: 'Carte mentale',
-    flow: 'Diagramme de flux',
-    org: 'Organigramme',
-    uml: 'UML',
-    bpmn: 'BPMN',
+  starter: {
+    root: 'Mon projet',
+    b1: 'Objectifs',
+    b2: 'Idées',
+    b3: 'Questions',
+    b4: 'Prochaines étapes',
+  },
+
+  outline: {
+    label: 'Plan de la toile',
+    hint: 'Le plan reprend la toile sous forme de liste. Flèches gauche et droite : replier ou déplier.',
+    empty: 'La toile est vide.',
   },
 
   toast: {
-    nodeDeleted: 'Nœud supprimé',
-    nodesDeleted: '{count, plural, one {# nœud supprimé} other {# nœuds supprimés}}',
+    deleted: '{count, plural, one {# nœud supprimé} other {# nœuds supprimés}}',
     linked: 'Nœuds liés',
+    converted: 'Tâche créée',
   },
 
   empty: {
     title: 'Une toile blanche',
-    body: 'Double-cliquez ou touchez deux fois n’importe où pour poser une première idée.',
-    action: 'Ajouter un nœud',
-    secondary: 'Partir d’un modèle',
+    body: 'Double-cliquez n’importe où pour poser une première idée, ou partez de vos tâches.',
+    action: 'Commencer une carte mentale',
+    tasks: 'Partir de mes tâches',
+  },
+
+  dev: {
+    stress: 'Test de charge · 10 000 nœuds',
+    stats: '{nodes} nœuds dessinés · {ms} ms',
   },
 };

@@ -124,6 +124,14 @@ export const today: typeof fr = {
       breathe: 'Three slow breaths.',
       walk: 'A few steps away from the screen.',
     },
+    complete: 'Mark as done',
+    noise: {
+      white: 'White',
+      pink: 'Pink',
+      brown: 'Brown',
+    },
+    soundHint: 'Generated on your device, no files, no network.',
+    timerA11y: '{state}, {duration} left',
   },
 
   unlocked: {
@@ -157,9 +165,24 @@ export const today: typeof fr = {
     a11y: '{duration} breather',
     hint: 'Time to breathe between two meetings',
     remove: 'Remove this breather',
+    suggested: 'Suggested breather',
+    add: 'Add breathers',
     removed: 'Breather removed',
     added:
       '{count, plural, one {# breather added} other {# breathers added}} between your meetings',
+  },
+
+  /** WIP limiter (2.15): high-priority tasks planned today vs. the limit. */
+  wip: {
+    label: '{count}/{limit} priorities',
+    a11y: '{count} high-priority tasks planned today, against a limit of {limit}',
+    exceeded: 'More than {limit} priorities today: working memory only holds a few items at once.',
+  },
+
+  /** Task decay (2.3): postponed tasks fade. Never guilt-tripping. */
+  decay: {
+    aging: 'Postponed a few times',
+    stale: 'Still useful?',
   },
 
   maker: {

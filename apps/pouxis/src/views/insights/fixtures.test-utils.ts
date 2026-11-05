@@ -61,7 +61,10 @@ export function demoRecords(now: Timestamp, timeZone: TimeZone): DemoRecords {
   let n = 0;
   const id = (prefix: string) => `${prefix}-${++n}`;
 
-  const task = (fields: Partial<Task> & Pick<Task, 'title' | 'mode'>, createdAt: Timestamp): Task => ({
+  const task = (
+    fields: Partial<Task> & Pick<Task, 'title' | 'mode'>,
+    createdAt: Timestamp,
+  ): Task => ({
     id: id('t'),
     createdAt,
     updatedAt: fields.completedAt ?? createdAt,

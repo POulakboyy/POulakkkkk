@@ -73,6 +73,7 @@ export const calendar = {
     low: 'Basse',
     high: 'Haute',
     peak: 'Pic habituel : {day} vers {hour}',
+    rail: 'La bande colorée à gauche de chaque jour indique votre énergie habituelle, heure par heure.',
     learning:
       'Estimation encore générale : elle s’affine à mesure que vous enregistrez des sessions de concentration.',
     cell: '{hour} : énergie {level, select, 0 {très basse} 1 {basse} 2 {moyenne} 3 {haute} other {très haute}}',
@@ -125,6 +126,9 @@ export const calendar = {
   /** Watermark showing progress through the year, quarter or sprint. */
   progress: {
     label: 'Avancement',
+    yearShort: 'Année',
+    quarterShort: 'Trimestre',
+    weekShort: 'Semaine',
     year: '{percent} de l’année',
     quarter: '{percent} du trimestre',
     sprint: '{percent} du sprint',
@@ -149,6 +153,7 @@ export const calendar = {
     timeThere: '{time} à {name}',
     assumption: 'Heures de travail supposées identiques aux vôtres.',
     pick: 'Choisir un fuseau',
+    invalid: 'Fuseau inconnu. Choisissez une ville de la liste, par exemple « Tokyo ».',
   },
 
   /** Maker-schedule guard (1.15) and transition buffers (1.6) when planning a meeting. */
@@ -166,7 +171,6 @@ export const calendar = {
     title: 'Prévu et réalisé',
     take: 'Garder une photo du planning',
     taken: 'Photo du planning gardée',
-    auto: 'Une photo est prise automatiquement chaque lundi matin.',
     compare: 'Comparer avec la semaine prévue',
     planned: 'Prévu',
     actual: 'Réalisé',
@@ -182,6 +186,7 @@ export const calendar = {
     kept: 'Tenus',
     onTime: 'Terminés à temps',
     slipped: 'Glissés',
+    accuracyLabel: 'Justesse des estimations',
     accuracy: 'Estimations : {percent} du temps réel',
     ghosts: 'Les contours pointillés montrent la place prévue.',
   },
@@ -207,7 +212,8 @@ export const calendar = {
     deleted: 'Événement supprimé',
     resized: 'Durée ajustée · {duration}',
     updated: 'Événement mis à jour',
-    buffers: '{count, plural, one {Temps de transition ajouté} other {# temps de transition ajoutés}}',
+    buffers:
+      '{count, plural, one {Temps de transition ajouté} other {# temps de transition ajoutés}}',
   },
 
   empty: {
