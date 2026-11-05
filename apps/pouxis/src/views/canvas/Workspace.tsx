@@ -497,6 +497,11 @@ export function CanvasWorkspace({ graph, graphs }: { graph: Graph; graphs: reado
           {t('canvas.view.keyboardHelp')}
         </p>
         {mode === 'canvas' && (
+          <p className={s.srOnly} aria-live="polite" aria-atomic="true">
+            {describeSelection(t, selectedNodes)}
+          </p>
+        )}
+        {mode === 'canvas' && (
           <CanvasStage
             scene={scene}
             tool={tool}

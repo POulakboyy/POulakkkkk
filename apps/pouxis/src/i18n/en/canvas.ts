@@ -35,6 +35,7 @@ export const canvas: typeof fr = {
   },
 
   node: {
+    empty: 'Empty node',
     placeholder: 'Write…',
     editLabel: 'Node text',
     newIdea: 'New idea',
@@ -103,7 +104,8 @@ export const canvas: typeof fr = {
     minimapA11y: 'Minimap: tap a point to move the view there',
     canvasA11y: 'Canvas “{title}”, {count, plural, one {# node} other {# nodes}}',
     keyboardHelp:
-      'Arrows: move between nodes (or pan). Tab: add a child. Enter: add a sibling. F2: edit. Delete: remove. + and −: zoom. 0: fit to screen.',
+      'Arrows: move between nodes (or pan). Tab: add a child. Enter: add a sibling. F2: edit. Delete: remove. + and −: zoom. 0: fit to screen. Escape: clear the selection, then Tab to leave the canvas. The Outline view shows the same canvas as a list.',
+    hiddenCount: '{count, plural, one {# collapsed item} other {# collapsed items}}',
   },
 
   present: {

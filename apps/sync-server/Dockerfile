@@ -7,9 +7,12 @@
 
 FROM node:22-alpine AS deps
 WORKDIR /app
-# The only runtime dependency; `ws` itself has no dependencies.
-RUN printf '{"name":"pouxis-sync-server","private":true,"type":"module"}\n' > package.json \
- && npm install --omit=dev --ignore-scripts --no-audit --no-fund --no-save ws@8.22.0 \
+# The only runtime dependency (`ws` itself has no dependencies), installed with `npm ci` from a
+# lockfile carrying the same sha512 integrity as the repository's package-lock.json: a tampered
+# or substituted tarball fails the build (EINTEGRITY). Update both together.
+RUN printf '%s\n' '{"name":"pouxis-sync-server","private":true,"type":"module","dependencies":{"ws":"8.22.0"}}' > package.json \
+ && printf '%s\n' '{"name":"pouxis-sync-server","lockfileVersion":3,"requires":true,"packages":{"":{"name":"pouxis-sync-server","dependencies":{"ws":"8.22.0"}},"node_modules/ws":{"version":"8.22.0","resolved":"https://registry.npmjs.org/ws/-/ws-8.22.0.tgz","integrity":"sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg==","license":"MIT"}}}' > package-lock.json \
+ && npm ci --omit=dev --ignore-scripts --no-audit --no-fund \
  && npm cache clean --force
 
 FROM node:22-alpine
@@ -20,7 +23,7 @@ ENV NODE_ENV=production \
     POUXIS_STORAGE=file \
     POUXIS_FSYNC=always
 WORKDIR /app
-COPY --from=deps --chown=root:root /app/package.json /app/package.json
+COPY --from=deps --chown=root:root /app/package.json /app/package-lock.json /app/
 COPY --from=deps --chown=root:root /app/node_modules /app/node_modules
 COPY --chown=root:root src /app/src
 # Only the data volume is writable, and only by the unprivileged `node` user (uid 1000).

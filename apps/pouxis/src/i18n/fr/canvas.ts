@@ -39,6 +39,7 @@ export const canvas = {
 
   node: {
     placeholder: 'Écrire…',
+    empty: 'Nœud sans texte',
     editLabel: 'Texte du nœud',
     newIdea: 'Nouvelle idée',
     add: 'Ajouter un nœud',
@@ -107,7 +108,8 @@ export const canvas = {
     minimapA11y: 'Mini-carte : touchez un point pour y déplacer la vue',
     canvasA11y: 'Toile « {title} », {count, plural, one {# nœud} other {# nœuds}}',
     keyboardHelp:
-      'Flèches : passer d’un nœud à l’autre (ou déplacer la vue). Tab : ajouter un enfant. Entrée : ajouter un voisin. F2 : modifier. Suppr : supprimer. + et − : zoom. 0 : tout afficher.',
+      'Flèches : passer d’un nœud à l’autre (ou déplacer la vue). Tab : ajouter un enfant. Entrée : ajouter un voisin. F2 : modifier. Suppr : supprimer. + et − : zoom. 0 : tout afficher. Échap : désélectionner, puis Tab pour quitter la toile. La vue Plan présente la même toile sous forme de liste.',
+    hiddenCount: '{count, plural, one {# élément replié} other {# éléments repliés}}',
   },
 
   present: {
