@@ -28,6 +28,7 @@ import {
   toggleDone,
   type ActionContext,
 } from './actions.ts';
+import { describeSelection } from './a11y.ts';
 import { useAnnotations } from './annotations.ts';
 import { CanvasStage } from './components/CanvasStage.tsx';
 import { Minimap } from './components/Minimap.tsx';
