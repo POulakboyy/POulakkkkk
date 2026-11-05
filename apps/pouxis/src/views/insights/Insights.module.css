@@ -915,11 +915,27 @@
   list-style: none;
 }
 
+.ratio {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 300px;
+}
+
 .ratioScale {
   display: block;
   width: 100%;
-  max-width: 300px;
   height: auto;
+}
+
+.ratioAxis {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  color: var(--ink-2);
+  font-size: var(--text-xs);
+}
+
+.ratioAxis > :last-child {
+  text-align: end;
 }
 
 @media (prefers-reduced-motion: reduce) {

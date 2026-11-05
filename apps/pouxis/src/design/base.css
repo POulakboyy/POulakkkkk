@@ -108,6 +108,23 @@ button {
 }
 
 /*
+ * WCAG 2.4.11 Focus Not Obscured: keyboard focus and scrollIntoView stop clear of the fixed
+ * chrome (sticky phone header, tab bar, docked mini-player). Components that dock a bar raise
+ * --obscured-end (e.g. the focus mini-player via :has()).
+ */
+html {
+  scroll-padding-block-start: var(--obscured-start, 0px);
+  scroll-padding-block-end: calc(var(--obscured-end, 0px) + var(--space-4));
+}
+
+@media (max-width: 767px) {
+  html {
+    --obscured-start: calc(var(--header-h) + var(--safe-top));
+    --obscured-end: calc(var(--tabbar-h) + var(--safe-bottom));
+  }
+}
+
+/*
  * E-ink (7.10) behaviour. Every partial refresh of an electrophoretic panel ghosts, so motion,
  * translucency and soft depth are removed outright rather than shortened. Colours live in
  * tokens.css; this block catches what tokens cannot (hard-coded effects in components).

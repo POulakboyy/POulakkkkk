@@ -49,14 +49,15 @@
 .dayHead {
   position: sticky;
   top: 0;
-  z-index: 3;
+  /* Above events, the now line (4) and a dragged event (5) scrolling beneath. */
+  z-index: 6;
   background: var(--surface);
   border-bottom: var(--border-width) solid var(--line);
 }
 
 .corner {
   left: 0;
-  z-index: 4;
+  z-index: 7;
   display: flex;
   align-items: flex-end;
   padding-bottom: var(--space-2);

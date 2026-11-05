@@ -16,8 +16,15 @@
  *   after that the pause expires and the next active day starts a new streak.
  */
 import type { Task, TimeZone, WorkMode } from '../model.ts';
-import { dayKey, endOfDay as endOfLocalDay, MINUTE } from '../time.ts';
-import { completedAt, dayKeyOf, dayNumber, focusLogs, weekdayOf } from './internal.ts';
+import { MINUTE } from '../time.ts';
+import {
+  completedAt,
+  createDayLookup,
+  dayKeyOf,
+  dayNumber,
+  focusLogs,
+  weekdayOf,
+} from './internal.ts';
 
 export interface StreakRules {
   /** Jokers granted at the start of each week. */
@@ -194,19 +201,19 @@ export function activeDays(input: ActiveDaysInput): string[] {
   const mode = input.mode ?? 'create';
   const minMs = (input.minFocusMin ?? 1) * MINUTE;
   if (!(minMs >= 0)) throw new RangeError('minFocusMin must be >= 0');
-  const tz = input.timeZone;
+  const localDay = createDayLookup(input.timeZone);
   const focus = new Map<string, number>();
   const days = new Set<string>();
   for (const task of input.tasks) {
     if (mode !== 'any' && task.mode !== mode) continue;
     const done = completedAt(task);
-    if (done !== undefined && Number.isFinite(done)) days.add(dayKey(done, tz));
+    if (done !== undefined && Number.isFinite(done)) days.add(localDay(done).key);
     for (const log of focusLogs(task)) {
       let t = log.start;
       while (t < log.end) {
-        const key = dayKey(t, tz);
-        const next = Math.min(log.end, endOfLocalDay(t, tz));
-        focus.set(key, (focus.get(key) ?? 0) + (next - t));
+        const day = localDay(t);
+        const next = Math.min(log.end, day.end);
+        focus.set(day.key, (focus.get(day.key) ?? 0) + (next - t));
         t = next;
       }
     }

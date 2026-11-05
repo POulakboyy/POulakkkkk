@@ -244,7 +244,15 @@ function PlanningAccuracy({ planning }: { planning: insights.PlanningAccuracy })
               within: f.percent(estimates.withinQuarter),
             })}
           </p>
-          <RatioScale ratio={estimates.medianRatio} />
+          <div className={s.ratio}>
+            <RatioScale ratio={estimates.medianRatio} />
+            {/* Visual axis only: the sentence above already states the ratio in words. */}
+            <div className={s.ratioAxis} aria-hidden="true">
+              <span>{t('insights.weekly.scaleShort')}</span>
+              <span>{t('insights.weekly.scaleExact')}</span>
+              <span>{t('insights.weekly.scaleLong')}</span>
+            </div>
+          </div>
         </>
       ) : null}
       {scheduled ? (

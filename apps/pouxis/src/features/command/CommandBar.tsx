@@ -339,7 +339,9 @@ function CommandPanel({ initialText, active }: { initialText: string; active: bo
         <span>
           <Kbd keys="shift+enter" /> {t('command.hints.newLine', { key: '' }).trim()}
         </span>
-        <span>{t('command.hints.commands')}</span>
+        <span>
+          <Kbd keys="/" /> {t('command.hints.commands', { key: '' }).trim()}
+        </span>
         <span className={s.footerEnd}>
           <Kbd keys="escape" /> {t('command.hints.close', { key: '' }).trim()}
         </span>

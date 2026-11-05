@@ -1,8 +1,8 @@
 /**
  * Small helpers shared by the insights sub-modules. Not part of the public API.
  */
-import type { Interval, Task, Timestamp } from '../model.ts';
-import { DAY, MINUTE } from '../time.ts';
+import type { Interval, Task, TimeZone, Timestamp } from '../model.ts';
+import { DAY, MINUTE, dayKey, endOfDay, startOfDay } from '../time.ts';
 
 export const WEEK = 7 * DAY;
 
@@ -105,4 +105,43 @@ export function dayKeyOf(n: number): string {
 /** Weekday (0 = Sunday … 6 = Saturday) of a day number. 1970-01-01 was a Thursday. */
 export function weekdayOf(n: number): number {
   return (((n + 4) % 7) + 7) % 7;
+}
+
+/** One local calendar day: `[start, end)` and its `YYYY-MM-DD` key. */
+export interface LocalDay {
+  readonly key: string;
+  readonly start: Timestamp;
+  readonly end: Timestamp;
+}
+
+/**
+ * Memoised "which local day contains this instant" for one zone. Each day is computed once
+ * with `startOfDay`/`endOfDay`/`dayKey` (several `Intl` calls) and then found by interval
+ * containment, so results are identical to calling those functions for every instant.
+ */
+export function createDayLookup(timeZone: TimeZone): (ts: Timestamp) => LocalDay {
+  /** Local days overlapping each UTC day bucket. */
+  const buckets = new Map<number, LocalDay[]>();
+  let last: LocalDay | undefined;
+  const find = (ts: Timestamp): LocalDay | undefined => {
+    for (const day of buckets.get(Math.floor(ts / DAY)) ?? []) {
+      if (ts >= day.start && ts < day.end) return day;
+    }
+    return undefined;
+  };
+  return (ts) => {
+    if (last && ts >= last.start && ts < last.end) return last;
+    let day = find(ts);
+    if (!day) {
+      day = { key: dayKey(ts, timeZone), start: startOfDay(ts, timeZone), end: endOfDay(ts, timeZone) };
+      const lastBucket = Math.floor((day.end - 1) / DAY);
+      for (let b = Math.floor(day.start / DAY); b <= lastBucket; b++) {
+        const list = buckets.get(b);
+        if (list) list.push(day);
+        else buckets.set(b, [day]);
+      }
+    }
+    last = day;
+    return day;
+  };
 }

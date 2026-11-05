@@ -17,10 +17,7 @@ export function describeNode(t: T, node: SceneNode): string {
 }
 
 /** Announcement for the current selection: one node is described, several are counted. */
-export function describeSelection(
-  t: T,
-  nodes: readonly SceneNode[],
-): string {
+export function describeSelection(t: T, nodes: readonly SceneNode[]): string {
   if (nodes.length === 0) return '';
   if (nodes.length === 1) return describeNode(t, nodes[0] as SceneNode);
   return t('canvas.node.selected', { count: nodes.length });

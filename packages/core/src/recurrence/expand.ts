@@ -14,7 +14,8 @@
  * stops with what it has.
  */
 import type { TimeZone, Timestamp } from '../model.ts';
-import { DAY, fromZoned, startOfDay, tzOffset, zonedParts } from '../time.ts';
+import { DAY, fromZoned, startOfDay, zonedParts } from '../time.ts';
+import { createOffsetLookup, type OffsetLookup } from './offsets.ts';
 import {
   daysInMonth,
   daysInYear,
@@ -118,9 +119,10 @@ export function occurrences(rule: RecurrenceRule, opts: OccurrenceOptions): Time
   let candidates = 0;
   let emptyRun = 0;
   const startDay = Math.max(localDay(opts.from, tz) - 1, anchor.day);
+  const offsetAt = createOffsetLookup(tz);
   for (let k = rule.count === undefined ? periodIndexOf(plan, startDay) : 0; ; k++) {
     if (periodStart(plan, k) > stopDay) break;
-    const instants = periodInstants(plan, k, tz);
+    const instants = periodInstants(plan, k, tz, offsetAt);
     if (instants.length === 0) {
       if (++emptyRun > CYCLE_PERIODS[plan.freq]) break;
       continue;
@@ -278,7 +280,12 @@ function periodStart(plan: Plan, k: number): number {
 }
 
 /** Sorted, deduplicated instants of period `k`. */
-function periodInstants(plan: Plan, k: number, tz: TimeZone): Timestamp[] {
+function periodInstants(
+  plan: Plan,
+  k: number,
+  tz: TimeZone,
+  offsetAt: OffsetLookup,
+): Timestamp[] {
   const days = candidateDays(plan, k).filter((d) => !plan.holidays?.has(d));
   if (days.length === 0) return [];
   let instances = expandTimes(plan, days);
@@ -286,7 +293,7 @@ function periodInstants(plan: Plan, k: number, tz: TimeZone): Timestamp[] {
   const both = plan.freq === 'hourly' || plan.freq === 'minutely';
   const instants = instances
     .flatMap((i) => {
-      const all = toInstants(i, tz);
+      const all = toInstants(i, tz, offsetAt);
       return both ? all : all.slice(0, 1);
     })
     .sort((a, b) => a - b);
@@ -423,16 +430,16 @@ function applySetPos(plan: Plan, instances: readonly LocalInstance[]): LocalInst
  * Every instant showing wall-clock instance `i` in `tz`, ascending: one normally, two when a
  * fall-back repeats it, and — when spring-forward skips it — the next valid instant.
  */
-function toInstants(i: LocalInstance, tz: TimeZone): Timestamp[] {
+function toInstants(i: LocalInstance, tz: TimeZone, offsetAt: OffsetLookup): Timestamp[] {
   const { year, month, day } = fromDayNum(i.day);
   const hour = Math.floor(i.sec / 3600);
   const minute = Math.floor((i.sec % 3600) / 60);
   const wall = Date.UTC(year, month - 1, day, hour, minute, i.sec % 60);
   // Offsets a day either side bracket any single DST transition around this wall time.
-  const offsets = new Set([tzOffset(wall - DAY, tz), tzOffset(wall + DAY, tz)]);
+  const offsets = new Set([offsetAt(wall - DAY), offsetAt(wall + DAY)]);
   const valid = [...offsets]
     .map((offset) => wall - offset)
-    .filter((ts) => wall - tzOffset(ts, tz) === ts)
+    .filter((ts) => wall - offsetAt(ts) === ts)
     .sort((a, b) => a - b);
   if (valid.length > 0) return valid;
   return [fromZoned({ year, month, day, hour, minute, second: i.sec % 60 }, tz)];

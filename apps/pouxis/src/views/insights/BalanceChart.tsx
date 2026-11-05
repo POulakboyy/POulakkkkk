@@ -6,10 +6,15 @@ import { dayKeyWeekday, stackSegments, weekdayNames } from './model.ts';
 import s from './Insights.module.css';
 
 /** Series in fixed order; colours validated together for colour-vision deficiencies. */
+/**
+ * Every pair is adjacent in some stacked column (organisation can be 0), so the slots are
+ * validated on all pairs, light and dark: viz-7 (violet) collapsed onto viz-1 in dark mode
+ * for protan vision (ΔE 1.9); with viz-3 the worst protan/deutan pair stays at ΔE 9.4.
+ */
 export const BALANCE_SERIES = [
   { key: 'create', label: 'insights.balance.create', color: 'var(--viz-1)' },
   { key: 'organize', label: 'insights.balance.organize', color: 'var(--viz-2)' },
-  { key: 'meetings', label: 'insights.balance.meetings', color: 'var(--viz-7)' },
+  { key: 'meetings', label: 'insights.balance.meetings', color: 'var(--viz-3)' },
 ] as const satisfies readonly { key: string; label: MessageKey; color: string }[];
 
 const BAR_W = 600;

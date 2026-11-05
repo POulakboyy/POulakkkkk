@@ -13,6 +13,7 @@ import {
   ProgressRing,
   SegmentedControl,
   Switch,
+  VisuallyHidden,
   cx,
   useFocusTrap,
   useMediaQuery,
@@ -101,6 +102,8 @@ export function FocusMode({ state, controller, onCollapse }: FocusModeProps) {
             <span className={s.bigTimer}>{f.timer(d.remainingSec)}</span>
             <span className={s.bigPhase}>{phase}</span>
           </ProgressRing>
+          {/* Phase changes (focus → break → paused) are spoken; the ticking timer is not. */}
+          <VisuallyHidden aria-live="polite">{phase}</VisuallyHidden>
 
           <div className={s.titleBlock}>
             <span className={s.bigIcon} aria-hidden="true">

@@ -106,32 +106,33 @@ export function Timeline(props: TimelineProps) {
         <div className={s.track}>
           {window.work && <OffHours window={window} work={window.work} />}
 
-          {gaps.map((gap) => (
-            <Gap
-              key={gap.start}
-              window={window}
-              gap={gap}
-              onGap={props.onGap}
-              onDrop={props.onDropTask}
-            />
-          ))}
-
+          {/* One chronological list: Tab walks the day in time order (WCAG 2.4.3). */}
           <ol className={s.blocks} aria-label={t('today.timeline.label')}>
-            {items.map((item) => (
-              <Block
-                key={item.id}
-                item={item}
-                window={window}
-                lane={lanes.get(item.id)}
-                now={now}
-                landed={props.landed.has(item.task?.id ?? item.id)}
-                focused={item.task !== undefined && item.task.id === props.focusTaskId}
-                decay={props.decayOf(item)}
-                onToggle={props.onToggle}
-                onFocus={props.onFocus}
-                onRemoveBuffer={props.onRemoveBuffer}
-              />
-            ))}
+            {chronological(items, gaps).map((entry) =>
+              entry.kind === 'gap' ? (
+                <Gap
+                  key={`gap-${entry.gap.start}`}
+                  window={window}
+                  gap={entry.gap}
+                  onGap={props.onGap}
+                  onDrop={props.onDropTask}
+                />
+              ) : (
+                <Block
+                  key={entry.item.id}
+                  item={entry.item}
+                  window={window}
+                  lane={lanes.get(entry.item.id)}
+                  now={now}
+                  landed={props.landed.has(entry.item.task?.id ?? entry.item.id)}
+                  focused={entry.item.task !== undefined && entry.item.task.id === props.focusTaskId}
+                  decay={props.decayOf(entry.item)}
+                  onToggle={props.onToggle}
+                  onFocus={props.onFocus}
+                  onRemoveBuffer={props.onRemoveBuffer}
+                />
+              ),
+            )}
           </ol>
 
           {ghosts.map((g) => (
@@ -156,6 +157,22 @@ export function Timeline(props: TimelineProps) {
       </div>
     </section>
   );
+}
+
+type TrackEntry =
+  | { kind: 'gap'; start: Timestamp; gap: Interval }
+  | { kind: 'item'; start: Timestamp; item: TimelineItem };
+
+/** Blocks and free gaps merged by start time (stable: blocks keep their lane order). */
+export function chronological(
+  items: readonly TimelineItem[],
+  gaps: readonly Interval[],
+): TrackEntry[] {
+  const entries: TrackEntry[] = [
+    ...items.map((item) => ({ kind: 'item' as const, start: item.start, item })),
+    ...gaps.map((gap) => ({ kind: 'gap' as const, start: gap.start, gap })),
+  ];
+  return entries.sort((a, b) => a.start - b.start);
 }
 
 function OffHours({ window, work }: { window: Interval; work: Interval }) {
@@ -218,10 +235,10 @@ function Gap(props: {
   const accepts = (e: DragEvent) => e.dataTransfer.types.includes(TASK_DRAG_TYPE);
 
   return (
+    <li className={s.gapItem} style={pos(props.window, props.gap)}>
     <button
       type="button"
       className={cx(s.gap, over && s.gapOver)}
-      style={pos(props.window, props.gap)}
       onClick={() => props.onGap(props.gap)}
       onDragOver={(e) => {
         if (!accepts(e)) return;
@@ -243,6 +260,7 @@ function Gap(props: {
         {t('today.timeline.freeSlot', { duration: f.duration(minutes) })}
       </span>
     </button>
+    </li>
   );
 }
 

@@ -116,10 +116,23 @@ export function tokenize(text: string): Token[] {
   return out;
 }
 
-interface AnalyzedWord {
-  surface: string;
-  term: string;
-  stop: boolean;
+/**
+ * Analysed non-stop words of `text`, without offsets: the allocation-light path used to build
+ * the index. The returned objects are shared and must not be mutated.
+ */
+export function indexWords(text: string): AnalyzedWord[] {
+  const out: AnalyzedWord[] = [];
+  for (const match of text.matchAll(WORD_RE)) {
+    const word = analyzeWord(match[0]);
+    if (word !== null && !word.stop) out.push(word);
+  }
+  return out;
+}
+
+export interface AnalyzedWord {
+  readonly surface: string;
+  readonly term: string;
+  readonly stop: boolean;
 }
 
 /**

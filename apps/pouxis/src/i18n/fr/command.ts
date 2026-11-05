@@ -100,7 +100,7 @@ export const command = {
     select: '{key} pour valider',
     navigate: '↑ ↓ pour naviguer',
     close: '{key} pour fermer',
-    commands: '/ pour les commandes',
+    commands: '{key} pour les commandes',
     newLine: '{key} pour une nouvelle ligne',
     complete: '{key} pour compléter',
     syntax: '#étiquette · @personne · p1 · demain 14 h',

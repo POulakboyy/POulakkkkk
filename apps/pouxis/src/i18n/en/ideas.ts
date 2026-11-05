@@ -25,7 +25,7 @@ export const ideas: typeof fr = {
     search: 'Search notes',
     noResults: 'No note contains “{query}”.',
     back: 'All notes',
-    pick: 'Pick a note on the left, or create one.',
+    pick: 'Pick a note from the list, or create one.',
     backlinks: 'Mentioned in',
     noBacklinks: 'No other note mentions it yet. Write [[{title}]] elsewhere to link it.',
     mentions: '{count, plural, one {# mention} other {# mentions}}',

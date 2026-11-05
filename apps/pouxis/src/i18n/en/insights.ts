@@ -93,6 +93,10 @@ export const insights: typeof fr = {
     planningEstimates:
       'Durations: median at {ratio} of the estimate, {within} of tasks within ±25%',
     planningScheduled: 'Slots: {done} of {planned} planned tasks done',
+    /** Axis labels under the estimate scale (×0.5 · estimate · ×2). */
+    scaleShort: 'shorter',
+    scaleExact: 'as estimated',
+    scaleLong: 'longer',
     planningEmpty: 'Not enough estimates yet to measure planning accuracy.',
     slipped: '{count, plural, one {# task to reschedule} other {# tasks to reschedule}}',
     suggestions: 'Ideas for next week',

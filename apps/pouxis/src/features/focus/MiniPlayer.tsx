@@ -1,6 +1,13 @@
 import { useT, useFormat } from '../../i18n/index.ts';
 import { useRecord } from '../../store/index.ts';
-import { IconButton, IconPause, IconPlay, ProgressRing, cx } from '../../ui/index.ts';
+import {
+  IconButton,
+  IconPause,
+  IconPlay,
+  ProgressRing,
+  VisuallyHidden,
+  cx,
+} from '../../ui/index.ts';
 import type { FocusController, FocusState } from './controller.ts';
 import { focusDisplay, type FocusDisplay } from './display.ts';
 import s from './Focus.module.css';
@@ -70,6 +77,7 @@ export function MiniPlayer({ state, controller, onExpand }: MiniPlayerProps) {
           </span>
         </span>
       </button>
+      <VisuallyHidden aria-live="polite">{phase}</VisuallyHidden>
       {d.running ? (
         <IconButton
           label={t('today.focus.pause')}

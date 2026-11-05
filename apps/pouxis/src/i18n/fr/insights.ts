@@ -98,6 +98,10 @@ export const insights = {
     planningEstimates:
       'Durées : médiane à {ratio} de l’estimation, {within} des tâches à ±25 % près',
     planningScheduled: 'Créneaux : {done} sur {planned} tâches planifiées terminées',
+    /** Axis labels under the estimate scale (×0.5 · estimate · ×2). */
+    scaleShort: 'plus court',
+    scaleExact: 'prévu',
+    scaleLong: 'plus long',
     planningEmpty: 'Pas encore assez d’estimations pour mesurer la justesse du plan.',
     slipped: '{count, plural, one {# tâche à replanifier} other {# tâches à replanifier}}',
     suggestions: 'Pistes pour la semaine prochaine',

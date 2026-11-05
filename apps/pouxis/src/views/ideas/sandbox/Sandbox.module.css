@@ -55,8 +55,10 @@
   color: var(--ink-3);
 }
 
+/* Focus ring colour, not the accent: the light accent is 2.2:1 on paper (WCAG 1.4.11 asks 3:1). */
 .paper:focus-within {
-  border-color: var(--accent);
+  border-color: var(--focus-ring);
+  border-style: solid;
 }
 
 .actions {

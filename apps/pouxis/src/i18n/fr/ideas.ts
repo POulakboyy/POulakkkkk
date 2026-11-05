@@ -28,7 +28,7 @@ export const ideas = {
     search: 'Rechercher dans les notes',
     noResults: 'Aucune note ne contient « {query} ».',
     back: 'Toutes les notes',
-    pick: 'Choisissez une note à gauche, ou créez-en une.',
+    pick: 'Choisissez une note dans la liste, ou créez-en une.',
     backlinks: 'Mentionnée dans',
     noBacklinks:
       'Aucune autre note ne la mentionne pour l’instant. Écrivez [[{title}]] ailleurs pour la relier.',

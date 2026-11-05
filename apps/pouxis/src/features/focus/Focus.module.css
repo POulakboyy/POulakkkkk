@@ -14,7 +14,8 @@
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
   border: var(--border-width) solid var(--line);
   border-radius: var(--radius-xl);
-  background: var(--glass);
+  /* Denser than --glass: timeline text behind the player must not bleed through its meta line. */
+  background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: var(--shadow-2);
@@ -73,11 +74,20 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* WCAG 2.4.11: focused content scrolls clear of the docked player (see base.css). */
+:global(html):has(.mini) {
+  --obscured-end: calc(var(--safe-bottom) + var(--space-5) + 64px);
+}
+
 @media (max-width: 767px) {
   .mini {
     left: var(--space-3);
     right: var(--space-3);
     bottom: calc(var(--tabbar-h) + var(--safe-bottom) + var(--space-2));
+  }
+
+  :global(html):has(.mini) {
+    --obscured-end: calc(var(--tabbar-h) + var(--safe-bottom) + var(--space-2) + 64px);
   }
 }
 

@@ -12,7 +12,7 @@
  * Sandbox records (5.8) are indexed but excluded from results unless explicitly requested.
  */
 import type { CollectionName, Id, Timestamp } from '../model.ts';
-import { excerpt, tokenize, type Token } from './text.ts';
+import { excerpt, indexWords, tokenize, type Token } from './text.ts';
 
 /** A record flattened for indexing. Build one from a domain record with `toSearchDoc`. */
 export interface SearchDoc {
@@ -99,7 +99,10 @@ type FieldFreqs = [number, number, number];
  */
 interface Posting {
   readonly slot: number;
-  readonly freqs: FieldFreqs;
+  /** Term frequencies per field, inline to halve allocations on large indexes. */
+  title: number;
+  tags: number;
+  body: number;
   index: number;
 }
 
@@ -188,15 +191,16 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
       doc.body ?? '',
     ];
     for (let f = 0; f < 3; f++) {
-      for (const token of tokenize(fields[f] ?? '')) {
-        if (token.stop) continue;
+      for (const token of indexWords(fields[f] ?? '')) {
         entry.lengths[f] = (entry.lengths[f] ?? 0) + 1;
         let posting = entry.terms.get(token.term);
         if (!posting) {
-          posting = { slot, freqs: [0, 0, 0], index: 0 };
+          posting = { slot, title: 0, tags: 0, body: 0, index: 0 };
           entry.terms.set(token.term, posting);
         }
-        posting.freqs[f] = (posting.freqs[f] ?? 0) + 1;
+        if (f === TITLE) posting.title++;
+        else if (f === TAGS) posting.tags++;
+        else posting.body++;
         entry.surfaces.set(token.surface, token.term);
       }
     }
@@ -284,15 +288,10 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
   }
 
   /** BM25F contribution of one term to one document. */
-  function termScore(
-    freqs: FieldFreqs,
-    lengths: FieldFreqs,
-    avg: FieldFreqs,
-    termIdf: number,
-  ): number {
+  function termScore(posting: Posting, lengths: FieldFreqs, avg: FieldFreqs, termIdf: number) {
     let tf = 0;
     for (let f = 0; f < 3; f++) {
-      const freq = freqs[f] ?? 0;
+      const freq = f === TITLE ? posting.title : f === TAGS ? posting.tags : posting.body;
       if (freq === 0) continue;
       const norm = 1 - b + (b * (lengths[f] ?? 0)) / (avg[f] ?? 1);
       tf += ((weights[f] ?? 0) * freq) / norm;
@@ -309,7 +308,7 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
       for (const [term, multiplier] of clause.terms) {
         const posting = entry.terms.get(term);
         if (!posting) continue;
-        const score = termScore(posting.freqs, entry.lengths, avg, idf(term) * multiplier);
+        const score = termScore(posting, entry.lengths, avg, idf(term) * multiplier);
         if (bestTerm === undefined || score > bestScore) {
           bestTerm = term;
           bestScore = score;
@@ -359,7 +358,7 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
             acceptance[slot] = state;
           }
           if (state === 2) continue;
-          const score = termScore(posting.freqs, entry.lengths, avg, termIdf);
+          const score = termScore(posting, entry.lengths, avg, termIdf);
           if (clauseMark[slot] !== c + 1) {
             clauseMark[slot] = c + 1;
             clauseBest[slot] = score;

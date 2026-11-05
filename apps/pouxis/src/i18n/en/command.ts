@@ -94,7 +94,7 @@ export const command: typeof fr = {
     select: '{key} to confirm',
     navigate: '↑ ↓ to move',
     close: '{key} to close',
-    commands: '/ for commands',
+    commands: '{key} for commands',
     newLine: '{key} for a new line',
     complete: '{key} to complete',
     syntax: '#tag · @person · p1 · tomorrow 2pm',
