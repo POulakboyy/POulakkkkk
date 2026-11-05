@@ -12,9 +12,6 @@
   font: inherit;
   text-align: start;
   cursor: pointer;
-  transition:
-    background-color var(--dur-fast) var(--ease-standard),
-    border-color var(--dur-fast) var(--ease-standard);
 }
 
 .candidate:hover {
@@ -32,13 +29,16 @@
 }
 
 .candidateTitle {
+  display: -webkit-box;
   flex: 1;
   min-width: 0;
   overflow: hidden;
   font-size: var(--text-md);
   font-weight: var(--weight-medium);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: var(--leading-snug);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .check {

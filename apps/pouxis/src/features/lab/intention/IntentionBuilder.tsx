@@ -270,9 +270,11 @@ function composeSentence(draft: IntentionDraft, t: ReturnType<typeof useT>): str
   const action = cleanFragment(draft.action) || '…';
   const when = cleanFragment(draft.when) || '…';
   const where = cleanFragment(draft.where);
-  return where
+  const sentence = where
     ? t('lab.intention.sentenceWhere', { when, where, action })
     : t('lab.intention.sentence', { when, action });
+  // An empty action placeholder ends with "…" already: drop the sentence's final period.
+  return sentence.replace(/…\.$/u, '…');
 }
 
 /** Books `slot` on the task and returns an undo callback restoring its previous plan. */

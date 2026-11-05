@@ -3,8 +3,7 @@ import type { lab as fr } from '../fr/lab.ts';
 export const lab: typeof fr = {
   title: 'Lab',
   eyebrow: 'Experiments',
-  subtitle:
-    'Research-based tools on trial. They use your local data and may change.',
+  subtitle: 'Research-based tools on trial. They use your local data and may change.',
   experimental: 'Experimental',
   pick: 'Choose an experiment',
   evidence: 'Basis',
@@ -48,7 +47,8 @@ export const lab: typeof fr = {
   shutdown: {
     title: 'Day shutdown',
     description: 'Close the day in a few steps: what is done, what is left, where to pick up.',
-    evidence: 'Plans and unfinished goals (Masicampo and Baumeister, 2011); resumption plans (Leroy and Glomb, 2018)',
+    evidence:
+      'Plans and unfinished goals (Masicampo and Baumeister, 2011); resumption plans (Leroy and Glomb, 2018)',
     stepLabel: 'Step {current} of {total}',
     next: 'Continue',
     back: 'Back',
@@ -104,6 +104,7 @@ export const lab: typeof fr = {
       high: 'Demanding or creative work',
     },
     last: 'Noted {when}',
+    entry: 'Energy check-in: {level}',
     saved: 'Energy noted',
     fits: 'What fits right now',
     fitsEmpty: 'No open task matches. A break counts too.',
@@ -111,13 +112,15 @@ export const lab: typeof fr = {
     curveHint: 'Your check-ins adjust the curve that auto-scheduling uses to pick your slots.',
     peak: 'Peak around {hour}:00',
     hourA11y: '{hour}:00: {percent}',
-    checkIns: '{count, plural, =0 {No check-ins} one {# check-in} other {# check-ins}} over 4 weeks',
+    checkIns:
+      '{count, plural, =0 {No check-ins} one {# check-in} other {# check-ins}} over 4 weeks',
   },
 
   wins: {
     title: 'Wins jar',
     description: 'Keep track of progress, even small. It feeds your weekly review.',
-    evidence: 'Progress principle (Amabile and Kramer, 2011); peak-end rule (Kahneman et al., 1993)',
+    evidence:
+      'Progress principle (Amabile and Kramer, 2011); peak-end rule (Kahneman et al., 1993)',
     heading: 'Your wins this week',
     count:
       '{count, plural, =0 {The jar is empty for now} one {# win this week} other {# wins this week}}',
@@ -138,14 +141,16 @@ export const lab: typeof fr = {
   breaks: {
     title: 'Well-timed breaks',
     description: 'A break suggested from your focus time, matched to the kind of work.',
-    evidence: 'Scheduled breaks (Biwer et al., 2023; Ariga and Lleras, 2011); walking (Oppezzo and Schwartz, 2014)',
+    evidence:
+      'Scheduled breaks (Biwer et al., 2023; Ariga and Lleras, 2011); walking (Oppezzo and Schwartz, 2014)',
     since: 'of focus since your last break',
     rested: 'On a break for {duration}',
     none: 'No focus session today. Suggestions will appear while you work.',
     progress: 'Until the next break',
     progressValue: '{duration} left',
     rhythm: 'Rhythm',
-    rhythmHint: 'The 12/3 and 24/6 rhythms are the ones compared by Biwer et al. (2023). No duration is proven optimal.',
+    rhythmHint:
+      'The 12/3 and 24/6 rhythms are the ones compared by Biwer et al. (2023). No duration is proven optimal.',
     rhythmOption: '{focus}/{rest}',
     free: 'Free',
     freeHint: 'No automatic suggestion: take your breaks when you feel like it.',

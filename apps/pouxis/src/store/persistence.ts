@@ -19,6 +19,8 @@ export interface Persistence {
   load(): Promise<PersistedState>;
   /** Synchronous load, when the backend can (memory). Lets a store be ready immediately. */
   loadSync?(): PersistedState;
+  /** Synchronous metadata read, when the backend can (memory). */
+  getMetaSync?<T>(key: string): T | undefined;
   append(ops: readonly sync.Op[]): Promise<void>;
   /**
    * Atomically replaces the snapshot and the op log with one snapshot. `merge` receives what is
@@ -70,6 +72,7 @@ export function createMemoryPersistence(disk: MemoryDisk = createMemoryDisk()): 
       disk.snapshot = JSON.stringify(merge(read()));
       disk.batches = [];
     },
+    getMetaSync: <T>(key: string) => disk.meta.get(key) as T | undefined,
     getMeta: async <T>(key: string) => disk.meta.get(key) as T | undefined,
     async setMeta(key, value) {
       disk.meta.set(key, value);

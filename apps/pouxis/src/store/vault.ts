@@ -49,7 +49,12 @@ export function payloadCipher(
   encrypt: (payload: string, header: sync.EnvelopeHeader) => Promise<string>;
   decrypt: (sealed: string, header: sync.EnvelopeHeader) => Promise<string>;
 } {
-  const context = (h: sync.EnvelopeHeader) => ({ spaceId: space, id: h.id, hlc: h.hlc, node: h.node });
+  const context = (h: sync.EnvelopeHeader) => ({
+    spaceId: space,
+    id: h.id,
+    hlc: h.hlc,
+    node: h.node,
+  });
   return {
     encrypt: (payload, header) => pxCrypto.encryptPayload(key, payload, context(header)),
     async decrypt(sealed, header) {

@@ -66,8 +66,9 @@ export function checkInPrior(
   const sum = base.map((value) => value * PRIOR_WEIGHT);
   const weight = base.map(() => PRIOR_WEIGHT);
   for (const entry of checkIns(journal)) {
-    const age = now - entry.createdAt;
-    if (age < 0 || age > WINDOW_WEEKS * WEEK) continue;
+    // `now` may lag a fresh check-in by up to a minute: treat it as age zero.
+    const age = Math.max(0, now - entry.createdAt);
+    if (age > WINDOW_WEEKS * WEEK) continue;
     const level = levelOf(entry);
     if (!level) continue;
     const recency = 0.5 ** (age / WEEK / HALF_LIFE_WEEKS);
@@ -119,7 +120,9 @@ export function fitScore(task: Task, level: Energy): number {
     case 'high':
       return (demanding ? 2 : 0) + (long ? 1 : 0) - (task.energy === 'low' ? 2 : 0);
     case 'low':
-      return (task.energy === 'low' ? 2 : 0) + (short ? 1 : 0) - (demanding ? 2 : 0) - (long ? 1 : 0);
+      return (
+        (task.energy === 'low' ? 2 : 0) + (short ? 1 : 0) - (demanding ? 2 : 0) - (long ? 1 : 0)
+      );
     case 'medium':
       return (task.energy === 'medium' || task.energy === undefined ? 1 : 0) - (long ? 0.5 : 0);
   }

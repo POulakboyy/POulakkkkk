@@ -1,5 +1,5 @@
 import { useId, useMemo, type CSSProperties } from 'react';
-import type { Energy, Task } from '@pouxis/core';
+import { zonedParts, type Energy, type Task } from '@pouxis/core';
 import { useAppPrefs } from '../../../app/appPrefs.ts';
 import { useFormat, useT, type MessageKey } from '../../../i18n/index.ts';
 import { store, useCollection, usePrefs } from '../../../store/index.ts';
@@ -77,7 +77,9 @@ export function EnergyCheckIn() {
                 />
               ))}
             </span>
-            <span className={styles.levelLabel}>{t(`lab.energy.level.${value}` as MessageKey)}</span>
+            <span className={styles.levelLabel}>
+              {t(`lab.energy.level.${value}` as MessageKey)}
+            </span>
             <span className={styles.levelHint}>
               {t(`lab.energy.levelHint.${value}` as MessageKey)}
             </span>
@@ -135,7 +137,7 @@ function Curve() {
   );
   const hours = curve.cells.slice(FIRST_HOUR, LAST_HOUR + 1);
   const peak = curve.peak;
-  const nowHour = Number(format.time(now).slice(0, 2));
+  const nowHour = zonedParts(now, prefs.timeZone).hour;
   const count = recentCheckInCount(journal, now);
 
   return (

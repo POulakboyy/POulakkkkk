@@ -6,6 +6,8 @@ export type NewRecord<K extends CollectionName> = Omit<
   'id' | 'createdAt' | 'updatedAt'
 > & {
   id?: string;
+  /** Backdates the record (imports, demo content); defaults to now. */
+  createdAt?: number;
 };
 
 export type RecordPatch<K extends CollectionName> = Partial<
@@ -62,6 +64,10 @@ export interface Store {
   update<K extends CollectionName>(name: K, id: string, patch: RecordPatch<K>): void;
   /** Moves a record to the trash (undoable); trashed records are purged after 30 days. */
   remove<K extends CollectionName>(name: K, id: string): void;
+  /** Records in the trash, oldest first. */
+  trashed<K extends CollectionName>(name: K): readonly Collections[K][];
+  /** Takes a record out of the trash (no-op when it is not trashed). */
+  restore<K extends CollectionName>(name: K, id: string): void;
   prefs(): UserPrefs;
   setPrefs(patch: Partial<UserPrefs>): void;
   syncStatus(): SyncStatus;

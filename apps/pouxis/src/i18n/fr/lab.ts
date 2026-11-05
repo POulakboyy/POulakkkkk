@@ -49,8 +49,10 @@ export const lab = {
 
   shutdown: {
     title: 'Clôture de journée',
-    description: 'Fermer la journée en quelques gestes : ce qui est fait, ce qui reste, par quoi reprendre.',
-    evidence: 'Plan et buts inachevés (Masicampo et Baumeister, 2011) ; plan de reprise (Leroy et Glomb, 2018)',
+    description:
+      'Fermer la journée en quelques gestes : ce qui est fait, ce qui reste, par quoi reprendre.',
+    evidence:
+      'Plan et buts inachevés (Masicampo et Baumeister, 2011) ; plan de reprise (Leroy et Glomb, 2018)',
     stepLabel: 'Étape {current} sur {total}',
     next: 'Continuer',
     back: 'Retour',
@@ -106,6 +108,7 @@ export const lab = {
       high: 'Travail exigeant ou créatif',
     },
     last: 'Noté {when}',
+    entry: 'Check-in d’énergie : {level}',
     saved: 'Énergie notée',
     fits: 'Ce qui vous va maintenant',
     fitsEmpty: 'Aucune tâche ouverte ne correspond. Une pause compte aussi.',
@@ -114,13 +117,16 @@ export const lab = {
       'Vos check-ins ajustent la courbe que le placement automatique utilise pour choisir vos créneaux.',
     peak: 'Pic vers {hour} h',
     hourA11y: '{hour} h : {percent}',
-    checkIns: '{count, plural, =0 {Aucun check-in} one {# check-in} other {# check-ins}} sur 4 semaines',
+    checkIns:
+      '{count, plural, =0 {Aucun check-in} one {# check-in} other {# check-ins}} sur 4 semaines',
   },
 
   wins: {
     title: 'Bocal des victoires',
-    description: 'Gardez une trace des progrès, même petits. Ils nourrissent votre bilan de la semaine.',
-    evidence: 'Principe du progrès (Amabile et Kramer, 2011) ; règle pic-fin (Kahneman et al., 1993)',
+    description:
+      'Gardez une trace des progrès, même petits. Ils nourrissent votre bilan de la semaine.',
+    evidence:
+      'Principe du progrès (Amabile et Kramer, 2011) ; règle pic-fin (Kahneman et al., 1993)',
     heading: 'Vos victoires de la semaine',
     count:
       '{count, plural, =0 {Le bocal est vide pour l’instant} one {# victoire cette semaine} other {# victoires cette semaine}}',
@@ -141,14 +147,16 @@ export const lab = {
   breaks: {
     title: 'Pauses au bon moment',
     description: 'Une pause proposée selon votre temps de focus, adaptée au type de travail.',
-    evidence: 'Pauses planifiées (Biwer et al., 2023 ; Ariga et Lleras, 2011) ; marche (Oppezzo et Schwartz, 2014)',
+    evidence:
+      'Pauses planifiées (Biwer et al., 2023 ; Ariga et Lleras, 2011) ; marche (Oppezzo et Schwartz, 2014)',
     since: 'de focus depuis la dernière pause',
     rested: 'En pause depuis {duration}',
     none: 'Aucune session de focus aujourd’hui. Les suggestions apparaîtront pendant que vous travaillez.',
     progress: 'Avant la prochaine pause',
     progressValue: '{duration} restantes',
     rhythm: 'Rythme',
-    rhythmHint: 'Les rythmes 12/3 et 24/6 sont ceux comparés par Biwer et al. (2023). Aucune durée n’est démontrée optimale.',
+    rhythmHint:
+      'Les rythmes 12/3 et 24/6 sont ceux comparés par Biwer et al. (2023). Aucune durée n’est démontrée optimale.',
     rhythmOption: '{focus}/{rest}',
     free: 'Libre',
     freeHint: 'Pas de suggestion automatique : prenez vos pauses quand vous le sentez.',
