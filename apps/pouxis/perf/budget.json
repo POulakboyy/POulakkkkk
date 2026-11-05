@@ -1,6 +1,6 @@
 {
-  "initialJsGzip": 999,
-  "initialCssGzip": 999,
-  "largestLazyJsGzip": 999,
-  "totalJsGzip": 999
+  "initialJsGzip": 195,
+  "initialCssGzip": 16,
+  "largestLazyJsGzip": 40,
+  "totalJsGzip": 420
 }
