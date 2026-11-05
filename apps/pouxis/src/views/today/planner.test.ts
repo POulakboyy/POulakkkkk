@@ -73,6 +73,15 @@ describe('planDay', () => {
     expect(s.batches).toBe(1);
     expect(s.get('tasks', a.id)?.scheduled).toEqual({ start: slot.start, end: slot.end });
   });
+
+  it('also places floating tasks left over from an earlier day', () => {
+    const s = world();
+    const yesterday = startOfDay(at(-12), TZ);
+    const old = s.create('tasks', taskFixture({ title: 'Old', floatingDay: yesterday }));
+    const result = planDay({ tasks: s.all('tasks'), events: [], prefs, now: at(8) });
+    expect(result.placements.map((p) => p.taskId)).toEqual([old.id]);
+    expect(result.placements[0]!.start).toBeGreaterThanOrEqual(at(8));
+  });
 });
 
 describe('magnetizeDay and slotInGap', () => {
