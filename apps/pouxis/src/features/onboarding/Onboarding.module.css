@@ -1,0 +1,345 @@
+.root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100dvh;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  background: radial-gradient(120% 60% at 50% -10%, var(--accent-soft), transparent 60%), var(--bg);
+}
+
+.top {
+  display: grid;
+  /* minmax(0, …): at 320 px the skip label wraps instead of pushing the page sideways. */
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 50% 50%, var(--accent) 0 42%, var(--ink) 44%);
+}
+
+.dots {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--line-strong);
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+
+.dot[data-state='done'] {
+  background: var(--ink-3);
+}
+
+/* Width changes without animation: only transform/opacity are animated (MOTION.md). */
+.dot[data-state='current'] {
+  width: 24px;
+  background: var(--ink);
+}
+
+.skip {
+  justify-self: end;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  text-align: end;
+  cursor: pointer;
+}
+
+.skip:hover {
+  background: var(--state-hover);
+  color: var(--ink);
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-6) var(--space-5);
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: min(520px, 100%);
+  animation: px-rise-in var(--dur-slow) var(--ease-enter) both;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  outline: none;
+}
+
+.body {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--ink-2);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+
+.field {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Example capture ---------- */
+
+.example {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-2);
+}
+
+.exampleLine {
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+}
+
+.token {
+  border-radius: var(--radius-xs);
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.token[data-type='tag'] {
+  color: var(--create);
+  background: var(--create-soft);
+  box-shadow: 0 0 0 2px var(--create-soft);
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--ink);
+  /* Stops before 5 s (WCAG 2.2.2): a decorative blink must not run indefinitely. */
+  animation: px-pulse var(--dur-slower) var(--ease-standard) 8;
+}
+
+.caption {
+  margin-top: var(--space-3);
+  color: var(--ink-3);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Choices (chronotype) ---------- */
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 64px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.choice:hover {
+  border-color: var(--line-strong);
+}
+
+.choice:active {
+  transform: scale(var(--press-scale));
+}
+
+.choice[aria-checked='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.choiceQuiet {
+  min-height: var(--tap-min);
+  background: transparent;
+  border-style: dashed;
+}
+
+.choiceIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.choiceText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.choiceLabel {
+  font-weight: var(--weight-semibold);
+}
+
+.choiceHint {
+  color: var(--ink-3);
+  font-size: var(--text-sm);
+}
+
+.choiceCheck {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--bg);
+  background: transparent;
+}
+
+.choice[aria-checked='true'] .choiceCheck {
+  background: var(--ink);
+}
+
+/* ---------- Permission primers ---------- */
+
+.primers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.primer {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+}
+
+.primerIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.primerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.primerTitle {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+
+.primerBody {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.primerAction {
+  margin-top: var(--space-2);
+}
+
+.granted {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--success);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.note {
+  color: var(--ink-3);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Footer ---------- */
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  width: min(520px, 100%);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) var(--space-7);
+}
+
+.primary {
+  flex: 1;
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: var(--text-3xl);
+  }
+
+  .stage {
+    align-items: flex-start;
+    padding-top: var(--space-4);
+  }
+
+  /* Keeps the next step reachable when a screen is taller than the viewport (step 4 at 390×844). */
+  .actions {
+    position: sticky;
+    bottom: 0;
+    padding-bottom: max(var(--space-5), var(--safe-bottom));
+    background: linear-gradient(to bottom, transparent, var(--bg) var(--space-5));
+  }
+}

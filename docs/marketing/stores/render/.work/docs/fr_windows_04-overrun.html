@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --bg-elevated: #fbfaf7;
+        --surface: #ffffff;
+        --surface-2: #f0ede6;
+        --surface-3: #e8e4db;
+        --ink: #1c1b18;
+        --ink-2: #4f4b44;
+        --ink-3: #656156;
+        --line: #e6e2d8;
+        --line-strong: #d3cec2;
+        --line-control: #827d73;
+        --overlay: rgb(28 27 24 / 0.32);
+        --glass: rgb(251 250 247 / 0.72);
+        --shadow-color: 28 27 24;
+        --accent: #ff8f70;
+        --accent-ink: #1c1b18;
+        --accent-soft: #ffe5dc;
+        --accent-strong: #a83c1f;
+        --create: #344ce5;
+        --create-soft: #e3e8ff;
+        --create-ink: #ffffff;
+        --execute: #a04803;
+        --execute-soft: #ffead7;
+        --execute-ink: #ffffff;
+        --mode-accent: var(--create);
+        --mode-accent-soft: var(--create-soft);
+        --mode-accent-ink: var(--create-ink);
+        --success: #007144;
+        --success-soft: #dbf6e7;
+        --success-ink: #ffffff;
+        --warning: #8b5600;
+        --warning-soft: #fdf0d5;
+        --danger: #b12620;
+        --danger-soft: #fbe0dd;
+        --danger-ink: #ffffff;
+        --focus-ring: #344ce5;
+        --focus-ring-width: 2px;
+        --focus-ring-offset: 2px;
+        --state-hover: rgb(28 27 24 / 0.05);
+        --state-pressed: rgb(28 27 24 / 0.1);
+        --opacity-disabled: 0.45;
+        --cat-1: #ffd8cc;
+        --cat-2: #ffe9a8;
+        --cat-3: #cdefd6;
+        --cat-4: #cfe3ff;
+        --cat-5: #e3d5ff;
+        --cat-6: #ffd3e6;
+        --cat-7: #d4f0ef;
+        --cat-8: #ede6da;
+        --heat-0: #f0ede6;
+        --heat-1: #ffe5dc;
+        --heat-2: #ffc2ad;
+        --heat-3: #ff9d80;
+        --heat-4: #e8694a;
+        --viz-1: #2a78d6;
+        --viz-2: #dd5c26;
+        --viz-3: #009764;
+        --viz-4: #bd7300;
+        --viz-5: #cb628b;
+        --viz-6: #008300;
+        --viz-7: #4a3aa7;
+        --viz-8: #e34948;
+        --text-2xs: 0.6875rem;
+        --text-xs: 0.75rem;
+        --text-sm: 0.875rem;
+        --text-md: 1rem;
+        --text-lg: 1.125rem;
+        --text-xl: 1.375rem;
+        --text-2xl: 1.75rem;
+        --text-3xl: 2.25rem;
+        --text-4xl: 3rem;
+        --text-display: clamp(2.25rem, 1.5rem + 2.6vw, 3.75rem);
+        --leading-tight: 1.15;
+        --leading-snug: 1.3;
+        --leading-normal: 1.5;
+        --leading-relaxed: 1.65;
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+        --weight-bold: 700;
+        --tracking-tight: -0.02em;
+        --tracking-wide: 0.04em;
+        --tracking-caps: 0.08em;
+        --measure: 66ch;
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.25rem;
+        --space-6: 1.5rem;
+        --space-7: 2rem;
+        --space-8: 2.5rem;
+        --space-9: 3rem;
+        --space-10: 4rem;
+        --space-11: 5rem;
+        --space-12: 6rem;
+        --gutter: clamp(1rem, 0.6rem + 1.8vw, 2rem);
+        --radius-xs: 6px;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+        --radius-pill: 999px;
+        --border-width: 1px;
+        --border-width-strong: 2px;
+        --shadow-1:
+          0 1px 2px rgb(var(--shadow-color) / 0.06), 0 1px 1px rgb(var(--shadow-color) / 0.04);
+        --shadow-2:
+          0 4px 12px rgb(var(--shadow-color) / 0.08), 0 1px 3px rgb(var(--shadow-color) / 0.06);
+        --shadow-3:
+          0 16px 40px rgb(var(--shadow-color) / 0.14), 0 4px 12px rgb(var(--shadow-color) / 0.08);
+        --dur-instant: 80ms;
+        --dur-fast: 140ms;
+        --dur-base: 220ms;
+        --dur-slow: 320ms;
+        --dur-slower: 480ms;
+        --dur-zen-out: 700ms;
+        --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in: cubic-bezier(0.4, 0, 1, 1);
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-enter: var(--ease-out);
+        --ease-exit: var(--ease-in);
+        --stagger-step: 24ms;
+        --motion-offset-sm: 8px;
+        --motion-offset-md: 24px;
+        --motion-scale-from: 0.96;
+        --daylight: 1;
+        --zen-chrome-opacity: 0.08;
+        --press-scale: 0.97;
+        --icon-sm: 16px;
+        --icon-md: 20px;
+        --icon-lg: 24px;
+        --icon-xl: 32px;
+        --icon-stroke: 1.75;
+        --bp-sm: 480px;
+        --bp-md: 768px;
+        --bp-lg: 1200px;
+        --sidebar-w: 264px;
+        --tabbar-h: 64px;
+        --header-h: 56px;
+        --content-max: 1120px;
+        --content-narrow: 720px;
+        --tap-min: 44px;
+        --row-min: 44px;
+        --control-h-sm: 32px;
+        --control-h-lg: 52px;
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+        --z-base: 0;
+        --z-sticky: 10;
+        --z-nav: 20;
+        --z-player: 30;
+        --z-sheet: 40;
+        --z-overlay: 50;
+        --z-command: 60;
+        --z-toast: 70;
+        --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Bitstream Charter', 'Charter', Georgia, serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      body {
+        position: relative;
+        font-family: var(--font-sans);
+        color: var(--ink);
+        background: linear-gradient(
+          180deg,
+          var(--bg-elevated) 0%,
+          var(--bg) 46%,
+          var(--surface-2) 100%
+        );
+        -webkit-font-smoothing: antialiased;
+      }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.55em;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .eyebrow::before {
+        content: '';
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .headline {
+        font-family: var(--font-serif);
+        font-weight: 400;
+        line-height: 1.06;
+        letter-spacing: -0.015em;
+        color: var(--ink);
+        text-wrap: balance;
+      }
+      .device {
+        position: absolute;
+      }
+      .screen {
+        position: absolute;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      .screen > img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+      }
+      .shadow {
+        box-shadow:
+          0 38.4px 134.4px rgb(var(--shadow-color) / 0.16),
+          0 7.68px 23.04px rgb(var(--shadow-color) / 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        position: absolute;
+        left: 100px;
+        top: 0;
+        bottom: 0;
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      "
+    >
+      <div class="eyebrow" style="font-size: 24px">Planification</div>
+      <h1 class="headline" style="font-size: 82px; margin-top: 16.8px">
+        Votre planning se réajuste seul
+      </h1>
+    </div>
+    <div
+      class="device shadow"
+      style="
+        left: 650px;
+        top: 100px;
+        width: 1170px;
+        height: 880px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--bg);
+        outline: 1px solid rgb(28 27 24 / 0.1);
+      "
+      lang="fr"
+    >
+      <div
+        style="
+          position: absolute;
+          inset: 0 0 auto 0;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding-left: 12px;
+          background: var(--bg-elevated);
+          border-bottom: 1px solid var(--line);
+        "
+      >
+        <img
+          src="file:///home/user/POulakkkkk/docs/brand/assets/symbol-small.svg"
+          alt=""
+          style="width: 16px; height: 16px"
+        /><span style="font: 600 13px/1 var(--font-sans); color: var(--ink-2)">POuxis</span>
+        <span style="margin-left: auto; display: flex; height: 100%"
+          ><span style="width: 46px; display: grid; place-items: center; color: var(--ink-2)"
+            ><svg
+              width="10px"
+              height="10px"
+              viewBox="0 0 10 10"
+              stroke="currentColor"
+              stroke-width="1"
+              fill="none"
+            >
+              <path d="M0 5.5h10" /></svg></span
+          ><span style="width: 46px; display: grid; place-items: center; color: var(--ink-2)"
+            ><svg
+              width="10px"
+              height="10px"
+              viewBox="0 0 10 10"
+              stroke="currentColor"
+              stroke-width="1"
+              fill="none"
+            >
+              <rect x=".5" y=".5" width="9" height="9" /></svg></span
+          ><span style="width: 46px; display: grid; place-items: center; color: var(--ink-2)"
+            ><svg
+              width="10px"
+              height="10px"
+              viewBox="0 0 10 10"
+              stroke="currentColor"
+              stroke-width="1"
+              fill="none"
+            >
+              <path d="M0 0l10 10M10 0L0 10" /></svg></span
+        ></span>
+      </div>
+      <div class="screen" style="left: 0px; top: 32px; width: 1170px; height: 848px">
+        <img
+          src="file:///home/user/POulakkkkk/docs/marketing/stores/render/.work/captures/027-overrun-fr.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </body>
+</html>

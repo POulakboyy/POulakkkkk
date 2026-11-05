@@ -1,0 +1,115 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.labelFirst {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.disabled {
+  opacity: var(--opacity-disabled);
+}
+
+.control {
+  --w: 46px;
+  --h: 28px;
+  --gap: 3px;
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: max(var(--w), var(--tap-min));
+  height: var(--tap-min);
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.track {
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 var(--border-width) var(--line-control);
+}
+
+/* "On" colour fades in as a layer: opacity, not background-color. */
+.on {
+  position: absolute;
+  inset: 0;
+  background: var(--mode-accent);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.thumb {
+  position: absolute;
+  inset-block-start: var(--gap);
+  inset-inline-start: var(--gap);
+  width: calc(var(--h) - 2 * var(--gap));
+  height: calc(var(--h) - 2 * var(--gap));
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.input:checked + .track .on {
+  opacity: 1;
+}
+
+.input:checked + .track .thumb {
+  transform: translateX(calc(var(--w) - var(--h)));
+}
+
+.input:checked + .track .thumb:dir(rtl) {
+  transform: translateX(calc((var(--w) - var(--h)) * -1));
+}
+
+.input:active:not(:disabled) + .track .thumb {
+  transform: scale(0.92);
+}
+
+.input:checked:active:not(:disabled) + .track .thumb {
+  transform: translateX(calc(var(--w) - var(--h))) scale(0.92);
+}
+
+.input:focus-visible + .track {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label {
+  color: var(--ink);
+  line-height: var(--leading-snug);
+  cursor: pointer;
+}
+
+.description {
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}

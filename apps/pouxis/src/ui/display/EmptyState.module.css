@@ -1,0 +1,66 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-inline: auto;
+  max-width: 28rem;
+  text-align: center;
+  animation: px-rise-in var(--dur-slow) var(--ease-out) both;
+}
+
+.page {
+  padding: var(--space-10) var(--gutter);
+}
+
+.compact {
+  padding: var(--space-7) var(--space-4);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-block-end: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.compact .icon {
+  width: 48px;
+  height: 48px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.compact .title {
+  font-size: var(--text-xl);
+}
+
+.description {
+  color: var(--ink-2);
+  line-height: var(--leading-normal);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-block-start: var(--space-3);
+}

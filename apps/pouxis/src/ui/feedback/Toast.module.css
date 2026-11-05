@@ -1,0 +1,151 @@
+/* Bottom-centre on phones (above the tab bar), bottom-end on desktop. */
+.viewport {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: calc(var(--tabbar-h) + var(--safe-bottom) + var(--space-3));
+  z-index: var(--z-toast);
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--space-3);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .viewport {
+    inset-inline: auto var(--space-6);
+    inset-block-end: calc(var(--safe-bottom) + var(--space-6));
+    justify-content: flex-end;
+  }
+}
+
+.list {
+  display: grid;
+  width: min(420px, 100%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* All toasts share one grid cell; the stack is built with transforms. */
+.toast {
+  --depth: 0;
+  --dx: 0px;
+  grid-area: 1 / 1;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  min-height: 56px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: var(--shadow-3);
+  pointer-events: auto;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: translateX(var(--dx)) translateY(calc(var(--depth) * -10px))
+    scale(calc(1 - var(--depth) * 0.05));
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    opacity var(--dur-base) var(--ease-standard);
+  animation: toast-in var(--dur-slow) var(--ease-out) backwards;
+}
+
+.toast[data-depth='3'] {
+  opacity: 0 !important;
+}
+
+.toast[data-depth]:not([data-depth='0']) > * {
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.toast[data-dragging] {
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+
+/* Expanded (hover / keyboard focus): toasts fan out into a readable list. */
+.viewport[data-expanded] .toast {
+  transform: translateX(var(--dx)) translateY(calc(var(--depth) * (-100% - var(--space-2))));
+}
+
+.viewport[data-expanded] .toast > * {
+  opacity: 1;
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.success .icon {
+  color: var(--success-soft);
+}
+
+.warning .icon {
+  color: var(--warning-soft);
+}
+
+.danger .icon {
+  color: var(--danger-soft);
+}
+
+/* A long action label drops to its own row instead of squeezing the message into a column. */
+.text {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding-block: var(--space-1);
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+
+.description {
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  opacity: 0.8;
+}
+
+.action {
+  flex: none;
+  margin-inline-start: auto;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  color: var(--bg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  touch-action: manipulation;
+}
+
+@media (hover: hover) {
+  .action:hover {
+    background: color-mix(in srgb, var(--bg) 22%, transparent);
+  }
+}
+
+.action:focus-visible,
+.dismiss:focus-visible {
+  outline-color: var(--bg);
+}
+
+.dismiss {
+  flex: none;
+  --btn-layer: var(--bg);
+  color: inherit !important;
+  opacity: 0.75;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(100%) scale(0.96);
+  }
+}

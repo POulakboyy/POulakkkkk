@@ -1,0 +1,69 @@
+.sandbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: var(--content-narrow);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.hint {
+  margin: var(--space-1) 0 0;
+  color: var(--ink-2);
+}
+
+/* Dotted "scratch paper" so the throwaway space never looks like a real note. */
+.paper {
+  border: var(--border-width-strong) dashed var(--line-strong);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle, var(--line) 1px, transparent 1.5px) 0 0 / 20px 20px,
+    var(--surface);
+}
+
+.field {
+  display: block;
+  width: 100%;
+  min-height: 46vh;
+  padding: var(--space-6);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  resize: vertical;
+  outline: none;
+}
+
+.field::placeholder {
+  color: var(--ink-3);
+}
+
+/* Focus ring colour, not the accent: the light accent is 2.2:1 on paper (WCAG 1.4.11 asks 3:1). */
+.paper:focus-within {
+  border-color: var(--focus-ring);
+  border-style: solid;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}

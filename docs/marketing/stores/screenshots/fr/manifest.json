@@ -1,0 +1,371 @@
+[
+  {
+    "file": "fr/ios-phone/01-today.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Votre journée, d’un seul regard",
+    "alt": "Votre journée, d’un seul regard. Vue Aujourd’hui : la frise de la journée, les tâches planifiées entre les rendez-vous et les tâches flottantes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/02-capture-nlp.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Écrivez, POuxis planifie",
+    "alt": "Écrivez, POuxis planifie. Barre de capture : la phrase « Réunion projet mardi 14h-16h » reconnue comme un événement daté.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/03-overrun.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Votre planning se réajuste seul",
+    "alt": "Votre planning se réajuste seul. Vue Aujourd’hui : une tâche déborde, la suite est proposée plus tard, les rendez-vous fixes restent en place.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/04-focus.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Une tâche à la fois",
+    "alt": "Une tâche à la fois. Mode Focus : une seule tâche en grand et le minuteur en cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/05-ideas.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Vos idées, notées en secondes",
+    "alt": "Vos idées, notées en secondes. Idées : la liste des notes, la recherche et le bouton « Vider sa tête ».",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/06-canvas.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Pensez sur une toile infinie",
+    "alt": "Pensez sur une toile infinie. Toile : la carte du projet « Lancement du nouveau site », reliée aux tâches et aux notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/07-insights-energy.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Découvrez votre propre rythme",
+    "alt": "Découvrez votre propre rythme. Bilan : la carte de chaleur des heures d’énergie sur la semaine.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ios-phone/08-privacy.png",
+    "format": "ios-phone",
+    "lang": "fr",
+    "size": "1320x2868",
+    "caption": "Vos données restent chez vous",
+    "alt": "Vos données restent chez vous. Réglages de confidentialité : statistiques calculées et gardées sur l’appareil.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/01-week.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Toute votre semaine, en clair",
+    "alt": "Toute votre semaine, en clair. Calendrier : la semaine, ses réunions, ses blocs de création et un temps tampon.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/02-capture-week.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Une phrase devient un événement",
+    "alt": "Une phrase devient un événement. Barre de capture au-dessus de la semaine : une phrase reconnue comme un événement daté.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/03-canvas.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Vos projets, sur une toile",
+    "alt": "Vos projets, sur une toile. Toile : la carte du projet « Lancement du nouveau site », reliée aux tâches et aux notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/04-kanban.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Vos listes deviennent un tableau",
+    "alt": "Vos listes deviennent un tableau. Tâches en tableau : colonnes À trier, À faire et En cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/05-focus.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Plein écran sur l’essentiel",
+    "alt": "Plein écran sur l’essentiel. Mode Focus : une seule tâche en grand et le minuteur en cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/06-serendipity.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Des idées qui se rencontrent",
+    "alt": "Des idées qui se rencontrent. Atelier : deux notes sans lien rapprochées par la rencontre fortuite.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/07-insights-balance.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Organiser moins, produire plus",
+    "alt": "Organiser moins, produire plus. Bilan : la part du temps consacrée à créer et à organiser.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/ipad/08-data.png",
+    "format": "ipad",
+    "lang": "fr",
+    "size": "2064x2752",
+    "caption": "Vos données, sur votre iPad",
+    "alt": "Vos données, sur votre iPad. Réglages des données : export complet en JSON lisible, import et suppression.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/01-today.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Votre journée, d’un seul regard",
+    "alt": "Votre journée, d’un seul regard. Vue Aujourd’hui : la frise de la journée, les tâches planifiées entre les rendez-vous et les tâches flottantes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/02-capture-window.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Capturez depuis n’importe quelle app",
+    "alt": "Capturez depuis n’importe quelle app. Fenêtre de capture ouverte par le raccourci global au-dessus d’un autre document.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/03-palette.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Toute l’app au clavier",
+    "alt": "Toute l’app au clavier. Barre de commande en mode commandes : navigation, focus, thème et export au clavier.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/04-week.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Des pauses entre vos réunions",
+    "alt": "Des pauses entre vos réunions. Calendrier : la semaine, ses réunions, ses blocs de création et un temps tampon.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/05-maker.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Vos heures profondes, protégées",
+    "alt": "Vos heures profondes, protégées. Vue Aujourd’hui : alerte avant qu’une réunion coupe une plage de création, avec un autre horaire proposé.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/06-canvas.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Pensez en grand, sans limite",
+    "alt": "Pensez en grand, sans limite. Toile : la carte du projet « Lancement du nouveau site », reliée aux tâches et aux notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/07-focus.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Une seule tâche, plein écran",
+    "alt": "Une seule tâche, plein écran. Mode Focus : une seule tâche en grand et le minuteur en cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/mac/08-insights-week.png",
+    "format": "mac",
+    "lang": "fr",
+    "size": "2880x1800",
+    "caption": "Chaque semaine, votre bilan",
+    "alt": "Chaque semaine, votre bilan. Bilan : le point de la semaine, temps de focus, tâches terminées et victoires.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/01-today.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Votre journée, d’un seul regard",
+    "alt": "Votre journée, d’un seul regard. Vue Aujourd’hui : la frise de la journée, les tâches planifiées entre les rendez-vous et les tâches flottantes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/02-capture-window.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Capturez depuis n’importe quelle application",
+    "alt": "Capturez depuis n’importe quelle application. Fenêtre de capture ouverte par le raccourci global au-dessus d’un autre document.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/03-capture-nlp.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Une phrase, un événement",
+    "alt": "Une phrase, un événement. Barre de capture : la phrase « Réunion projet mardi 14h-16h » reconnue comme un événement daté.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/04-overrun.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Votre planning se réajuste seul",
+    "alt": "Votre planning se réajuste seul. Vue Aujourd’hui : une tâche déborde, la suite est proposée plus tard, les rendez-vous fixes restent en place.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/05-focus.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Une seule tâche, plein écran",
+    "alt": "Une seule tâche, plein écran. Mode Focus : une seule tâche en grand et le minuteur en cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/06-canvas.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Pensez sur une toile infinie",
+    "alt": "Pensez sur une toile infinie. Toile : la carte du projet « Lancement du nouveau site », reliée aux tâches et aux notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/07-insights-energy.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Découvrez votre propre rythme",
+    "alt": "Découvrez votre propre rythme. Bilan : la carte de chaleur des heures d’énergie sur la semaine.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/windows/08-data.png",
+    "format": "windows",
+    "lang": "fr",
+    "size": "1920x1080",
+    "caption": "Vos données, sur votre PC",
+    "alt": "Vos données, sur votre PC. Réglages des données : export complet en JSON lisible, import et suppression.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/01-today.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Votre journée, d’un seul regard",
+    "alt": "Votre journée, d’un seul regard. Vue Aujourd’hui : la frise de la journée, les tâches planifiées entre les rendez-vous et les tâches flottantes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/02-capture-nlp.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Écrivez, POuxis planifie",
+    "alt": "Écrivez, POuxis planifie. Barre de capture : la phrase « Réunion projet mardi 14h-16h » reconnue comme un événement daté.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/03-overrun.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Votre planning se réajuste seul",
+    "alt": "Votre planning se réajuste seul. Vue Aujourd’hui : une tâche déborde, la suite est proposée plus tard, les rendez-vous fixes restent en place.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/04-focus.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Une tâche à la fois",
+    "alt": "Une tâche à la fois. Mode Focus : une seule tâche en grand et le minuteur en cours.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/05-ideas.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Vos idées, notées en secondes",
+    "alt": "Vos idées, notées en secondes. Idées : la liste des notes, la recherche et le bouton « Vider sa tête ».",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/06-canvas.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Pensez sur une toile infinie",
+    "alt": "Pensez sur une toile infinie. Toile : la carte du projet « Lancement du nouveau site », reliée aux tâches et aux notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/07-insights-energy.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Découvrez votre propre rythme",
+    "alt": "Découvrez votre propre rythme. Bilan : la carte de chaleur des heures d’énergie sur la semaine.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/08-privacy.png",
+    "format": "android-phone",
+    "lang": "fr",
+    "size": "1080x1920",
+    "caption": "Privé et chiffré, par défaut",
+    "alt": "Privé et chiffré, par défaut. Réglages de confidentialité : statistiques calculées et gardées sur l’appareil.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "fr/android-phone/feature-graphic-1024x500.png",
+    "format": "google-play-feature",
+    "lang": "fr",
+    "size": "1024x500",
+    "caption": "Votre journée, d’un seul regard",
+    "alt": "Votre journée, d’un seul regard",
+    "encoding": "truecolor"
+  }
+]

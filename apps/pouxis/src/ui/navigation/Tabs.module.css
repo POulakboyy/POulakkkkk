@@ -1,0 +1,90 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  gap: var(--space-5);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-block-end: var(--border-width) solid var(--line);
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-1);
+  color: var(--ink-2);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.tab[aria-selected='true'] {
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+@media (hover: hover) {
+  .tab:hover:not(:disabled) {
+    color: var(--ink);
+  }
+}
+
+.tab:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.tab:focus-visible {
+  outline-offset: -2px;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 1 px wide, scaled to the tab width: compositor-only motion. */
+.indicator {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: 1px;
+  height: 2px;
+  background: var(--ink);
+  transform-origin: left center;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.list:dir(rtl) .indicator {
+  inset-inline-start: auto;
+  left: 0;
+}
+
+.panel {
+  padding-block-start: var(--space-5);
+}
+
+.panel:focus-visible {
+  outline-offset: 4px;
+}

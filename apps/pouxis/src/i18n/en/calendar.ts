@@ -1,0 +1,226 @@
+import type { calendar as fr } from '../fr/calendar.ts';
+
+export const calendar: typeof fr = {
+  title: 'Calendar',
+
+  views: {
+    label: 'View',
+    day: 'Day',
+    week: 'Week',
+    month: 'Month',
+    spiral: 'Spiral',
+    spiralHint: 'Time as one continuous line, no week or month breaks.',
+  },
+
+  nav: {
+    today: 'Today',
+    previousDay: 'Previous day',
+    nextDay: 'Next day',
+    previousWeek: 'Previous week',
+    nextWeek: 'Next week',
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
+    goTo: 'Go to date',
+    weekNumber: 'Week {number}',
+    rangeA11y: '{start} to {end}',
+  },
+
+  spiral: {
+    label: 'Time spiral',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    turn: 'One turn = {span, select, day {one day} week {one week} month {one month} other {one year}}',
+    centerOnNow: 'Center on now',
+    a11y: 'Spiral view. Use the arrow keys to move forward or back in time.',
+    keys: '← →: move forward or back · + −: zoom',
+    now: 'Now',
+    legend:
+      'The center is the past, the outside the future. Each turn sits on top of the previous one.',
+    upcoming: 'Coming up on the spiral',
+    nothingUpcoming: 'Nothing planned on this stretch of the spiral.',
+  },
+
+  grid: {
+    label: 'Time grid',
+    column: '{date}. Up and down arrows to pick a time, Enter to create an event.',
+    cursor: 'New slot at {time}',
+    now: 'Now, {time}',
+    eventKeys:
+      'Arrows: move by 15 minutes or a day. Shift + arrows: adjust the end. Enter: edit. Delete: remove.',
+    resize: 'Adjust duration',
+    draft: 'New event, {range}',
+  },
+
+  month: {
+    label: 'Month view',
+    more: '{count, plural, one {# more} other {# more}}',
+    day: '{date}, {count, plural, =0 {no events} one {# event} other {# events}}',
+  },
+
+  overlays: {
+    label: 'Show',
+    energy: 'Energy',
+    zones: 'Time zones',
+    progress: 'Progress',
+    snapshot: 'Planned vs actual',
+  },
+
+  energy: {
+    title: 'Usual energy',
+    low: 'Low',
+    high: 'High',
+    peak: 'Usual peak: {day} around {hour}',
+    rail: 'The coloured band on the left of each day shows your usual energy, hour by hour.',
+    learning: 'Still a general estimate: it gets more personal as you log focus sessions.',
+    cell: '{hour}: {level, select, 0 {very low} 1 {low} 2 {medium} 3 {high} other {very high}} energy',
+  },
+
+  event: {
+    new: 'New event',
+    create: 'Create event',
+    title: 'Title',
+    day: 'Day',
+    recurrence: 'Repeat',
+    recurrenceHint: 'E.g. “every Monday”, “the third business Tuesday of every month”.',
+    recurrenceInvalid: 'Rule not recognized. Try “every Monday” or “every 2 days”.',
+    recurrenceParsed: 'Repeats {rule}',
+    series: 'Changes apply to the whole series.',
+    untitled: 'Untitled',
+    more: 'Event actions',
+    titlePlaceholder: 'Event title',
+    quickPlaceholder: 'E.g. Project X meeting next Tuesday 2-4pm with @paul',
+    quickHint: 'Write naturally: date, time, duration and people are recognized.',
+    parsed: 'Got it: {summary}',
+    parsedNothing: 'No date recognized: the event will be created for today.',
+    kind: 'Type',
+    allDay: 'All day',
+    starts: 'Starts',
+    ends: 'Ends',
+    timeZone: 'Time zone',
+    location: 'Location',
+    attendees: 'People',
+    addAttendee: 'Add person',
+    fixed: 'Fixed appointment',
+    fixedHint: 'Never moves when the day is rearranged.',
+    notes: 'Notes',
+    a11y: '{title}, {range}',
+    a11yAllDay: '{title}, all day',
+    edit: 'Edit event',
+    delete: 'Delete event',
+    duplicate: 'Duplicate event',
+    endBeforeStart: 'The end needs to come after the start.',
+  },
+
+  travel: {
+    label: 'Travel',
+    estimate: '{duration} travel',
+    leaveAt: 'Leave at {time}',
+    add: 'Add travel time',
+    unavailable: 'Travel estimate unavailable right now.',
+  },
+
+  progress: {
+    label: 'Progress',
+    yearShort: 'Year',
+    quarterShort: 'Quarter',
+    weekShort: 'Week',
+    year: '{percent} of the year',
+    quarter: '{percent} of the quarter',
+    sprint: '{percent} of the sprint',
+    month: '{percent} of the month',
+    week: '{percent} of the week',
+    choose: 'Show progress through',
+    hide: 'Hide progress',
+  },
+
+  zones: {
+    title: 'Time zones',
+    add: 'Add time zone',
+    remove: 'Remove this time zone',
+    search: 'City or time zone',
+    local: 'Your time zone',
+    offset: '{offset} from you',
+    sameTime: 'Same time as you',
+    overlap: 'Shared window: {range}',
+    noOverlap: 'No shared window within working hours.',
+    nightThere: 'It’s night for {name}',
+    empty: 'Add a collaborator’s time zone to line up your days.',
+    timeThere: '{time} in {name}',
+    assumption: 'Working hours assumed to match yours.',
+    pick: 'Pick a time zone',
+    invalid: 'Unknown time zone. Pick a city from the list, for example “Tokyo”.',
+  },
+
+  guard: {
+    title: 'This slot cuts into your maker block',
+    alternatives: 'Slots that keep it whole',
+    keep: 'Keep this slot',
+    buffers: '{count, plural, one {Add a buffer} other {Add # buffers}} of {duration}',
+    buffersHint: 'A breather between back-to-back meetings.',
+  },
+
+  snapshot: {
+    title: 'Planned vs actual',
+    take: 'Save a snapshot of the plan',
+    taken: 'Plan snapshot saved',
+    compare: 'Compare with the planned week',
+    planned: 'Planned',
+    actual: 'Actual',
+    added: 'Added along the way',
+    moved: 'Moved',
+    dropped: 'Removed',
+    summary:
+      '{kept, plural, one {# block kept} other {# blocks kept}} · {moved, plural, one {# moved} other {# moved}}',
+    note: 'A plan helps you decide; it isn’t a contract.',
+    empty: 'No snapshot for this week yet.',
+    takenAt: 'Snapshot from {date} at {time}',
+    retake: 'Update the snapshot',
+    kept: 'Kept',
+    onTime: 'Done on time',
+    slipped: 'Slipped',
+    accuracyLabel: 'Estimate accuracy',
+    accuracy: 'Estimates: {percent} of actual time',
+    ghosts: 'Dotted outlines show where things were planned.',
+  },
+
+  deepLink: {
+    copy: 'Copy slot link',
+    copied: 'Slot link copied',
+    copiedHint: 'Paste it into a note or onto the canvas to come back to it.',
+    openFailed: 'This slot no longer exists. It may have been deleted.',
+    copyFailed: 'Couldn’t copy. Here’s the link: {link}',
+  },
+
+  conflict: {
+    title: 'Overlap',
+    body: '“{title}” overlaps “{other}”.',
+    keepBoth: 'Keep both',
+    move: 'Move',
+  },
+
+  toast: {
+    created: 'Event added {when}',
+    moved: 'Moved to {time}',
+    deleted: 'Event deleted',
+    resized: 'Duration adjusted · {duration}',
+    updated: 'Event updated',
+    buffers: '{count, plural, one {Buffer added} other {# buffers added}}',
+  },
+
+  empty: {
+    day: {
+      title: 'A free day',
+      body: 'No events. Drag in a task or type “lunch tomorrow 12:30”.',
+      action: 'Add event',
+    },
+    week: {
+      title: 'A clear week',
+      body: 'Nothing planned this week. A good moment to protect some maker time.',
+      action: 'Add event',
+    },
+    month: {
+      title: 'A clear month',
+      body: 'No events this month.',
+    },
+  },
+};

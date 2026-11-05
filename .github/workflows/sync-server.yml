@@ -1,0 +1,107 @@
+# Image Docker du relais de synchronisation, publiée sur GHCR (ghcr.io/<owner>/pouxis-sync-server)
+# avec attestation de provenance et SBOM. Les pull requests ne font que construire l'image.
+# Documentation : docs/operations/CI_CD.md
+name: Sync server image
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - 'apps/sync-server/**'
+      - '.github/workflows/sync-server.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-server-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOCKERFILE: apps/sync-server/Dockerfile
+
+jobs:
+  image:
+    name: Build${{ github.event_name != 'pull_request' && ' and push' || '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      # Provenance and SBOM are pushed as attestation manifests alongside the image.
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Detect Dockerfile
+        id: docker
+        run: |
+          if [ -f "$DOCKERFILE" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Image ignorée::$DOCKERFILE n'existe pas encore."
+          fi
+
+      # GHCR image names must be lowercase; the owner may not be.
+      - name: Image name
+        if: steps.docker.outputs.present == 'true'
+        id: name
+        env:
+          OWNER: ${{ github.repository_owner }}
+        run: echo "image=ghcr.io/${OWNER,,}/pouxis-sync-server" >> "$GITHUB_OUTPUT"
+
+      - name: Docker metadata
+        if: steps.docker.outputs.present == 'true'
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ${{ steps.name.outputs.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+            type=ref,event=pr
+            type=sha,format=short
+          labels: |
+            org.opencontainers.image.title=POuxis sync server
+            org.opencontainers.image.description=Relais de synchronisation chiffré de bout en bout pour POuxis
+            org.opencontainers.image.licenses=AGPL-3.0-or-later
+
+      - name: Setup QEMU
+        if: steps.docker.outputs.present == 'true'
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
+
+      - name: Setup Buildx
+        if: steps.docker.outputs.present == 'true'
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Log in to GHCR
+        if: steps.docker.outputs.present == 'true' && github.event_name != 'pull_request'
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      # The Dockerfile is self-contained: its build context is apps/sync-server (it copies `src`
+      # and installs its only runtime dependency, `ws`, itself).
+      - name: Build${{ github.event_name != 'pull_request' && ' and push' || '' }}
+        if: steps.docker.outputs.present == 'true'
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: apps/sync-server
+          file: ${{ env.DOCKERFILE }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: mode=max
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PLACEHOLDER DOMAIN: replace https://pouxis.example with the production domain. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://pouxis.example/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://pouxis.example/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pouxis.example/en/" />
+  </url>
+  <url>
+    <loc>https://pouxis.example/en/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://pouxis.example/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pouxis.example/en/" />
+  </url>
+  <url>
+    <loc>https://pouxis.example/confidentialite/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://pouxis.example/confidentialite/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pouxis.example/en/privacy/" />
+  </url>
+  <url>
+    <loc>https://pouxis.example/en/privacy/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://pouxis.example/confidentialite/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pouxis.example/en/privacy/" />
+  </url>
+</urlset>

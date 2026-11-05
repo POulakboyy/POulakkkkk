@@ -1,0 +1,31 @@
+.prompt {
+  margin: 0;
+  max-width: var(--measure);
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--ink);
+}
+
+.risks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.risk {
+  display: grid;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-width) solid var(--line);
+}
+
+@container lab (min-width: 36rem) {
+  .risk {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}

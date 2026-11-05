@@ -1,0 +1,371 @@
+[
+  {
+    "file": "en/ios-phone/01-today.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Your day at a glance",
+    "alt": "Your day at a glance. Today view: the day’s timeline, tasks planned between appointments, and floating tasks.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/02-capture-nlp.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Type it, POuxis plans it",
+    "alt": "Type it, POuxis plans it. Capture bar: the sentence “Project meeting Tuesday 2-4pm” recognised as a dated event.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/03-overrun.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Delays reschedule themselves",
+    "alt": "Delays reschedule themselves. Today view: a task runs over, what follows is offered later, fixed appointments stay put.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/04-focus.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "One task at a time",
+    "alt": "One task at a time. Focus mode: one task, large, with the timer running.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/05-ideas.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Ideas saved in seconds",
+    "alt": "Ideas saved in seconds. Ideas: the note list, search and the brain-dump button.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/06-canvas.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Think on an endless canvas",
+    "alt": "Think on an endless canvas. Canvas: the “New website launch” project map, linked to tasks and notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/07-insights-energy.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Discover your own rhythm",
+    "alt": "Discover your own rhythm. Insights: the heat map of energy hours across the week.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ios-phone/08-privacy.png",
+    "format": "ios-phone",
+    "lang": "en",
+    "size": "1320x2868",
+    "caption": "Your data stays yours",
+    "alt": "Your data stays yours. Privacy settings: statistics computed and kept on the device.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/01-week.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Your whole week, clearly",
+    "alt": "Your whole week, clearly. Calendar: the week, its meetings, creative blocks and a buffer.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/02-capture-week.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "One sentence becomes an event",
+    "alt": "One sentence becomes an event. Capture bar over the week: a sentence recognised as a dated event.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/03-canvas.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Your projects on one canvas",
+    "alt": "Your projects on one canvas. Canvas: the “New website launch” project map, linked to tasks and notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/04-kanban.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Lists turn into boards",
+    "alt": "Lists turn into boards. Tasks as a board: To sort, To do and In progress columns.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/05-focus.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Full screen on what matters",
+    "alt": "Full screen on what matters. Focus mode: one task, large, with the timer running.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/06-serendipity.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Ideas that meet by chance",
+    "alt": "Ideas that meet by chance. Studio: two unrelated notes brought together by the chance encounter.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/07-insights-balance.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Organize less, make more",
+    "alt": "Organize less, make more. Insights: the share of time spent creating and organising.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/ipad/08-data.png",
+    "format": "ipad",
+    "lang": "en",
+    "size": "2064x2752",
+    "caption": "Your data, on your iPad",
+    "alt": "Your data, on your iPad. Data settings: full export as readable JSON, import and deletion.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/01-today.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Your day at a glance",
+    "alt": "Your day at a glance. Today view: the day’s timeline, tasks planned between appointments, and floating tasks.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/02-capture-window.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Capture from any app",
+    "alt": "Capture from any app. Capture window opened by the global shortcut over another document.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/03-palette.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "The whole app, keyboard-first",
+    "alt": "The whole app, keyboard-first. Command bar in command mode: navigation, focus, theme and export from the keyboard.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/04-week.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Breathing room between meetings",
+    "alt": "Breathing room between meetings. Calendar: the week, its meetings, creative blocks and a buffer.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/05-maker.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Your deep work, protected",
+    "alt": "Your deep work, protected. Today view: a warning before a meeting splits a creative block, with another time suggested.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/06-canvas.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Think big, without edges",
+    "alt": "Think big, without edges. Canvas: the “New website launch” project map, linked to tasks and notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/07-focus.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "One task, full screen",
+    "alt": "One task, full screen. Focus mode: one task, large, with the timer running.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/mac/08-insights-week.png",
+    "format": "mac",
+    "lang": "en",
+    "size": "2880x1800",
+    "caption": "Your week, in review",
+    "alt": "Your week, in review. Insights: the weekly review, focus time, completed tasks and wins.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/01-today.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Your day at a glance",
+    "alt": "Your day at a glance. Today view: the day’s timeline, tasks planned between appointments, and floating tasks.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/02-capture-window.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Capture from any app",
+    "alt": "Capture from any app. Capture window opened by the global shortcut over another document.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/03-capture-nlp.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "One sentence, one event",
+    "alt": "One sentence, one event. Capture bar: the sentence “Project meeting Tuesday 2-4pm” recognised as a dated event.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/04-overrun.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Delays reschedule themselves",
+    "alt": "Delays reschedule themselves. Today view: a task runs over, what follows is offered later, fixed appointments stay put.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/05-focus.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "One task, full screen",
+    "alt": "One task, full screen. Focus mode: one task, large, with the timer running.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/06-canvas.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Think on an endless canvas",
+    "alt": "Think on an endless canvas. Canvas: the “New website launch” project map, linked to tasks and notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/07-insights-energy.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Discover your own rhythm",
+    "alt": "Discover your own rhythm. Insights: the heat map of energy hours across the week.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/windows/08-data.png",
+    "format": "windows",
+    "lang": "en",
+    "size": "1920x1080",
+    "caption": "Your data, on your PC",
+    "alt": "Your data, on your PC. Data settings: full export as readable JSON, import and deletion.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/01-today.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Your day at a glance",
+    "alt": "Your day at a glance. Today view: the day’s timeline, tasks planned between appointments, and floating tasks.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/02-capture-nlp.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Type it, POuxis plans it",
+    "alt": "Type it, POuxis plans it. Capture bar: the sentence “Project meeting Tuesday 2-4pm” recognised as a dated event.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/03-overrun.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Delays reschedule themselves",
+    "alt": "Delays reschedule themselves. Today view: a task runs over, what follows is offered later, fixed appointments stay put.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/04-focus.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "One task at a time",
+    "alt": "One task at a time. Focus mode: one task, large, with the timer running.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/05-ideas.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Ideas saved in seconds",
+    "alt": "Ideas saved in seconds. Ideas: the note list, search and the brain-dump button.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/06-canvas.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Think on an endless canvas",
+    "alt": "Think on an endless canvas. Canvas: the “New website launch” project map, linked to tasks and notes.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/07-insights-energy.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Discover your own rhythm",
+    "alt": "Discover your own rhythm. Insights: the heat map of energy hours across the week.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/08-privacy.png",
+    "format": "android-phone",
+    "lang": "en",
+    "size": "1080x1920",
+    "caption": "Private and encrypted by default",
+    "alt": "Private and encrypted by default. Privacy settings: statistics computed and kept on the device.",
+    "encoding": "truecolor"
+  },
+  {
+    "file": "en/android-phone/feature-graphic-1024x500.png",
+    "format": "google-play-feature",
+    "lang": "en",
+    "size": "1024x500",
+    "caption": "Your day at a glance",
+    "alt": "Your day at a glance",
+    "encoding": "truecolor"
+  }
+]

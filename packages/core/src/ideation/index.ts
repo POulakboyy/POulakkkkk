@@ -1,0 +1,70 @@
+/**
+ * Ideation engine (5.1, 5.2, 5.4, 5.10): serendipity connector, divergent constraints,
+ * innovation method cards and moodboard palettes. Every random draw takes an `Rng` so results
+ * are reproducible with `mulberry32(seed)`.
+ */
+export { mulberry32, pick, randomInt, seedFrom, shuffle, weightedIndex, type Rng } from './rng.ts';
+export {
+  CONNECTION_TEMPLATES,
+  graphDistance,
+  pairKey,
+  randomConnection,
+  tagOverlap,
+  type Connection,
+  type ConnectionNote,
+  type RandomConnectionOptions,
+} from './connection.ts';
+export {
+  CONSTRAINT_CATEGORIES,
+  CONSTRAINTS,
+  drawConstraint,
+  getConstraint,
+  type Constraint,
+  type ConstraintCategory,
+  type DrawConstraintOptions,
+} from './constraints.ts';
+export {
+  addIdea,
+  currentStep,
+  finishSession,
+  getMethod,
+  goToStep,
+  isOverdue,
+  METHODS,
+  nextStep,
+  pauseSession,
+  previousStep,
+  sessionProgress,
+  resumeSession,
+  SCAMPER,
+  SIX_HATS,
+  startSession,
+  stepElapsed,
+  stepRemaining,
+  summarizeSession,
+  type HatColor,
+  type MethodCard,
+  type MethodId,
+  type MethodSession,
+  type MethodStep,
+  type SessionStatus,
+  type StartSessionOptions,
+} from './methods.ts';
+export {
+  contrastRatio,
+  deltaE,
+  extractPalette,
+  extractSwatches,
+  hexToRgb,
+  labToRgb,
+  meetsContrast,
+  readableInk,
+  relativeLuminance,
+  rgbToHex,
+  rgbToLab,
+  type ColorInput,
+  type Lab,
+  type PaletteOptions,
+  type PaletteSwatch,
+  type Rgb,
+} from './palette.ts';

@@ -1,0 +1,138 @@
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.disabled {
+  opacity: var(--opacity-disabled);
+}
+
+.control {
+  --box: 22px;
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin: calc((var(--box) - var(--tap-min)) / 2);
+}
+
+.lg {
+  --box: 26px;
+}
+
+/* The native input covers the full 44 px hit area, invisible but operable. */
+.input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--box);
+  height: var(--box);
+  border-radius: var(--radius-xs);
+  box-shadow: inset 0 0 0 var(--border-width-strong) var(--line-control);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.circle .box {
+  border-radius: var(--radius-pill);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--mode-accent);
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    opacity var(--dur-instant) var(--ease-standard);
+}
+
+.tick {
+  position: relative;
+  width: 78%;
+  height: 78%;
+  stroke: var(--mode-accent-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: scale(0.5) rotate(-12deg);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    opacity var(--dur-instant) var(--ease-standard);
+}
+
+.input:checked + .box .fill,
+.input:indeterminate + .box .fill {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tick lands just after the fill: 60 ms delay + 140 ms = 200 ms total. */
+.input:checked + .box .tick,
+.input:indeterminate + .box .tick {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--dur-fast) * 0.43);
+}
+
+.input:active:not(:disabled) + .box {
+  transform: scale(0.9);
+}
+
+@media (hover: hover) {
+  .input:hover:not(:disabled, :checked) + .box {
+    box-shadow: inset 0 0 0 var(--border-width-strong) var(--ink-2);
+  }
+}
+
+.input:focus-visible + .box {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.input[aria-invalid='true'] + .box {
+  box-shadow: inset 0 0 0 var(--border-width-strong) var(--danger);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-block-start: 1px;
+}
+
+.label {
+  color: var(--ink);
+  line-height: var(--leading-snug);
+  cursor: pointer;
+}
+
+.disabled .label {
+  cursor: not-allowed;
+}
+
+.description {
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}

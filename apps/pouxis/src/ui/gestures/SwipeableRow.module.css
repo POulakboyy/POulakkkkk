@@ -1,0 +1,123 @@
+.root {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.root[data-state='closed'] {
+  animation: collapse var(--dur-base) var(--ease-exit) both;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  /* Opaque so the action underlay stays hidden at rest; set --swipe-row-bg on lists over --bg. */
+  background: var(--swipe-row-bg, var(--surface));
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+.settling {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.underlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-5);
+  background: var(--surface-3);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.trailing {
+  justify-content: flex-end;
+}
+
+.neutral {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+
+.accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.success {
+  background: var(--success);
+  color: var(--success-ink);
+}
+
+.warning {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.danger {
+  background: var(--danger);
+  color: var(--danger-ink);
+}
+
+.create {
+  background: var(--create);
+  color: var(--create-ink);
+}
+
+/* Not yet armed: the colour is a hint; the icon grows when the threshold is crossed. */
+.underlay:not(.armed) {
+  background: var(--surface-3);
+  color: var(--ink-2);
+}
+
+.actionIcon {
+  display: inline-flex;
+  transform: scale(0.8);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+.armed .actionIcon {
+  transform: scale(1.1);
+}
+
+.actionLabel {
+  white-space: nowrap;
+}
+
+/* Keyboard / screen-reader path: visible on hover or focus (pointer devices), always in the tree. */
+.menuButton {
+  position: absolute !important;
+  inset-block-start: 50%;
+  inset-inline-end: var(--space-2);
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.menuButton:focus-visible,
+.menuButton[aria-expanded='true'] {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .root:hover .menuButton {
+    opacity: 1;
+  }
+}
+
+.root[data-swiping] .menuButton {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes collapse {
+  to {
+    opacity: 0;
+    transform: scaleY(0.6);
+  }
+}

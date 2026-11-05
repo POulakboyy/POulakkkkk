@@ -1,0 +1,81 @@
+# Bancs d'essai nocturnes du moteur (@pouxis/core) et test de charge du relais de synchronisation.
+# Les résultats (JSON + tableau Markdown) sont publiés comme artefact et dans le résumé du run.
+# Documentation : docs/performance/BENCHMARKS.md
+name: Benchmarks
+
+on:
+  schedule:
+    # Every night at 02:17 UTC (off the hour to avoid the scheduler rush).
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bench-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  npm_config_audit: 'false'
+  npm_config_fund: 'false'
+
+jobs:
+  bench:
+    name: Engine benchmarks and relay load test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare results directory
+        run: mkdir -p bench-results
+
+      - name: Engine benchmarks
+        working-directory: packages/core
+        # Explicit bash runs with -o pipefail, so a crash is not hidden by `tee`.
+        shell: bash
+        run: |
+          node bench/run.ts --json ../../bench-results/core.json | tee ../../bench-results/core.md
+          cat ../../bench-results/core.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Relay load test (memory storage)
+        working-directory: apps/sync-server
+        run: node bench/load.ts --json ../../bench-results/load-memory.json
+
+      - name: Relay load test (file storage)
+        working-directory: apps/sync-server
+        run: node bench/load.ts --storage file --json ../../bench-results/load-file.json
+
+      # Shared runners are noisy: a budget overrun is reported, not fatal.
+      - name: Check budgets
+        id: budgets
+        continue-on-error: true
+        working-directory: packages/core
+        run: node bench/run.ts --quick --check-budgets > /dev/null
+
+      - name: Report budget overruns
+        if: steps.budgets.outcome == 'failure'
+        run: echo "::warning title=Budgets de performance::Au moins un scénario dépasse son budget, voir les journaux de l'étape « Check budgets »."
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: bench-results-${{ github.run_number }}
+          path: bench-results/
+          if-no-files-found: warn
+          retention-days: 90

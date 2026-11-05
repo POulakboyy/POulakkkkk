@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Confidentialité — POuxis</title>
+    <meta
+      name="description"
+      content="Ce que POuxis fait de vos données : stockage sur l'appareil, synchronisation facultative chiffrée de bout en bout, aucun pistage."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <!-- PLACEHOLDER DOMAIN: replace https://pouxis.example with the production domain. -->
+    <link rel="canonical" href="https://pouxis.example/confidentialite/" />
+    <link rel="alternate" hreflang="fr" href="https://pouxis.example/confidentialite/" />
+    <link rel="alternate" hreflang="en" href="https://pouxis.example/en/privacy/" />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="../" aria-label="POuxis, accueil">
+          <picture>
+            <source srcset="../assets/logotype-reversed.svg" media="(prefers-color-scheme: dark)" />
+            <img src="../assets/logotype.svg" alt="POuxis" width="100" height="27" />
+          </picture>
+        </a>
+        <nav class="nav" aria-label="Navigation principale">
+          <a href="../en/privacy/" hreflang="en" lang="en">English</a>
+          <a href="https://github.com/POulakboyy/POulakkkkk">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main id="contenu" class="prose">
+      <div class="wrap">
+        <h1>Politique de confidentialité</h1>
+        <p class="callout">
+          Version provisoire du 4 novembre 2026, publiée avant la sortie de l'application. Elle sera
+          validée juridiquement et complétée (responsable du traitement, coordonnées) avant la
+          première version publique.
+        </p>
+
+        <h2>En bref</h2>
+        <ul>
+          <li>
+            Vos tâches, événements, notes et toiles sont enregistrés et traités sur votre appareil.
+          </li>
+          <li>POuxis s'utilise sans compte.</li>
+          <li>
+            L'application ne contient ni publicité, ni outil d'analyse d'audience, ni traceur.
+          </li>
+          <li>La synchronisation entre appareils est facultative et chiffrée de bout en bout.</li>
+        </ul>
+
+        <h2>Synchronisation</h2>
+        <p>
+          Si vous l'activez, le contenu est chiffré sur votre appareil (AES-256-GCM) avant d'être
+          envoyé à un relais. Le relais ne détient aucune clé de déchiffrement et ne peut pas lire
+          vos données. Pour acheminer les enveloppes chiffrées, il voit :
+        </p>
+        <ul>
+          <li>l'identifiant de l'espace synchronisé ;</li>
+          <li>un identifiant d'appareil aléatoire, sans lien avec un identifiant publicitaire ;</li>
+          <li>une horloge logique, qui ordonne les modifications ;</li>
+          <li>
+            la taille approximative de chaque enveloppe, arrondie pour limiter ce qu'elle révèle ;
+          </li>
+          <li>le jeton d'accès à l'espace.</li>
+        </ul>
+        <p>
+          Le relais fourni dans le dépôt ne journalise pas les adresses IP. Un hébergeur ou un proxy
+          placé devant lui peut le faire : renseignez-vous si vous utilisez un relais tiers. Vous
+          pouvez aussi héberger votre propre relais.
+        </p>
+
+        <h2>Ce site</h2>
+        <p>
+          Ce site ne dépose aucun cookie, n'utilise aucun outil de mesure d'audience et ne charge
+          aucune ressource externe (police, script ou image). L'hébergeur du site peut conserver des
+          journaux techniques de connexion.
+        </p>
+
+        <h2>Questions</h2>
+        <p>
+          En attendant une adresse de contact dédiée, posez vos questions dans les
+          <a href="https://github.com/POulakboyy/POulakkkkk/issues">issues du dépôt GitHub</a>. Pour
+          un sujet de sécurité, suivez la procédure de signalement du dépôt plutôt qu'une issue
+          publique.
+        </p>
+        <p><a href="../">Retour à l'accueil</a></p>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="legal">
+          Textes sous CC-BY-4.0. Le nom et le logo POuxis ne sont pas couverts par cette licence.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

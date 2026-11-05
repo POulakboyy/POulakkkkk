@@ -1,0 +1,89 @@
+.card {
+  --card-bg: var(--surface);
+  position: relative;
+  min-width: 0;
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  color: var(--ink);
+}
+
+.plain {
+  box-shadow: inset 0 0 0 var(--border-width) var(--line);
+}
+
+.elevated {
+  box-shadow: var(--shadow-2);
+}
+
+.outlined {
+  --card-bg: transparent;
+  box-shadow: inset 0 0 0 var(--border-width) var(--line-strong);
+}
+
+.tinted {
+  --card-bg: var(--surface-2);
+}
+
+.pad-none {
+  padding: 0;
+}
+
+.pad-sm {
+  padding: var(--space-3);
+}
+
+.pad-md {
+  padding: var(--space-5);
+}
+
+.pad-lg {
+  padding: var(--space-7);
+}
+
+.interactive {
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--state-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .interactive:hover::after {
+    opacity: 1;
+  }
+}
+
+.interactive:active {
+  transform: scale(0.985);
+}
+
+.interactive:has(.link:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+  text-align: start;
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.link:focus-visible {
+  outline: none;
+}

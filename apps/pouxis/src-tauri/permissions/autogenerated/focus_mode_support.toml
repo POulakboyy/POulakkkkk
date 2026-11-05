@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-focus-mode-support"
+description = "Enables the focus_mode_support command without any pre-configured scope."
+commands.allow = ["focus_mode_support"]
+
+[[permission]]
+identifier = "deny-focus-mode-support"
+description = "Denies the focus_mode_support command without any pre-configured scope."
+commands.deny = ["focus_mode_support"]

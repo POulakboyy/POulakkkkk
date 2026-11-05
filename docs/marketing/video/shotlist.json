@@ -1,0 +1,2525 @@
+{
+  "$schemaVersion": 1,
+  "project": "POuxis — films de présentation",
+  "docs": "docs/marketing/video/STORYBOARD.md",
+  "conventions": {
+    "timeUnit": "ms",
+    "actionsAt": "ms from scene start (before any inMs trim)",
+    "camera": "x, y: point of the device screen (0–1, top-left origin) held at the frame centre; scale 1 = device screen height fills 80 % of the frame height (framed scenes) or the full frame (device \"none\"). App-store formats must keep scale 1 (no zoom).",
+    "viewport": "device \"none\" + route: use format.viewport; otherwise devices[device].viewport",
+    "transition": "happens over the last durationMs of the scene, overlapping the next one; total runtime = sum of sequence durations",
+    "text": "type actions carry text {fr, en}; render one pass per locale",
+    "musicGrid": {
+      "bpm": 96,
+      "beatMs": 625,
+      "barMs": 2500,
+      "note": "cuts land on half-bars (1250 ms)"
+    }
+  },
+  "fixtures": {
+    "clock": {
+      "now": "2026-11-05T09:12:00",
+      "timeZone": "Europe/Paris",
+      "note": "freeze with page.clock; \"mardi prochain\" resolves to 2026-11-10 (AC-1.1)"
+    },
+    "locale": ["fr", "en"],
+    "prefs": {
+      "timeZone": "Europe/Paris",
+      "workHours": "09:00–18:00",
+      "weekStartsOn": 1,
+      "reducedMotion": false
+    },
+    "persona": "Inès (fictive, PP1) — créatrice de contenu solo",
+    "disclaimer": {
+      "fr": "Données de démonstration fictives.",
+      "en": "Fictional demo data."
+    },
+    "tasks": [
+      {
+        "title": {
+          "fr": "Monter l’épisode 12",
+          "en": "Edit episode 12"
+        },
+        "estimateMin": 90,
+        "priority": "high",
+        "status": "todo"
+      },
+      {
+        "title": {
+          "fr": "Écrire le script de la vidéo",
+          "en": "Write the video script"
+        },
+        "estimateMin": 60,
+        "priority": "high",
+        "status": "todo",
+        "focusTarget": true
+      },
+      {
+        "title": {
+          "fr": "Répondre aux commentaires",
+          "en": "Reply to comments"
+        },
+        "estimateMin": 20,
+        "status": "todo",
+        "overrunMin": 15
+      },
+      {
+        "title": {
+          "fr": "Exporter les miniatures",
+          "en": "Export thumbnails"
+        },
+        "estimateMin": 30,
+        "status": "todo"
+      },
+      {
+        "title": {
+          "fr": "Facture client Lumen",
+          "en": "Invoice Lumen"
+        },
+        "estimateMin": 15,
+        "status": "todo",
+        "checkTarget": true
+      }
+    ],
+    "events": [
+      {
+        "title": {
+          "fr": "Appel partenaire",
+          "en": "Partner call"
+        },
+        "start": "2026-11-05T11:00",
+        "end": "2026-11-05T11:30",
+        "fixed": true
+      },
+      {
+        "title": {
+          "fr": "Déjeuner",
+          "en": "Lunch"
+        },
+        "start": "2026-11-05T12:30",
+        "end": "2026-11-05T13:30",
+        "fixed": true
+      },
+      {
+        "title": {
+          "fr": "Revue montage",
+          "en": "Edit review"
+        },
+        "start": "2026-11-05T13:30",
+        "end": "2026-11-05T14:00",
+        "fixed": true
+      }
+    ],
+    "notes": [
+      {
+        "title": {
+          "fr": "Lumière d’hiver à 16 h",
+          "en": "Winter light at 4 pm"
+        }
+      },
+      {
+        "title": {
+          "fr": "Les cafés où l’on parle bas",
+          "en": "Cafés where people speak softly"
+        }
+      },
+      {
+        "title": {
+          "fr": "Série : objets qui durent",
+          "en": "Series: objects that last"
+        }
+      }
+    ],
+    "weeklyReview": {
+      "note": "Chiffres fictifs, marqués comme tels à l’écran.",
+      "wins": 7,
+      "focusMinutes": 610,
+      "createVsOrganize": [68, 32]
+    }
+  },
+  "devices": {
+    "iphone": {
+      "viewport": {
+        "width": 402,
+        "height": 874,
+        "deviceScaleFactor": 3
+      },
+      "isMobile": true,
+      "hasTouch": true,
+      "frame": "generic-phone-dynamic-island",
+      "statusBar": "09:41, full signal, full battery"
+    },
+    "android": {
+      "viewport": {
+        "width": 412,
+        "height": 915,
+        "deviceScaleFactor": 2.625
+      },
+      "isMobile": true,
+      "hasTouch": true,
+      "frame": "generic-phone-punch-hole",
+      "statusBar": "09:41, full signal, full battery"
+    },
+    "macbook": {
+      "viewport": {
+        "width": 1512,
+        "height": 982,
+        "deviceScaleFactor": 2
+      },
+      "isMobile": false,
+      "hasTouch": false,
+      "frame": "generic-laptop-notch",
+      "modifier": "Meta"
+    },
+    "windows-laptop": {
+      "viewport": {
+        "width": 1536,
+        "height": 864,
+        "deviceScaleFactor": 1.25
+      },
+      "isMobile": false,
+      "hasTouch": false,
+      "frame": "generic-laptop-thin-bezel",
+      "modifier": "Control"
+    }
+  },
+  "easings": {
+    "linear": "linear",
+    "standard": "cubic-bezier(0.2, 0, 0, 1)",
+    "out": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "in": "cubic-bezier(0.4, 0, 1, 1)",
+    "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+  },
+  "selectorContract": {
+    "note": "Stable hooks the views must expose as data-demo=\"…\" (requested from view owners). Until present, the renderer must fail loudly, never guess.",
+    "hooks": {
+      "capture-button": "Shell — sidebar capture button and mobile central tab button",
+      "command-input": "features/command — command bar text field",
+      "command-chip": "features/command — each recognised fragment chip",
+      "today-plan-button": "views/today — \"Plan my day\" action",
+      "today-timeline": "views/today — scrollable timeline",
+      "task-checkbox": "views/tasks + views/today — checkbox of the fixture task with checkTarget",
+      "calendar-week": "views/calendar — scrollable week grid",
+      "calendar-block-overrun": "views/calendar — block of the fixture task with overrunMin",
+      "shift-confirm": "views/calendar — \"Shift what comes next\" button",
+      "focus-start": "views/tasks — start focus on the fixture task with focusTarget",
+      "mini-player": "features/focus — mini-player bar",
+      "braindump-open": "views/ideas — open brain dump",
+      "braindump-input": "views/ideas — brain dump textarea",
+      "serendipity-shuffle": "views/ideas — draw a new serendipity pair",
+      "canvas-surface": "views/canvas — pannable/zoomable surface",
+      "canvas-node": "views/canvas — first node of the fixture map",
+      "insights-weekly": "views/insights — weekly review panel",
+      "settings-data": "views/settings — data section",
+      "settings-export": "views/settings — \"Export my data\" button"
+    }
+  },
+  "formats": [
+    {
+      "id": "hero-16x9",
+      "label": "Film principal 16:9",
+      "aspect": "16:9",
+      "master": {
+        "width": 3840,
+        "height": 2160,
+        "fps": 60
+      },
+      "deliverables": [
+        {
+          "width": 3840,
+          "height": 2160,
+          "fps": 60
+        },
+        {
+          "width": 1920,
+          "height": 1080,
+          "fps": 30
+        }
+      ],
+      "durationMs": 105000,
+      "platforms": ["youtube", "website", "press-kit"],
+      "captions": "lower-third",
+      "voScenes": [
+        "h01-breche",
+        "h02-capture",
+        "h03-sync",
+        "h04-plan",
+        "h05-propagation",
+        "h06-done",
+        "h08-focus",
+        "h09-miniplayer",
+        "h10-braindump",
+        "h11-canvas",
+        "h12-serendipity",
+        "h14-insights",
+        "h15-offline",
+        "h16-devices",
+        "h17-export",
+        "h18-endcard"
+      ],
+      "sequence": [
+        {
+          "scene": "h01-breche",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h02-capture",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h03-sync",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h04-plan",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h05-propagation",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h06-done",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h07-card-focus",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h08-focus",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h09-miniplayer",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h10-braindump",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "h11-canvas",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h12-serendipity",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "h13-card-review",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h14-insights",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "h15-offline",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h16-devices",
+          "inMs": 0,
+          "durationMs": 7500
+        },
+        {
+          "scene": "h17-export",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h18-endcard",
+          "inMs": 0,
+          "durationMs": 7500
+        }
+      ]
+    },
+    {
+      "id": "cut-30-16x9",
+      "label": "Version 30 s 16:9",
+      "aspect": "16:9",
+      "master": {
+        "width": 3840,
+        "height": 2160,
+        "fps": 60
+      },
+      "deliverables": [
+        {
+          "width": 1920,
+          "height": 1080,
+          "fps": 30
+        }
+      ],
+      "durationMs": 30000,
+      "platforms": ["youtube", "x", "linkedin", "website"],
+      "captions": "burned-in",
+      "voScenes": ["h18-endcard"],
+      "sequence": [
+        {
+          "scene": "h02-capture",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h04-plan",
+          "inMs": 1250,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h05-propagation",
+          "inMs": 1250,
+          "durationMs": 5000
+        },
+        {
+          "scene": "h08-focus",
+          "inMs": 1250,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h12-serendipity",
+          "inMs": 1250,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h16-devices",
+          "inMs": 1250,
+          "durationMs": 3750
+        },
+        {
+          "scene": "h18-endcard",
+          "inMs": 750,
+          "durationMs": 3750
+        }
+      ]
+    },
+    {
+      "id": "vertical-15-9x16",
+      "label": "Vertical 15 s",
+      "aspect": "9:16",
+      "master": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      },
+      "deliverables": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "fps": 30
+        }
+      ],
+      "durationMs": 15000,
+      "platforms": ["instagram-reels", "youtube-shorts", "tiktok"],
+      "captions": "burned-in-safe-zone",
+      "voScenes": ["v05-endcard"],
+      "sequence": [
+        {
+          "scene": "v01-capture",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v02-plan",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v03-focus",
+          "inMs": 0,
+          "durationMs": 2500
+        },
+        {
+          "scene": "v04-serendipity",
+          "inMs": 0,
+          "durationMs": 2500
+        },
+        {
+          "scene": "v05-endcard",
+          "inMs": 0,
+          "durationMs": 2500
+        }
+      ]
+    },
+    {
+      "id": "vertical-30-9x16",
+      "label": "Vertical 30 s",
+      "aspect": "9:16",
+      "master": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      },
+      "deliverables": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "fps": 30
+        }
+      ],
+      "durationMs": 30000,
+      "platforms": ["instagram-reels", "youtube-shorts", "tiktok"],
+      "captions": "burned-in-safe-zone",
+      "voScenes": ["v05-endcard"],
+      "sequence": [
+        {
+          "scene": "v01-capture",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v02-plan",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v06-propagation",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v03-focus",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v07-miniplayer",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "v04-serendipity",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "v08-offline",
+          "inMs": 0,
+          "durationMs": 2500
+        },
+        {
+          "scene": "v05-endcard",
+          "inMs": 0,
+          "durationMs": 3750
+        }
+      ]
+    },
+    {
+      "id": "appstore-iphone",
+      "label": "Aperçu App Store — iPhone (portrait)",
+      "aspect": "886:1920",
+      "master": {
+        "width": 886,
+        "height": 1920,
+        "fps": 30
+      },
+      "deliverables": [
+        {
+          "width": 886,
+          "height": 1920,
+          "fps": 30,
+          "codec": "h264",
+          "bitrateMbps": 11,
+          "audio": "aac-256k-stereo-48k"
+        }
+      ],
+      "viewport": {
+        "width": 443,
+        "height": 960,
+        "deviceScaleFactor": 2
+      },
+      "durationMs": 27500,
+      "posterFrameMs": 5000,
+      "platforms": ["app-store-ios"],
+      "captions": "burned-in",
+      "voScenes": [],
+      "sequence": [
+        {
+          "scene": "ap01-capture",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "ap02-plan",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap03-propagation",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap04-focus",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap05-ideas",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "ap06-rest",
+          "inMs": 0,
+          "durationMs": 2500
+        }
+      ]
+    },
+    {
+      "id": "appstore-mac",
+      "label": "Aperçu Mac App Store",
+      "aspect": "16:9",
+      "master": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30
+      },
+      "deliverables": [
+        {
+          "width": 1920,
+          "height": 1080,
+          "fps": 30,
+          "codec": "h264",
+          "bitrateMbps": 11,
+          "audio": "aac-256k-stereo-48k"
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 810,
+        "deviceScaleFactor": 1.3333
+      },
+      "durationMs": 27500,
+      "posterFrameMs": 5000,
+      "platforms": ["app-store-macos"],
+      "captions": "burned-in",
+      "voScenes": [],
+      "sequence": [
+        {
+          "scene": "apm01-command",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "apm02-plan",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "apm03-focus",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "apm04-canvas",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "apm05-insights",
+          "inMs": 0,
+          "durationMs": 5000
+        }
+      ]
+    },
+    {
+      "id": "google-play-portrait",
+      "label": "Vidéo Google Play (YouTube, portrait)",
+      "aspect": "9:16",
+      "master": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30
+      },
+      "deliverables": [
+        {
+          "width": 1080,
+          "height": 1920,
+          "fps": 30
+        }
+      ],
+      "viewport": {
+        "width": 405,
+        "height": 720,
+        "deviceScaleFactor": 2.6667
+      },
+      "durationMs": 27500,
+      "platforms": ["google-play"],
+      "captions": "burned-in",
+      "voScenes": [],
+      "sequence": [
+        {
+          "scene": "ap01-capture",
+          "inMs": 0,
+          "durationMs": 6250
+        },
+        {
+          "scene": "ap02-plan",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap03-propagation",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap04-focus",
+          "inMs": 0,
+          "durationMs": 5000
+        },
+        {
+          "scene": "ap05-ideas",
+          "inMs": 0,
+          "durationMs": 3750
+        },
+        {
+          "scene": "ap06-rest",
+          "inMs": 0,
+          "durationMs": 2500
+        }
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "h01-breche",
+      "kind": "card",
+      "durationMs": 5000,
+      "device": "none",
+      "route": null,
+      "theme": "light",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Tout ce que vous avez en tête.",
+        "en": "Everything on your mind."
+      },
+      "transition": {
+        "type": "match-cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 600,
+        "durationMs": 4300,
+        "fr": "Le matin, la journée est souvent pleine avant même d’avoir commencé.",
+        "en": "Some mornings, the day is full before it’s even begun."
+      },
+      "notes": {
+        "interaction": "Fond papier (--bg). Un curseur clignote (1 Hz), puis la phrase s’écrit lettre à lettre au centre, en --font-serif.",
+        "sound": "Silence 0,5 s, puis nappe de piano feutré (mesure 1). Clics de touches très doux."
+      }
+    },
+    {
+      "id": "h02-capture",
+      "kind": "ui",
+      "durationMs": 7500,
+      "device": "macbook",
+      "route": "#/today",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 300,
+          "type": "press",
+          "key": "Meta+k"
+        },
+        {
+          "at": 900,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Réunion projet X mardi prochain 14h-16h avec @paul",
+            "en": "Project X meeting next Tuesday 2-4pm with @paul"
+          },
+          "durationMs": 3400
+        },
+        {
+          "at": 4600,
+          "type": "wait",
+          "durationMs": 1400
+        },
+        {
+          "at": 6000,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.32,
+          "scale": 2.4
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.4,
+          "scale": 1.5
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Capturez en une phrase",
+        "en": "Capture in one sentence"
+      },
+      "transition": {
+        "type": "match-cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 800,
+        "durationMs": 5500,
+        "fr": "Alors on commence par la vider. Une phrase, telle qu’on la dirait.",
+        "en": "So start by emptying it. One sentence, the way you’d say it."
+      },
+      "notes": {
+        "interaction": "⌘K ouvre la barre de commande. Saisie en langage naturel ; les fragments reconnus (mardi 10 nov., 14:00–16:00, @paul) s’allument en pastilles (AC-1.2). Entrée valide.",
+        "sound": "Clics de clavier réels, mixés bas. Une note de marimba par pastille reconnue (3 notes montantes)."
+      }
+    },
+    {
+      "id": "h03-sync",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "iphone",
+      "route": "#/calendar",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 400,
+          "type": "scroll",
+          "selector": "[data-demo=\"calendar-week\"]",
+          "deltaY": 240
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.6
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.1
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Synchronisé sur vos appareils",
+        "en": "Synced across your devices"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 500
+      },
+      "vo": {
+        "atMs": 300,
+        "durationMs": 3000,
+        "fr": "Et elle est déjà là, sur le téléphone aussi.",
+        "en": "And it’s already there. On your phone, too."
+      },
+      "notes": {
+        "interaction": "Raccord sur le bloc « Réunion projet X » : il apparaît mardi 10 nov. 14:00–16:00 dans la semaine de l’iPhone.",
+        "sound": "La nappe s’ouvre ; pas de whoosh."
+      }
+    },
+    {
+      "id": "h04-plan",
+      "kind": "ui",
+      "durationMs": 7500,
+      "device": "macbook",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 800,
+          "type": "click",
+          "selector": "[data-demo=\"today-plan-button\"]"
+        },
+        {
+          "at": 1000,
+          "type": "wait",
+          "durationMs": 3500
+        },
+        {
+          "at": 4800,
+          "type": "scroll",
+          "selector": "[data-demo=\"today-timeline\"]",
+          "deltaY": 320
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.62,
+          "y": 0.45,
+          "scale": 1.25
+        },
+        "to": {
+          "x": 0.55,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Planification automatique, avec des marges",
+        "en": "Auto-planned, with breathing room"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 500,
+        "durationMs": 6500,
+        "fr": "Le reste se range autour : chaque tâche trouve sa place, avec de l’air entre les rendez-vous.",
+        "en": "Everything else falls into place, with room to breathe between meetings."
+      },
+      "notes": {
+        "interaction": "Clic « Planifier ma journée » (1.1). Les tâches flottantes glissent dans les créneaux libres (1.10) ; des marges de 10 min apparaissent entre deux réunions (1.6).",
+        "sound": "Entrée d’une pulsation douce (mesure 7). Un « tic » feutré par bloc placé, quantifié à la croche."
+      }
+    },
+    {
+      "id": "h05-propagation",
+      "kind": "ui",
+      "durationMs": 7500,
+      "device": "windows-laptop",
+      "route": "#/calendar",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 900,
+          "type": "click",
+          "selector": "[data-demo=\"calendar-block-overrun\"]"
+        },
+        {
+          "at": 2400,
+          "type": "click",
+          "selector": "[data-demo=\"shift-confirm\"]"
+        },
+        {
+          "at": 2600,
+          "type": "wait",
+          "durationMs": 3200
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.4,
+          "y": 0.4,
+          "scale": 1.6
+        },
+        "to": {
+          "x": 0.45,
+          "y": 0.5,
+          "scale": 1.2
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Ça déborde ? La suite se décale",
+        "en": "Running long? The rest shifts"
+      },
+      "transition": {
+        "type": "push-left",
+        "durationMs": 400
+      },
+      "vo": {
+        "atMs": 500,
+        "durationMs": 6000,
+        "fr": "Une tâche déborde ? La suite se décale. Les rendez-vous, eux, restent où ils sont.",
+        "en": "A task runs long? What comes next shifts. Your meetings stay put."
+      },
+      "notes": {
+        "interaction": "Vue semaine Windows. Une tâche dépasse de 15 min : bandeau « Elle dépasse son créneau de 15 min. Décaler la suite ? ». Clic « Décaler » : les tâches suivantes glissent ; le rendez-vous fixe (icône cadenas) ne bouge pas (1.2).",
+        "sound": "Un léger glissando de piano accompagne le décalage. Pas d’alerte sonore."
+      }
+    },
+    {
+      "id": "h06-done",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "android",
+      "route": "#/tasks",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 900,
+          "type": "click",
+          "selector": "[data-demo=\"task-checkbox\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.35,
+          "scale": 2.2
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.38,
+          "scale": 2
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Fait, c’est fait",
+        "en": "Done is done"
+      },
+      "transition": {
+        "type": "fade-to-paper",
+        "durationMs": 500
+      },
+      "vo": {
+        "atMs": 400,
+        "durationMs": 2400,
+        "fr": "Et ce qui est fait… est fait.",
+        "en": "And what’s done is done."
+      },
+      "notes": {
+        "interaction": "Gros plan sur une tâche Android : la case se coche, la ligne se barre et s’estompe (opacity), sans confettis.",
+        "sound": "Son « tock » boisé + vibration suggérée (2.15/7.7). Puis la musique retient son souffle."
+      }
+    },
+    {
+      "id": "h07-card-focus",
+      "kind": "card",
+      "durationMs": 3750,
+      "device": "none",
+      "route": null,
+      "theme": "dark",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Une chose à la fois.",
+        "en": "One thing at a time."
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 500
+      },
+      "notes": {
+        "interaction": "Carton typographique sombre (--bg sombre), texte en --font-serif, apparition par opacité seule. Aucun mouvement de caméra.",
+        "sound": "[silence] Une seule note grave tenue."
+      }
+    },
+    {
+      "id": "h08-focus",
+      "kind": "ui",
+      "durationMs": 7500,
+      "device": "macbook",
+      "route": "#/tasks",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 500,
+          "type": "click",
+          "selector": "[data-demo=\"focus-start\"]"
+        },
+        {
+          "at": 900,
+          "type": "wait",
+          "durationMs": 5200
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.35
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Focus unique",
+        "en": "Single focus"
+      },
+      "transition": {
+        "type": "match-cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 600,
+        "durationMs": 6000,
+        "fr": "Planifier n’est pas le travail. Le travail, c’est ce moment-là.",
+        "en": "Planning isn’t the work. The work is this moment."
+      },
+      "notes": {
+        "interaction": "Démarrage d’une session : l’interface s’efface, seul le titre de la tâche reste en grande typographie, avec le minuteur et « Terminer · Pause · Quitter » (2.14, AC-13.1). Lent travelling avant.",
+        "sound": "La musique se réduit à un pad. Ambiance de pièce calme."
+      }
+    },
+    {
+      "id": "h09-miniplayer",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 1200,
+          "type": "click",
+          "selector": "[data-demo=\"mini-player\"]"
+        },
+        {
+          "at": 1400,
+          "type": "wait",
+          "durationMs": 2800
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.85,
+          "scale": 1.9
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.05
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Le minuteur vous suit",
+        "en": "The timer follows you"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 300,
+        "durationMs": 4400,
+        "fr": "Une tâche, un minuteur. Rien d’autre ne réclame votre attention.",
+        "en": "One task, one timer. Nothing else asking for your attention."
+      },
+      "notes": {
+        "interaction": "Mini-lecteur de focus en bas d’écran (inspiration Musique iOS). Toucher : il s’ouvre en plein écran avec la progression circulaire (2.6).",
+        "sound": "Pad continu ; léger « souffle » à l’ouverture du lecteur."
+      }
+    },
+    {
+      "id": "h10-braindump",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "macbook",
+      "route": "#/ideas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 300,
+          "type": "click",
+          "selector": "[data-demo=\"braindump-open\"]"
+        },
+        {
+          "at": 700,
+          "type": "type",
+          "selector": "[data-demo=\"braindump-input\"]",
+          "text": {
+            "fr": "Titre vidéo : le temps qui reste\nIdée : carte des lieux calmes du quartier\nRelancer Paul pour le devis",
+            "en": "Video title: the time we have left\nIdea: a map of quiet places nearby\nFollow up with Paul on the quote"
+          },
+          "durationMs": 4200
+        },
+        {
+          "at": 5200,
+          "type": "press",
+          "selector": "[data-demo=\"braindump-input\"]",
+          "key": "Escape"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.45,
+          "y": 0.4,
+          "scale": 1.8
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.3
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Brain dump",
+        "en": "Brain dump"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 400
+      },
+      "vo": {
+        "atMs": 500,
+        "durationMs": 5200,
+        "fr": "Les idées, elles, n’arrivent jamais à l’heure. On les dépose ici, en vrac.",
+        "en": "Ideas never arrive on schedule. So drop them here, as they come."
+      },
+      "notes": {
+        "interaction": "Champ de texte pur plein écran (5.14). Trois lignes tapées vite ; à la fermeture, chaque ligne rejoint la boîte de réception (AC-3.2).",
+        "sound": "Retour de la pulsation, plus légère (mesure 21). Clavier rapide."
+      }
+    },
+    {
+      "id": "h11-canvas",
+      "kind": "ui",
+      "durationMs": 7500,
+      "device": "macbook",
+      "route": "#/canvas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 600,
+          "type": "scroll",
+          "selector": "[data-demo=\"canvas-surface\"]",
+          "deltaY": -400
+        },
+        {
+          "at": 2600,
+          "type": "click",
+          "selector": "[data-demo=\"canvas-node\"]"
+        },
+        {
+          "at": 3000,
+          "type": "wait",
+          "durationMs": 3500
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.5
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Toile infinie",
+        "en": "Infinite canvas"
+      },
+      "transition": {
+        "type": "match-cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 600,
+        "durationMs": 6200,
+        "fr": "Puis on prend du recul. Sur la toile, ce qui était une liste devient une carte.",
+        "en": "Then step back. On the canvas, a list becomes a map."
+      },
+      "notes": {
+        "interaction": "Dézoom sur la toile : les nœuds se démêlent (layout de forces, 4.2) ; la mini-carte (4.13) en bas. Un nœud sélectionné montre ses liens.",
+        "sound": "Nappe qui s’élargit (réverbération plus longue)."
+      }
+    },
+    {
+      "id": "h12-serendipity",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "iphone",
+      "route": "#/ideas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 700,
+          "type": "click",
+          "selector": "[data-demo=\"serendipity-shuffle\"]"
+        },
+        {
+          "at": 900,
+          "type": "wait",
+          "durationMs": 4400
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.55,
+          "scale": 1.2
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.45
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Moteur de sérendipité",
+        "en": "Serendipity engine"
+      },
+      "transition": {
+        "type": "fade-to-paper",
+        "durationMs": 500
+      },
+      "vo": {
+        "atMs": 400,
+        "durationMs": 5200,
+        "fr": "Et parfois, POuxis rapproche deux notes qui ne se connaissaient pas.",
+        "en": "And sometimes, POuxis brings together two notes that had never met."
+      },
+      "notes": {
+        "interaction": "Carte de sérendipité (5.1) : deux notes sans lien s’approchent ; un trait les relie ; question « Et si… ? ». Fonction hors MVP 0.1 : ne tourner que si le build la contient (voir CREATIVE_BRIEF §8).",
+        "sound": "Deux notes de marimba qui se répondent puis s’accordent (motif du point corail)."
+      }
+    },
+    {
+      "id": "h13-card-review",
+      "kind": "card",
+      "durationMs": 3750,
+      "device": "none",
+      "route": null,
+      "theme": "light",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Puis, regarder le chemin.",
+        "en": "Then, look back."
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 500
+      },
+      "notes": {
+        "interaction": "Carton papier clair, --font-serif. Un balayage lumineux lent et doux traverse le texte (une seule fois, voir accessibilité).",
+        "sound": "[silence] Respiration de deux temps."
+      }
+    },
+    {
+      "id": "h14-insights",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "windows-laptop",
+      "route": "#/insights",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 1500,
+          "type": "scroll",
+          "selector": "[data-demo=\"insights-weekly\"]",
+          "deltaY": 360
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.35,
+          "scale": 1.4
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.55,
+          "scale": 1.15
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Bilan hebdomadaire",
+        "en": "Weekly review"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 400,
+        "durationMs": 5400,
+        "fr": "Le dimanche, un bilan sans jugement : ce qui a avancé, ce qui coince.",
+        "en": "On Sunday, a review without judgement: what moved, what’s stuck."
+      },
+      "notes": {
+        "interaction": "Bilan du dimanche (7.9) : « Victoires de la semaine », « Points de blocage récurrents », ratio création/organisation. Les chiffres s’incrémentent (fixture fictive marquée).",
+        "sound": "Pulsation reprend, accords majeurs (mesure 31)."
+      }
+    },
+    {
+      "id": "h15-offline",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "light",
+      "setup": {
+        "offline": true
+      },
+      "actions": [
+        {
+          "at": 500,
+          "type": "click",
+          "selector": "[data-demo=\"capture-button\"]"
+        },
+        {
+          "at": 800,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Acheter du café",
+            "en": "Buy coffee"
+          },
+          "durationMs": 1200
+        },
+        {
+          "at": 2200,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.1,
+          "scale": 1.8
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.1
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Hors-ligne, tout fonctionne",
+        "en": "Offline, everything works"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 300,
+        "durationMs": 3000,
+        "fr": "Sans réseau ? Tout continue de fonctionner.",
+        "en": "No signal? Everything keeps working."
+      },
+      "notes": {
+        "interaction": "Mode avion (barre d’état). L’indicateur de synchronisation affiche « Hors-ligne » ; une tâche s’ajoute quand même, instantanément (3.1).",
+        "sound": "La musique coupe un temps (silence d’un temps), puis repart sur l’ajout."
+      }
+    },
+    {
+      "id": "h16-devices",
+      "kind": "composite",
+      "durationMs": 7500,
+      "device": "none",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [],
+      "composite": {
+        "layout": "quad",
+        "panes": [
+          {
+            "device": "macbook",
+            "route": "#/today",
+            "theme": "light",
+            "actions": [
+              {
+                "at": 1600,
+                "type": "click",
+                "selector": "[data-demo=\"task-checkbox\"]"
+              }
+            ]
+          },
+          {
+            "device": "windows-laptop",
+            "route": "#/today",
+            "theme": "dark",
+            "actions": [
+              {
+                "at": 2200,
+                "type": "wait",
+                "durationMs": 0
+              }
+            ]
+          },
+          {
+            "device": "iphone",
+            "route": "#/today",
+            "theme": "light",
+            "actions": [
+              {
+                "at": 2200,
+                "type": "wait",
+                "durationMs": 0
+              }
+            ]
+          },
+          {
+            "device": "android",
+            "route": "#/today",
+            "theme": "dark",
+            "actions": [
+              {
+                "at": 2200,
+                "type": "wait",
+                "durationMs": 0
+              }
+            ]
+          }
+        ],
+        "syncDelayMs": 600
+      },
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.25
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "iPhone · Android · Mac · Windows",
+        "en": "iPhone · Android · Mac · Windows"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 500
+      },
+      "vo": {
+        "atMs": 500,
+        "durationMs": 6200,
+        "fr": "Sur l’iPhone, Android, le Mac ou Windows : la même journée, synchronisée.",
+        "en": "iPhone, Android, Mac or Windows: the same day, in sync."
+      },
+      "notes": {
+        "interaction": "Chorégraphie des quatre appareils sur fond papier. Une tâche cochée sur le Mac se coche sur les trois autres 600 ms plus tard (rendu : état appliqué à t+600 ms).",
+        "sound": "Plein de la musique (mesure 35). Quatre « tock » en cascade, un par appareil."
+      }
+    },
+    {
+      "id": "h17-export",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "android",
+      "route": "#/settings",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 700,
+          "type": "scroll",
+          "selector": "[data-demo=\"settings-data\"]",
+          "deltaY": 280
+        },
+        {
+          "at": 2200,
+          "type": "click",
+          "selector": "[data-demo=\"settings-export\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.6,
+          "scale": 1.5
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Exportez toutes vos données",
+        "en": "Export all your data"
+      },
+      "transition": {
+        "type": "fade-to-paper",
+        "durationMs": 600
+      },
+      "vo": {
+        "atMs": 400,
+        "durationMs": 4400,
+        "fr": "Vos données restent chez vous. Vous les emportez quand vous voulez.",
+        "en": "Your data stays with you. Take it with you whenever you like."
+      },
+      "notes": {
+        "interaction": "Réglages › Données : « Exporter mes données » (6.11) ; une feuille confirme l’archive .zip (JSON).",
+        "sound": "Décrescendo ; la pulsation s’arrête."
+      }
+    },
+    {
+      "id": "h18-endcard",
+      "kind": "endcard",
+      "durationMs": 7500,
+      "device": "none",
+      "route": null,
+      "theme": "light",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Votre temps, en clair.",
+        "en": "Your time, made clear."
+      },
+      "endcard": {
+        "logo": "docs/brand/assets/lockup-horizontal.svg",
+        "logoReversed": "docs/brand/assets/lockup-horizontal-reversed.svg",
+        "lines": {
+          "fr": ["Open source · iPhone · Android · Mac · Windows", "pouxis.app — URL à confirmer"],
+          "en": [
+            "Open source · iPhone · Android · Mac · Windows",
+            "pouxis.app — URL to be confirmed"
+          ]
+        }
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 1200,
+        "durationMs": 3200,
+        "fr": "POuxis. Votre temps, en clair.",
+        "en": "POuxis. Your time, made clear."
+      },
+      "notes": {
+        "interaction": "Le symbole se trace (trait du « P », 600 ms, --ease-out), le point corail se pose (--ease-spring), puis le logotype et la signature apparaissent en opacité. Tenue 3 s pour lecture.",
+        "sound": "Logo sonore : deux notes (quinte montante) sur la pose du point. Puis silence jusqu’au noir."
+      }
+    },
+    {
+      "id": "v01-capture",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 200,
+          "type": "click",
+          "selector": "[data-demo=\"capture-button\"]"
+        },
+        {
+          "at": 500,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Réunion projet X mardi prochain 14h-16h avec @paul",
+            "en": "Project X meeting next Tuesday 2-4pm with @paul"
+          },
+          "durationMs": 2300
+        },
+        {
+          "at": 3000,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.3,
+          "scale": 1.5
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.35,
+          "scale": 1.3
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Une phrase. Un rendez-vous.",
+        "en": "One sentence. One meeting."
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Accroche dans la première seconde : la saisie démarre dès 0,5 s.",
+        "sound": "Attaque franche de la pulsation sur la 1re image."
+      }
+    },
+    {
+      "id": "v02-plan",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 300,
+          "type": "click",
+          "selector": "[data-demo=\"today-plan-button\"]"
+        },
+        {
+          "at": 500,
+          "type": "wait",
+          "durationMs": 3000
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.55,
+          "scale": 1.4
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.15
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Votre journée, planifiée en un geste",
+        "en": "Your day, planned in one tap"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Les tâches tombent dans la journée, marges visibles.",
+        "sound": "« Tic » par bloc placé."
+      }
+    },
+    {
+      "id": "v03-focus",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "iphone",
+      "route": "#/tasks",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 300,
+          "type": "click",
+          "selector": "[data-demo=\"focus-start\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.4
+        },
+        "easing": "standard"
+      },
+      "caption": {
+        "fr": "Une chose à la fois",
+        "en": "One thing at a time"
+      },
+      "transition": {
+        "type": "match-cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Entrée en focus unique, grande typographie.",
+        "sound": "La musique se réduit au pad."
+      }
+    },
+    {
+      "id": "v04-serendipity",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "android",
+      "route": "#/ideas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 300,
+          "type": "click",
+          "selector": "[data-demo=\"serendipity-shuffle\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.2
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.4
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Deux idées. Une étincelle.",
+        "en": "Two ideas. One spark."
+      },
+      "transition": {
+        "type": "fade-to-paper",
+        "durationMs": 400
+      },
+      "notes": {
+        "interaction": "Deux notes se rapprochent et se relient.",
+        "sound": "Deux notes de marimba."
+      }
+    },
+    {
+      "id": "v05-endcard",
+      "kind": "endcard",
+      "durationMs": 3750,
+      "device": "none",
+      "route": null,
+      "theme": "light",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Votre temps, en clair.",
+        "en": "Your time, made clear."
+      },
+      "endcard": {
+        "logo": "docs/brand/assets/lockup-stacked.svg",
+        "logoReversed": "docs/brand/assets/lockup-stacked-reversed.svg",
+        "lines": {
+          "fr": ["Open source · iPhone · Android · Mac · Windows"],
+          "en": ["Open source · iPhone · Android · Mac · Windows"]
+        }
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "vo": {
+        "atMs": 300,
+        "durationMs": 2100,
+        "fr": "POuxis. Votre temps, en clair.",
+        "en": "POuxis. Your time, made clear."
+      },
+      "notes": {
+        "interaction": "Logo empilé centré dans la zone sûre.",
+        "sound": "Logo sonore deux notes."
+      }
+    },
+    {
+      "id": "v06-propagation",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "android",
+      "route": "#/calendar",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 300,
+          "type": "click",
+          "selector": "[data-demo=\"calendar-block-overrun\"]"
+        },
+        {
+          "at": 1300,
+          "type": "click",
+          "selector": "[data-demo=\"shift-confirm\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.4
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.15
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Ça déborde ? La suite se décale",
+        "en": "Running long? The rest shifts"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Décalage en cascade ; le rendez-vous fixe ne bouge pas.",
+        "sound": "Glissando léger."
+      }
+    },
+    {
+      "id": "v07-miniplayer",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 1200,
+          "type": "click",
+          "selector": "[data-demo=\"mini-player\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.85,
+          "scale": 1.7
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1.1
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Le minuteur vous suit partout",
+        "en": "The timer follows you everywhere"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Mini-lecteur → plein écran.",
+        "sound": "Souffle doux."
+      }
+    },
+    {
+      "id": "v08-offline",
+      "kind": "ui",
+      "durationMs": 2500,
+      "device": "iphone",
+      "route": "#/today",
+      "theme": "light",
+      "setup": {
+        "offline": true
+      },
+      "actions": [
+        {
+          "at": 200,
+          "type": "click",
+          "selector": "[data-demo=\"capture-button\"]"
+        },
+        {
+          "at": 500,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Acheter du café",
+            "en": "Buy coffee"
+          },
+          "durationMs": 900
+        },
+        {
+          "at": 1600,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.2,
+          "scale": 1.5
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.45,
+          "scale": 1.15
+        },
+        "easing": "out"
+      },
+      "caption": {
+        "fr": "Hors-ligne, tout fonctionne",
+        "en": "Offline, everything works"
+      },
+      "transition": {
+        "type": "fade-to-paper",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Mode avion, ajout instantané.",
+        "sound": "Un temps de silence."
+      }
+    },
+    {
+      "id": "ap01-capture",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "none",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 400,
+          "type": "click",
+          "selector": "[data-demo=\"capture-button\"]"
+        },
+        {
+          "at": 800,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Réunion projet X mardi prochain 14h-16h avec @paul",
+            "en": "Project X meeting next Tuesday 2-4pm with @paul"
+          },
+          "durationMs": 3200
+        },
+        {
+          "at": 5600,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Capturez en une phrase",
+        "en": "Capture in one sentence"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Image d’affiche (poster frame, 5 s par défaut chez Apple) : pastilles de saisie toutes visibles à 5,0 s.",
+        "sound": "Musique seule ; clics UI. Muet par défaut : le sens tient dans les légendes."
+      }
+    },
+    {
+      "id": "ap02-plan",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 600,
+          "type": "click",
+          "selector": "[data-demo=\"today-plan-button\"]"
+        },
+        {
+          "at": 800,
+          "type": "wait",
+          "durationMs": 3600
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Votre journée, planifiée",
+        "en": "Your day, planned"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Routage + marges.",
+        "sound": "« Tic » par bloc."
+      }
+    },
+    {
+      "id": "ap03-propagation",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/calendar",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 600,
+          "type": "click",
+          "selector": "[data-demo=\"calendar-block-overrun\"]"
+        },
+        {
+          "at": 1800,
+          "type": "click",
+          "selector": "[data-demo=\"shift-confirm\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "La suite se décale, les rendez-vous tiennent",
+        "en": "The rest shifts, meetings stay put"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Propagation des retards.",
+        "sound": "Glissando."
+      }
+    },
+    {
+      "id": "ap04-focus",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/tasks",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 500,
+          "type": "click",
+          "selector": "[data-demo=\"focus-start\"]"
+        },
+        {
+          "at": 700,
+          "type": "wait",
+          "durationMs": 3800
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Focus unique, minuteur par tâche",
+        "en": "Single focus, a timer per task"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Focus unique.",
+        "sound": "Pad."
+      }
+    },
+    {
+      "id": "ap05-ideas",
+      "kind": "ui",
+      "durationMs": 3750,
+      "device": "none",
+      "route": "#/ideas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 400,
+          "type": "click",
+          "selector": "[data-demo=\"serendipity-shuffle\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Des idées qui se rencontrent",
+        "en": "Ideas that meet"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Sérendipité (si présente dans le build ; sinon brain dump, voir CREATIVE_BRIEF §8).",
+        "sound": "Marimba."
+      }
+    },
+    {
+      "id": "ap06-rest",
+      "kind": "ui",
+      "durationMs": 2500,
+      "device": "none",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "POuxis : temps, tâches, idées",
+        "en": "POuxis: time, tasks, ideas"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Plan d’Aujourd’hui au repos (pas de carton logo : Apple et Google limitent le contenu promotionnel).",
+        "sound": "Résolution musicale."
+      }
+    },
+    {
+      "id": "apm01-command",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "none",
+      "route": "#/today",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 400,
+          "type": "press",
+          "key": "Meta+k"
+        },
+        {
+          "at": 900,
+          "type": "type",
+          "selector": "[data-demo=\"command-input\"]",
+          "text": {
+            "fr": "Réunion projet X mardi prochain 14h-16h avec @paul",
+            "en": "Project X meeting next Tuesday 2-4pm with @paul"
+          },
+          "durationMs": 3200
+        },
+        {
+          "at": 5500,
+          "type": "press",
+          "selector": "[data-demo=\"command-input\"]",
+          "key": "Enter"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "⌘K, une phrase, c’est noté",
+        "en": "⌘K, one sentence, noted"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Barre de commande.",
+        "sound": "Clavier."
+      }
+    },
+    {
+      "id": "apm02-plan",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/today",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 600,
+          "type": "click",
+          "selector": "[data-demo=\"today-plan-button\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Votre journée, planifiée",
+        "en": "Your day, planned"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Routage.",
+        "sound": "« Tic »."
+      }
+    },
+    {
+      "id": "apm03-focus",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/tasks",
+      "theme": "dark",
+      "actions": [
+        {
+          "at": 500,
+          "type": "click",
+          "selector": "[data-demo=\"focus-start\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Focus unique",
+        "en": "Single focus"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Focus.",
+        "sound": "Pad."
+      }
+    },
+    {
+      "id": "apm04-canvas",
+      "kind": "ui",
+      "durationMs": 6250,
+      "device": "none",
+      "route": "#/canvas",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 600,
+          "type": "scroll",
+          "selector": "[data-demo=\"canvas-surface\"]",
+          "deltaY": -400
+        },
+        {
+          "at": 3000,
+          "type": "click",
+          "selector": "[data-demo=\"canvas-node\"]"
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Toile infinie",
+        "en": "Infinite canvas"
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationMs": 300
+      },
+      "notes": {
+        "interaction": "Dézoom, mini-carte.",
+        "sound": "Nappe."
+      }
+    },
+    {
+      "id": "apm05-insights",
+      "kind": "ui",
+      "durationMs": 5000,
+      "device": "none",
+      "route": "#/insights",
+      "theme": "light",
+      "actions": [
+        {
+          "at": 1000,
+          "type": "scroll",
+          "selector": "[data-demo=\"insights-weekly\"]",
+          "deltaY": 300
+        }
+      ],
+      "camera": {
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "scale": 1
+        },
+        "easing": "linear"
+      },
+      "caption": {
+        "fr": "Un bilan chaque semaine",
+        "en": "A review every week"
+      },
+      "transition": {
+        "type": "cut",
+        "durationMs": 0
+      },
+      "notes": {
+        "interaction": "Bilan hebdomadaire.",
+        "sound": "Résolution."
+      }
+    }
+  ]
+}

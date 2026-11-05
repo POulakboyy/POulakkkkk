@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-toggle-scrapbook"
+description = "Enables the toggle_scrapbook command without any pre-configured scope."
+commands.allow = ["toggle_scrapbook"]
+
+[[permission]]
+identifier = "deny-toggle-scrapbook"
+description = "Denies the toggle_scrapbook command without any pre-configured scope."
+commands.deny = ["toggle_scrapbook"]

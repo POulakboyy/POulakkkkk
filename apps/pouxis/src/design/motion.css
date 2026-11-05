@@ -1,0 +1,214 @@
+/*
+ * Motion primitives — reference: docs/design/MOTION.md.
+ * Rules: animate only transform and opacity (compositor-only, no layout or paint), take every
+ * duration and easing from the --dur-* / --ease-* tokens so reduced motion and e-ink collapse
+ * them to 0 ms, and keep direct feedback under 100 ms (Nielsen's 0.1 s limit).
+ */
+
+/* ---------------------------------------------------------------------------------------- */
+/* Keyframes                                                                                 */
+/* ---------------------------------------------------------------------------------------- */
+
+@keyframes px-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes px-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes px-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-offset-sm));
+  }
+}
+
+@keyframes px-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+
+@keyframes px-scale-out {
+  to {
+    opacity: 0;
+    transform: scale(var(--motion-scale-from));
+  }
+}
+
+@keyframes px-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes px-sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes px-slide-in-end {
+  from {
+    opacity: 0;
+    transform: translateX(var(--motion-offset-md));
+  }
+}
+
+/* Completion "pop" for a checked task: brief overshoot, then rest. */
+@keyframes px-pop {
+  40% {
+    transform: scale(1.12);
+  }
+}
+
+/* Invalid input: a short horizontal shake (direction only — the message carries the meaning). */
+@keyframes px-shake {
+  20%,
+  60% {
+    transform: translateX(calc(var(--motion-offset-sm) * -0.5));
+  }
+  40%,
+  80% {
+    transform: translateX(calc(var(--motion-offset-sm) * 0.5));
+  }
+}
+
+/* Loading placeholder: opacity pulse (no animated gradients — they repaint every frame). */
+@keyframes px-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Utility classes                                                                           */
+/* ---------------------------------------------------------------------------------------- */
+
+.px-fade-in {
+  animation: px-fade-in var(--dur-base) var(--ease-enter) both;
+}
+
+.px-fade-out {
+  animation: px-fade-out var(--dur-fast) var(--ease-exit) both;
+}
+
+.px-rise-in {
+  animation: px-rise-in var(--dur-slow) var(--ease-enter) both;
+}
+
+.px-scale-in {
+  animation: px-scale-in var(--dur-base) var(--ease-enter) both;
+}
+
+.px-scale-out {
+  animation: px-scale-out var(--dur-fast) var(--ease-exit) both;
+}
+
+.px-sheet-in {
+  animation: px-sheet-in var(--dur-slow) var(--ease-enter) both;
+}
+
+.px-sheet-out {
+  animation: px-sheet-out var(--dur-base) var(--ease-exit) both;
+}
+
+.px-slide-in-end {
+  animation: px-slide-in-end var(--dur-slow) var(--ease-enter) both;
+}
+
+.px-pop {
+  animation: px-pop var(--dur-base) var(--ease-spring);
+}
+
+.px-shake {
+  animation: px-shake var(--dur-slow) var(--ease-standard);
+}
+
+.px-pulse {
+  animation: px-pulse calc(var(--dur-slower) * 3) var(--ease-standard) infinite;
+}
+
+/* Pressable surface: immediate scale-down on press, eased release. */
+.px-press {
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.px-press:active {
+  transform: scale(var(--press-scale));
+  transition-duration: var(--dur-instant);
+}
+
+/*
+ * Staggered lists: set --i (0-based index) on each child. Capped at 12 steps so a long list
+ * never makes the last row wait more than ~0.3 s.
+ */
+.px-stagger > * {
+  animation: px-rise-in var(--dur-slow) var(--ease-enter) both;
+  animation-delay: calc(min(var(--i, 0), 12) * var(--stagger-step));
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Zen UI (7.4) — zen.ts sets data-zen="idle" on <html>                                       */
+/* ---------------------------------------------------------------------------------------- */
+
+.px-chrome {
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+
+:root[data-zen='idle'] .px-chrome:not(:hover, :focus-within, [data-zen-keep]) {
+  opacity: var(--zen-chrome-opacity);
+  transition-duration: var(--dur-zen-out);
+}
+
+:root[data-zen='idle'] {
+  scrollbar-color: transparent transparent;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* View Transitions (view-transition.ts) — progressive enhancement                           */
+/* ---------------------------------------------------------------------------------------- */
+
+/* Between top-level views: a short cross-fade, nothing moves. */
+::view-transition-old(root) {
+  animation: px-fade-out var(--dur-fast) var(--ease-exit) both;
+}
+
+::view-transition-new(root) {
+  animation: px-fade-in var(--dur-base) var(--ease-enter) both;
+}
+
+/* Shared element: mini-player ⇄ full player. Put the class on both; only one is mounted. */
+.px-vt-player {
+  view-transition-name: px-player;
+}
+
+::view-transition-group(px-player) {
+  animation-duration: var(--dur-slower);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-old(px-player),
+::view-transition-new(px-player) {
+  /* Let the group morph the box; contents cross-fade without stretching. */
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  .px-pulse {
+    animation: none;
+  }
+}

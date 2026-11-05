@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Signaler une vulnérabilité
+    url: https://github.com/POulakboyy/POulakkkkk/security/advisories/new
+    about: Ne publiez jamais une faille dans une issue publique. Suivez la politique de sécurité (SECURITY.md).
+  - name: Questions et idées ouvertes
+    url: https://github.com/POulakboyy/POulakkkkk/discussions
+    about: Pour une question d'usage ou une idée encore floue, ouvrez plutôt une discussion.

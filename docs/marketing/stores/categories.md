@@ -1,0 +1,19 @@
+# Choix des catégories
+
+| Store                   | Catégorie principale | Secondaire / compléments                                                                                                                    | Justification                                                                                                                                                                                                                                                               |
+| ----------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App Store (iOS, iPadOS) | **Productivité**     | **Utilitaires** pour la 1.0 ; réévaluer **Économie et entreprise** quand la collaboration sera livrée                                       | La définition Apple de Productivité cite la gestion de tâches, la gestion de calendrier, la prise de notes et les générateurs d'organigrammes : c'est exactement le cœur de POuxis. Économie et entreprise vise la collaboration et l'édition partagée, absentes de la 1.0. |
+| Mac App Store           | **Productivité**     | **Utilitaires**                                                                                                                             | La catégorie choisie dans App Store Connect doit correspondre à celle déclarée dans le bundle (`LSApplicationCategoryType` = `public.app-category.productivity`).                                                                                                           |
+| Google Play             | **Productivité**     | Jusqu'à 5 tags, choisis dans la liste imposée par la Play Console (par ex. tags liés à l'agenda, aux tâches, aux notes, à la concentration) | Exemples Play de la catégorie : bloc-notes, liste de tâches, calendrier. Les tags doivent décrire ce que l'app est, pas des genres voisins.                                                                                                                                 |
+| Microsoft Store         | **Productivité**     | —                                                                                                                                           | Catégorie à sélectionner dans « Propriétés » de la soumission ; libellé exact à confirmer dans Partner Center (non listé dans la page de documentation consultée).                                                                                                          |
+| Flathub                 | `Office`             | `ProjectManagement`, `Calendar`                                                                                                             | Catégories de la spécification freedesktop.org utilisées par AppStream ; à confirmer lors de la rédaction du `.desktop`.                                                                                                                                                    |
+
+Définitions consultées le 4 novembre 2026 :
+
+- Apple, Categories and Discoverability : <https://developer.apple.com/app-store/categories/>
+- Google Play, Choose a category and tags : <https://support.google.com/googleplay/android-developer/answer/9859673>
+- Microsoft, Enter app properties : <https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/enter-app-properties>
+
+Demande associée (hors de ce dossier) : déclarer la catégorie dans la configuration Tauri
+(`bundle.category: "Productivity"`), qui alimente `LSApplicationCategoryType` sur macOS et la
+catégorie du `.desktop` sous Linux.

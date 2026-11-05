@@ -1,0 +1,12 @@
+node_modules
+data
+test
+coverage
+*.log
+.env*
+Dockerfile
+.dockerignore
+compose.yaml
+README.md
+vitest.config.ts
+tsconfig.json

@@ -1,0 +1,29 @@
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-5);
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.description {
+  color: var(--ink-2);
+  line-height: var(--leading-normal);
+  max-width: var(--measure);
+}
