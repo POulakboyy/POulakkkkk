@@ -197,11 +197,14 @@ function startVoice(audio: AudioContext, out: AudioNode, sound: SoundId): { stop
   const stops = scape.layers.map((layer) => startLayer(audio, out, layer));
   const timers = new Set<ReturnType<typeof setTimeout>>();
   const schedule = (accent: Accent) => {
-    const id = setTimeout(() => {
-      timers.delete(id);
-      playAccent(audio, out, accent);
-      schedule(accent);
-    }, nextDelay(accent.meanIntervalMs, rng));
+    const id = setTimeout(
+      () => {
+        timers.delete(id);
+        playAccent(audio, out, accent);
+        schedule(accent);
+      },
+      nextDelay(accent.meanIntervalMs, rng),
+    );
     timers.add(id);
   };
   scape.accents.forEach(schedule);

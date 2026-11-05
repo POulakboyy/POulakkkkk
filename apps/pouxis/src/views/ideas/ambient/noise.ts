@@ -15,7 +15,12 @@ export type SoundId = (typeof SOUNDS)[number];
  * Pink: Paul Kellet's refined filter (≈ −3 dB/octave). Brown: leaky integration of white
  * noise (≈ −6 dB/octave).
  */
-export function fillNoise(out: Float32Array, color: NoiseColor, rng: Rng, peak = 0.9): Float32Array {
+export function fillNoise(
+  out: Float32Array,
+  color: NoiseColor,
+  rng: Rng,
+  peak = 0.9,
+): Float32Array {
   let b0 = 0;
   let b1 = 0;
   let b2 = 0;
@@ -77,13 +82,27 @@ export interface Soundscape {
 }
 
 export const SOUNDSCAPES: Readonly<Record<SoundId, Soundscape>> = {
-  white: { layers: [{ color: 'white', filter: { type: 'lowpass', frequency: 12000 }, gain: 0.35 }], accents: [] },
-  pink: { layers: [{ color: 'pink', filter: { type: 'lowpass', frequency: 10000 }, gain: 0.5 }], accents: [] },
-  brown: { layers: [{ color: 'brown', filter: { type: 'lowpass', frequency: 2000 }, gain: 0.8 }], accents: [] },
+  white: {
+    layers: [{ color: 'white', filter: { type: 'lowpass', frequency: 12000 }, gain: 0.35 }],
+    accents: [],
+  },
+  pink: {
+    layers: [{ color: 'pink', filter: { type: 'lowpass', frequency: 10000 }, gain: 0.5 }],
+    accents: [],
+  },
+  brown: {
+    layers: [{ color: 'brown', filter: { type: 'lowpass', frequency: 2000 }, gain: 0.8 }],
+    accents: [],
+  },
   cafe: {
     layers: [
       // Murmur of voices: brown noise in the speech band, gently swelling.
-      { color: 'brown', filter: { type: 'bandpass', frequency: 500, q: 0.7 }, gain: 0.9, swell: { rate: 0.13, depth: 0.35 } },
+      {
+        color: 'brown',
+        filter: { type: 'bandpass', frequency: 500, q: 0.7 },
+        gain: 0.9,
+        swell: { rate: 0.13, depth: 0.35 },
+      },
       { color: 'pink', filter: { type: 'lowpass', frequency: 1800 }, gain: 0.12 },
     ],
     accents: [{ kind: 'clink', meanIntervalMs: 2600, gain: 0.08 }],
@@ -91,13 +110,23 @@ export const SOUNDSCAPES: Readonly<Record<SoundId, Soundscape>> = {
   forest: {
     layers: [
       // Wind in the leaves.
-      { color: 'pink', filter: { type: 'bandpass', frequency: 900, q: 0.5 }, gain: 0.45, swell: { rate: 0.07, depth: 0.6 } },
+      {
+        color: 'pink',
+        filter: { type: 'bandpass', frequency: 900, q: 0.5 },
+        gain: 0.45,
+        swell: { rate: 0.07, depth: 0.6 },
+      },
     ],
     accents: [{ kind: 'chirp', meanIntervalMs: 3200, gain: 0.05 }],
   },
   rain: {
     layers: [
-      { color: 'white', filter: { type: 'bandpass', frequency: 3500, q: 0.4 }, gain: 0.32, swell: { rate: 0.05, depth: 0.2 } },
+      {
+        color: 'white',
+        filter: { type: 'bandpass', frequency: 3500, q: 0.4 },
+        gain: 0.32,
+        swell: { rate: 0.05, depth: 0.2 },
+      },
       { color: 'brown', filter: { type: 'lowpass', frequency: 600 }, gain: 0.35 },
     ],
     accents: [{ kind: 'drop', meanIntervalMs: 180, gain: 0.05 }],

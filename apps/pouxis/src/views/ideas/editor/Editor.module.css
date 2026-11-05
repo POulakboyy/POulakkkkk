@@ -1,0 +1,244 @@
+/* Hybrid editor: rendered lines and the one source line being edited share the same metrics so
+   switching between them never shifts the text. */
+
+.body {
+  position: relative;
+  max-width: var(--measure);
+  min-height: 40vh;
+  padding-block: var(--space-2) var(--space-10);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--ink);
+  cursor: text;
+  outline: none;
+}
+
+.body:focus-visible {
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring);
+  border-radius: var(--radius-xs);
+}
+
+.line {
+  position: relative;
+  min-height: calc(1em * 1.65);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.content {
+  white-space: pre-wrap;
+}
+
+.placeholder {
+  color: var(--ink-3);
+}
+
+/* The line being edited: a borderless auto-growing textarea showing the Markdown source. */
+.source {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  resize: none;
+  overflow: hidden;
+  outline: none;
+  caret-color: var(--accent);
+}
+
+.source::placeholder {
+  color: var(--ink-3);
+}
+
+.lineActive::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--space-1);
+  inset-inline-start: calc(-1 * var(--space-4));
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* ---------- Blocks ---------- */
+
+.heading {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.h1 {
+  font-size: var(--text-3xl);
+  padding-block: var(--space-5) var(--space-2);
+}
+
+.h2 {
+  font-size: var(--text-2xl);
+  padding-block: var(--space-4) var(--space-1);
+}
+
+.h3 {
+  font-size: var(--text-xl);
+  padding-block: var(--space-3) 0;
+}
+
+.quote {
+  padding-inline-start: var(--space-4);
+  border-inline-start: 3px solid var(--line-strong);
+  color: var(--ink-2);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.ruleLine {
+  margin: var(--space-4) 0;
+  border: 0;
+  border-top: var(--border-width) solid var(--line-strong);
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+}
+
+.rule > .ruleLine {
+  flex: 1;
+}
+
+.item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.bulletMark {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-inline: var(--space-1) 0;
+  border-radius: 50%;
+  background: var(--ink-2);
+  transform: translateY(-0.2em);
+}
+
+.number {
+  flex: none;
+  min-width: 1.4em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.taskBox {
+  flex: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: var(--border-width-strong) solid var(--line-control);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  transform: translateY(0.2em);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+/* Enlarges the hit area to 44 px without changing the visual size. */
+.taskBox::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
+.taskBox:active {
+  transform: translateY(0.2em) scale(var(--press-scale));
+}
+
+.taskBox[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.taskBox[aria-checked='true']::before {
+  content: '';
+  position: absolute;
+  inset: 3px 5px 5px;
+  border: solid var(--accent-ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0.8);
+}
+
+.taskBox:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.taskDone {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+/* ---------- Inline ---------- */
+
+.code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.link {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.wiki {
+  display: inline;
+  padding: 0 0.15em;
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--accent-soft);
+  color: var(--ink);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .wiki:hover {
+    background: color-mix(in srgb, var(--accent) 24%, transparent);
+  }
+}
+
+.wikiMissing {
+  background: transparent;
+  color: var(--ink-2);
+  text-decoration: underline dashed var(--ink-3);
+  text-underline-offset: 0.2em;
+}
+
+.wiki:focus-visible,
+.link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* Typewriter mode: a calmer, mono rhythm signals that this is a forward-only first draft. */
+.typewriter {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+}
+
+.typewriter .heading {
+  font-family: var(--font-mono);
+}

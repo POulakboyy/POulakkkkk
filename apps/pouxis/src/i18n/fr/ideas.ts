@@ -30,17 +30,20 @@ export const ideas = {
     back: 'Toutes les notes',
     pick: 'Choisissez une note à gauche, ou créez-en une.',
     backlinks: 'Mentionnée dans',
-    noBacklinks: 'Aucune autre note ne la mentionne pour l’instant. Écrivez [[{title}]] ailleurs pour la relier.',
+    noBacklinks:
+      'Aucune autre note ne la mentionne pour l’instant. Écrivez [[{title}]] ailleurs pour la relier.',
     mentions: '{count, plural, one {# mention} other {# mentions}}',
     createLinked: 'Créer la note « {title} »',
     history: 'Historique des paragraphes',
     historyHint: 'Les paragraphes effacés ou modifiés pendant cette session.',
-    historyEmpty: 'Rien à restaurer : aucun paragraphe n’a été effacé ou modifié depuis l’ouverture.',
+    historyEmpty:
+      'Rien à restaurer : aucun paragraphe n’a été effacé ou modifié depuis l’ouverture.',
     restoreBlock: 'Restaurer ce paragraphe',
     restored: 'Paragraphe restauré',
     delete: 'Supprimer la note',
     deleted: 'Note supprimée',
     more: 'Actions de la note',
+    toggleTask: 'Cocher ou décocher la tâche',
     words: '{count, plural, =0 {Aucun mot} one {# mot} other {# mots}}',
   },
 

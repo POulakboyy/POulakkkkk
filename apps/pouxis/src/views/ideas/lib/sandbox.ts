@@ -37,7 +37,10 @@ export function startSession(storage: Pick<Storage, 'getItem' | 'setItem'> | und
 let installed = false;
 
 /** Purges leftovers of a previous session once, then purges again on exit. Idempotent. */
-export function installSandboxLifecycle(store: Store, win: Window | undefined = globalThis.window): void {
+export function installSandboxLifecycle(
+  store: Store,
+  win: Window | undefined = globalThis.window,
+): void {
   if (installed) return;
   installed = true;
   let storage: Storage | undefined;

@@ -1,0 +1,119 @@
+.triggerOn {
+  border-color: var(--accent);
+}
+
+@media (max-width: 479px) {
+  /* Icon-only on phones; the name stays available to assistive tech. */
+  .triggerText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 14px;
+}
+
+.bars > span {
+  flex: 1;
+  height: 100%;
+  border-radius: 1px;
+  background: currentColor;
+  transform: scaleY(0.35);
+  transform-origin: bottom;
+}
+
+.bars > span:nth-child(2) {
+  transform: scaleY(0.7);
+}
+
+.barsOn > span {
+  background: var(--accent);
+  animation: px-bar var(--dur-slower) var(--ease-standard) infinite alternate;
+}
+
+.barsOn > span:nth-child(2) {
+  animation-delay: calc(-1 * var(--dur-base));
+}
+
+.barsOn > span:nth-child(3) {
+  animation-delay: calc(-1 * var(--dur-fast));
+}
+
+@keyframes px-bar {
+  from {
+    transform: scaleY(0.25);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* The popover provides padding and caps the width at 360 px. */
+  width: 328px;
+  max-width: 100%;
+  margin: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.sounds {
+  gap: var(--space-2);
+}
+
+.playRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.volume {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.volumeLabel,
+.caption {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+}
+
+.volume input {
+  width: 100%;
+  min-height: var(--tap-min);
+  accent-color: var(--accent);
+}
+
+.note {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barsOn > span {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+}

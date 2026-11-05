@@ -9,11 +9,7 @@ export const RESOLVED_TAG = 'resolved';
 export const FRICTION_KINDS = ['technical', 'creative', 'external', 'other'] as const;
 export type FrictionKind = (typeof FRICTION_KINDS)[number];
 
-const fold = (s: string): string =>
-  s
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase();
+const fold = (s: string): string => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 /** Notes shown in the main list: no sandbox, vault or archived note; most recent first. */
 export function visibleNotes(notes: readonly Note[], query = ''): Note[] {
@@ -22,6 +18,11 @@ export function visibleNotes(notes: readonly Note[], query = ''): Note[] {
     .filter((n) => !n.sandbox && !n.vaultId && !n.tags.includes(ARCHIVED_TAG))
     .filter((n) => !q || fold(`${n.title}\n${n.body}`).includes(q))
     .sort((a, b) => b.updatedAt - a.updatedAt);
+}
+
+/** Notes that wiki links and backlinks may point to: everything but sandbox and vault notes. */
+export function linkableNotes(notes: readonly Note[]): Note[] {
+  return notes.filter((n) => !n.sandbox && !n.vaultId);
 }
 
 /** First meaningful body line, without Markdown, for list rows. */

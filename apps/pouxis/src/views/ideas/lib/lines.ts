@@ -36,7 +36,12 @@ export function continuation(line: string): string | null {
   }
 }
 
-function replace(lines: readonly string[], index: number, count: number, items: string[]): string[] {
+function replace(
+  lines: readonly string[],
+  index: number,
+  count: number,
+  items: string[],
+): string[] {
   const next = lines.slice();
   next.splice(index, count, ...items);
   return next;

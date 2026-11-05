@@ -5,14 +5,7 @@
  */
 
 export type BlockKind =
-  | 'blank'
-  | 'heading'
-  | 'bullet'
-  | 'ordered'
-  | 'task'
-  | 'quote'
-  | 'rule'
-  | 'paragraph';
+  'blank' | 'heading' | 'bullet' | 'ordered' | 'task' | 'quote' | 'rule' | 'paragraph';
 
 export interface Block {
   kind: BlockKind;

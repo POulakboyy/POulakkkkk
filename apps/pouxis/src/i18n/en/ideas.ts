@@ -32,12 +32,14 @@ export const ideas: typeof fr = {
     createLinked: 'Create note “{title}”',
     history: 'Paragraph history',
     historyHint: 'Paragraphs deleted or changed during this session.',
-    historyEmpty: 'Nothing to restore: no paragraph has been deleted or changed since you opened it.',
+    historyEmpty:
+      'Nothing to restore: no paragraph has been deleted or changed since you opened it.',
     restoreBlock: 'Restore this paragraph',
     restored: 'Paragraph restored',
     delete: 'Delete note',
     deleted: 'Note deleted',
     more: 'Note actions',
+    toggleTask: 'Check or uncheck the task',
     words: '{count, plural, =0 {No words} one {# word} other {# words}}',
   },
 
