@@ -48,9 +48,7 @@ export function TransitionAirlock() {
       {settling ? (
         <Settle settling={settling} onDone={() => setSettling(null)} />
       ) : (
-        <Airlock
-          onPassed={(nextId) => setSettling({ startedAt: Date.now(), nextId })}
-        />
+        <Airlock onPassed={(nextId) => setSettling({ startedAt: Date.now(), nextId })} />
       )}
     </section>
   );
@@ -68,7 +66,8 @@ function Airlock({ onPassed }: { onPassed: (nextId: Id | null) => void }) {
   const [nextStep, setNextStep] = useState('');
 
   const touched = leavingCandidates(tasks, now, prefs.timeZone);
-  const leavingOptions = touched.length > 0 ? touched : nextCandidates(tasks, null, now, prefs.timeZone);
+  const leavingOptions =
+    touched.length > 0 ? touched : nextCandidates(tasks, null, now, prefs.timeZone);
   const leaving = tasks.find((task) => task.id === leavingId);
   const next = tasks.find((task) => task.id === nextId && task.id !== leavingId);
   const nextOptions = nextCandidates(tasks, leavingId, now, prefs.timeZone);

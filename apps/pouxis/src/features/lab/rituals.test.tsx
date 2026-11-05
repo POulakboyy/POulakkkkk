@@ -1,6 +1,7 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Note } from '@pouxis/core';
+import { dismissToast, getToasts, runToastAction } from '../../ui/feedback/toastStore.ts';
 import { NOW, fakeStore, makeEntry, makeTask } from './shared/fixtures.test-utils.ts';
 
 vi.mock('../../store/index.ts', async () => {
@@ -21,7 +22,17 @@ beforeEach(() => {
   vi.useFakeTimers({ now: NOW, toFake: ['Date'] });
   fakeStore.reset();
   localStorage.clear();
+  dismissToast();
 });
+
+/** French copy gets non-breaking spaces before `:`, `·` and inside guillemets. */
+const norm = (text: string | undefined) => text?.replace(/[\u00a0\u202f]/g, ' ');
+const named = (text: string) => (name: string) => norm(name) === text;
+
+/** Title of the latest toast, and a way to press its undo action. */
+const lastToast = () => getToasts().at(-1);
+const toastTitle = () => norm(lastToast()?.title);
+const undo = () => runToastAction(lastToast()!.id);
 
 afterEach(() => {
   cleanup();
@@ -45,7 +56,7 @@ describe('feature toggle', () => {
   it('pauses a feature without mounting it, and remembers the choice', () => {
     const Wins = labFeatures.find((f) => f.id === 'wins')!.Component;
     render(<Wins />);
-    const toggle = screen.getByRole('switch', { name: 'Activer « Bocal des victoires »' });
+    const toggle = screen.getByRole('switch', { name: named('Activée : Bocal des victoires') });
     expect(screen.getByText('Vos victoires de la semaine')).toBeTruthy();
     fireEvent.click(toggle);
     expect(screen.queryByText('Vos victoires de la semaine')).toBeNull();
@@ -62,7 +73,7 @@ describe('PreMortem', () => {
     fakeStore.seed('tasks', [target]);
     render(<PreMortem />);
     fireEvent.click(screen.getByRole('button', { name: 'Lancer la chaîne' }));
-    expect(screen.getByText(/« Lancer la chaîne » a échoué/)).toBeTruthy();
+    expect(screen.getByText(/Lancer la chaîne.*n’a pas abouti/)).toBeTruthy();
 
     const save = screen.getByRole('button', { name: 'Enregistrer le pré-mortem' });
     expect((save as HTMLButtonElement).disabled).toBe(true);
@@ -80,9 +91,9 @@ describe('PreMortem', () => {
     });
     const sub = fakeStore.all('tasks').find((t) => t.parentId === target.id);
     expect(sub?.title).toBe('Bloquer le mardi');
-    expect(screen.getByText('Pré-mortem enregistré · 1 parade ajoutée')).toBeTruthy();
+    expect(toastTitle()).toBe('Pré-mortem enregistré · 1 parade ajoutée');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Annuler' }));
+    undo();
     expect(fakeStore.all('journal')).toHaveLength(0);
     expect(fakeStore.all('tasks')).toHaveLength(1);
   });
@@ -106,14 +117,16 @@ describe('TransitionAirlock', () => {
     fakeStore.seed('tasks', [leaving, next]);
     render(<TransitionAirlock />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Montage' }));
+    const leavingGroup = () => screen.getByRole('group', { name: 'Je quitte' });
+    const goingGroup = () => screen.getByRole('group', { name: 'Je passe à (facultatif)' });
+    fireEvent.click(within(leavingGroup()).getByRole('button', { name: 'Montage' }));
     fireEvent.change(screen.getByLabelText('Où j’en suis'), {
       target: { value: 'Séquence 2 calée' },
     });
     fireEvent.change(screen.getByLabelText('Prochaine étape'), {
       target: { value: 'Étalonner' },
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Courriels' }));
+    fireEvent.click(within(goingGroup()).getByRole('button', { name: 'Courriels' }));
     fireEvent.click(screen.getByRole('button', { name: 'Passer le sas' }));
 
     expect(fakeStore.all('journal')[0]).toMatchObject({
@@ -123,14 +136,22 @@ describe('TransitionAirlock', () => {
     expect(fakeStore.get('tasks', leaving.id)?.status).toBe('todo');
     expect(fakeStore.get('tasks', next.id)?.status).toBe('doing');
     expect(screen.getByRole('progressbar', { name: 'Pause de transition' })).toBeTruthy();
-    expect(screen.getByText('Ensuite : Courriels')).toBeTruthy();
+    expect(
+      screen.getByText(
+        (_, el) => el?.tagName === 'P' && norm(el.textContent) === 'Ensuite : Courriels',
+      ),
+    ).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: 'Passer la pause' }));
     // Coming back to "Montage" later shows the note.
-    fireEvent.click(screen.getByRole('button', { name: 'Courriels' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Montage' }));
+    fireEvent.click(within(leavingGroup()).getByRole('button', { name: 'Courriels' }));
+    fireEvent.click(within(goingGroup()).getByRole('button', { name: 'Montage' }));
     expect(screen.getByText('Séquence 2 calée')).toBeTruthy();
-    expect(screen.getByText('Prochaine étape : Étalonner')).toBeTruthy();
+    expect(
+      screen.getByText(
+        (_, el) => el?.tagName === 'P' && norm(el.textContent) === 'Prochaine étape : Étalonner',
+      ),
+    ).toBeTruthy();
   });
 
   it('requires a line before passing', () => {
@@ -156,10 +177,10 @@ describe('IdeaIncubator', () => {
       '#/ideas?note=b',
     );
     fireEvent.click(screen.getByRole('button', { name: 'Idée a' }));
-    expect(screen.getByText('En incubation · revient demain')).toBeTruthy();
+    expect(toastTitle()).toBe('En incubation · revient demain');
     expect(screen.getByText('Revient demain')).toBeTruthy();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Laisser mûrir · 7 j' }));
+    fireEvent.click(screen.getByRole('button', { name: named('Laisser mûrir · 7 j') }));
     const b = fakeStore.all('journal').find((e) => e.tags.includes('lab:note:b'));
     expect(b?.tags).toContain('lab:stage:2');
     expect(b?.tags).toContain('lab:since:2026-11-05');
@@ -174,12 +195,9 @@ describe('IdeaIncubator', () => {
     render(<IdeaIncubator />);
     fireEvent.click(screen.getByRole('button', { name: 'J’y retourne' }));
     expect(fakeStore.all('journal')).toHaveLength(0);
-    expect(fakeStore.all('tasks')[0]).toMatchObject({
-      title: 'Développer : Idée c',
-      mode: 'create',
-      status: 'todo',
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'Annuler' }));
+    expect(fakeStore.all('tasks')[0]).toMatchObject({ mode: 'create', status: 'todo' });
+    expect(fakeStore.all('tasks')[0]?.title).toMatch(/^Développer\s?: Idée c$/);
+    undo();
     expect(fakeStore.all('tasks')).toHaveLength(0);
     expect(fakeStore.all('journal')).toHaveLength(1);
   });
@@ -193,12 +211,14 @@ describe('FreshStart', () => {
     expect(screen.queryByText('Fraîche')).toBeNull();
     expect(screen.getByText('Reportée 5 fois')).toBeTruthy();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Repartir « Déclarer la TVA » · lundi' }));
-    expect(screen.getByText(/Reporter n’est pas un échec/)).toBeTruthy();
+    fireEvent.click(
+      screen.getByRole('button', { name: named('Repartir « Déclarer la TVA » · lundi') }),
+    );
+    expect(screen.getByText(/Reporter arrive à tout le monde/)).toBeTruthy();
     fireEvent.change(screen.getByLabelText(/Un premier pas/), {
       target: { value: 'Ouvrir le portail' },
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Recommencer · lundi' }));
+    fireEvent.click(screen.getByRole('button', { name: named('Recommencer · lundi') }));
 
     const updated = fakeStore.get('tasks', task.id)!;
     expect(updated.postponedCount).toBe(0);
@@ -209,7 +229,7 @@ describe('FreshStart', () => {
     expect(fakeStore.all('journal')[0]?.tags).toContain('lab:postponed:5');
     expect(screen.getByText('Aucune tâche enlisée. Rien à relancer.')).toBeTruthy();
 
-    act(() => fireEvent.click(screen.getByRole('button', { name: 'Annuler' })));
+    undo();
     expect(fakeStore.get('tasks', task.id)?.postponedCount).toBe(5);
     expect(fakeStore.all('tasks')).toHaveLength(2);
     expect(fakeStore.all('journal')).toHaveLength(0);
@@ -219,7 +239,7 @@ describe('FreshStart', () => {
     const task = makeTask({ title: 'Vieille idée', postponedCount: 4 });
     fakeStore.seed('tasks', [task]);
     render(<FreshStart />);
-    fireEvent.click(screen.getByRole('button', { name: 'Lâcher « Vieille idée »' }));
+    fireEvent.click(screen.getByRole('button', { name: named('Lâcher « Vieille idée »') }));
     expect(fakeStore.get('tasks', task.id)?.status).toBe('archived');
   });
 
@@ -227,8 +247,8 @@ describe('FreshStart', () => {
     const task = makeTask({ title: 'Ranger', postponedCount: 4 });
     fakeStore.seed('tasks', [task]);
     render(<FreshStart />);
-    fireEvent.click(screen.getByRole('radio', { name: /Nouveau mois/ }));
-    fireEvent.click(screen.getByRole('button', { name: /Repartir « Ranger »/ }));
+    fireEvent.click(screen.getByRole('radio', { name: /^Mois/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Repartir\s«\s?Ranger/ }));
     fireEvent.click(screen.getByRole('button', { name: /Recommencer/ }));
     expect(fakeStore.get('tasks', task.id)?.floatingDay).toBe(Date.UTC(2026, 10, 30, 23));
   });

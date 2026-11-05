@@ -81,7 +81,11 @@ describe('incubationCandidates', () => {
       note('archived', { tags: ['archived'] }),
       note('untitled', { title: '  ' }),
     ];
-    const parked = incubating([makeEntry({ tags: incubationTags('parked', 0, NOW, TZ) })], notes, TZ);
+    const parked = incubating(
+      [makeEntry({ tags: incubationTags('parked', 0, NOW, TZ) })],
+      notes,
+      TZ,
+    );
     expect(incubationCandidates(notes, parked).map((n) => n.id)).toEqual(['new', 'old']);
     const many = Array.from({ length: 10 }, (_, i) => note(`m${i}`));
     expect(incubationCandidates(many, [])).toHaveLength(MAX_CANDIDATES);

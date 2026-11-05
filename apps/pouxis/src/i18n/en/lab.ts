@@ -8,7 +8,7 @@ export const lab: typeof fr = {
   pick: 'Choose an experiment',
   evidence: 'Basis',
   toggle: 'On',
-  toggleLabel: 'Turn on “{title}”',
+  toggleLabel: 'On: {title}',
   paused: 'Paused. Your data is kept; turn it back on whenever you like.',
 
   intention: {
@@ -188,10 +188,10 @@ export const lab: typeof fr = {
     evidence:
       'Prospective hindsight (Mitchell, Russo and Pennington, 1989); pre-mortem (Klein, 2007)',
     heading: 'What if it failed?',
-    lead: 'Picturing yourself after the failure helps you find its plausible causes. Five minutes is enough.',
+    lead: 'Looking back from the future helps you see what could go wrong. Five minutes is enough.',
     empty: 'No open task. Keep the pre-mortem for your next project.',
     pick: 'Which task or project?',
-    prompt: 'It is {date}. “{title}” has failed. What happened?',
+    prompt: 'It is {date}. “{title}” didn’t work out. What happened?',
     cause: 'Cause {n}',
     causeHint: 'A plausible reason, for example “The schedule slipped and I didn’t notice”',
     parade: 'Safeguard',
@@ -272,8 +272,8 @@ export const lab: typeof fr = {
     empty: 'No stalled task. Nothing to restart.',
     landmark: {
       label: 'Start over',
-      week: 'New week · {date}',
-      month: 'New month · {date}',
+      week: 'Week · {date}',
+      month: 'Month · {date}',
     },
     postponed: '{count, plural, one {Postponed # time} other {Postponed # times}}',
     waiting: 'Waiting since {when}',
@@ -282,7 +282,7 @@ export const lab: typeof fr = {
     letGo: 'Let go',
     letGoLabel: 'Let go of “{title}”',
     kindWords:
-      'Postponing is not a failure. The postponement counter goes back to zero; the history stays in your journal.',
+      'Postponing happens to everyone. The postponement counter goes back to zero; the history stays in your journal.',
     firstStep: 'A 10-minute first step (optional)',
     firstStepHint: 'It will be added as a subtask, on the same day',
     confirm: 'Start over · {when}',

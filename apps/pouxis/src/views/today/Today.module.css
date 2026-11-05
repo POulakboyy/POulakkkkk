@@ -80,6 +80,13 @@
   color: var(--ink-3);
 }
 
+/* Phones: the list wraps, and a separator would start a line — whitespace separates instead. */
+@media (max-width: 479px) {
+  .summary > li + li::before {
+    content: none;
+  }
+}
+
 .wipNote {
   margin: 0;
   max-width: var(--measure);

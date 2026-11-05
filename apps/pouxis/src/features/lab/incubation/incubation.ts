@@ -65,7 +65,10 @@ export function nextStage(stage: number): number {
 export function dueAt(entry: JournalEntry, timeZone: TimeZone): Timestamp {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(tagValue(entry, SINCE_PREFIX) ?? '');
   const since = match
-    ? fromZoned({ year: Number(match[1]), month: Number(match[2]), day: Number(match[3]) }, timeZone)
+    ? fromZoned(
+        { year: Number(match[1]), month: Number(match[2]), day: Number(match[3]) },
+        timeZone,
+      )
     : startOfDay(entry.createdAt, timeZone);
   return addDays(since, INTERVALS_DAYS[stageOf(entry)] ?? 1, timeZone);
 }

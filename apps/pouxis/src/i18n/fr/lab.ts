@@ -11,7 +11,7 @@ export const lab = {
   pick: 'Choisir une expérience',
   evidence: 'Fondement',
   toggle: 'Activée',
-  toggleLabel: 'Activer « {title} »',
+  toggleLabel: 'Activée : {title}',
   paused: 'En pause. Vos données sont conservées ; réactivez-la quand vous voulez.',
 
   intention: {
@@ -194,10 +194,10 @@ export const lab = {
     evidence:
       'Rétrospection prospective (Mitchell, Russo et Pennington, 1989) ; pré-mortem (Klein, 2007)',
     heading: 'Et si c’était raté ?',
-    lead: 'Se projeter après l’échec aide à en trouver les causes plausibles. Cinq minutes suffisent.',
+    lead: 'Se projeter après coup aide à voir ce qui pourrait mal tourner. Cinq minutes suffisent.',
     empty: 'Aucune tâche ouverte. Le pré-mortem servira pour votre prochain projet.',
     pick: 'Quelle tâche ou quel projet ?',
-    prompt: 'Nous sommes le {date}. « {title} » a échoué. Que s’est-il passé ?',
+    prompt: 'Nous sommes le {date}. « {title} » n’a pas abouti. Que s’est-il passé ?',
     cause: 'Cause {n}',
     causeHint: 'Une raison plausible, par exemple « Le planning a glissé sans que je le voie »',
     parade: 'Parade',
@@ -279,8 +279,8 @@ export const lab = {
     empty: 'Aucune tâche enlisée. Rien à relancer.',
     landmark: {
       label: 'Recommencer',
-      week: 'Nouvelle semaine · {date}',
-      month: 'Nouveau mois · {date}',
+      week: 'Semaine · {date}',
+      month: 'Mois · {date}',
     },
     postponed: '{count, plural, one {Reportée # fois} other {Reportée # fois}}',
     waiting: 'En attente depuis {when}',
@@ -289,7 +289,7 @@ export const lab = {
     letGo: 'Lâcher',
     letGoLabel: 'Lâcher « {title} »',
     kindWords:
-      'Reporter n’est pas un échec. Le compteur de reports repart à zéro ; l’historique reste dans votre journal.',
+      'Reporter arrive à tout le monde. Le compteur de reports repart à zéro ; l’historique reste dans votre journal.',
     firstStep: 'Un premier pas de 10 minutes (facultatif)',
     firstStepHint: 'Il sera ajouté comme sous-tâche, le même jour',
     confirm: 'Recommencer · {when}',

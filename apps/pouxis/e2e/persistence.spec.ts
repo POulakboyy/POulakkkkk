@@ -1,7 +1,9 @@
 import { expect, openView, test, waitForPersisted } from './fixtures.ts';
 
 test.describe('local-first persistence', () => {
-  test('tasks, completions and events survive a reload (IndexedDB)', async ({ page }) => {
+  test('tasks and completions survive a reload without re-seeding (IndexedDB)', async ({
+    page,
+  }) => {
     await openView(page, 'tasks');
     const form = page.getByRole('form', { name: 'Nouvelle tâche' });
     await form.getByRole('textbox', { name: 'Nouvelle tâche' }).fill('Tâche persistante e2e');

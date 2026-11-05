@@ -94,24 +94,48 @@ const BODY = 2;
 type FieldFreqs = [number, number, number];
 
 /**
- * One document in one term's posting list. Postings are unordered arrays (cache-friendly to
- * scan, cheap to build); `index` is the posting's position so removal is an O(1) swap.
+ * Documents containing one term, as flat typed arrays (no object per posting): scanning a
+ * list stays cache-friendly and a 50k-document index does not hold millions of small objects.
+ * Unordered; removal swaps the last posting into the hole.
  */
-interface Posting {
-  readonly slot: number;
-  /** Term frequencies per field, inline to halve allocations on large indexes. */
-  title: number;
-  tags: number;
-  body: number;
-  index: number;
+class PostingList {
+  size = 0;
+  slots = new Int32Array(4);
+  /** Three frequencies per posting: title, tags, body. */
+  freqs = new Int32Array(12);
+
+  /** Appends a posting for `slot`; returns its index. */
+  push(slot: number, freqs: FieldFreqs): number {
+    if (this.size === this.slots.length) {
+      const slots = new Int32Array(this.size * 2);
+      slots.set(this.slots);
+      this.slots = slots;
+      const freqs = new Int32Array(this.size * 6);
+      freqs.set(this.freqs);
+      this.freqs = freqs;
+    }
+    this.slots[this.size] = slot;
+    this.freqs.set(freqs, this.size * 3);
+    return this.size++;
+  }
+
+  /** Removes posting `i`; returns the slot whose posting moved into `i`, or -1. */
+  removeAt(i: number): number {
+    const last = --this.size;
+    if (i === last) return -1;
+    const moved = this.slots[last] as number;
+    this.slots[i] = moved;
+    this.freqs.copyWithin(i * 3, last * 3, last * 3 + 3);
+    return moved;
+  }
 }
 
 interface Entry {
   /** Dense integer handle used by postings and the per-query score arrays. */
   readonly slot: number;
   doc: SearchDoc;
-  lengths: FieldFreqs;
-  terms: Map<string, Posting>;
+  /** Index term → position of this document in the term's posting list. */
+  terms: Map<string, number>;
   /** Folded surface word → its index term. */
   surfaces: Map<string, string>;
 }
@@ -140,7 +164,9 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
   /** Entry by slot; freed slots are reused. */
   const slots: (Entry | undefined)[] = [];
   const freeSlots: number[] = [];
-  const postings = new Map<string, Posting[]>();
+  /** Field lengths (indexed words) of each slot: `lengths[slot * 3 + field]`. */
+  let lengths = new Float64Array(3 * 64);
+  const postings = new Map<string, PostingList>();
   /** Folded surface word → { stemmed term, number of docs containing it }. */
   const surfaces = new Map<string, { term: string; docs: number }>();
   let sortedSurfaces: string[] | null = null;
@@ -152,15 +178,12 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     entries.delete(id);
     slots[entry.slot] = undefined;
     freeSlots.push(entry.slot);
-    for (const [term, posting] of entry.terms) {
+    for (const [term, index] of entry.terms) {
       const list = postings.get(term);
       if (!list) continue;
-      const moved = list.pop() as Posting;
-      if (moved !== posting) {
-        list[posting.index] = moved;
-        moved.index = posting.index;
-      }
-      if (list.length === 0) postings.delete(term);
+      const moved = list.removeAt(index);
+      if (moved !== -1) (slots[moved] as Entry).terms.set(term, index);
+      if (list.size === 0) postings.delete(term);
     }
     for (const surface of entry.surfaces.keys()) {
       const info = surfaces.get(surface);
@@ -171,49 +194,61 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
         sortedSurfaces = null;
       }
     }
-    for (let f = 0; f < 3; f++) totalLengths[f] = (totalLengths[f] ?? 0) - (entry.lengths[f] ?? 0);
+    for (let f = 0; f < 3; f++) {
+      totalLengths[f] = (totalLengths[f] ?? 0) - (lengths[entry.slot * 3 + f] as number);
+    }
     return true;
+  }
+
+  function allocSlot(): number {
+    const slot = freeSlots.pop() ?? slots.length;
+    if ((slot + 1) * 3 > lengths.length) {
+      const grown = new Float64Array(lengths.length * 2);
+      grown.set(lengths);
+      lengths = grown;
+    }
+    lengths.fill(0, slot * 3, slot * 3 + 3);
+    return slot;
   }
 
   function add(doc: SearchDoc): void {
     remove(doc.id);
-    const slot = freeSlots.pop() ?? slots.length;
+    const slot = allocSlot();
     const entry: Entry = {
       slot,
       doc: { ...doc, tags: doc.tags ? [...doc.tags] : [] },
-      lengths: [0, 0, 0],
       terms: new Map(),
       surfaces: new Map(),
     };
+    entries.set(doc.id, entry);
+    slots[slot] = entry;
     const fields: [string, string, string] = [
       doc.title,
       (doc.tags ?? []).join(' '),
       doc.body ?? '',
     ];
+    // Count per document first, then touch each term's posting list once.
+    const counts = new Map<string, FieldFreqs>();
     for (let f = 0; f < 3; f++) {
-      for (const token of indexWords(fields[f] ?? '')) {
-        entry.lengths[f] = (entry.lengths[f] ?? 0) + 1;
-        let posting = entry.terms.get(token.term);
-        if (!posting) {
-          posting = { slot, title: 0, tags: 0, body: 0, index: 0 };
-          entry.terms.set(token.term, posting);
+      for (const word of indexWords(fields[f] ?? '')) {
+        lengths[slot * 3 + f] = (lengths[slot * 3 + f] as number) + 1;
+        let freqs = counts.get(word.term);
+        if (!freqs) {
+          freqs = [0, 0, 0];
+          counts.set(word.term, freqs);
         }
-        if (f === TITLE) posting.title++;
-        else if (f === TAGS) posting.tags++;
-        else posting.body++;
-        entry.surfaces.set(token.surface, token.term);
+        freqs[f] = (freqs[f] as number) + 1;
+        entry.surfaces.set(word.surface, word.term);
       }
     }
-    entries.set(doc.id, entry);
-    slots[slot] = entry;
-    for (const [term, posting] of entry.terms) {
+    for (const [term, freqs] of counts) {
       let list = postings.get(term);
       if (!list) {
-        list = [];
+        list = new PostingList();
         postings.set(term, list);
       }
-      posting.index = list.length;
-      list.push(posting);
+      const index = list.push(slot, freqs);
+      entry.terms.set(term, index);
     }
     for (const [surface, term] of entry.surfaces) {
       const info = surfaces.get(surface);
@@ -223,7 +258,9 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
         sortedSurfaces = null;
       }
     }
-    for (let f = 0; f < 3; f++) totalLengths[f] = (totalLengths[f] ?? 0) + (entry.lengths[f] ?? 0);
+    for (let f = 0; f < 3; f++) {
+      totalLengths[f] = (totalLengths[f] ?? 0) + (lengths[slot * 3 + f] as number);
+    }
   }
 
   function surfacesWithPrefix(prefix: string): string[] {
@@ -282,18 +319,18 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
   }
 
   function idf(term: string): number {
-    const df = postings.get(term)?.length ?? 0;
+    const df = postings.get(term)?.size ?? 0;
     const n = entries.size;
     return Math.log(1 + (n - df + 0.5) / (df + 0.5));
   }
 
-  /** BM25F contribution of one term to one document. */
-  function termScore(posting: Posting, lengths: FieldFreqs, avg: FieldFreqs, termIdf: number) {
+  /** BM25F contribution of posting `p` of `list` (document `slot`). */
+  function termScore(list: PostingList, p: number, slot: number, avg: FieldFreqs, termIdf: number) {
     let tf = 0;
     for (let f = 0; f < 3; f++) {
-      const freq = f === TITLE ? posting.title : f === TAGS ? posting.tags : posting.body;
+      const freq = list.freqs[p * 3 + f] as number;
       if (freq === 0) continue;
-      const norm = 1 - b + (b * (lengths[f] ?? 0)) / (avg[f] ?? 1);
+      const norm = 1 - b + (b * (lengths[slot * 3 + f] as number)) / (avg[f] ?? 1);
       tf += ((weights[f] ?? 0) * freq) / norm;
     }
     return (termIdf * tf) / (k1 + tf);
@@ -306,9 +343,10 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
       let bestTerm: string | undefined;
       let bestScore = 0;
       for (const [term, multiplier] of clause.terms) {
-        const posting = entry.terms.get(term);
-        if (!posting) continue;
-        const score = termScore(posting, entry.lengths, avg, idf(term) * multiplier);
+        const index = entry.terms.get(term);
+        const list = postings.get(term);
+        if (index === undefined || !list) continue;
+        const score = termScore(list, index, entry.slot, avg, idf(term) * multiplier);
         if (bestTerm === undefined || score > bestScore) {
           bestTerm = term;
           bestScore = score;
@@ -349,16 +387,16 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
         const list = postings.get(term);
         if (!list) continue;
         const termIdf = idf(term) * multiplier;
-        for (const posting of list) {
-          const slot = posting.slot;
-          const entry = slots[slot] as Entry;
+        const listSlots = list.slots;
+        for (let p = 0; p < list.size; p++) {
+          const slot = listSlots[p] as number;
           let state = acceptance[slot];
           if (state === 0) {
-            state = keep(entry.doc) ? 1 : 2;
+            state = keep((slots[slot] as Entry).doc) ? 1 : 2;
             acceptance[slot] = state;
           }
           if (state === 2) continue;
-          const score = termScore(posting, entry.lengths, avg, termIdf);
+          const score = termScore(list, p, slot, avg, termIdf);
           if (clauseMark[slot] !== c + 1) {
             clauseMark[slot] = c + 1;
             clauseBest[slot] = score;
@@ -415,6 +453,7 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
       entries.clear();
       slots.length = 0;
       freeSlots.length = 0;
+      lengths = new Float64Array(3 * 64);
       postings.clear();
       surfaces.clear();
       sortedSurfaces = null;

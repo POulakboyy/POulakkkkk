@@ -2,9 +2,10 @@
 
 > Statut : proposition, novembre 2026. Les fonctions retenues sont livrées en **expérimental**
 > dans la vue Labo (`#/lab`), code dans `apps/pouxis/src/features/lab/<id>/`. Les références
-> renvoient à [`SCIENTIFIC_BASIS.md`](../research/SCIENTIFIC_BASIS.md) ; aucune étude n'est citée
-> ici qui n'y figure pas. Identifiants provisoires `X.n`, comme le prévoit le
-> [gabarit](./FEATURE_TEMPLATE.md).
+> renvoient à [`SCIENTIFIC_BASIS.md`](../research/SCIENTIFIC_BASIS.md), sauf les quatre études
+> ajoutées pour la deuxième série (X.10 et X.14), vérifiées à la source et listées en
+> [§ 7](#7-références-ajoutées-à-reporter-dans-la-base) en attendant leur report dans la base.
+> Identifiants provisoires `X.n`, comme le prévoit le [gabarit](./FEATURE_TEMPLATE.md).
 
 ## 1. Démarche
 
@@ -20,8 +21,17 @@
    attentes restent des **hypothèses à valider** avec le guide d'entretien de
    [`USER_RESEARCH.md`](../research/USER_RESEARCH.md).
 4. **Réutiliser le moteur** (`@pouxis/core`) plutôt que d'ajouter des modèles : chaque fonction
-   s'appuie sur les collections existantes (`tasks`, `events`, `journal`) et sur les modules
-   `scheduler`, `insights` et `tasks`.
+   s'appuie sur les collections existantes (`tasks`, `events`, `notes`, `journal`) et sur les
+   modules `scheduler`, `insights` et `tasks`.
+5. **Deuxième série (novembre 2026).** Relecture des candidats « à explorer » et des moments que
+   la première série laisse de côté : **avant** un projet (anticiper ce qui peut mal tourner),
+   **entre** deux tâches (changer sans emporter la précédente), le **temps long** des idées
+   (les laisser mûrir sans les perdre) et les tâches **enlisées** (repartir sans culpabilité).
+   Côté outils, les applications de relecture comme Readwise font revenir les contenus
+   enregistrés selon un calendrier espacé (fiche App Store de Readwise) ; l'incubateur reprend
+   ce geste pour les idées, sans en reprendre l'algorithme, qui n'est pas documenté.
+6. **Chaque fonction se désactive** depuis sa carte (interrupteur « Activée »). Le choix est
+   propre à l'appareil ; désactiver masque la fonction sans rien effacer.
 
 ## 2. Barème
 
@@ -44,11 +54,13 @@ Le **score** est la somme (sur 15). L'effort est noté **à l'envers** : 5 = peu
 | X.5  | Bocal des victoires                              |   3    |   5    |     3     |  11   | **Livrée**        |
 | X.6  | Correctif d'estimation visible                   |   4    |   3    |     4     |  11   | À intégrer en 1.1 |
 | X.7  | Ambiance sonore liée au type de tâche            |   3    |   3    |     2     |   8   | Plus tard         |
+| X.13 | Incubateur d'idées (retours espacés)             |   4    |   4    |     4     |  12   | **Livrée**        |
+| X.14 | Nouveau départ pour les tâches enlisées          |   4    |   4    |     3     |  11   | **Livrée**        |
 | X.8  | « Marcher et parler » : capture vocale en marche |   3    |   2    |     3     |   8   | Plus tard         |
 | X.9  | Budget de temps hebdomadaire visuel              |   3    |   3    |     1     |   7   | Plus tard         |
-| X.10 | Pré-mortem express avant un gros projet          |   3    |   4    |     1     |   8   | À explorer        |
+| X.10 | Pré-mortem express avant un gros projet          |   3    |   4    |     3     |  10   | **Livrée**        |
 | X.11 | Regroupement des notifications aux pauses        |   4    |   2    |     4     |  10   | Plateforme (6.8)  |
-| X.12 | Sas de transition entre deux blocs               |   3    |   4    |     3     |  10   | À explorer        |
+| X.12 | Sas de transition entre deux blocs               |   3    |   4    |     3     |  10   | **Livrée**        |
 
 ### X.1 Intention du jour — livrée
 
@@ -143,29 +155,83 @@ de la plateforme ; effort élevé.
 Répartir visuellement les heures de la semaine par projet ou par mode. Aucun appui direct dans la
 base ; recouvre en partie l'équilibre création/organisation (7.2).
 
-### X.10 Pré-mortem express — à explorer
+### X.10 Pré-mortem express — livrée
 
-Avant un projet long, imaginer qu'il a échoué et noter pourquoi. Technique connue de gestion de
-projet, **absente de la base** : à documenter avant toute implémentation.
+- **Problème.** Les plans sont optimistes ; ce qui peut mal tourner apparaît trop tard.
+- **Fonction.** Choisir une tâche ouverte (les importantes d'abord). Une phrase place la
+  personne après coup : « Nous sommes le … (échéance, ou dans 30 jours). « X » n'a pas abouti.
+  Que s'est-il passé ? ». Jusqu'à cinq causes, chacune avec une **parade** facultative ; les
+  parades deviennent des sous-tâches (désactivable). Le pré-mortem précédent de la tâche est
+  rappelé. Annulable.
+- **Fondement.** Pré-mortem (Klein, 2007), fondé sur la « rétrospection prospective » : se
+  projeter dans un futur où l'issue est acquise change la façon de l'expliquer (Mitchell, Russo
+  et Pennington, 1989). Des sources secondaires citent un gain de 30 % ; il n'a **pas** été
+  vérifié dans l'article d'origine et n'est donc pas repris. Confiance : faible à modérée.
+- **Risque.** Nourrir l'anxiété : vocabulaire neutre (« n'a pas abouti »), cinq causes au plus,
+  chaque cause appelle une parade.
 
 ### X.11 Regroupement des notifications aux pauses — plateforme
 
 Différer les notifications jusqu'au prochain point de rupture (fin de bloc ou pause). Fondement
 solide (Iqbal et Bailey, 2008). Relève de `src/platform` et de 6.8, pas du Labo.
 
-### X.12 Sas de transition — à explorer
+### X.12 Sas de transition — livrée
 
-Entre deux blocs, une minute pour écrire « où j'en suis » avant de changer de tâche. Même
-fondement que le plan de reprise (Leroy et Glomb, 2018) ; pourrait réutiliser le champ « Demain,
-je commence par » de X.2.
+- **Problème.** Passer d'une tâche à l'autre laisse un résidu d'attention, et la reprise de la
+  première coûte cher.
+- **Fonction.** « Je quitte » (tâche en cours, travaillée ou prévue aujourd'hui) ; deux lignes
+  « Où j'en suis » et « Prochaine étape » ; « Je passe à » (facultatif). La tâche quittée revient
+  à « à faire », la suivante passe « en cours ». Une pause d'une minute (barre de progression,
+  passable) suit. Quand une tâche est choisie comme suivante, sa **dernière note de reprise**
+  s'affiche. Annulable.
+- **Fondement.** Un plan « prêt à reprendre » réduit le résidu attentionnel (Leroy et Glomb,
+  2018 ; confiance modérée dans la base). La durée d'une minute est un choix produit.
+- **Risque.** Ajouter une étape de plus : tout est facultatif sauf une ligne, et la pause se
+  passe d'un geste.
+
+### X.13 Incubateur d'idées — livrée
+
+- **Problème.** Une idée qui bloque est soit forcée, soit oubliée ; le détecteur de « dead ends »
+  (5.15) la signale après coup, mais rien ne permet de la mettre de côté **exprès**.
+- **Fonction.** Mettre une note en incubation d'un toucher (la note ne change pas). Elle revient
+  après 1, 3, 7 puis 21 jours (le dernier intervalle se répète). À son retour : « J'y retourne »
+  crée une tâche créative pour aujourd'hui, « Laisser mûrir » repousse au palier suivant,
+  « Laisser partir » la retire de l'incubateur. Un conseil rappelle de préférer une activité peu
+  exigeante pendant l'incubation. Tout est annulable.
+- **Fondement.** Effet positif de l'incubation, plus marqué pour les tâches divergentes (Sio et
+  Ormerod, 2009, méta-analyse ; confiance forte) ; activité peu exigeante pendant l'incubation
+  (Baird et al., 2012 ; confiance faible). Les intervalles sont un **choix produit** : la
+  méta-analyse ne fixe pas de durée.
+- **Risque.** Une file de rappels de plus : rien n'est notifié, les idées attendent dans la vue.
+
+### X.14 Nouveau départ — livrée
+
+- **Problème.** Une tâche reportée encore et encore se décolore (2.3) et finit par peser ; la
+  reporter une fois de plus ne règle rien.
+- **Fonction.** Liste des tâches que l'usure marque « vieillissante » ou « périmée » (cinq au
+  plus). Pour chacune : **repartir** au prochain repère temporel (lundi ou premier du mois, au
+  choix), avec le compteur de reports remis à zéro et un premier pas de 10 minutes facultatif en
+  sous-tâche ; ou **lâcher** (archivage). L'ancien compteur est conservé dans le journal
+  (`lab:postponed:<n>`) : rien n'est caché. Annulable.
+- **Fondement.** Effet « nouveau départ » : les repères temporels (nouvelle semaine, nouveau
+  mois…) s'accompagnent de plus de comportements tournés vers les buts (Dai, Milkman et Riis,
+  2014 ; trois études de terrain archivistiques). Se pardonner un premier report est associé à
+  moins de procrastination ensuite (Wohl, Pychyl et Bennett, 2010 ; une étude, étudiants).
+  Confiance : modérée (effet) ; faible (application à une tâche isolée, non étudiée).
+- **Risque.** Remettre à zéro pour éviter l'échéance : l'historique reste visible et lâcher est
+  présenté comme une issue aussi légitime que recommencer.
 
 ## 4. Données et confidentialité
 
 Tout reste local, dans les collections existantes. Les entrées du Labo portent des étiquettes
 `lab:*` (`lab:intention`, `lab:shutdown`, `lab:energy:<niveau>`, `lab:day:<AAAA-MM-JJ>`,
-`lab:task:<id>`, `lab:win`) pour rester reconnaissables et filtrables ; `isLabEntry` permet aux
-autres vues de les exclure de la boîte de vidage. Seul le rythme de pause choisi est conservé
-dans le stockage local de l'appareil.
+`lab:task:<id>`, `lab:win`, `lab:premortem`, `lab:transition`, `lab:incubation` avec
+`lab:note:<id>`, `lab:stage:<n>` et `lab:since:<AAAA-MM-JJ>`, `lab:freshstart` avec
+`lab:landmark:<week|month>` et `lab:postponed:<n>`) pour rester reconnaissables et filtrables ;
+`isLabEntry` permet aux autres vues de les exclure de la boîte de vidage. Les parades du
+pré-mortem, les premiers pas du nouveau départ et les idées reprises de l'incubateur sont de
+vraies tâches, visibles partout. Seuls le rythme de pause et la liste des fonctions désactivées
+(`pouxis.lab.disabled`) sont conservés dans le stockage local de l'appareil.
 
 ## 5. Mesurer avant de généraliser
 
@@ -180,6 +246,10 @@ télémétrie par défaut :
 | X.3      | Les créneaux proposés semblent-ils plus justes après deux semaines ?     | Check-ins sur 4 semaines (affiché)              |
 | X.4      | Les suggestions tombent-elles à un moment acceptable ?                   | Proportion de « Pas maintenant »                |
 | X.5      | Le souvenir est-il jugé agréable et non infantilisant ?                  | Victoires ajoutées par semaine                  |
+| X.10     | Les parades sont-elles jugées utiles plutôt qu'anxiogènes ?              | Parades devenues tâches, puis terminées         |
+| X.12     | La note de reprise est-elle relue au retour sur la tâche ?               | Notes de reprise par semaine                    |
+| X.13     | Les idées revenues sont-elles reprises plutôt que repoussées ?           | Part de « J'y retourne » au retour              |
+| X.14     | Le nouveau départ tient-il, ou la tâche s'enlise-t-elle à nouveau ?      | Reports après un nouveau départ                 |
 
 ## 6. Intégrations attendues hors du Labo
 
@@ -189,3 +259,23 @@ chronotype })` comme `energyProfile` aux appels de `scheduler.route` (vues Aujou
 - **Boîte de vidage.** Exclure les entrées `isLabEntry` de la liste des vidages de cerveau.
 - **Pauses.** Le compteur ne voit que les sessions de focus **enregistrées** : exposer l'état
   de la session en cours depuis `features/focus` le rendrait exact pendant un bloc.
+- **Idées.** Les notes en incubation (`lab:incubation`) pourraient porter une marque discrète
+  dans la liste de la vue Idées, et « Mettre en incubation » y figurer comme action de note.
+- **Tâches.** La note de reprise du sas (`lab:transition`) pourrait s'afficher à l'ouverture de
+  la fiche d'une tâche, comme le prévoit la base pour le résidu attentionnel.
+
+## 7. Références ajoutées, à reporter dans la base
+
+Vérifiées à la source (notice de l'éditeur ou texte de l'article) en novembre 2026 ; à intégrer
+dans [`SCIENTIFIC_BASIS.md`](../research/SCIENTIFIC_BASIS.md) et `references.bib`.
+
+- Mitchell, D. J., Russo, J. E. et Pennington, N. (1989). _Back to the future: Temporal
+  perspective in the explanation of events._ Journal of Behavioral Decision Making, 2, 25–38.
+  doi:10.1002/bdm.3960020103
+- Klein, G. (2007). _Performing a project premortem._ Harvard Business Review, 85(9), 18–19.
+- Dai, H., Milkman, K. L. et Riis, J. (2014). _The fresh start effect: Temporal landmarks
+  motivate aspirational behavior._ Management Science, 60(10), 2563–2582.
+  doi:10.1287/mnsc.2014.1901
+- Wohl, M. J. A., Pychyl, T. A. et Bennett, S. H. (2010). _I forgive myself, now I can study:
+  How self-forgiveness for procrastinating can reduce future procrastination._ Personality and
+  Individual Differences, 48, 803–808. doi:10.1016/j.paid.2010.01.029
