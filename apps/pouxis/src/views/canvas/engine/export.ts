@@ -24,7 +24,17 @@ export function fileName(title: string, format: ExportFormat, fallback = 'toile'
 }
 
 /** Ink colours exported with the drawing (light palette: exports are documents). */
-const INK_EXPORT = ['#1c1b18', '#e2603f', '#c98a00', '#3f9a54', '#2f8bb3', '#5a5ad6', '#b04fa2', '#7d7464', '#3d8f7f'];
+const INK_EXPORT = [
+  '#1c1b18',
+  '#e2603f',
+  '#c98a00',
+  '#3f9a54',
+  '#2f8bb3',
+  '#5a5ad6',
+  '#b04fa2',
+  '#7d7464',
+  '#3d8f7f',
+];
 
 /** Standalone SVG: the engine's graph drawing plus the freehand strokes on top. */
 export function exportSvg(graph: Graph, strokes: readonly Stroke[]): string {
@@ -57,7 +67,10 @@ export const PNG_MAX_SIDE = 4096;
  * Pixel size and viewport for a PNG of the whole canvas: 2× density when it fits, scaled down
  * so the longest side stays within {@link PNG_MAX_SIDE}.
  */
-export function pngFrame(bounds: g.Rect, padding = 48): { width: number; height: number; vp: g.Viewport; dpr: number } {
+export function pngFrame(
+  bounds: g.Rect,
+  padding = 48,
+): { width: number; height: number; vp: g.Viewport; dpr: number } {
   const width = Math.max(1, Math.ceil(bounds.width + 2 * padding));
   const height = Math.max(1, Math.ceil(bounds.height + 2 * padding));
   const dpr = Math.min(2, PNG_MAX_SIDE / Math.max(width, height));
@@ -78,7 +91,9 @@ export function download(blob: Blob, name: string): void {
 }
 
 /** Reads pasted / dropped text as a tree: OPML when it looks like XML, a Markdown list otherwise. */
-export function parseTreeText(text: string): { nodes: Graph['nodes']; edges: Graph['edges'] } | null {
+export function parseTreeText(
+  text: string,
+): { nodes: Graph['nodes']; edges: Graph['edges'] } | null {
   const trimmed = text.trim();
   if (!trimmed) return null;
   if (/^<\?xml|^<opml[\s>]/i.test(trimmed)) {

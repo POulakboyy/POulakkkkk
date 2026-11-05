@@ -102,9 +102,7 @@ export function Markdown({ source, className }: { source: string; className?: st
               <Tag key={i}>
                 {block.items.map((item, j) => (
                   <li key={j} data-checked={item.checked}>
-                    {item.checked !== undefined && (
-                      <span>{item.checked ? '☑ ' : '☐ '}</span>
-                    )}
+                    {item.checked !== undefined && <span>{item.checked ? '☑ ' : '☐ '}</span>}
                     {renderInline(item.text)}
                   </li>
                 ))}

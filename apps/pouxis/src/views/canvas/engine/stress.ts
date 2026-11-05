@@ -1,12 +1,12 @@
 import { graph as g } from '@pouxis/core';
-import type { GraphContent, GraphEdge, GraphNode } from '@pouxis/core';
+import type { GraphEdge, GraphNode } from '@pouxis/core';
 
 /**
  * Deterministic large canvas for the dev "stress" button: `count` nodes in a forest of
  * mind maps laid out on a grid, plus a few cross links, so culling, LOD and the minimap are
  * exercised the way a real 10 000-node canvas would.
  */
-export function stressGraph(count = 10_000, seed = 7): GraphContent {
+export function stressGraph(count = 10_000, seed = 7): g.GraphContent {
   const random = g.createRandom(seed);
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
@@ -35,10 +35,12 @@ export function stressGraph(count = 10_000, seed = 7): GraphContent {
     }
     nodes.push(node);
   }
+  // Conditional links between nearby ideas (same or next tree), like real cross references.
   for (let i = 0; i < count / 50; i++) {
     const from = Math.floor(random() * count);
-    const to = Math.floor(random() * count);
-    if (from !== to) edges.push({ id: `x${i}`, from: `s${from}`, to: `s${to}`, condition: 'on-complete' });
+    const to = Math.min(count - 1, from + 1 + Math.floor(random() * perTree * 1.5));
+    if (from !== to)
+      edges.push({ id: `x${i}`, from: `s${from}`, to: `s${to}`, condition: 'on-complete' });
   }
   return { nodes, edges };
 }

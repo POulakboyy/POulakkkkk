@@ -78,7 +78,11 @@ export function simplify(points: readonly InkPoint[], tolerance: number): InkPoi
   return points.filter((_, i) => keep[i] === 1);
 }
 
-export function segmentDistanceSq(p: InkPoint | { x: number; y: number }, a: InkPoint, b: InkPoint): number {
+export function segmentDistanceSq(
+  p: InkPoint | { x: number; y: number },
+  a: InkPoint,
+  b: InkPoint,
+): number {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
   const len2 = dx * dx + dy * dy;
@@ -97,7 +101,10 @@ export function halfWidthAt(point: InkPoint, width: number): number {
  * Closed outline of a variable-width stroke: left offsets forward, then right offsets back.
  * A single point yields a small diamond so a tap still leaves a dot.
  */
-export function strokeOutline(points: readonly InkPoint[], width: number): { x: number; y: number }[] {
+export function strokeOutline(
+  points: readonly InkPoint[],
+  width: number,
+): { x: number; y: number }[] {
   const first = points[0];
   if (!first) return [];
   if (points.length === 1) {
@@ -144,7 +151,12 @@ export function outlinePath(outline: readonly { x: number; y: number }[]): strin
   return `${d}Z`;
 }
 
-export function strokeBounds(stroke: Stroke): { x: number; y: number; width: number; height: number } {
+export function strokeBounds(stroke: Stroke): {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+} {
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;
@@ -157,7 +169,12 @@ export function strokeBounds(stroke: Stroke): { x: number; y: number; width: num
   }
   if (minX === Infinity) return { x: 0, y: 0, width: 0, height: 0 };
   const pad = stroke.width;
-  return { x: minX - pad, y: minY - pad, width: maxX - minX + 2 * pad, height: maxY - minY + 2 * pad };
+  return {
+    x: minX - pad,
+    y: minY - pad,
+    width: maxX - minX + 2 * pad,
+    height: maxY - minY + 2 * pad,
+  };
 }
 
 /** Whether the eraser circle at `(x, y)` with `radius` touches the stroke. */
@@ -170,7 +187,8 @@ export function hitStroke(stroke: Stroke, x: number, y: number, radius: number):
     return (p.x - x) ** 2 + (p.y - y) ** 2 <= reach2;
   }
   for (let i = 1; i < pts.length; i++) {
-    if (segmentDistanceSq({ x, y }, pts[i - 1] as InkPoint, pts[i] as InkPoint) <= reach2) return true;
+    if (segmentDistanceSq({ x, y }, pts[i - 1] as InkPoint, pts[i] as InkPoint) <= reach2)
+      return true;
   }
   return false;
 }

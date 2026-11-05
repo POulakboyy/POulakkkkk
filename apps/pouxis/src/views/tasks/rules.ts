@@ -153,3 +153,36 @@ export function deadlineFromDateInput(value: string, timeZone: TimeZone): Timest
   const day = fromDateInput(value, timeZone);
   return day === undefined ? undefined : addDays(day, 1, timeZone) - 60_000;
 }
+
+/* ---------------------------------------------------------------------------------------- */
+/* WIP resolution                                                                             */
+/* ---------------------------------------------------------------------------------------- */
+
+export type WipResolution =
+  { kind: 'swap'; other: Task } | { kind: 'tomorrow' } | { kind: 'lower' } | { kind: 'cancel' };
+
+/** Medium priority: what « lower » and « swap » fall back to. */
+export const LOWERED_PRIORITY = 2;
+
+/**
+ * Turns the user's answer to the WIP dialog into the extra changes to apply: on top of the
+ * pending save (`override`) and on the swapped task (`demote`). `null` cancels the save.
+ */
+export function resolveWip(
+  choice: WipResolution,
+  conflict: Pick<WipConflict, 'day'>,
+  timeZone: TimeZone,
+): { override: Partial<Task>; demote?: Task } | null {
+  switch (choice.kind) {
+    case 'swap':
+      return { override: {}, demote: choice.other };
+    case 'tomorrow':
+      return {
+        override: { floatingDay: addDays(conflict.day, 1, timeZone), scheduled: undefined },
+      };
+    case 'lower':
+      return { override: { priority: LOWERED_PRIORITY } };
+    case 'cancel':
+      return null;
+  }
+}

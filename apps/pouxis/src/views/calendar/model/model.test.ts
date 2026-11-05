@@ -67,7 +67,9 @@ describe('range', () => {
     expect(stepAnchor(at(4, 9), 'day', 1, TZ)).toBe(at(5, 9));
     expect(stepAnchor(at(4, 9), 'week', -1, TZ)).toBe(at(28, 9, 0, 10));
     const jan31 = fromZoned({ year: 2026, month: 1, day: 31 }, TZ);
-    expect(stepAnchor(jan31, 'month', 1, TZ)).toBe(fromZoned({ year: 2026, month: 2, day: 28 }, TZ));
+    expect(stepAnchor(jan31, 'month', 1, TZ)).toBe(
+      fromZoned({ year: 2026, month: 2, day: 28 }, TZ),
+    );
   });
 
   it('computes ISO week numbers and month membership', () => {
@@ -134,6 +136,25 @@ describe('layoutDay', () => {
     expect(byId.c).toMatchObject({ lane: 0, lanes: 1 });
   });
 
+  it('widens an event over free lanes to its right', () => {
+    const placed = layoutDay(
+      [
+        instance('long', at(4, 8), at(4, 12)),
+        instance('x', at(4, 9), at(4, 10)),
+        instance('y', at(4, 9), at(4, 10)),
+        instance('late', at(4, 11), at(4, 12)),
+      ],
+      day.start,
+      day.end,
+      TZ,
+    );
+    const byId = Object.fromEntries(placed.map((p) => [p.instance.key, p]));
+    expect(byId.long).toMatchObject({ lane: 0, lanes: 3, span: 1 });
+    expect(byId.x).toMatchObject({ lane: 1, span: 1 });
+    expect(byId.y).toMatchObject({ lane: 2, span: 1 });
+    expect(byId.late).toMatchObject({ lane: 1, span: 2 });
+  });
+
   it('clips events crossing midnight', () => {
     expect(daySpan(at(3, 22), at(4, 2), day.start, day.end, TZ)).toEqual({ top: 0, bottom: 120 });
     const [late] = layoutDay([instance('x', at(4, 23), at(5, 1))], day.start, day.end, TZ);
@@ -151,7 +172,11 @@ describe('drag geometry', () => {
   it('moves within the day and the visible columns', () => {
     const slot = { day: 1, startMin: 600, endMin: 660 };
     expect(applyGesture('move', slot, 37, 1, 7)).toEqual({ day: 2, startMin: 630, endMin: 690 });
-    expect(applyGesture('move', slot, 2000, 9, 7)).toEqual({ day: 6, startMin: 1380, endMin: 1440 });
+    expect(applyGesture('move', slot, 2000, 9, 7)).toEqual({
+      day: 6,
+      startMin: 1380,
+      endMin: 1440,
+    });
   });
 
   it('resizes without going under 15 minutes', () => {

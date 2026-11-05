@@ -15,7 +15,11 @@ export type CalendarMode = 'day' | 'week' | 'month' | 'spiral';
 export const CALENDAR_MODES: readonly CalendarMode[] = ['day', 'week', 'month', 'spiral'];
 
 /** Start instants of the local days shown by `mode` around `anchor`. */
-export function visibleDays(anchor: Timestamp, mode: CalendarMode, timeZone: TimeZone): Timestamp[] {
+export function visibleDays(
+  anchor: Timestamp,
+  mode: CalendarMode,
+  timeZone: TimeZone,
+): Timestamp[] {
   switch (mode) {
     case 'day':
       return [startOfDay(anchor, timeZone)];

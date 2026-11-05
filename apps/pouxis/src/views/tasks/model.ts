@@ -14,17 +14,16 @@ import {
 } from '@pouxis/core';
 import type { NewRecord } from '../../store/index.ts';
 
-export type TaskViewMode = 'list' | 'board' | 'matrix' | 'deps';
-export const VIEW_MODES: readonly TaskViewMode[] = ['list', 'board', 'matrix', 'deps'];
+/** Values double as the `view` route parameter: `#/tasks?view=kanban`. */
+export type TaskViewMode = 'list' | 'kanban' | 'matrix' | 'deps';
+export const VIEW_MODES: readonly TaskViewMode[] = ['list', 'kanban', 'matrix', 'deps'];
+
+export function parseViewMode(value: string | null): TaskViewMode {
+  return VIEW_MODES.find((m) => m === value) ?? 'list';
+}
 
 export type ListGroupId =
-  | 'inbox'
-  | 'today'
-  | 'toReschedule'
-  | 'upcoming'
-  | 'noDate'
-  | 'waiting'
-  | 'done';
+  'inbox' | 'today' | 'toReschedule' | 'upcoming' | 'noDate' | 'waiting' | 'done';
 
 export const LIST_GROUPS: readonly ListGroupId[] = [
   'inbox',
@@ -230,7 +229,8 @@ export function taskFromCapture(
   if (r.recurrence) record.recurrence = r.recurrence;
   if (r.start !== undefined) {
     if (r.allDay) record.floatingDay = r.start;
-    else record.scheduled = { start: r.start, end: r.end ?? r.start + (estimateMin ?? 30) * 60_000 };
+    else
+      record.scheduled = { start: r.start, end: r.end ?? r.start + (estimateMin ?? 30) * 60_000 };
   }
   // Anything with a date or a priority has already been triaged.
   const triaged = r.start !== undefined || r.deadline !== undefined || record.priority > 0;

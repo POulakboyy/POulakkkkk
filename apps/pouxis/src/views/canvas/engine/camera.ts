@@ -37,7 +37,11 @@ export interface CameraTween {
 }
 
 /** Viewport of a running tween at time `now`, and whether it is finished. */
-export function tweenAt(tween: CameraTween, now: number, size: Size): { vp: Viewport; done: boolean } {
+export function tweenAt(
+  tween: CameraTween,
+  now: number,
+  size: Size,
+): { vp: Viewport; done: boolean } {
   if (tween.duration <= 0) return { vp: tween.to, done: true };
   const t = (now - tween.start) / tween.duration;
   if (t >= 1) return { vp: tween.to, done: true };

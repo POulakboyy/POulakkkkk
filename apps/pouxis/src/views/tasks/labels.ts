@@ -8,7 +8,7 @@ export const BOARD_GROUPS: readonly BoardGroup[] = ['status', 'priority', 'mode'
 
 export const VIEW_LABEL: Record<TaskViewMode, MessageKey> = {
   list: 'tasks.views.list',
-  board: 'tasks.views.kanban',
+  kanban: 'tasks.views.kanban',
   matrix: 'tasks.views.matrix',
   deps: 'tasks.views.deps',
 };

@@ -104,6 +104,8 @@ export function createFocusController(deps: FocusDeps): FocusController {
       void deps.platform.setFocusMode(true).then(
         (dnd) => {
           if (state.session) set({ dnd });
+          // The session ended while the OS was switching DND on: switch it back off.
+          else if (dnd.applied) void deps.platform.setFocusMode(false).catch(() => {});
         },
         () => set({ dnd: { applied: false, method: 'none', reason: 'command-failed' } }),
       );
@@ -126,7 +128,10 @@ export function createFocusController(deps: FocusDeps): FocusController {
       if (signal === 'focus-done' && !finished) {
         const idea = BREAK_IDEAS[breaks++ % BREAK_IDEAS.length] ?? 'breathe';
         deps.platform.haptic('success');
-        deps.toast({ title: t('today.focus.onBreak'), description: t(`today.focus.breakIdeas.${idea}`) });
+        deps.toast({
+          title: t('today.focus.onBreak'),
+          description: t(`today.focus.breakIdeas.${idea}`),
+        });
       } else if (signal === 'break-done') {
         deps.platform.haptic('light');
         deps.toast({ title: t('today.focus.breakDone') });

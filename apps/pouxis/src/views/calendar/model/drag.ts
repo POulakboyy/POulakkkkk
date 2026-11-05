@@ -47,7 +47,11 @@ export function applyGesture(
     return { day, startMin, endMin: startMin + length };
   }
   if (gesture === 'resize-end') {
-    const endMin = clamp(snap(origin.endMin + deltaMin), origin.startMin + MIN_DURATION, DAY_MINUTES);
+    const endMin = clamp(
+      snap(origin.endMin + deltaMin),
+      origin.startMin + MIN_DURATION,
+      DAY_MINUTES,
+    );
     return { ...origin, endMin };
   }
   const startMin = clamp(snap(origin.startMin + deltaMin), 0, origin.endMin - MIN_DURATION);

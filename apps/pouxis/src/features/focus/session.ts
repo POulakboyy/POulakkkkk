@@ -141,12 +141,20 @@ export function advance(s: FocusSession, now: Timestamp): Step {
 /** Skips the current break and starts the next focus block now. */
 export function skipBreak(s: FocusSession, now: Timestamp): FocusSession {
   if (!isBreak(s) || s.index + 1 >= s.blocks.length) return s;
-  return { taskId: s.taskId, blocks: s.blocks, index: s.index + 1, elapsedMs: 0, runningSince: now };
+  return {
+    taskId: s.taskId,
+    blocks: s.blocks,
+    index: s.index + 1,
+    elapsedMs: 0,
+    runningSince: now,
+  };
 }
 
 /** Adds `minutes` to the current focus block ("Encore 5 min"). */
 export function extend(s: FocusSession, minutes: Minutes): FocusSession {
   if (isBreak(s) || !(minutes > 0)) return s;
-  const blocks = s.blocks.map((b, i) => (i === s.index ? { ...b, minutes: b.minutes + minutes } : b));
+  const blocks = s.blocks.map((b, i) =>
+    i === s.index ? { ...b, minutes: b.minutes + minutes } : b,
+  );
   return { ...s, blocks };
 }

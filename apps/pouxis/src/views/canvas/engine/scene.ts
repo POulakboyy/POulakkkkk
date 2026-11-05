@@ -1,5 +1,5 @@
 import { graph as g } from '@pouxis/core';
-import type { GraphEdge, GraphLike, GraphNode, Id } from '@pouxis/core';
+import type { GraphEdge, GraphNode, Id } from '@pouxis/core';
 
 /** Text width in world units for the node label font. Injected so tests need no canvas. */
 export type Measure = (text: string) => number;
@@ -83,7 +83,7 @@ export function nodeWidth(labelWidth: number, glyph: boolean, badge: boolean): n
  * Turns a stored graph into what the renderer and hit-testing need: visible nodes only
  * (collapsed branches removed), fitted labels and box sizes, lock state and a quadtree.
  */
-export function buildScene(graph: GraphLike, options: SceneOptions): Scene {
+export function buildScene(graph: g.GraphLike, options: SceneOptions): Scene {
   const doneIds = options.doneIds ?? new Set<Id>();
   const visible = g.visibleSubgraph(graph);
   const hierarchy = g.buildHierarchy(graph);
@@ -216,6 +216,107 @@ export function nodeInDirection(
     if (score < bestScore) {
       bestScore = score;
       best = node;
+    }
+  }
+  return best;
+}
+
+export interface Anchors {
+  ax: number;
+  ay: number;
+  bx: number;
+  by: number;
+  horizontal: boolean;
+}
+
+/** Edge end points on the facing sides of the two boxes. */
+export function edgeAnchors(from: SceneNode, to: SceneNode): Anchors {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const horizontal = Math.abs(dx) >= Math.abs(dy) * 1.2;
+  if (horizontal) {
+    const s = Math.sign(dx) || 1;
+    return {
+      ax: from.x + (s * from.w) / 2,
+      ay: from.y,
+      bx: to.x - (s * to.w) / 2,
+      by: to.y,
+      horizontal,
+    };
+  }
+  const s = Math.sign(dy) || 1;
+  return {
+    ax: from.x,
+    ay: from.y + (s * from.h) / 2,
+    bx: to.x,
+    by: to.y - (s * to.h) / 2,
+    horizontal,
+  };
+}
+
+/** Point at `t` on the cubic the renderer draws between two anchors. */
+export function edgePoint(a: Anchors, t: number): { x: number; y: number } {
+  const u = 1 - t;
+  // Control points: horizontal edges bend at the mid x, vertical ones at the mid y.
+  const c1 = a.horizontal ? { x: (a.ax + a.bx) / 2, y: a.ay } : { x: a.ax, y: (a.ay + a.by) / 2 };
+  const c2 = a.horizontal ? { x: (a.ax + a.bx) / 2, y: a.by } : { x: a.bx, y: (a.ay + a.by) / 2 };
+  const b0 = u * u * u;
+  const b1 = 3 * u * u * t;
+  const b2 = 3 * u * t * t;
+  const b3 = t * t * t;
+  return {
+    x: b0 * a.ax + b1 * c1.x + b2 * c2.x + b3 * a.bx,
+    y: b0 * a.ay + b1 * c1.y + b2 * c2.y + b3 * a.by,
+  };
+}
+
+const EDGE_SAMPLES = 12;
+
+/** Distance from a world point to an edge curve (sampled polyline). */
+export function edgeDistance(e: SceneEdge, x: number, y: number): number {
+  const a = edgeAnchors(e.from, e.to);
+  let prev = edgePoint(a, 0);
+  let best = Infinity;
+  for (let i = 1; i <= EDGE_SAMPLES; i++) {
+    const next = edgePoint(a, i / EDGE_SAMPLES);
+    best = Math.min(best, segmentDistance(x, y, prev, next));
+    prev = next;
+  }
+  return best;
+}
+
+function segmentDistance(
+  x: number,
+  y: number,
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+): number {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  const t = len2 === 0 ? 0 : Math.max(0, Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / len2));
+  return Math.hypot(a.x + t * dx - x, a.y + t * dy - y);
+}
+
+/** Closest edge within `tolerance` world units of the point (edges under nodes excluded). */
+export function hitEdge(
+  scene: Scene,
+  x: number,
+  y: number,
+  tolerance: number,
+): SceneEdge | undefined {
+  let best: SceneEdge | undefined;
+  let bestD = tolerance;
+  for (const e of scene.edges) {
+    const minX = Math.min(e.from.x, e.to.x) - Math.max(e.from.w, e.to.w) / 2 - tolerance;
+    const maxX = Math.max(e.from.x, e.to.x) + Math.max(e.from.w, e.to.w) / 2 + tolerance;
+    const minY = Math.min(e.from.y, e.to.y) - NODE_HEIGHT / 2 - tolerance;
+    const maxY = Math.max(e.from.y, e.to.y) + NODE_HEIGHT / 2 + tolerance;
+    if (x < minX || x > maxX || y < minY || y > maxY) continue;
+    const d = edgeDistance(e, x, y);
+    if (d <= bestD) {
+      bestD = d;
+      best = e;
     }
   }
   return best;

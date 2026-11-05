@@ -1,19 +1,11 @@
 import { createId, graph as g } from '@pouxis/core';
-import type {
-  EdgeCondition,
-  GraphContent,
-  GraphEdge,
-  GraphLike,
-  GraphNode,
-  GraphNodeKind,
-  Id,
-} from '@pouxis/core';
+import type { EdgeCondition, GraphEdge, GraphNode, GraphNodeKind, Id } from '@pouxis/core';
 
 /**
  * Pure editing operations on graph content. Each returns new `{ nodes, edges }` (the same
  * reference when nothing changed) so the view can commit it with `store.update`.
  */
-export type Content = Pick<GraphContent, 'nodes' | 'edges'>;
+export type Content = Pick<g.GraphContent, 'nodes' | 'edges'>;
 
 /** Horizontal gap between a parent and its children in mind-map placement. */
 export const CHILD_DX = 260;
@@ -27,7 +19,14 @@ export function makeNode(
   extra: Partial<Omit<GraphNode, 'id' | 'label' | 'x' | 'y'>> & { id?: Id } = {},
 ): GraphNode {
   const { id, kind, ...rest } = extra;
-  return { id: id ?? createId(), label, kind: kind ?? ('idea' satisfies GraphNodeKind), x, y, ...rest };
+  return {
+    id: id ?? createId(),
+    label,
+    kind: kind ?? ('idea' satisfies GraphNodeKind),
+    x,
+    y,
+    ...rest,
+  };
 }
 
 export function addNode(content: Content, node: GraphNode): Content {
@@ -35,7 +34,7 @@ export function addNode(content: Content, node: GraphNode): Content {
 }
 
 /** Children of `id`, using the same rules as the engine's hierarchy. */
-function childrenOf(content: GraphLike, id: Id): GraphNode[] {
+function childrenOf(content: g.GraphLike, id: Id): GraphNode[] {
   const kids = g.buildHierarchy(content).children.get(id) ?? [];
   const index = g.indexNodes(content.nodes);
   return kids.map((k) => index.get(k)).filter((n): n is GraphNode => n !== undefined);
@@ -55,7 +54,9 @@ export function addChild(
   const x = last ? last.x : parent.x + CHILD_DX;
   const node = makeNode(label, x, y, { parentId });
   const edge: GraphEdge = { id: createId(), from: parentId, to: node.id, condition: 'always' };
-  const nodes = content.nodes.map((n) => (n.id === parentId && n.collapsed ? { ...n, collapsed: false } : n));
+  const nodes = content.nodes.map((n) =>
+    n.id === parentId && n.collapsed ? { ...n, collapsed: false } : n,
+  );
   return { content: { nodes: [...nodes, node], edges: [...content.edges, edge] }, node };
 }
 
@@ -154,7 +155,7 @@ export function updateNode(
  */
 export function mergeContent(
   content: Content,
-  incoming: GraphContent,
+  incoming: g.GraphContent,
   at: { x: number; y: number },
 ): Content {
   if (incoming.nodes.length === 0) return content;
@@ -169,7 +170,12 @@ export function mergeContent(
     if (n.parentId !== undefined) moved.parentId = remap(n.parentId);
     return moved;
   });
-  const edges = incoming.edges.map((e) => ({ ...e, id: createId(), from: remap(e.from), to: remap(e.to) }));
+  const edges = incoming.edges.map((e) => ({
+    ...e,
+    id: createId(),
+    from: remap(e.from),
+    to: remap(e.to),
+  }));
   return { nodes: [...content.nodes, ...nodes], edges: [...content.edges, ...edges] };
 }
 
@@ -177,7 +183,7 @@ export function mergeContent(
 export function starterMindMap(labels: {
   root: string;
   branches: readonly string[];
-}): GraphContent {
+}): g.GraphContent {
   const root = makeNode(labels.root, 0, 0, { color: 1 });
   let content: Content = { nodes: [root], edges: [] };
   labels.branches.forEach((label, i) => {

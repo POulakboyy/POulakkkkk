@@ -13,6 +13,8 @@ export interface PlacedInstance {
   /** Lane index within its overlap cluster and the cluster's lane count. */
   lane: number;
   lanes: number;
+  /** Lanes the instance spans: it widens to the right over lanes that are free beside it. */
+  span: number;
   /** The instance starts before / ends after this day. */
   clippedStart: boolean;
   clippedEnd: boolean;
@@ -53,6 +55,7 @@ export function layoutDay(
       height: Math.max(minHeight, span.bottom - span.top),
       lane: 0,
       lanes: 1,
+      span: 1,
       clippedStart: instance.start < dayStart,
       clippedEnd: instance.end > dayEnd,
     });
@@ -63,7 +66,10 @@ export function layoutDay(
   let laneEnds: number[] = [];
   let clusterEnd = -1;
   const close = () => {
-    for (const item of cluster) item.lanes = laneEnds.length;
+    for (const item of cluster) {
+      item.lanes = laneEnds.length;
+      item.span = freeSpan(item, cluster, item.lanes);
+    }
     cluster = [];
     laneEnds = [];
   };
@@ -78,4 +84,18 @@ export function layoutDay(
   }
   close();
   return items;
+}
+
+/** 1 + the lanes right of `item` that hold nothing overlapping it in time. */
+function freeSpan(item: PlacedInstance, cluster: readonly PlacedInstance[], lanes: number): number {
+  const bottom = item.top + item.height;
+  let span = 1;
+  for (let lane = item.lane + 1; lane < lanes; lane++) {
+    const blocked = cluster.some(
+      (other) => other.lane === lane && other.top < bottom && other.top + other.height > item.top,
+    );
+    if (blocked) break;
+    span++;
+  }
+  return span;
 }

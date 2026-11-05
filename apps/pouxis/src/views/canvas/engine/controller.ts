@@ -1,7 +1,14 @@
 import { graph as g } from '@pouxis/core';
 import type { Id } from '@pouxis/core';
 import { sameViewport, tweenAt, type CameraTween } from './camera.ts';
-import { addInkPoint, hitStroke, normalisePressure, simplify, type InkPoint, type Stroke } from './ink.ts';
+import {
+  addInkPoint,
+  hitStroke,
+  normalisePressure,
+  simplify,
+  type InkPoint,
+  type Stroke,
+} from './ink.ts';
 import { renderScene, type RenderState, type RenderStats } from './render.ts';
 import {
   NODE_GLYPH,
@@ -210,9 +217,32 @@ export class CanvasController {
     this.frameRect(this.sceneBounds(), duration);
   }
 
+  /**
+   * Opening view: fits the content, but never below the zoom where labels are drawn — on a
+   * phone a large map opens readable on its centre, the minimap shows the rest.
+   */
+  fitReadable(minZoom = 0.55, duration = 0): void {
+    if (this.scene.nodes.length === 0) {
+      this.fit(duration);
+      return;
+    }
+    const bounds = this.sceneBounds();
+    // Generous padding: floating chrome (header, tools, minimap) covers the edges.
+    const fitted = g.fitView(bounds, this.size, { padding: 112, ...ZOOM_LIMITS, maxZoom: 1.5 });
+    if (fitted.zoom >= minZoom) {
+      this.setViewport(fitted, duration);
+      return;
+    }
+    const center = { x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 };
+    this.setViewport(g.centerOn(center, this.size, minZoom), duration);
+  }
+
   sceneBounds(): g.Rect {
     return g.graphBounds(
-      { nodes: this.scene.nodes.map((n) => n.node).map((n, i) => this.withScenePos(n, i)), edges: [] },
+      {
+        nodes: this.scene.nodes.map((n) => n.node).map((n, i) => this.withScenePos(n, i)),
+        edges: [],
+      },
       { nodeSize: { width: this.scene.maxHalfW * 2, height: 44 } },
     );
   }
@@ -228,6 +258,7 @@ export class CanvasController {
     this.setViewport(g.zoomAround(base, at, factor, ZOOM_LIMITS), duration);
   }
 
+  /** Moves the content by a screen-space delta (CSS px), like a drag. */
   panBy(dx: number, dy: number, duration = 0): void {
     const base = this.tween?.to ?? this.vp;
     this.setViewport(g.panBy(base, dx, dy), duration);
@@ -316,11 +347,14 @@ export class CanvasController {
   private renderState(): RenderState {
     const gesture = this.gesture;
     const lifted =
-      gesture?.kind === 'drag' && gesture.moved ? new Set(gesture.nodes.map((n) => n.node.id)) : undefined;
+      gesture?.kind === 'drag' && gesture.moved
+        ? new Set(gesture.nodes.map((n) => n.node.id))
+        : undefined;
     let dragDue: RenderState['dragDue'];
     if (this.timeline && lifted && gesture?.kind === 'drag' && this.options.dueLabel) {
       const first = gesture.nodes[0]?.node;
-      if (first) dragDue = { x: first.x, text: this.options.dueLabel(this.timeline.scale.toTime(first.x)) };
+      if (first)
+        dragDue = { x: first.x, text: this.options.dueLabel(this.timeline.scale.toTime(first.x)) };
     }
     return {
       vp: this.vp,
@@ -332,7 +366,12 @@ export class CanvasController {
       hover: this.hover,
       connecting:
         gesture?.kind === 'connect'
-          ? { from: gesture.from, x: gesture.current.x, y: gesture.current.y, target: gesture.target }
+          ? {
+              from: gesture.from,
+              x: gesture.current.x,
+              y: gesture.current.y,
+              target: gesture.target,
+            }
           : undefined,
       marquee: gesture?.kind === 'marquee' ? rectFrom(gesture.start, gesture.current) : undefined,
       strokes: this.strokes,
@@ -359,7 +398,11 @@ export class CanvasController {
 
   /* ---------------------------------------------------------------- input */
 
-  private readonly listeners: [keyof HTMLElementEventMap, EventListener, AddEventListenerOptions?][] = [];
+  private readonly listeners: [
+    keyof HTMLElementEventMap,
+    EventListener,
+    AddEventListenerOptions?,
+  ][] = [];
 
   private bind(): void {
     const on = <K extends keyof HTMLElementEventMap>(
@@ -511,7 +554,7 @@ export class CanvasController {
         gesture.last = p;
         if (!gesture.moved && distance(p, gesture.start) < slop(e)) return;
         gesture.moved = true;
-        this.vp = g.panBy(this.vp, -dx / this.vp.zoom, -dy / this.vp.zoom);
+        this.vp = g.panBy(this.vp, dx, dy);
         break;
       }
       case 'drag':
@@ -529,7 +572,10 @@ export class CanvasController {
       case 'draw':
         for (const ev of coalesced(e)) {
           const q = this.screenToWorld(this.local(ev));
-          addInkPoint(gesture.stroke.points, { ...q, p: normalisePressure(ev.pressure, ev.pointerType) });
+          addInkPoint(gesture.stroke.points, {
+            ...q,
+            p: normalisePressure(ev.pressure, ev.pointerType),
+          });
         }
         break;
       case 'erase':
@@ -634,7 +680,8 @@ export class CanvasController {
     const gesture = this.gesture;
     this.gesture = undefined;
     if (gesture?.kind === 'drag' && gesture.moved) {
-      for (const { node } of gesture.nodes) moveSceneNode(this.scene, node, node.node.x, node.node.y);
+      for (const { node } of gesture.nodes)
+        moveSceneNode(this.scene, node, node.node.x, node.node.y);
     }
     this.requestDraw();
   }
@@ -654,7 +701,7 @@ export class CanvasController {
     const [a, b] = pts as [Point, Point];
     const d = Math.max(1, distance(a, b));
     const mid = midpoint(a, b);
-    let vp = g.panBy(this.vp, -(mid.x - gesture.mid.x) / this.vp.zoom, -(mid.y - gesture.mid.y) / this.vp.zoom);
+    let vp = g.panBy(this.vp, mid.x - gesture.mid.x, mid.y - gesture.mid.y);
     vp = g.zoomAround(vp, mid, d / gesture.distance, ZOOM_LIMITS);
     this.vp = vp;
     gesture.distance = d;
@@ -673,9 +720,9 @@ export class CanvasController {
       // Trackpad pinch arrives as ctrl + wheel; a mouse wheel with ctrl zooms too.
       this.vp = g.zoomAround(this.vp, p, Math.exp(-dy * 0.01), ZOOM_LIMITS);
     } else if (e.shiftKey && dx === 0) {
-      this.vp = g.panBy(this.vp, dy / this.vp.zoom, 0);
+      this.vp = g.panBy(this.vp, -dy, 0);
     } else {
-      this.vp = g.panBy(this.vp, dx / this.vp.zoom, dy / this.vp.zoom);
+      this.vp = g.panBy(this.vp, -dx, -dy);
     }
     this.requestDraw();
   }
@@ -714,7 +761,12 @@ function slop(e: PointerEvent): number {
 }
 
 export function rectFrom(a: Point, b: Point): g.Rect {
-  return { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.abs(a.x - b.x), height: Math.abs(a.y - b.y) };
+  return {
+    x: Math.min(a.x, b.x),
+    y: Math.min(a.y, b.y),
+    width: Math.abs(a.x - b.x),
+    height: Math.abs(a.y - b.y),
+  };
 }
 
 /** Whether a world x falls on the check circle drawn at the left of a task node. */

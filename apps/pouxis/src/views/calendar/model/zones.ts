@@ -104,11 +104,7 @@ export function zoneHours(
 }
 
 /** Working intervals of `zone` that touch `range`, on the zone's own working days. */
-export function workingIntervals(
-  zone: TimeZone,
-  hours: WorkingHours,
-  range: Interval,
-): Interval[] {
+export function workingIntervals(zone: TimeZone, hours: WorkingHours, range: Interval): Interval[] {
   const out: Interval[] = [];
   const first = zonedParts(range.start, zone);
   for (let offset = -1; offset <= 1; offset++) {

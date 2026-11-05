@@ -22,7 +22,13 @@ const listeners = new Set<() => void>();
 
 function isPoint(v: unknown): v is InkPoint {
   const p = v as InkPoint;
-  return typeof p === 'object' && p !== null && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.p);
+  return (
+    typeof p === 'object' &&
+    p !== null &&
+    Number.isFinite(p.x) &&
+    Number.isFinite(p.y) &&
+    Number.isFinite(p.p)
+  );
 }
 
 /** Validates stored JSON: anything malformed is dropped rather than crashing the canvas. */
@@ -87,10 +93,9 @@ function subscribe(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
-export function useAnnotations(graphId: Id | undefined): [
-  Annotations,
-  (update: (current: Annotations) => Annotations) => void,
-] {
+export function useAnnotations(
+  graphId: Id | undefined,
+): [Annotations, (update: (current: Annotations) => Annotations) => void] {
   const value = useSyncExternalStore(subscribe, () => (graphId ? getAnnotations(graphId) : EMPTY));
   const set = useCallback(
     (update: (current: Annotations) => Annotations) => {

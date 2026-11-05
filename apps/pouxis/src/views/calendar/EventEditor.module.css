@@ -1,0 +1,108 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.when {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(132px, auto) minmax(132px, auto);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+@media (max-width: 479px) {
+  .when {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .date {
+    grid-column: 1 / -1;
+  }
+
+  /* Four kinds share a phone width: tighter padding keeps every label whole. */
+  .kinds button {
+    padding-inline: var(--space-1);
+    font-size: var(--text-xs);
+  }
+}
+
+.guard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--warning-soft);
+  color: var(--ink);
+}
+
+.guardTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-weight: var(--weight-semibold);
+}
+
+.guardTitle svg {
+  flex: none;
+  color: var(--warning);
+}
+
+.guardBody,
+.guardLabel {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+.guardLabel {
+  font-weight: var(--weight-medium);
+  color: var(--ink);
+}
+
+.alternatives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.note {
+  margin: calc(-1 * var(--space-2)) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+.attendees {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: var(--border-width) solid var(--line);
+}
+
+.secondary,
+.primary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.primary {
+  margin-left: auto;
+}

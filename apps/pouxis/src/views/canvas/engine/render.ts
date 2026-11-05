@@ -1,7 +1,16 @@
 import { graph as g } from '@pouxis/core';
 import type { Id } from '@pouxis/core';
 import { outlinePath, strokeBounds, strokeOutline, type Stroke } from './ink.ts';
-import { NODE_BADGE, NODE_HEIGHT, NODE_PAD_X, type Scene, type SceneEdge, type SceneNode } from './scene.ts';
+import {
+  NODE_BADGE,
+  NODE_HEIGHT,
+  NODE_PAD_X,
+  edgeAnchors,
+  type Anchors,
+  type Scene,
+  type SceneEdge,
+  type SceneNode,
+} from './scene.ts';
 import type { CanvasTheme } from './theme.ts';
 
 type Viewport = g.Viewport;
@@ -31,14 +40,27 @@ export interface RenderState {
   selectedEdge?: Id | undefined;
   hover?: Id | undefined;
   /** Edge being drawn with the link tool, in world coordinates. */
-  connecting?: { from: SceneNode; x: number; y: number; target?: SceneNode | undefined } | undefined;
+  connecting?:
+    { from: SceneNode; x: number; y: number; target?: SceneNode | undefined } | undefined;
   strokes: readonly Stroke[];
   draft?: Stroke | undefined;
-  timeline?: { scale: g.TimeScale; label: (tick: g.TimeTick) => string; today: number } | undefined;
+  timeline?:
+    | {
+        scale: g.TimeScale;
+        label: (tick: g.TimeTick) => string;
+        today: number;
+        /** Screen y of the date axis (CSS px), below the floating header. */
+        top?: number;
+      }
+    | undefined;
   /** Fill the background and draw the dot grid (off for transparent PNG export). */
   background: boolean;
   /** Nodes being dragged are drawn lifted. */
   lifted?: ReadonlySet<Id> | undefined;
+  /** Rubber-band selection rectangle, in world coordinates. */
+  marquee?: g.Rect | undefined;
+  /** Due date shown above the dragged node in timeline mode (world x of the node). */
+  dragDue?: { x: number; text: string } | undefined;
 }
 
 export interface RenderStats {
@@ -81,36 +103,47 @@ export function renderScene(
 
   const view = g.visibleWorldRect(vp, { width, height }, 0);
   const lod = lodFor(vp.zoom);
-  ctx.setTransform(dpr * vp.zoom, 0, 0, dpr * vp.zoom, -vp.x * vp.zoom * dpr, -vp.y * vp.zoom * dpr);
+  ctx.setTransform(
+    dpr * vp.zoom,
+    0,
+    0,
+    dpr * vp.zoom,
+    -vp.x * vp.zoom * dpr,
+    -vp.y * vp.zoom * dpr,
+  );
 
   if (state.background) drawGrid(ctx, view, vp.zoom, theme);
   if (state.timeline) drawTimelineLines(ctx, view, state.timeline, vp.zoom, theme);
 
-  const visible = visibleNodes(scene, view);
+  // Dots are drawn grouped by colour, so draw order only matters for boxes.
+  const visible = visibleNodes(scene, view, lod !== 'dot');
   const edges = drawEdges(ctx, scene.edges, view, lod, state, theme);
   drawInk(ctx, state.strokes, state.draft, view, theme);
   if (state.connecting) drawConnecting(ctx, state.connecting, vp.zoom, theme);
 
   if (lod === 'dot') drawDots(ctx, visible, vp.zoom, state, theme);
   else if (lod === 'block') drawBlocks(ctx, visible, state, theme);
-  else drawFull(ctx, visible, state, theme, dpr * vp.zoom);
+  else drawFull(ctx, visible, state, theme);
+  if (state.marquee) drawMarquee(ctx, state.marquee, vp.zoom, theme);
 
-  if (state.timeline) {
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawTimelineAxis(ctx, state.timeline, vp, width, theme);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (state.timeline) drawTimelineAxis(ctx, state.timeline, vp, width, theme);
+  if (state.dragDue) {
+    const top = (state.timeline?.top ?? 0) + AXIS_HEIGHT + 8;
+    drawDuePill(ctx, (state.dragDue.x - vp.x) * vp.zoom, top, state.dragDue.text, theme);
   }
   return { nodes: visible.length, edges, lod };
 }
 
 /** Viewport culling through the quadtree; returned in draw order. */
-export function visibleNodes(scene: Scene, view: g.Rect): SceneNode[] {
+export function visibleNodes(scene: Scene, view: g.Rect, sorted = true): SceneNode[] {
   const items = scene.index.queryRect(g.inflateRect(view, scene.maxHalfW + 8));
   const out: SceneNode[] = [];
   for (const item of items) {
     const node = scene.byId.get(item.id);
     if (node) out.push(node);
   }
-  out.sort((a, b) => a.order - b.order);
+  if (sorted) out.sort((a, b) => a.order - b.order);
   return out;
 }
 
@@ -127,31 +160,11 @@ function drawGrid(ctx: CanvasRenderingContext2D, view: g.Rect, zoom: number, the
   ctx.globalAlpha = Math.min(1, (zoom - 0.3) * 2.5) * 0.9;
   ctx.beginPath();
   for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) ctx.rect(x0 + i * step - size / 2, y0 + j * step - size / 2, size, size);
+    for (let j = 0; j < rows; j++)
+      ctx.rect(x0 + i * step - size / 2, y0 + j * step - size / 2, size, size);
   }
   ctx.fill();
   ctx.globalAlpha = 1;
-}
-
-interface Anchors {
-  ax: number;
-  ay: number;
-  bx: number;
-  by: number;
-  horizontal: boolean;
-}
-
-/** Edge end points on the facing sides of the two boxes. */
-export function edgeAnchors(from: SceneNode, to: SceneNode): Anchors {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const horizontal = Math.abs(dx) >= Math.abs(dy) * 1.2;
-  if (horizontal) {
-    const s = Math.sign(dx) || 1;
-    return { ax: from.x + (s * from.w) / 2, ay: from.y, bx: to.x - (s * to.w) / 2, by: to.y, horizontal };
-  }
-  const s = Math.sign(dy) || 1;
-  return { ax: from.x, ay: from.y + (s * from.h) / 2, bx: to.x, by: to.y - (s * to.h) / 2, horizontal };
 }
 
 function traceEdge(ctx: CanvasRenderingContext2D, a: Anchors, curved: boolean) {
@@ -188,7 +201,9 @@ function edgeInView(e: SceneEdge, view: g.Rect): boolean {
   const maxX = Math.max(e.from.x, e.to.x) + e.to.w;
   const minY = Math.min(e.from.y, e.to.y) - NODE_HEIGHT;
   const maxY = Math.max(e.from.y, e.to.y) + NODE_HEIGHT;
-  return maxX >= view.x && minX <= view.x + view.width && maxY >= view.y && minY <= view.y + view.height;
+  return (
+    maxX >= view.x && minX <= view.x + view.width && maxY >= view.y && minY <= view.y + view.height
+  );
 }
 
 function drawEdges(
@@ -205,8 +220,12 @@ function drawEdges(
   const flow: Anchors[] = [];
   const arrows: Anchors[] = [];
   let selected: Anchors | undefined;
+  // Zoomed far out, edges shorter than a few pixels only add noise (and raster cost).
+  const minLength = lod === 'dot' ? 10 / zoom : 0;
   for (const e of edges) {
     if (!edgeInView(e, view)) continue;
+    if (minLength > 0 && Math.abs(e.to.x - e.from.x) + Math.abs(e.to.y - e.from.y) < minLength)
+      continue;
     const a = edgeAnchors(e.from, e.to);
     if (e.edge.id === state.selectedEdge) selected = a;
     else if (e.conditional) flow.push(a);
@@ -356,7 +375,13 @@ function highlightSelection(
   for (const n of nodes) {
     if (!state.selection.has(n.id)) continue;
     const pad = 4 / zoom;
-    ctx.roundRect(n.x - n.w / 2 - pad, n.y - n.h / 2 - pad, n.w + 2 * pad, n.h + 2 * pad, RADIUS + pad);
+    ctx.roundRect(
+      n.x - n.w / 2 - pad,
+      n.y - n.h / 2 - pad,
+      n.w + 2 * pad,
+      n.h + 2 * pad,
+      RADIUS + pad,
+    );
   }
   ctx.stroke();
 }
@@ -366,28 +391,18 @@ function drawFull(
   nodes: readonly SceneNode[],
   state: RenderState,
   theme: CanvasTheme,
-  deviceScale: number,
 ) {
-  const shadows = nodes.length <= SHADOW_BUDGET;
   const font = theme.font;
+  if (nodes.length <= SHADOW_BUDGET) drawShadows(ctx, nodes, state.lifted, theme);
   ctx.textBaseline = 'middle';
   for (const n of nodes) {
-    const lifted = state.lifted?.has(n.id) ?? false;
     const x = n.x - n.w / 2;
     const y = n.y - n.h / 2;
     ctx.globalAlpha = n.locked ? 0.6 : 1;
-    if (shadows || lifted) {
-      ctx.shadowColor = theme.dark ? 'rgba(0,0,0,0.45)' : 'rgba(28,27,24,0.10)';
-      ctx.shadowBlur = (lifted ? 18 : 6) * deviceScale;
-      ctx.shadowOffsetY = (lifted ? 6 : 1) * deviceScale;
-    }
     ctx.fillStyle = nodeFill(n, theme);
     ctx.beginPath();
     ctx.roundRect(x, y, n.w, n.h, RADIUS);
     ctx.fill();
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetY = 0;
     ctx.lineWidth = 1;
     ctx.strokeStyle = n.id === state.hover ? theme.ink3 : theme.line;
     ctx.stroke();
@@ -411,7 +426,50 @@ function drawFull(
   highlightSelection(ctx, nodes, state, theme, state.vp.zoom);
 }
 
-function drawGlyph(ctx: CanvasRenderingContext2D, n: SceneNode, cx: number, cy: number, theme: CanvasTheme) {
+/**
+ * Soft elevation without `shadowBlur` (a Gaussian blur per node is the most expensive thing a
+ * 2D canvas can do): two offset translucent layers, batched in one path each. Lifted (dragged)
+ * nodes get a deeper, wider shadow.
+ */
+function drawShadows(
+  ctx: CanvasRenderingContext2D,
+  nodes: readonly SceneNode[],
+  lifted: ReadonlySet<Id> | undefined,
+  theme: CanvasTheme,
+) {
+  const layers = [
+    { dy: 1, spread: 0, alpha: theme.dark ? 0.5 : 0.06, lift: false },
+    { dy: 3, spread: 1.5, alpha: theme.dark ? 0.25 : 0.035, lift: false },
+    { dy: 10, spread: 4, alpha: theme.dark ? 0.4 : 0.1, lift: true },
+  ];
+  for (const layer of layers) {
+    ctx.fillStyle = theme.dark ? `rgba(0,0,0,${layer.alpha})` : `rgba(28,27,24,${layer.alpha})`;
+    ctx.beginPath();
+    let any = false;
+    for (const n of nodes) {
+      const isLifted = lifted?.has(n.id) ?? false;
+      if (layer.lift !== isLifted && layer.lift) continue;
+      const p = layer.spread;
+      ctx.roundRect(
+        n.x - n.w / 2 - p,
+        n.y - n.h / 2 + layer.dy - p,
+        n.w + 2 * p,
+        n.h + 2 * p,
+        RADIUS + p,
+      );
+      any = true;
+    }
+    if (any) ctx.fill();
+  }
+}
+
+function drawGlyph(
+  ctx: CanvasRenderingContext2D,
+  n: SceneNode,
+  cx: number,
+  cy: number,
+  theme: CanvasTheme,
+) {
   ctx.lineWidth = 1.5;
   if (n.locked) {
     ctx.strokeStyle = theme.ink2;
@@ -468,7 +526,7 @@ function drawTimelineLines(
 ) {
   const scale = visibleScale(tl.scale, view);
   ctx.lineWidth = 1 / zoom;
-  for (const tick of scale.ticks(Math.max(2, Math.round(view.width * zoom / 140)))) {
+  for (const tick of scale.ticks(Math.max(2, Math.round((view.width * zoom) / 140)))) {
     ctx.strokeStyle = tick.major ? theme.lineStrong : theme.line;
     ctx.beginPath();
     ctx.moveTo(tick.x, view.y);
@@ -506,18 +564,57 @@ function drawTimelineAxis(
 ) {
   const view = g.visibleWorldRect(vp, { width, height: 1 });
   const scale = visibleScale(tl.scale, view);
+  const top = tl.top ?? 0;
   ctx.fillStyle = theme.bg;
   ctx.globalAlpha = 0.92;
-  ctx.fillRect(0, 0, width, AXIS_HEIGHT);
+  ctx.fillRect(0, top, width, AXIS_HEIGHT);
   ctx.globalAlpha = 1;
   ctx.fillStyle = theme.line;
-  ctx.fillRect(0, AXIS_HEIGHT - 1, width, 1);
+  ctx.fillRect(0, top, width, 1);
+  ctx.fillRect(0, top + AXIS_HEIGHT - 1, width, 1);
   ctx.textBaseline = 'middle';
   for (const tick of scale.ticks(Math.max(2, Math.round(width / 140)))) {
     const sx = (tick.x - vp.x) * vp.zoom;
     ctx.font = `${tick.major ? 600 : 500} 12px ${theme.font}`;
     ctx.fillStyle = tick.major ? theme.ink : theme.ink3;
-    ctx.fillText(tl.label(tick), sx + 6, AXIS_HEIGHT / 2);
-    ctx.fillRect(sx, AXIS_HEIGHT - 8, 1, 7);
+    ctx.fillText(tl.label(tick), sx + 6, top + AXIS_HEIGHT / 2);
+    ctx.fillRect(sx, top + AXIS_HEIGHT - 8, 1, 7);
   }
+}
+
+function drawMarquee(
+  ctx: CanvasRenderingContext2D,
+  rect: g.Rect,
+  zoom: number,
+  theme: CanvasTheme,
+) {
+  ctx.fillStyle = theme.accentSoft;
+  ctx.globalAlpha = 0.35;
+  ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = theme.accentStrong;
+  ctx.lineWidth = 1 / zoom;
+  ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+}
+
+/** Screen-space pill under the axis telling the due date the drop will set. */
+function drawDuePill(
+  ctx: CanvasRenderingContext2D,
+  sx: number,
+  y: number,
+  text: string,
+  theme: CanvasTheme,
+) {
+  ctx.font = `600 12px ${theme.font}`;
+  const w = ctx.measureText(text).width + 20;
+  const x = sx - w / 2;
+  ctx.fillStyle = theme.ink;
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, 24, 12);
+  ctx.fill();
+  ctx.fillStyle = theme.bg;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, sx, y + 12.5);
+  ctx.textAlign = 'start';
 }

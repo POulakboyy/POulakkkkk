@@ -1,0 +1,118 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--ink-2);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.overlays {
+  flex: none;
+  margin-left: auto;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.panels:empty {
+  display: none;
+}
+
+.newIcon {
+  display: none !important;
+}
+
+.emptyNote {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+}
+
+.emptyNote strong {
+  color: var(--ink);
+}
+
+@media (max-width: 767px) {
+  .view {
+    gap: var(--space-4);
+  }
+
+  .title {
+    font-size: var(--text-2xl);
+  }
+
+  .newButton {
+    display: none !important;
+  }
+
+  .newIcon {
+    display: inline-flex !important;
+    flex: none;
+  }
+
+  .header {
+    align-items: center;
+  }
+
+  .modes {
+    order: -1;
+    width: 100%;
+  }
+
+  /* Four segments share a phone width: tighter padding keeps every label whole. */
+  .modes button {
+    padding-inline: var(--space-2);
+  }
+
+  .overlays {
+    flex: 1 1 100%;
+    margin-left: 0;
+  }
+}

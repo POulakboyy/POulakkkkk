@@ -96,9 +96,10 @@ function toResult(r: engine.FormulaResult): FieldResult {
 
 function referencesName(source: string, name: string): boolean {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`(^|[^\\p{L}\\p{N}_])${escaped}($|[^\\p{L}\\p{N}_])|\\[${escaped}\\]`, 'u').test(
-    source,
-  );
+  return new RegExp(
+    `(^|[^\\p{L}\\p{N}_])${escaped}($|[^\\p{L}\\p{N}_])|\\[${escaped}\\]`,
+    'u',
+  ).test(source);
 }
 
 /** Identifier or bracketed name at `position`, else the next few characters. */
