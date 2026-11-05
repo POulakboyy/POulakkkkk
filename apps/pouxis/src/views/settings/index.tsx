@@ -1,4 +1,4 @@
-import { useEffect, type MouseEvent } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { navigate, useRoute } from '../../app/router.ts';
 import { useT, type MessageKey } from '../../i18n/index.ts';
 import { Button, Gallery, IconChevronLeft, SectionHeader } from '../../ui/index.ts';
@@ -43,12 +43,42 @@ function focusSection(id: string): void {
   heading.focus({ preventScroll: true });
 }
 
+/**
+ * Section currently being read, for `aria-current` in the side navigation: the last section
+ * whose top has passed the upper third of the viewport.
+ */
+function useActiveSection(enabled: boolean): SettingsSection {
+  const [active, setActive] = useState<SettingsSection>(SECTIONS[0]);
+  useEffect(() => {
+    if (!enabled || typeof IntersectionObserver !== 'function') return;
+    const visible = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target.id);
+          else visible.delete(entry.target.id);
+        }
+        const first = SECTIONS.find((id) => visible.has(`settings-${id}`));
+        if (first) setActive(first);
+      },
+      { rootMargin: '0px 0px -66% 0px' },
+    );
+    for (const id of SECTIONS) {
+      const el = document.getElementById(`settings-${id}`);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, [enabled]);
+  return active;
+}
+
 /** `#/settings` — every option on one scrollable page, `?section=` jumps to one group. */
 export default function SettingsView() {
   const t = useT();
   const { params } = useRoute();
   const section = params.get('section');
   const gallery = params.get('gallery') === '1';
+  const active = useActiveSection(!gallery);
 
   useEffect(() => {
     if (section && (SECTIONS as readonly string[]).includes(section)) focusSection(section);
@@ -83,7 +113,11 @@ export default function SettingsView() {
           <ul role="list">
             {SECTIONS.map((id) => (
               <li key={id}>
-                <a href={`#/settings?section=${id}`} onClick={(e) => jump(e, id)}>
+                <a
+                  href={`#/settings?section=${id}`}
+                  aria-current={id === active ? 'location' : undefined}
+                  onClick={(e) => jump(e, id)}
+                >
                   {t(TITLE[id])}
                 </a>
               </li>
