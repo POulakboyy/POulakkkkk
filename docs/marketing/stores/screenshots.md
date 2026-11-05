@@ -48,7 +48,7 @@ au moment de la soumission (les tailles acceptées évoluent avec les appareils)
 ```text
 Votre journée, d’un seul regard
 Écrivez, POuxis planifie
-Les retards se rattrapent seuls
+Votre planning se réajuste seul
 Une tâche à la fois
 Vos idées, notées en secondes
 Pensez sur une toile infinie
@@ -134,7 +134,7 @@ fusionnée avec la confidentialité.
 ```text
 Votre journée, d’un seul regard
 Écrivez, POuxis planifie
-Les retards se rattrapent seuls
+Votre planning se réajuste seul
 Une tâche à la fois
 Partagez, c’est déjà rangé
 Pensez sur une toile infinie
@@ -205,7 +205,7 @@ long autorisé, 200 caractères). La série courte ci-dessous sert aux visuels.
 Votre journée, d’un seul regard
 Capturez depuis n’importe quelle application
 Une phrase, un événement
-Les retards se rattrapent seuls
+Votre planning se réajuste seul
 Une seule tâche, plein écran
 Pensez sur une toile infinie
 Découvrez votre propre rythme
@@ -236,7 +236,7 @@ visuels du site ou de Snapcraft ; les légendes AppStream sont dans `listings/fl
 Votre journée, d’un seul regard
 Capturez au clavier, partout
 Une phrase, un événement
-Les retards se rattrapent seuls
+Votre planning se réajuste seul
 Une seule tâche, plein écran
 Pensez sur une toile infinie
 Découvrez votre propre rythme

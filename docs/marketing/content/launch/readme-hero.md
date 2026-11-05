@@ -31,7 +31,7 @@ Puis, juste en dessous, une capture réelle de la vue du jour (clair et sombre v
 `<picture>` + `prefers-color-scheme`) et trois lignes :
 
 ```markdown
-- **Plan in one sentence.** "Team sync Tuesday 2–4pm" becomes an event; tasks fit around it.
+- **Plan in one sentence.** "Team sync Tuesday 2pm-4pm" becomes an event; tasks fit around it.
 - **Yours, offline.** Data lives on your device. Sync is optional and the relay can't read it.
 - **Open.** Pure-TypeScript engine with zero runtime dependencies, Tauri 2 apps, AGPL/MPL.
 ```
@@ -46,11 +46,11 @@ a React + Tauri 2 client for desktop and mobile, and a blind, end-to-end encrypt
 you can self-host.
 
 [Quick start](#quick-start) · [Architecture](docs/architecture/ARCHITECTURE.md) ·
-[ADRs](docs/adr/README.md) · [Contributing](docs/architecture/CONTRIBUTING.md)
+[ADRs](docs/adr/README.md) · [Contributing](CONTRIBUTING.md)
 ```
 
-> Le guide de contribution vit dans `docs/architecture/CONTRIBUTING.md` ; ajuster le lien s'il
-> est déplacé à la racine au moment de l'intégration.
+> Le guide de contribution vit à la racine (`CONTRIBUTING.md`) ; ajuster le lien s'il est
+> déplacé au moment de l'intégration.
 
 ## Option C — française (`README.fr.md`)
 

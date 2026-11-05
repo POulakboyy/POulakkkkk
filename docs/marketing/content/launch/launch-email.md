@@ -22,7 +22,7 @@
 > Vous vous êtes inscrit·e pour être prévenu·e du lancement de POuxis. C'est aujourd'hui.
 >
 > POuxis réunit votre agenda, vos tâches et vos idées au même endroit. Vous écrivez « Réunion
-> projet mardi 14 h-16 h », l'événement est créé, et vos tâches trouvent leur place autour de ce
+> projet mardi 14h-16h », l'événement est créé, et vos tâches trouvent leur place autour de ce
 > qui est fixe. L'application fonctionne sans connexion, vos données restent sur votre appareil,
 > et la synchronisation entre vos appareils est chiffrée de bout en bout.
 >

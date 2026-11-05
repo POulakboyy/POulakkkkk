@@ -74,14 +74,15 @@ retirer le chevron `>` en tête de ligne.
 
 Aucune de ces adresses n'existe encore. Elles complètent [`../stores/urls.md`](../stores/urls.md).
 
-| Variable               | Usage                                       |
-| ---------------------- | ------------------------------------------- |
-| `{{GITHUB_URL}}`       | Dépôt public (étoile, contributions)        |
-| `{{WAITLIST_URL}}`     | Inscription à la liste d'attente / bêta     |
-| `{{DISCORD_URL}}`      | Invitation au serveur Discord communautaire |
-| `{{SITE_URL}}`         | Page d'accueil du site (`website/`)         |
-| `{{YOUTUBE_URL}}`      | Chaîne YouTube K13 Studios                  |
-| `{{INSTAGRAM_HANDLE}}` | Compte Instagram (fondateur ou POuxis)      |
-| `{{PRESS_EMAIL}}`      | Contact presse                              |
-| `{{LAUNCH_DATE}}`      | Jour J (J0 du calendrier)                   |
-| `{{UNSUBSCRIBE_URL}}`  | Lien de désinscription de l'e-mail          |
+| Variable                                          | Usage                                         |
+| ------------------------------------------------- | --------------------------------------------- |
+| `{{GITHUB_URL}}`                                  | Dépôt public (étoile, contributions)          |
+| `{{WAITLIST_URL}}`                                | Inscription à la liste d'attente / bêta       |
+| `{{DISCORD_URL}}`                                 | Invitation au serveur Discord communautaire   |
+| `{{SITE_URL}}`                                    | Page d'accueil du site (`website/`)           |
+| `{{YOUTUBE_URL}}`                                 | Chaîne YouTube K13 Studios                    |
+| `{{INSTAGRAM_HANDLE}}`                            | Compte Instagram (fondateur ou POuxis)        |
+| `{{PRESS_EMAIL}}`                                 | Contact presse                                |
+| `{{LAUNCH_DATE}}`                                 | Jour J (J0 du calendrier)                     |
+| `{{UNSUBSCRIBE_URL}}`                             | Lien de désinscription de l'e-mail            |
+| `{{PRÉNOM DU FONDATEUR}}`, `{{NOM DU FONDATEUR}}` | Signature de l'e-mail et du dossier de presse |

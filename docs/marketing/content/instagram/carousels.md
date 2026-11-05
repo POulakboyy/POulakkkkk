@@ -7,27 +7,27 @@
 > POuxis. Texte alternatif rédigé pour chaque diapositive (accessibilité) :
 > reprendre le texte affiché, sans « image de ».
 
-## Carrousel 1 — « Cent idées, une boucle »
+## Carrousel 1 — Cent idées, une boucle
 
 Objectif : expliquer le périmètre du MVP sans jargon, et pourquoi c'est un choix.
 
-| #   | Surtitre           | Texte                                                                                      | Visuel                                  |
-| --- | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- |
-| 1   | CONSTRUIRE         | j'ai écrit cent fonctionnalités.                                                           | Papier, le chiffre « 100 » en serif fin |
-| 2   | LE PROBLÈME        | une app qui fait cent choses, on n'en utilise que trois. et on se perd dans les 97 autres. | Grille de 100 points gris               |
-| 3   | LE CHOIX           | alors je commence par une boucle. une seule.                                               | Les 100 points, 19 restent encre        |
-| 4   | 1 · CAPTURER       | une phrase, n'importe où. l'idée ne se perd pas.                                           | Capture : champ de saisie (C16)         |
-| 5   | 2 · PLANIFIER      | la journée se range autour de ce qui est fixe.                                             | Capture : vue du jour (C5)              |
-| 6   | 3 · SE CONCENTRER  | une seule tâche à l'écran. le reste attend.                                                | Capture : mode Focus (C9)               |
-| 7   | 4 · FAIRE LE BILAN | ce qui a avancé. ce qui a bloqué. sans note, sans jugement.                                | Capture : bilan (C25), si livré         |
-| 8   | ENSUITE            | le reste viendra. quand la boucle tiendra seule.                                           | Les 81 points gris, un point corail     |
-| 9   | —                  | et toi, tu enlèverais quoi en premier ?                                                    | Papier vide, point corail               |
+| #   | Surtitre           | Texte                                                        | Visuel                                  |
+| --- | ------------------ | ------------------------------------------------------------ | --------------------------------------- |
+| 1   | CONSTRUIRE         | j'ai écrit cent fonctionnalités.                             | Papier, le chiffre « 100 » en serif fin |
+| 2   | LE PROBLÈME        | une app qui fait cent choses, on finit par se perdre dedans. | Grille de 100 points gris               |
+| 3   | LE CHOIX           | alors je commence par une boucle. une seule.                 | Les 100 points, 19 restent encre        |
+| 4   | 1 · CAPTURER       | une phrase, n'importe où. l'idée ne se perd pas.             | Capture : champ de saisie (C16)         |
+| 5   | 2 · PLANIFIER      | la journée se range autour de ce qui est fixe.               | Capture : vue du jour (C5)              |
+| 6   | 3 · SE CONCENTRER  | une seule tâche à l'écran. le reste attend.                  | Capture : mode Focus (C9)               |
+| 7   | 4 · FAIRE LE BILAN | ce qui a avancé. ce qui a bloqué. sans note, sans jugement.  | Capture : bilan (C25), si livré         |
+| 8   | ENSUITE            | le reste viendra. quand la boucle tiendra seule.             | Les 81 points gris, un point corail     |
+| 9   | —                  | et toi, tu enlèverais quoi en premier ?                      | Papier vide, point corail               |
 
 > La diapositive 9 pose une vraie question de produit, pas un appel à l'engagement : les réponses
 > alimentent la recherche utilisateur (`docs/research/USER_RESEARCH.md`). Si le bilan (C25) n'est
 > pas livré, remplacer la capture de la diapositive 7 par un texte seul « bientôt ».
 
-## Carrousel 2 — « Le temps entre les choses »
+## Carrousel 2 — Le temps entre les choses
 
 Objectif : la science des transitions, avec ses limites, puis la fonction buffer (C7).
 
@@ -45,7 +45,7 @@ Objectif : la science des transitions, avec ses limites, puis la fonction buffer
 > La diapositive 7 décrit l'invite de reprise suggérée par `SCIENTIFIC_BASIS.md` (§4.1). Ne pas la
 > présenter comme livrée tant qu'elle n'est pas dans le build ; sinon écrire « on y travaille ».
 
-## Carrousel 3 — « Ce que la recherche ne dit pas »
+## Carrousel 3 — Ce que la recherche ne dit pas
 
 Objectif : poser la crédibilité de la marque en démontant trois chiffres répandus, tous listés en
 [section 7 de `SCIENTIFIC_BASIS.md`](../../../research/SCIENTIFIC_BASIS.md#7-ce-que-la-recherche-ne-soutient-pas-encore).

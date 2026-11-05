@@ -24,7 +24,7 @@
 
 ```
 00:00 Le jour où mon agenda a gagné
-00:45 Sept applis pour une seule journée
+00:20 Sept applis pour une seule journée
 02:15 Une phrase, une journée
 03:30 Spirale 1 — Le temps entre les choses
 05:30 Spirale 2 — La série qui casse
@@ -53,7 +53,7 @@ Alors je la construis. Et je te montre tout. Le code aussi.
 
 > Les 15 premières secondes s'arrêtent ici. Pas de « salut à tous », pas d'appel à l'abonnement.
 
-## [CONTEXTE] — 00:45 · « Sept applis pour une seule journée »
+## [CONTEXTE] — 00:20 · « Sept applis pour une seule journée »
 
 [B-ROLL : un téléphone posé, écran allumé, notifications qui s'empilent en silence. Puis la main
 qui le retourne.]
@@ -91,9 +91,9 @@ marche sans connexion, et tes données restent chez toi.
 
 Je te montre plutôt que de t'expliquer.
 [pause]
-J'écris : « Réunion projet mardi 14 h-16 h ».
-[Les fragments reconnus se surlignent : « mardi », « 14 h-16 h ».]
-Huit mots. L'app a compris le jour, l'heure de début, l'heure de fin. L'événement est là, dans la
+J'écris : « Réunion projet mardi 14h-16h ».
+[Les fragments reconnus se surlignent : « mardi », « 14h-16h ».]
+Quatre mots. L'app a compris le jour, l'heure de début, l'heure de fin. L'événement est là, dans la
 semaine.
 
 Maintenant j'ajoute trois tâches. Une de deux heures, une d'une heure, une de vingt minutes. Je ne
@@ -173,7 +173,7 @@ variations d'une personne à l'autre. Pas vingt et un. Les vingt et un jours pou
 vert dans le terminal. Réf. 7.3 — moteur prêt, interface à venir.]
 
 Alors j'ai écrit des jokers. Chaque semaine, tu en as quelques-uns. Un jour sans création ? Le
-joker le couvre, la série continue. Plus de joker ? La série se met en pause. Elle ne meurt pas.
+joker le couvre, la série continue. Plus de joker ? La série se met en pause. Elle ne meurt pas tout de suite.
 Tu reviens dans les jours qui suivent, elle reprend là où elle s'était arrêtée.
 C'est dans le moteur aujourd'hui. L'écran arrive.
 

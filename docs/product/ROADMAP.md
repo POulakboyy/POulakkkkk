@@ -180,7 +180,7 @@ d'accessibilité complet ; documentation utilisateur FR/EN ; builds signés pour
 plateformes ; politique de confidentialité et conditions publiées (projet : [`PRIVACY_POLICY_DRAFT.md`](../legal/PRIVACY_POLICY_DRAFT.md)) ; procédure de signalement de vulnérabilités opérationnelle.
 
 **Métriques de succès.** Rétention d'usage à 8 semaines dans les cohortes longitudinales (phase 5
-du programme de recherche) ; taux de crash déclaré nul en bloquant sur les parcours de la boucle ;
+du programme de recherche) ; aucun plantage bloquant signalé sur les parcours de la boucle ;
 délai de traitement des signalements de sécurité.
 
 ### 2.0+ — « Collaboration et écosystème »

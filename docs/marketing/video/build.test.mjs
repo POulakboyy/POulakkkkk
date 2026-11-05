@@ -60,6 +60,19 @@ test('validate catches store, timing and selector problems', () => {
   assert.match(errors, /"nope" missing from selectorContract/);
 });
 
+test('validate rejects raw CSS selectors and VO cut off by a trimmed window', () => {
+  const doc = shotlist();
+  doc.scenes.find((s) => s.id === 'h02-capture').actions[1].selector = '.command input';
+  const hero = doc.formats.find((f) => f.id === 'hero-16x9');
+  const h02 = hero.sequence.find((s) => s.scene === 'h02-capture');
+  h02.inMs += 1000;
+  h02.durationMs -= 1000;
+  hero.durationMs -= 1000;
+  const errors = validate(doc).join('\n');
+  assert.match(errors, /must be \[data-demo="<hook>"\]/);
+  assert.match(errors, /vo of h02-capture falls outside its sequence window/);
+});
+
 test('hero subtitles start with the opening line and stay in programme order', () => {
   const doc = shotlist();
   const byId = new Map(doc.scenes.map((s) => [s.id, s]));

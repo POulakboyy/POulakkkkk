@@ -119,8 +119,10 @@ function checkScene(scene, contract, errors) {
     errors.push(`${where}: composite scene needs panes`);
   }
   for (const a of [...scene.actions, ...(scene.composite?.panes ?? []).flatMap((p) => p.actions)]) {
-    const hook = /^\[data-demo="([^"]+)"\]$/.exec(a.selector ?? '')?.[1];
-    if (hook && !contract.includes(hook)) {
+    if (a.selector === undefined) continue;
+    const hook = /^\[data-demo="([^"]+)"\]$/.exec(a.selector)?.[1];
+    if (!hook) errors.push(`${where}: selector ${a.selector} must be [data-demo="<hook>"]`);
+    else if (!contract.includes(hook)) {
       errors.push(`${where}: selector hook "${hook}" missing from selectorContract`);
     }
   }
@@ -182,7 +184,15 @@ function checkFormat(format, sceneById, errors) {
     errors.push(`${where}: sequence sums to ${total} ms, expected ${format.durationMs}`);
   }
   for (const id of format.voScenes) {
-    if (!sceneById.get(id)?.vo) errors.push(`${where}: voScenes ${id} has no vo`);
+    const vo = sceneById.get(id)?.vo;
+    if (!vo) {
+      errors.push(`${where}: voScenes ${id} has no vo`);
+      continue;
+    }
+    const item = format.sequence.find((s) => s.scene === id);
+    const fits =
+      item && vo.atMs >= item.inMs && vo.atMs + vo.durationMs <= item.inMs + item.durationMs;
+    if (!fits) errors.push(`${where}: vo of ${id} falls outside its sequence window`);
   }
   checkStoreLimits(format, errors);
 }

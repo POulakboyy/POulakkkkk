@@ -15,7 +15,7 @@ sans connexion et synchronise vos appareils avec un chiffrement de bout en bout.
 POuxis part d'un constat simple : une journée est souvent dispersée entre plusieurs applications
 qui réclament chacune de l'attention. L'application réunit l'agenda, les tâches et les idées
 autour d'une boucle — capturer, planifier, se concentrer, faire le bilan. On écrit « Réunion
-projet mardi 14 h-16 h », l'événement est créé et les tâches se placent dans les créneaux libres,
+projet mardi 14h-16h », l'événement est créé et les tâches se placent dans les créneaux libres,
 autour des rendez-vous fixes. Les données sont stockées sur l'appareil ; la synchronisation est
 facultative et passe par un relais qui ne peut pas lire le contenu. Le code est public.
 
@@ -40,8 +40,8 @@ facultative et passe par un relais qui ne peut pas lire le contenu. Le code est 
    service, pas une condition.
 2. **Ouvert et vérifiable.** Le code, les décisions d'architecture et les choix de licence sont
    publics.
-3. **Sans culpabilité.** Pas de badges anxiogènes ; des séries qui se mettent en pause au lieu de
-   retomber à zéro (dans le moteur, interface à venir).
+3. **Sans culpabilité.** Pas de badges anxiogènes ; des séries protégées par des jokers, qui se
+   mettent en pause plutôt que de retomber aussitôt à zéro (dans le moteur, interface à venir).
 4. **Honnête sur la recherche.** Les fonctions inspirées de travaux publiés citent leurs sources
    et leurs limites dans un document public ; POuxis ne présente rien comme « prouvé ».
 

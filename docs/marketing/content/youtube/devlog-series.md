@@ -35,7 +35,7 @@ question ouverte qui prépare le suivant.
 
 ### Épisode 3 — « Une phrase, une journée » (C4, C5)
 
-- **Brèche** : « "Réunion projet mardi 14 h-16 h." Huit mots. Voilà comment ils deviennent un
+- **Brèche** : « "Réunion projet mardi 14h-16h." Quatre mots. Voilà comment ils deviennent un
   agenda. »
 - **Contenu** : l'analyseur de langage naturel (`core/nlp`), puis le routage des tâches dans les
   créneaux libres (`core/scheduler`), avec une raison lisible pour chaque placement. Le biais de
@@ -68,9 +68,10 @@ question ouverte qui prépare le suivant.
 
 ### Épisode 6 — « Une chose à la fois » (C9, C10, C11)
 
-- **Brèche** : « J'ai essayé d'ajouter une sixième priorité à ma journée. L'app m'a dit non. »
+- **Brèche** : « J'ai voulu ajouter une sixième priorité à ma journée. L'app ne m'a pas bloqué. Elle m'a
+  demandé laquelle je repoussais. »
 - **Contenu** : mode Focus (une seule tâche, en grand), minuteur par tâche qui enregistre le temps
-  passé, limite de priorités par jour. Ce que dit la recherche sur les pauses planifiées (et
+  passé, limite de charge douce (avertissement non bloquant à partir de cinq priorités, seuil réglable). Ce que dit la recherche sur les pauses planifiées (et
   pourquoi 25 minutes n'est qu'une convention), sur la mémoire de travail (environ quatre
   éléments selon Cowan, 2001, et pourquoi ce n'est pas une règle sur les listes).
 - **À l'écran** : entrée et sortie du mode Focus (animations `transform`/`opacity`, version

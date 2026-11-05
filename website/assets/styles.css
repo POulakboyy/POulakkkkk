@@ -280,7 +280,6 @@ a:hover {
   color: var(--ink-2);
   font-size: 0.9375rem;
   text-decoration: none;
-  transition: background-color var(--dur-fast) linear;
 }
 
 .nav a:hover {

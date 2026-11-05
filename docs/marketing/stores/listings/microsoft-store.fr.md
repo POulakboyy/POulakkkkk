@@ -75,8 +75,8 @@ Ordre et visuels : voir `../screenshots.md` (série « windows »).
 Votre journée, planifiée d’un regard
 Capturez une idée depuis n’importe quelle application
 Une phrase suffit pour créer un événement
-Les retards se rattrapent sans casser vos rendez-vous
-Une seule tâche à l’écran, en plein écran
+Un retard décale la suite, pas vos rendez-vous
+Une seule tâche, en plein écran
 Vos idées prennent forme sur une toile infinie
 Comprenez quand vous travaillez le mieux
 Vos données restent sur votre PC

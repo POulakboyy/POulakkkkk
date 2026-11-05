@@ -75,7 +75,7 @@ Order and visuals: see `../screenshots.md` ("windows" set).
 Your whole day, planned at a glance
 Capture an idea from any app
 One sentence creates an event
-Delays absorbed without breaking appointments
+A delay shifts the rest, not your appointments
 One task on screen, full screen
 Ideas take shape on an endless canvas
 See your peak focus hours

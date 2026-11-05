@@ -25,7 +25,7 @@ scientifique citée : c'est une démonstration.
 
 | Temps   | Image                                                                           | Voix / texte                                                     |
 | ------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 0–2 s   | Écran : champ de saisie vide, curseur.                                          | Texte : « huit mots. »                                           |
+| 0–2 s   | Écran : champ de saisie vide, curseur.                                          | Texte : « quatre mots. »                                         |
 | 2–8 s   | Frappe réelle : « Réunion projet mardi 14h-16h ». Fragments reconnus surlignés. | Voix : « J'écris une phrase. »                                   |
 | 8–15 s  | L'événement apparaît dans la semaine ; des tâches se placent autour.            | Voix : « L'événement est créé. Les tâches trouvent leur place. » |
 | 15–20 s | Toucher une tâche : la raison du placement s'affiche en une ligne.              | Voix : « Et à chaque fois, l'app te dit pourquoi. »              |
@@ -42,7 +42,7 @@ scientifique citée : c'est une démonstration.
 | ------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | 0–3 s   | Pouce qui active le mode avion.                                   | Texte : « j'ai coupé le réseau. »                                        |
 | 3–10 s  | L'app s'ouvre, on ajoute une tâche, on en coche une. Tout répond. | Voix : « L'app continue. Parce que tes données sont sur ton téléphone. » |
-| 10–16 s | Ordinateur à côté, même compte, une autre modification.           | Voix : « Sur l'ordi, je change autre chose. »                            |
+| 10–16 s | Ordinateur à côté, même espace synchronisé, autre chose modifiée. | Voix : « Sur l'ordi, je change autre chose. »                            |
 | 16–22 s | Mode avion coupé : les deux écrans convergent.                    | Voix : « Je rallume. Les deux se mettent d'accord. »                     |
 | 22–28 s | Schéma : téléphone ⇄ relais (cadenas) ⇄ ordinateur.               | Voix : « Et le serveur au milieu ne peut rien lire. Tout part chiffré. » |
 | 28–30 s | Papier, point corail.                                             | Texte : « à toi. vraiment. »                                             |

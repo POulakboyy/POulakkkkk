@@ -74,8 +74,8 @@ corail change de place à chaque case (jamais deux points adjacents au même end
 
 ### 3 — Reel « Le temps entre deux réunions »
 
-- Script : [`reels.md` Reel 1](reels.md#reel-1--le-temps-entre-deux-réunions). Couverture : visage
-  - « 14:00 → 14:00 ».
+- Script : [`reels.md` Reel 1](reels.md#reel-1--le-temps-entre-deux-réunions). Couverture : visage et
+  « 14:00 → 14:00 ».
 - **Légende** :
 
   > Ta réunion finit à 14 h.
@@ -103,9 +103,9 @@ corail change de place à chaque case (jamais deux points adjacents au même end
   la saisie.
 - **Légende** :
 
-  > « Réunion projet mardi 14 h-16 h. »
+  > « Réunion projet mardi 14h-16h. »
   >
-  > Huit mots.
+  > Quatre mots.
   > L'événement est créé. Les tâches trouvent leur place autour.
   >
   > Le reste de ta journée t'appartient.

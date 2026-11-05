@@ -44,7 +44,7 @@ Images 1270 × 760, captures réelles, une idée par image, même gabarit que le
 
 | #   | Image                                            | Légende (EN)                                                   | Réf.    |
 | --- | ------------------------------------------------ | -------------------------------------------------------------- | ------- |
-| 1   | Saisie « Team sync Tuesday 2–4pm » → événement   | Type one sentence. Get a dated event.                          | C4      |
+| 1   | Saisie « Team sync Tuesday 2pm-4pm » → événement | Type one sentence. Get a dated event.                          | C4      |
 | 2   | Vue du jour : tâches placées autour des réunions | Tasks find free slots, around what's fixed.                    | C5      |
 | 3   | Un retard qui décale la suite                    | Running late? The rest of the day moves. Fixed meetings don't. | C6      |
 | 4   | Espace de transition entre deux réunions         | A buffer between back-to-back meetings. You set its length.    | C7      |

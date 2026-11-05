@@ -43,7 +43,7 @@ capitales espacées « DEVLOG 0X », titre serif de 2 à 4 mots, point corail en
 | 3   | une phrase suffit      | Une phrase devient une journée planifiée                        |
 | 4   | 14 h 20                | Ma réunion déborde. Qu'arrive-t-il au reste de ma journée ?     |
 | 5   | mode avion             | Deux appareils, hors-ligne, la même tâche : qui gagne ?         |
-| 6   | une chose à la fois    | J'ai essayé d'ajouter une 6e priorité. Mon app a dit non.       |
+| 6   | une chose à la fois    | Une 6e priorité ? Mon app m'a posé une question.                |
 | 7   | les jours sans         | Des jokers pour les jours sans                                  |
 | 8   | vous l'avez changée    | Ce que vous avez changé dans mon app                            |
 
