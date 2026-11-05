@@ -2,6 +2,8 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { getAppPrefs, resetAppPrefs } from '../../app/appPrefs.ts';
+import { KEYMAP_ACTIONS } from '../../app/keymap.ts';
+import { translate } from '../../i18n/index.ts';
 import { store } from '../../store/index.ts';
 import { buildExport, exportBaseName, snapshot, zipEntries } from './export.ts';
 import { minutesToTime, timeToMinutes, toggleDay, weekdayName } from './hours.ts';
@@ -81,6 +83,14 @@ describe('misc', () => {
     expect(actionLabelKey('command.open')).toBe('settings.keyboard.actions.commandOpen');
     expect(actionLabelKey('move.previous')).toBe('settings.keyboard.actions.movePrevious');
     expect(timeZoneOptions('Mars/Olympus')[0]).toBe('Mars/Olympus');
+  });
+
+  it('has a label for every keymap action in both locales', () => {
+    for (const action of KEYMAP_ACTIONS) {
+      const key = actionLabelKey(action);
+      expect(translate('fr', key), action).not.toBe(key);
+      expect(translate('en', key), action).not.toBe(key);
+    }
   });
 });
 

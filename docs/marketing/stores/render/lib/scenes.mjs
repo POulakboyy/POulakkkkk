@@ -35,13 +35,14 @@ async function scrollToHeading(page, name) {
 /** Sample sentence of the quick-capture frames (claims register C4). */
 export const CAPTURE_SENTENCE = {
   fr: 'Réunion projet mardi 14h-16h',
-  en: 'Project meeting Tuesday 2-4pm',
+  // "Tuesday 2-4pm" is read as a date ("Tuesday 2") by the English parser: reported to core/nlp.
+  en: 'Project meeting Tuesday 2pm-4pm',
 };
 
 /**
- * Scene id → { route, clock, day?, bare?, element?, run?(page, ctx) }. `clock` is the Paris
+ * Scene id → { route, clock, day?, bare?, viewport?, run?(page, ctx) }. `clock` is the Paris
  * wall-clock time of `day` (default: the demo Thursday); `bare` scenes have no main heading;
- * `element` clips the screenshot to one element; `ctx` = { t, lang, mod } where `mod` is the platform's
+ * `viewport` replaces the device's (a small floating window); `ctx` = { t, lang, mod } where `mod` is the platform's
  * shortcut modifier ('Meta' with a Mac user agent).
  */
 export const SCENES = {
@@ -51,7 +52,10 @@ export const SCENES = {
     clock: '10:20',
     async run(page, { t, lang, mod }) {
       const dialog = await openCommandBar(page, t, mod);
-      await typeInto(dialog.getByRole('textbox', { name: t('command.input') }), CAPTURE_SENTENCE[lang]);
+      await typeInto(
+        dialog.getByRole('textbox', { name: t('command.input') }),
+        CAPTURE_SENTENCE[lang],
+      );
       await dialog.getByText(t('command.preview.event')).first().waitFor({ timeout: 5000 });
     },
   },
@@ -81,7 +85,10 @@ export const SCENES = {
     route: '#/today',
     clock: '10:20',
     async run(page, { t }) {
-      await main(page).getByRole('button', { name: t.pattern('today.focus.startOn') }).first().click();
+      await main(page)
+        .getByRole('button', { name: t.pattern('today.focus.startOn') })
+        .first()
+        .click();
       // Seven minutes into the session, so the timer reads as running.
       await page.clock.fastForward(7 * 60_000);
       await page.waitForTimeout(400);
@@ -92,8 +99,13 @@ export const SCENES = {
     route: '#/ideas?tab=studio',
     clock: '10:20',
     async run(page, { t }) {
-      await main(page).getByRole('button', { name: t('ideas.serendipity.action') }).click();
-      await main(page).getByRole('button', { name: t('ideas.serendipity.link') }).first().waitFor({ timeout: 5000 });
+      await main(page)
+        .getByRole('button', { name: t('ideas.serendipity.action') })
+        .click();
+      await main(page)
+        .getByRole('button', { name: t('ideas.serendipity.link') })
+        .first()
+        .waitFor({ timeout: 5000 });
     },
   },
   canvas: {
@@ -103,7 +115,9 @@ export const SCENES = {
       const surface = main(page).getByRole('application').first();
       await surface.waitFor({ timeout: 8000 });
       // Wide screens frame the whole map; phones keep the default zoom, where labels stay legible.
-      const fit = main(page).getByRole('button', { name: t('canvas.view.fit') }).first();
+      const fit = main(page)
+        .getByRole('button', { name: t('canvas.view.fit') })
+        .first();
       if (await fit.isVisible().catch(() => false)) await fit.click();
       await page.waitForTimeout(600);
     },
@@ -142,7 +156,16 @@ export const SCENES = {
   privacy: { route: '#/settings?section=privacy', clock: '10:20' },
   data: { route: '#/settings?section=data', clock: '10:20' },
   /** The global-shortcut capture window alone; the frame draws the desktop around it. */
-  'capture-window': { route: '#/capture', clock: '10:20', bare: true, element: '#root > *' },
+  'capture-window': {
+    route: '#/capture',
+    clock: '10:20',
+    bare: true,
+    viewport: { width: 720, height: 128 },
+    async run(page, { lang }) {
+      await typeInto(page.getByRole('textbox').first(), CAPTURE_SENTENCE[lang]);
+      await page.waitForTimeout(300);
+    },
+  },
 };
 
 export function scene(id) {

@@ -5,8 +5,8 @@ import { ChartCard } from './ChartCard.tsx';
 import { dayKeyWeekday, stackSegments, weekdayNames } from './model.ts';
 import s from './Insights.module.css';
 
-/** Series in fixed order; colours validated together for colour-vision deficiencies. */
 /**
+ * Series in fixed order; colours validated together for colour-vision deficiencies.
  * Every pair is adjacent in some stacked column (organisation can be 0), so the slots are
  * validated on all pairs, light and dark: viz-7 (violet) collapsed onto viz-1 in dark mode
  * for protan vision (ΔE 1.9); with viz-3 the worst protan/deutan pair stays at ΔE 9.4.

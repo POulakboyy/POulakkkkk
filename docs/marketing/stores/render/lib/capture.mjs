@@ -7,7 +7,7 @@ import { translator } from './i18n.mjs';
 
 /**
  * Fonts and safe areas injected before the app's scripts. Linux has no SF Pro / New York: Inter
- * and Bitstream Charter stand in (the token stacks end on the same families of shapes). Safe-area
+ * and Bitstream Charter stand in, DejaVu Sans supplies the ⌘ glyph Inter lacks. Safe-area
  * insets are what the native shell reports on the device, so the app lays out exactly as there.
  */
 function initScript({ key, prefs, safe }) {
@@ -17,7 +17,7 @@ function initScript({ key, prefs, safe }) {
   }
   const style = document.createElement('style');
   style.textContent = `:root:root:root {
-    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-sans: 'Inter', 'DejaVu Sans', system-ui, sans-serif;
     --font-serif: 'Bitstream Charter', 'Charter', Georgia, serif;
     --safe-top: ${safe.top}px; --safe-bottom: ${safe.bottom}px;
   }
@@ -32,7 +32,12 @@ function initScript({ key, prefs, safe }) {
 
 async function waitForApp(page, bare) {
   if (bare) await page.locator('#root *').first().waitFor({ timeout: 20_000 });
-  else await page.getByRole('main').getByRole('heading', { level: 1 }).first().waitFor({ timeout: 20_000 });
+  else
+    await page
+      .getByRole('main')
+      .getByRole('heading', { level: 1 })
+      .first()
+      .waitFor({ timeout: 20_000 });
   await page.evaluate(() => document.fonts.ready);
 }
 
@@ -105,7 +110,6 @@ export async function captureScene(browser, { sceneId, device, lang, theme = 'li
     });
     await page.waitForTimeout(350);
     if (errors.length > 0) throw new Error(`scene ${sceneId}: page errors: ${errors.join(' | ')}`);
-    if (scene.element) return await page.locator(scene.element).first().screenshot({ type: 'png' });
     return await page.screenshot({ type: 'png' });
   } finally {
     await context.close();

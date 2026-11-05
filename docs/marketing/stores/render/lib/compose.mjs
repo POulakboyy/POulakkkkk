@@ -15,15 +15,27 @@ export function rootTokens(css = readFileSync(TOKENS_CSS, 'utf8')) {
   if (start === -1) throw new Error('tokens.css: no :root block');
   const body = css.slice(start + 7, css.indexOf('\n}', start));
   const vars = {};
-  for (const m of body.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) vars[m[1]] = m[2].replace(/\s+/g, ' ').trim();
-  for (const name of ['--bg', '--bg-elevated', '--surface-2', '--ink', '--ink-3', '--accent', '--line']) {
+  for (const m of body.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
+    vars[m[1]] = m[2].replace(/\s+/g, ' ').trim();
+  for (const name of [
+    '--bg',
+    '--bg-elevated',
+    '--surface-2',
+    '--ink',
+    '--ink-3',
+    '--accent',
+    '--line',
+  ]) {
     if (!vars[name]) throw new Error(`tokens.css: ${name} not found`);
   }
   return vars;
 }
 
 export const esc = (s) =>
-  String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  String(s).replace(
+    /[&<>"]/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+  );
 
 const px = (n) => `${Math.round(n * 100) / 100}px`;
 
@@ -73,9 +85,10 @@ function phoneFrame(geo, device, img, clock) {
   const inner = device.radius - device.bezel;
   const bar = device.safe.top * scale;
   const font = 17 * scale;
-  const pill = device.kind === 'phone'
-    ? `<div style="position:absolute;left:50%;top:${px(11 * scale)};width:${px(120 * scale)};height:${px(34 * scale)};transform:translateX(-50%);border-radius:${px(17 * scale)};background:#1c1b18"></div>`
-    : '';
+  const pill =
+    device.kind === 'phone'
+      ? `<div style="position:absolute;left:50%;top:${px(11 * scale)};width:${px(120 * scale)};height:${px(34 * scale)};transform:translateX(-50%);border-radius:${px(17 * scale)};background:#1c1b18"></div>`
+      : '';
   const home = `<div style="position:absolute;left:50%;bottom:${px(8 * scale)};width:${px((device.kind === 'phone' ? 140 : 320) * scale)};height:${px(5 * scale)};transform:translateX(-50%);border-radius:99px;background:var(--ink);opacity:.85"></div>`;
   const time = device.kind === 'phone' ? clock.time : `${clock.time}  ${clock.date}`;
   const timeX = device.kind === 'phone' ? 50 * scale : 22 * scale;
@@ -118,7 +131,11 @@ function winButtons(scale) {
   const stroke = `stroke="currentColor" stroke-width="1" fill="none"`;
   const glyph = (d) =>
     `<span style="width:${w};display:grid;place-items:center;color:var(--ink-2)"><svg width="${px(10 * scale)}" height="${px(10 * scale)}" viewBox="0 0 10 10" ${stroke}>${d}</svg></span>`;
-  return glyph('<path d="M0 5.5h10"/>') + glyph('<rect x=".5" y=".5" width="9" height="9"/>') + glyph('<path d="M0 0l10 10M10 0L0 10"/>');
+  return (
+    glyph('<path d="M0 5.5h10"/>') +
+    glyph('<rect x=".5" y=".5" width="9" height="9"/>') +
+    glyph('<path d="M0 0l10 10M10 0L0 10"/>')
+  );
 }
 
 function cardFrame(geo, device, img) {
@@ -155,7 +172,8 @@ function floatingFrame(geo, device, img, imgSize) {
 /** Device markup for `geo` (from formats.deviceGeometry), placed at `origin`. */
 export function deviceMarkup({ device, geo, img, imgSize, clock, lang, options = {} }) {
   if (options.composition === 'floating') return floatingFrame(geo, device, img, imgSize);
-  if (device.kind === 'phone' || device.kind === 'tablet') return phoneFrame(geo, device, img, clock);
+  if (device.kind === 'phone' || device.kind === 'tablet')
+    return phoneFrame(geo, device, img, clock);
   if (device.kind === 'window') return windowFrame(geo, device, img, { lang });
   return cardFrame(geo, device, img);
 }
@@ -175,7 +193,19 @@ function captionMarkup(format, { eyebrow, caption }) {
 }
 
 /** Full store frame document. */
-export function frameHtml({ format, tokens, lang, eyebrow, caption, device, geo, img, imgSize, clock, options }) {
+export function frameHtml({
+  format,
+  tokens,
+  lang,
+  eyebrow,
+  caption,
+  device,
+  geo,
+  img,
+  imgSize,
+  clock,
+  options,
+}) {
   const r = format.region;
   const shifted = { ...geo, box: { ...geo.box, x: geo.box.x + r.x, y: geo.box.y + r.y } };
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><style>${baseCss(tokens, format.size, false)}</style></head>

@@ -28,7 +28,7 @@ import {
   toggleDone,
   type ActionContext,
 } from './actions.ts';
-import { describeSelection } from './a11y.ts';
+import { describeSelection, nearestNode } from './a11y.ts';
 import { useAnnotations } from './annotations.ts';
 import { CanvasStage } from './components/CanvasStage.tsx';
 import { Minimap } from './components/Minimap.tsx';
@@ -401,9 +401,12 @@ export function CanvasWorkspace({ graph, graphs }: { graph: Graph; graphs: reado
       const dir = ARROWS[key];
       if (dir) {
         const from = only ? scene.byId.get(only) : undefined;
+        const entry = !from && !e.shiftKey ? nearestNode(scene.nodes, viewCenter()) : undefined;
         if (from && !e.shiftKey) {
           const next = nodeInDirection(scene, from, dir);
           if (next) select([next.id]);
+        } else if (entry) {
+          select([entry.id]);
         } else {
           // Arrows move the view, so the content slides the opposite way.
           const step = 96;

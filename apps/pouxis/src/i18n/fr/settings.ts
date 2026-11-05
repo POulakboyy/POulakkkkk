@@ -175,6 +175,7 @@ export const settings = {
       navSettings: 'Ouvrir les réglages',
       navLab: 'Ouvrir le labo',
       noteNew: 'Nouvelle note',
+      ideasBrainDump: 'Vider sa tête',
       focusStart: 'Commencer un focus',
       themeCycle: 'Changer de thème',
       zenToggle: 'Interface zen',

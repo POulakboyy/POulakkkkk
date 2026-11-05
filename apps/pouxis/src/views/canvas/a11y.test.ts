@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { translate, type MessageKey, type MessageVars } from '../../i18n/index.ts';
-import { describeNode, describeSelection } from './a11y.ts';
+import { describeNode, describeSelection, nearestNode } from './a11y.ts';
 import type { SceneNode } from './engine/scene.ts';
 
 const t = (key: MessageKey, vars?: MessageVars) => translate('fr', key, vars);
@@ -44,5 +44,14 @@ describe('describeSelection', () => {
   it('is silent without a selection and counts multiple nodes', () => {
     expect(describeSelection(t, [])).toBe('');
     expect(describeSelection(t, [node(), node({ id: 'n2' })])).toBe('2 nœuds sélectionnés');
+  });
+});
+
+describe('nearestNode', () => {
+  it('picks the node closest to the point and is undefined on an empty canvas', () => {
+    const far = node({ id: 'far', x: 400, y: 0 });
+    const near = node({ id: 'near', x: 30, y: -40 });
+    expect(nearestNode([far, near], { x: 0, y: 0 })?.id).toBe('near');
+    expect(nearestNode([], { x: 0, y: 0 })).toBeUndefined();
   });
 });

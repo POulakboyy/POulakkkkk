@@ -44,8 +44,8 @@ function focusSection(id: string): void {
 }
 
 /**
- * Section currently being read, for `aria-current` in the side navigation: the last section
- * whose top has passed the upper third of the viewport.
+ * Section currently being read, for `aria-current` in the side navigation: the first section
+ * (in page order) that intersects the upper third of the viewport.
  */
 function useActiveSection(enabled: boolean): SettingsSection {
   const [active, setActive] = useState<SettingsSection>(SECTIONS[0]);

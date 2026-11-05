@@ -8,7 +8,8 @@ const COLOR_TYPES = { 0: 'gray', 2: 'rgb', 3: 'palette', 4: 'gray-alpha', 6: 'rg
 
 /** Width, height, bit depth and colour type from the IHDR chunk. */
 export function pngInfo(buffer) {
-  if (buffer.length < 33 || !buffer.subarray(0, 8).equals(SIGNATURE)) throw new Error('not a PNG file');
+  if (buffer.length < 33 || !buffer.subarray(0, 8).equals(SIGNATURE))
+    throw new Error('not a PNG file');
   if (buffer.toString('latin1', 12, 16) !== 'IHDR') throw new Error('PNG without IHDR first');
   const colorType = buffer[25];
   return {
@@ -33,16 +34,17 @@ function hasTransparencyChunk(buffer) {
   return false;
 }
 
-/** Problems of the file at `path` against the expected size and rules (empty when valid). */
+/** Problems of the file at `path` against its rules (empty when valid); size checked when given. */
 export function checkPng(path, { width, height, maxBytes, opaque = true }) {
   const problems = [];
   const info = pngInfo(readFileSync(path));
-  if (info.width !== width || info.height !== height) {
+  if (width !== undefined && (info.width !== width || info.height !== height)) {
     problems.push(`${info.width}×${info.height} instead of ${width}×${height}`);
   }
   if (opaque && info.hasAlpha) problems.push(`has an alpha channel (${info.colorType})`);
   const bytes = statSync(path).size;
-  if (bytes > maxBytes) problems.push(`${(bytes / 1048576).toFixed(2)} MB > ${(maxBytes / 1048576).toFixed(2)} MB`);
+  if (bytes > maxBytes)
+    problems.push(`${(bytes / 1048576).toFixed(2)} MB > ${(maxBytes / 1048576).toFixed(2)} MB`);
   return problems;
 }
 
@@ -57,7 +59,17 @@ function ffmpeg(args) {
  */
 export function optimisePng(path, { maxBytes, opaque = true }) {
   const tmp = `${path}.tmp.png`;
-  ffmpeg(['-i', path, '-pix_fmt', opaque ? 'rgb24' : 'rgba', '-compression_level', '9', '-pred', 'mixed', tmp]);
+  ffmpeg([
+    '-i',
+    path,
+    '-pix_fmt',
+    opaque ? 'rgb24' : 'rgba',
+    '-compression_level',
+    '9',
+    '-pred',
+    'mixed',
+    tmp,
+  ]);
   renameSync(tmp, path);
   if (statSync(path).size <= maxBytes) return 'truecolor';
   const filter = opaque

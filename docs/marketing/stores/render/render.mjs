@@ -15,8 +15,25 @@ import { chromium } from 'playwright';
 import { caption } from './lib/captions.mjs';
 import { captureScene } from './lib/capture.mjs';
 import { featureHtml, frameHtml, heroHtml, rootTokens } from './lib/compose.mjs';
-import { APP_URL, DEMO_DAY, DEMO_ZONE, HERO_DIR, MAX_BYTES, OUT_DIR, WORK_DIR, chromiumPath, demoTime } from './lib/config.mjs';
-import { EYEBROWS, FEATURE_GRAPHIC, FORMATS, HEROES, deviceGeometry, framesOf } from './lib/formats.mjs';
+import {
+  APP_URL,
+  DEMO_DAY,
+  DEMO_ZONE,
+  HERO_DIR,
+  MAX_BYTES,
+  OUT_DIR,
+  WORK_DIR,
+  chromiumPath,
+  demoTime,
+} from './lib/config.mjs';
+import {
+  EYEBROWS,
+  FEATURE_GRAPHIC,
+  FORMATS,
+  HEROES,
+  deviceGeometry,
+  framesOf,
+} from './lib/formats.mjs';
 import { optimisePng, pngInfo } from './lib/png.mjs';
 import { SCENES, sceneAlt } from './lib/scenes.mjs';
 
@@ -50,7 +67,7 @@ function clockOf(sceneId, lang) {
 function captureCache(browser) {
   const cache = new Map();
   return async ({ sceneId, device, geo, lang, userAgent }) => {
-    const viewport = SCENES[sceneId].element ? { width: 720, height: 240 } : geo.viewport;
+    const viewport = SCENES[sceneId].viewport ?? geo.viewport;
     const key = JSON.stringify([sceneId, viewport, geo.captureScale, lang, userAgent ?? '']);
     if (!cache.has(key)) {
       const png = await captureScene(browser, {
@@ -60,7 +77,11 @@ function captureCache(browser) {
         device: { viewport, scale: geo.captureScale, touch: device.touch, safe: device.safe },
       });
       const info = pngInfo(png);
-      const file = join(WORK_DIR, 'captures', `${cache.size.toString().padStart(3, '0')}-${sceneId}-${lang}.png`);
+      const file = join(
+        WORK_DIR,
+        'captures',
+        `${cache.size.toString().padStart(3, '0')}-${sceneId}-${lang}.png`,
+      );
       mkdirSync(dirname(file), { recursive: true });
       writeFileSync(file, png);
       cache.set(key, {
@@ -74,14 +95,25 @@ function captureCache(browser) {
 
 /** Screenshots a composed document at its exact size; `transparent` keeps the alpha channel. */
 async function shoot(browser, html, size, out, { transparent = false } = {}) {
-  const doc = join(WORK_DIR, 'docs', relative(OUT_DIR, out).replaceAll('/', '_').replace(/\.png$/, '.html'));
+  const doc = join(
+    WORK_DIR,
+    'docs',
+    relative(OUT_DIR, out)
+      .replaceAll('/', '_')
+      .replace(/\.png$/, '.html'),
+  );
   mkdirSync(dirname(doc), { recursive: true });
   writeFileSync(doc, html);
-  const page = await browser.newPage({ viewport: { width: size.w, height: size.h }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({
+    viewport: { width: size.w, height: size.h },
+    deviceScaleFactor: 1,
+  });
   try {
     await page.goto(pathToFileURL(doc).href);
     await page.evaluate(() => document.fonts.ready);
-    await page.evaluate(() => Promise.all([...document.images].map((img) => img.decode().catch(() => {}))));
+    await page.evaluate(() =>
+      Promise.all([...document.images].map((img) => img.decode().catch(() => {}))),
+    );
     mkdirSync(dirname(out), { recursive: true });
     await page.screenshot({ path: out, omitBackground: transparent });
   } finally {
@@ -96,7 +128,13 @@ async function renderFormat(browser, capture, tokens, formatId, lang, manifest) 
   const format = FORMATS[formatId];
   for (const frame of framesOf(formatId)) {
     const geo = deviceGeometry(format.device, format.region, frame.options);
-    const shot = await capture({ sceneId: frame.scene, device: format.device, geo, lang, userAgent: format.userAgent });
+    const shot = await capture({
+      sceneId: frame.scene,
+      device: format.device,
+      geo,
+      lang,
+      userAgent: format.userAgent,
+    });
     const text = caption(frame.series, lang, frame.captionIndex);
     const html = frameHtml({
       format,
@@ -132,15 +170,34 @@ async function renderFeature(browser, capture, tokens, lang, manifest) {
   const shot = await capture({ sceneId: spec.scene, device: spec.device, geo, lang });
   const text = caption(spec.series, lang, 0);
   const out = join(OUT_DIR, lang, 'android-phone', 'feature-graphic-1024x500.png');
-  const mode = await shoot(browser, featureHtml({ spec, tokens, lang, caption: text, geo, img: shot.url }), spec.size, out);
-  manifest.push({ file: relative(OUT_DIR, out), format: 'google-play-feature', lang, size: '1024x500', caption: text, alt: text, encoding: mode });
+  const mode = await shoot(
+    browser,
+    featureHtml({ spec, tokens, lang, caption: text, geo, img: shot.url }),
+    spec.size,
+    out,
+  );
+  manifest.push({
+    file: relative(OUT_DIR, out),
+    format: 'google-play-feature',
+    lang,
+    size: '1024x500',
+    caption: text,
+    alt: text,
+    encoding: mode,
+  });
   console.log(`  ${relative(OUT_DIR, out)}  (${mode})`);
 }
 
 async function renderHero(browser, capture, tokens, hero, lang) {
   const format = FORMATS[hero.format];
   const geo = deviceGeometry(format.device, { x: 0, y: 0, ...hero.region });
-  const shot = await capture({ sceneId: hero.scene, device: format.device, geo, lang, userAgent: format.userAgent });
+  const shot = await capture({
+    sceneId: hero.scene,
+    device: format.device,
+    geo,
+    lang,
+    userAgent: format.userAgent,
+  });
   const { html, size } = heroHtml({
     tokens,
     lang,
@@ -180,13 +237,18 @@ async function main() {
         console.log(`${lang} · ${formatId}`);
         await renderFormat(browser, capture, tokens, formatId, lang, manifest);
       }
-      if (opts.feature && opts.formats.includes('android-phone')) await renderFeature(browser, capture, tokens, lang, manifest);
+      if (opts.feature && opts.formats.includes('android-phone'))
+        await renderFeature(browser, capture, tokens, lang, manifest);
       writeFileSync(join(OUT_DIR, lang, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
       if (opts.heroes) {
         console.log(`${lang} · heroes`);
         const heroes = [];
-        for (const hero of HEROES) heroes.push(await renderHero(browser, capture, tokens, hero, lang));
-        writeFileSync(join(HERO_DIR, lang, 'manifest.json'), `${JSON.stringify(heroes, null, 2)}\n`);
+        for (const hero of HEROES)
+          heroes.push(await renderHero(browser, capture, tokens, hero, lang));
+        writeFileSync(
+          join(HERO_DIR, lang, 'manifest.json'),
+          `${JSON.stringify(heroes, null, 2)}\n`,
+        );
       }
     }
   } finally {

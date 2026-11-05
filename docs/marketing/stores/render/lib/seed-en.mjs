@@ -159,7 +159,9 @@ export function translateValue(value, map = SEED_EN, key = '') {
   if (typeof value === 'string') return translateString(value, map);
   if (Array.isArray(value)) return value.map((v) => translateValue(v, map, ''));
   if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, translateValue(v, map, k)]));
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, translateValue(v, map, k)]),
+    );
   }
   return value;
 }

@@ -20,7 +20,12 @@ export function parseCaptions(markdown) {
 let cached;
 
 /** Caption `index` of `series` in `lang`; throws when the plan has no such line. */
-export function caption(series, lang, index, plan = (cached ??= parseCaptions(readFileSync(CAPTION_PLAN, 'utf8')))) {
+export function caption(
+  series,
+  lang,
+  index,
+  plan = (cached ??= parseCaptions(readFileSync(CAPTION_PLAN, 'utf8'))),
+) {
   const list = plan[`${series}@${lang}`];
   if (!list) throw new Error(`screenshots.md: no captions.${series}@${lang} block`);
   const text = list[index];

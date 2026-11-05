@@ -35,7 +35,14 @@ export const FORMATS = {
     layout: 'portrait',
     caption: { x: 100, y: 210, w: 1120, eyebrow: 40, size: 124 },
     region: { x: 100, y: 660, w: 1120, h: 2088 },
-    device: { kind: 'phone', logical: { w: 440, h: 956 }, bezel: 24, radius: 150, safe: { top: 54, bottom: 34 }, touch: true },
+    device: {
+      kind: 'phone',
+      logical: { w: 440, h: 956 },
+      bezel: 24,
+      radius: 150,
+      safe: { top: 54, bottom: 34 },
+      touch: true,
+    },
     frames: [
       ['today', 'today'],
       ['capture-nlp', 'capture'],
@@ -53,7 +60,14 @@ export const FORMATS = {
     layout: 'portrait',
     caption: { x: 140, y: 200, w: 1784, eyebrow: 42, size: 128 },
     region: { x: 140, y: 640, w: 1784, h: 1972 },
-    device: { kind: 'tablet', logical: { w: 1032, h: 1376 }, bezel: 30, radius: 80, safe: { top: 24, bottom: 20 }, touch: true },
+    device: {
+      kind: 'tablet',
+      logical: { w: 1032, h: 1376 },
+      bezel: 30,
+      radius: 80,
+      safe: { top: 24, bottom: 20 },
+      touch: true,
+    },
     frames: [
       ['week', 'calendar'],
       ['capture-week', 'capture'],

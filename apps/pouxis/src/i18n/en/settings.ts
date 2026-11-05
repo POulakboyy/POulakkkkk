@@ -171,6 +171,7 @@ export const settings: typeof fr = {
       navSettings: 'Open settings',
       navLab: 'Open the lab',
       noteNew: 'New note',
+      ideasBrainDump: 'Brain dump',
       focusStart: 'Start a focus',
       themeCycle: 'Change theme',
       zenToggle: 'Zen interface',
