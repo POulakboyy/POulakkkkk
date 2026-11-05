@@ -10,9 +10,13 @@ const main = (f) => f.getByRole('main');
 /** hook → (frame) => Locator, using roles and names of the current French build. */
 export const FALLBACKS = {
   'capture-button': (f) =>
-    f.getByRole('navigation', { name: 'Navigation principale' }).getByRole('button', { name: /^Capturer/ }),
+    f
+      .getByRole('navigation', { name: 'Navigation principale' })
+      .getByRole('button', { name: /^Capturer/ }),
   'command-input': (f) =>
-    f.getByRole('dialog', { name: 'Barre de commande' }).getByRole('textbox', { name: /^Capturer, chercher/ }),
+    f
+      .getByRole('dialog', { name: 'Barre de commande' })
+      .getByRole('textbox', { name: /^Capturer, chercher/ }),
   'today-plan-button': (f) => main(f).getByRole('button', { name: 'Planifier ma journée' }),
   'today-timeline': (f) => main(f).getByRole('region', { name: 'Frise de la journée' }),
   'task-checkbox': (f) => main(f).getByRole('checkbox', { checked: false }),
@@ -24,9 +28,10 @@ export const FALLBACKS = {
   'mini-player': (f) => f.getByRole('button', { name: /^Agrandir le lecteur/ }),
   'braindump-open': (f) => main(f).getByRole('button', { name: /^Vider sa tête/ }),
   'braindump-input': (f) => f.getByRole('dialog').getByRole('textbox'),
-  'serendipity-shuffle': (f) => main(f).getByRole('button', { name: /^(Rapprocher deux idées|Nouvelles paires)$/ }),
+  'serendipity-shuffle': (f) =>
+    main(f).getByRole('button', { name: /^(Rapprocher deux idées|Nouvelles paires)$/ }),
   'canvas-surface': (f) => main(f).getByRole('application'),
-  'canvas-node': (f) => main(f).getByRole('button', { name: /^Toile$/ }),
+  'canvas-node': (f) => main(f).getByRole('radio', { name: 'Toile' }),
   'insights-weekly': (f) => main(f).getByRole('region', { name: /^Semaine du/ }),
   'settings-data': (f) => main(f).getByRole('region', { name: 'Données' }),
   'settings-export': (f) => main(f).getByRole('button', { name: 'Exporter mes données' }),
@@ -55,7 +60,9 @@ export async function resolveHook(frame, selector, usage = new Map()) {
   try {
     await loc.first().waitFor({ state: 'visible', timeout: 4000 });
   } catch {
-    throw new Error(`hook "${hook}": no data-demo element and fallback not found in ${frame.url()}`);
+    throw new Error(
+      `hook "${hook}": no data-demo element and fallback not found in ${frame.url()}`,
+    );
   }
   usage.set(hook, 'fallback');
   return loc.first();

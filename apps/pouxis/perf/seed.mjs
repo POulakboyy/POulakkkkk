@@ -22,9 +22,31 @@ export function prng(seed) {
 }
 
 const WORDS = [
-  'plan', 'review', 'draft', 'call', 'design', 'budget', 'roadmap', 'client', 'launch', 'notes',
-  'sprint', 'audit', 'invoice', 'research', 'prototype', 'meeting', 'essay', 'sketch', 'deploy',
-  'interview', 'workshop', 'outline', 'refactor', 'podcast', 'poster',
+  'plan',
+  'review',
+  'draft',
+  'call',
+  'design',
+  'budget',
+  'roadmap',
+  'client',
+  'launch',
+  'notes',
+  'sprint',
+  'audit',
+  'invoice',
+  'research',
+  'prototype',
+  'meeting',
+  'essay',
+  'sketch',
+  'deploy',
+  'interview',
+  'workshop',
+  'outline',
+  'refactor',
+  'podcast',
+  'poster',
 ];
 const TAGS = ['work', 'home', 'deep', 'admin', 'creative', 'health', 'study'];
 // No `doing`: only one task runs at a time in the app.

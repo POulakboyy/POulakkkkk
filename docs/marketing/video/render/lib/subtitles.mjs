@@ -46,11 +46,33 @@ export function toAss(cues, { width, height, ink, paper, font = 'Inter', sizeRat
   const size = Math.round(height * sizeRatio);
   const margin = Math.round(height * 0.045);
   const style = [
-    'Default', font, size, assColour(ink), assColour(ink), assColour(paper, 0x14), assColour(paper, 0x14),
-    0, 0, 0, 0, 100, 100, 0, 0, 3, Math.round(size * 0.32), 0, 2, margin, margin, margin, 1,
+    'Default',
+    font,
+    size,
+    assColour(ink),
+    assColour(ink),
+    assColour(paper, 0x14),
+    assColour(paper, 0x14),
+    0,
+    0,
+    0,
+    0,
+    100,
+    100,
+    0,
+    0,
+    3,
+    Math.round(size * 0.32),
+    0,
+    2,
+    margin,
+    margin,
+    margin,
+    1,
   ].join(',');
   const events = cues.map(
-    (c) => `Dialogue: 0,${assTime(c.start)},${assTime(c.end)},Default,,0,0,0,,${c.text.replaceAll('\n', '\\N')}`,
+    (c) =>
+      `Dialogue: 0,${assTime(c.start)},${assTime(c.end)},Default,,0,0,0,,${c.text.replaceAll('\n', '\\N')}`,
   );
   return [
     '[Script Info]',

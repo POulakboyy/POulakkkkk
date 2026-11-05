@@ -15,7 +15,7 @@ import {
   type MenuItem,
 } from '../ui/index.ts';
 import { useAppPrefs } from './appPrefs.ts';
-import { DeferredCommandBar, loadCommandBar } from './deferred.tsx';
+import { DeferredCommandBar } from './deferred.tsx';
 import { prefetch, prefetchWhenIdle, shouldSaveData } from './prefetch.ts';
 import { navigate, useRoute } from './router.ts';
 import { VIEWS, viewDef, type ViewDef } from './routes.ts';
@@ -109,9 +109,7 @@ export function Shell() {
       </header>
 
       <main id="main" ref={mainRef} className={s.main} tabIndex={-1}>
-        <Suspense fallback={<ViewFallback label={t('common.loading')} />}>
-          {content}
-        </Suspense>
+        <Suspense fallback={<ViewFallback label={t('common.loading')} />}>{content}</Suspense>
       </main>
 
       <FocusMiniPlayer />
@@ -129,13 +127,13 @@ export function Shell() {
 }
 
 /**
- * After the first paint, warms the command bar then every view, one per idle period, so later
- * navigations render from cache. Skipped when the user asked to save data.
+ * After the first paint, warms every view, one per idle period, so later navigations render
+ * from cache. Skipped when the user asked to save data.
  */
 function useIdlePrefetch(): void {
   useEffect(() => {
     if (shouldSaveData()) return;
-    return prefetchWhenIdle([loadCommandBar, ...VIEWS.map((v) => v.preload)]);
+    return prefetchWhenIdle(VIEWS.map((v) => v.preload));
   }, []);
 }
 

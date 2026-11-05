@@ -7,7 +7,15 @@ import { SHOTLIST } from './lib/config.mjs';
 import { DIRECTIONS, directionFor, portableKey } from './lib/directions.mjs';
 import { FALLBACKS, hookName } from './lib/hooks.mjs';
 import {
-  captionTiming, clipPlan, deliverable, frameList, joinGraph, recordWindow, segments, stageGeometry, xfadeKind,
+  captionTiming,
+  clipPlan,
+  deliverable,
+  frameList,
+  joinGraph,
+  recordWindow,
+  segments,
+  stageGeometry,
+  xfadeKind,
 } from './lib/plan.mjs';
 import { cameraTransform, deviceBox, layout, stageHtml } from './lib/stage.mjs';
 import { assColour, assTime, parseSrt, parseSrtTime, toAss } from './lib/subtitles.mjs';
@@ -54,10 +62,16 @@ test('trimmed clips keep their in-point', () => {
 });
 
 test('recordWindow covers pre-roll and the latest out-point', () => {
-  assert.deepEqual(recordWindow([{ fromMs: -500, toMs: 3000 }, { fromMs: 1000, toMs: 6000 }]), {
-    leadMs: 500,
-    untilMs: 6000,
-  });
+  assert.deepEqual(
+    recordWindow([
+      { fromMs: -500, toMs: 3000 },
+      { fromMs: 1000, toMs: 6000 },
+    ]),
+    {
+      leadMs: 500,
+      untilMs: 6000,
+    },
+  );
 });
 
 test('xfadeKind maps transitions and treats zero-length ones as cuts', () => {
@@ -98,11 +112,19 @@ test('frameList holds the last frame before the window and ends on the out-point
 
 test('stage geometry: framed formats at 2x, store formats at native density', () => {
   const hero = stageGeometry(doc.formats.find((f) => f.id === 'hero-16x9'));
-  assert.deepEqual(hero, { css: { width: 1920, height: 1080 }, dsf: 2, out: { width: 1920, height: 1080, fps: 30 } });
+  assert.deepEqual(hero, {
+    css: { width: 1920, height: 1080 },
+    dsf: 2,
+    out: { width: 1920, height: 1080, fps: 30 },
+  });
   const iphone = stageGeometry(doc.formats.find((f) => f.id === 'appstore-iphone'));
   assert.deepEqual(iphone.css, { width: 443, height: 960 });
   assert.equal(iphone.dsf, 2);
-  assert.deepEqual(deliverable(doc.formats.find((f) => f.id === 'hero-16x9')), { width: 1920, height: 1080, fps: 30 });
+  assert.deepEqual(deliverable(doc.formats.find((f) => f.id === 'hero-16x9')), {
+    width: 1920,
+    height: 1080,
+    fps: 30,
+  });
 });
 
 test('camera holds the requested screen point at the frame centre', () => {
@@ -150,7 +172,8 @@ test('stageHtml frames the app, the caption and the camera move', () => {
 });
 
 test('tokens: dark overrides light and keeps the rest', () => {
-  const css = ":root {\n  --bg: #fff;\n  --ink: #000;\n}\n:root[data-theme='dark'],\n.x {\n  --bg: #111;\n}";
+  const css =
+    ":root {\n  --bg: #fff;\n  --ink: #000;\n}\n:root[data-theme='dark'],\n.x {\n  --bg: #111;\n}";
   assert.deepEqual(blockVars(css, ':root'), { '--bg': '#fff', '--ink': '#000' });
   const real = themeTokens();
   assert.notEqual(real.light['--bg'], real.dark['--bg']);
@@ -161,7 +184,9 @@ test('subtitles: SRT round trip into a brand-styled ASS', () => {
   assert.equal(parseSrtTime('00:01:05,432'), 65432);
   assert.equal(assTime(65432), '0:01:05.43');
   assert.equal(assColour('#f6f4ef', 0x14), '&H14EFF4F6');
-  const cues = parseSrt('1\n00:00:00,600 --> 00:00:04,900\nLigne un\nligne deux\n\n2\n00:00:05,000 --> 00:00:06,000\nFin\n');
+  const cues = parseSrt(
+    '1\n00:00:00,600 --> 00:00:04,900\nLigne un\nligne deux\n\n2\n00:00:05,000 --> 00:00:06,000\nFin\n',
+  );
   assert.deepEqual(cues[0], { start: 600, end: 4900, text: 'Ligne un\nligne deux' });
   const ass = toAss(cues, { width: 1920, height: 1080, ink: '#1c1b18', paper: '#f6f4ef' });
   assert.match(ass, /PlayResY: 1080/);

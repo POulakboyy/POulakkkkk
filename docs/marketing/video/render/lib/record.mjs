@@ -50,7 +50,20 @@ function paneFrames(page, count) {
 }
 
 async function waitForApp(frame) {
-  await frame.getByRole('main').getByRole('heading', { level: 1 }).first().waitFor({ timeout: 20_000 });
+  await frame
+    .getByRole('main')
+    .getByRole('heading', { level: 1 })
+    .first()
+    .waitFor({ timeout: 20_000 });
+}
+
+/**
+ * Clicks inside the app frame through the DOM. Playwright's pointer click refuses targets that
+ * the camera has moved outside the stage viewport, which is common in close-ups.
+ */
+async function activate(loc) {
+  await loc.waitFor({ state: 'visible', timeout: 10_000 });
+  await loc.evaluate((el) => el.click());
 }
 
 /** Centre of `loc` in its frame's viewport, for the tap halo. */
@@ -66,24 +79,28 @@ async function centreOf(loc) {
  * time with the standard easing, driven by requestAnimationFrame so slow motion applies to it.
  */
 async function smoothScroll(loc, dy, ms) {
-  await loc.evaluate((el, [delta, duration]) => {
-    let node = el;
-    while (node && node !== document.body) {
-      const style = getComputedStyle(node);
-      if (/(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1) break;
-      node = node.parentElement;
-    }
-    const target = node && node !== document.body ? node : document.scrollingElement;
-    const from = target.scrollTop;
-    const start = performance.now();
-    const ease = (t) => 1 - Math.pow(1 - t, 3);
-    const step = (now) => {
-      const t = Math.min(1, (now - start) / duration);
-      target.scrollTop = from + delta * ease(t);
-      if (t < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [dy, ms]);
+  await loc.evaluate(
+    (el, [delta, duration]) => {
+      let node = el;
+      while (node && node !== document.body) {
+        const style = getComputedStyle(node);
+        if (/(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1)
+          break;
+        node = node.parentElement;
+      }
+      const target = node && node !== document.body ? node : document.scrollingElement;
+      const from = target.scrollTop;
+      const start = performance.now();
+      const ease = (t) => 1 - Math.pow(1 - t, 3);
+      const step = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        target.scrollTop = from + delta * ease(t);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    },
+    [dy, ms],
+  );
 }
 
 /**
@@ -102,10 +119,10 @@ async function runAction(page, pane, action, usage) {
         const { x, y } = await centreOf(loc);
         await page.evaluate(([n, px, py]) => window.__stage.halo(n, px, py), [pane.name, x, y]);
       }
-      return loc.click({ noWaitAfter: true });
+      return activate(loc);
     }
     case 'clickRole':
-      return frame.getByRole('main').getByRole(action.role, { name: action.name }).first().click();
+      return activate(frame.getByRole(action.role, { name: action.name }).first());
     case 'type': {
       const loc = await target();
       const text = action.text[pane.lang] ?? action.text.fr;
@@ -180,7 +197,9 @@ export async function recordScene(browser, job) {
   const slow = job.slow ?? SLOW;
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
-  const isMobileScene = ['iphone', 'android'].includes(scene.device) || (scene.device === 'none' && geo.css.height > geo.css.width);
+  const isMobileScene =
+    ['iphone', 'android'].includes(scene.device) ||
+    (scene.device === 'none' && geo.css.height > geo.css.width);
   const context = await browser.newContext({
     viewport: geo.css,
     deviceScaleFactor: geo.dsf,
@@ -193,7 +212,10 @@ export async function recordScene(browser, job) {
   });
   const usage = new Map();
   try {
-    await prepareContext(context, { theme: scene.theme === 'dark' ? 'dark' : 'light', clock: dir0.clock ?? job.clock });
+    await prepareContext(context, {
+      theme: scene.theme === 'dark' ? 'dark' : 'light',
+      clock: dir0.clock ?? job.clock,
+    });
     const effective = dir0.route ? { ...scene, route: dir0.route } : scene;
     const html = stageHtml({
       scene: effective,
@@ -215,7 +237,12 @@ export async function recordScene(browser, job) {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(`${APP_URL}${STAGE_PATH}`);
-    const panes = await setupPanes(page, effective, { lang, halo: !store, usage, setup: dir0.setup });
+    const panes = await setupPanes(page, effective, {
+      lang,
+      halo: !store,
+      usage,
+      setup: dir0.setup,
+    });
     if (effective.setup?.offline) await context.setOffline(true);
     await page.evaluate(() => document.fonts.ready);
     await sleep(700);
@@ -260,7 +287,8 @@ function direction(scene) {
 
 /** Waits for every app iframe, applies per-pane themes and runs the direction's setup. */
 async function setupPanes(page, scene, { lang, halo, usage, setup }) {
-  const count = scene.kind === 'composite' ? scene.composite.panes.length : scene.kind === 'ui' ? 1 : 0;
+  const count =
+    scene.kind === 'composite' ? scene.composite.panes.length : scene.kind === 'ui' ? 1 : 0;
   const frames = paneFrames(page, count);
   const panes = frames.map((frame, i) => ({ frame, name: `pane-${i}`, lang, halo }));
   for (const [i, pane] of panes.entries()) {

@@ -4,7 +4,10 @@ import { TOKENS_CSS } from './config.mjs';
 
 /** Custom properties declared directly inside the first block whose selector list starts with `selector`. */
 export function blockVars(css, selector) {
-  const start = css.indexOf(`${selector} {`) !== -1 ? css.indexOf(`${selector} {`) : css.indexOf(`${selector},`);
+  const start =
+    css.indexOf(`${selector} {`) !== -1
+      ? css.indexOf(`${selector} {`)
+      : css.indexOf(`${selector},`);
   if (start === -1) return {};
   const open = css.indexOf('{', start);
   const close = css.indexOf('}', open);

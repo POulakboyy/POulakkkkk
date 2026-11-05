@@ -8,17 +8,53 @@ import { cssVars } from './tokens.mjs';
  * bars drawn by the frame (the app gets the remaining height, like a real safe area).
  */
 export const FRAMES = {
-  iphone: { bezel: 14, radius: 64, screenRadius: 50, top: 54, bottom: 0, kind: 'phone', cutout: 'island' },
-  android: { bezel: 12, radius: 46, screenRadius: 36, top: 36, bottom: 0, kind: 'phone', cutout: 'hole' },
-  macbook: { bezel: 18, radius: 22, screenRadius: 8, top: 32, bottom: 0, kind: 'laptop', cutout: 'notch' },
-  'windows-laptop': { bezel: 12, radius: 14, screenRadius: 4, top: 0, bottom: 40, kind: 'laptop', cutout: 'none' },
+  iphone: {
+    bezel: 14,
+    radius: 64,
+    screenRadius: 50,
+    top: 54,
+    bottom: 0,
+    kind: 'phone',
+    cutout: 'island',
+  },
+  android: {
+    bezel: 12,
+    radius: 46,
+    screenRadius: 36,
+    top: 36,
+    bottom: 0,
+    kind: 'phone',
+    cutout: 'hole',
+  },
+  macbook: {
+    bezel: 18,
+    radius: 22,
+    screenRadius: 8,
+    top: 32,
+    bottom: 0,
+    kind: 'laptop',
+    cutout: 'notch',
+  },
+  'windows-laptop': {
+    bezel: 12,
+    radius: 14,
+    screenRadius: 4,
+    top: 0,
+    bottom: 40,
+    kind: 'laptop',
+    cutout: 'none',
+  },
 };
 
 /** Share of the frame height the device screen fills at camera scale 1 (shotlist convention). */
 export const SCREEN_FILL = 0.8;
 
 const esc = (s) =>
-  String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+  String(s)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 
 /**
  * World transform that holds screen point (x, y) (0–1) at the frame centre at camera scale `s`.
@@ -98,7 +134,13 @@ export function layout(scene, frame, devices) {
       const s = Math.min((cellW * 0.86) / box.width, (cellH * 0.86) / box.height);
       const cx = (i % 2) * cellW + cellW / 2;
       const cy = Math.floor(i / 2) * cellH + cellH / 2;
-      return { ...p, viewport: devices[p.device].viewport, scale: s, x: cx - box.width / 2, y: cy - box.height / 2 };
+      return {
+        ...p,
+        viewport: devices[p.device].viewport,
+        scale: s,
+        x: cx - (box.width * s) / 2,
+        y: cy - (box.height * s) / 2,
+      };
     });
     return { placed, box: { left: 0, top: 0, width: frame.width, height: frame.height }, k: 1 };
   }
@@ -110,7 +152,17 @@ export function layout(scene, frame, devices) {
   const k = (frame.height * SCREEN_FILL) / viewport.height;
   // Placed at the world origin; the camera transform positions it.
   return {
-    placed: [{ device: scene.device, route: scene.route, theme: scene.theme, viewport, x: 0, y: 0, scale: 1 }],
+    placed: [
+      {
+        device: scene.device,
+        route: scene.route,
+        theme: scene.theme,
+        viewport,
+        x: 0,
+        y: 0,
+        scale: 1,
+      },
+    ],
     box: { ...box.screen },
     k,
   };
@@ -164,7 +216,7 @@ body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: anti
 @keyframes halo { from { transform: scale(0.55); opacity: 0.9; } to { transform: scale(1.35); opacity: 0; } }
 .caption { position: absolute; font-family: 'Bitstream Charter', 'Charter', Georgia, serif; font-weight: 400; line-height: 1.15;
   letter-spacing: -0.01em; color: var(--ink); opacity: 0; z-index: 10; }
-.cap-lower-third { left: 6%; bottom: 17%; max-width: 46%; padding: 0.32em 0.6em 0.38em; border-radius: 0.36em;
+.cap-lower-third { left: 6%; bottom: 17%; max-width: 70%; text-wrap: balance; padding: 0.32em 0.6em 0.38em; border-radius: 0.36em;
   background: color-mix(in srgb, var(--bg) 94%, transparent); box-shadow: 0 10px 30px -14px rgb(var(--shadow-color) / 0.35); }
 .cap-burned-in { left: 50%; bottom: 7%; max-width: 84%; padding: 0.3em 0.7em 0.36em; border-radius: 0.5em; text-align: center;
   background: color-mix(in srgb, var(--bg) 95%, transparent); box-shadow: 0 10px 30px -14px rgb(var(--shadow-color) / 0.35); translate: -50% 0; }
@@ -237,7 +289,7 @@ export function stageHtml(opts) {
 ${BASE_CSS}
 #world { transform: ${from}; transition: transform ${timing.durationMs}ms ${timing.easing}; }
 </style></head><body>
-<div id="world" data-to="${to}">${devicesHtml}${isCard ? caption : ''}</div>
+<div id="world" data-to="${to}" style="width:${frame.width}px;height:${frame.height}px">${devicesHtml}${isCard ? caption : ''}</div>
 ${bareHtml}${endcard}${isCard ? '' : caption}
 ${opts.disclaimer ? `<div class="disclaimer">${esc(opts.disclaimer)}</div>` : ''}
 <script>${STAGE_JS}</script></body></html>`;

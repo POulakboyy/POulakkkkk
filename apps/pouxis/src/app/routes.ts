@@ -1,4 +1,4 @@
-import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+import { createElement, lazy, useState, type ComponentType } from 'react';
 import type { MessageKey } from '../i18n/index.ts';
 import {
   IconCalendar,
@@ -19,7 +19,8 @@ export interface ViewDef {
   id: NavViewId;
   label: MessageKey;
   icon: ComponentType<{ size?: number }>;
-  component: LazyExoticComponent<ComponentType>;
+  /** Suspends while the chunk loads, unless it was already prefetched. */
+  component: ComponentType;
   /** Fetches and evaluates the view's chunk without rendering it (hover / idle prefetch). */
   preload: () => Promise<unknown>;
   /** Shown in the mobile tab bar (max 4 + the central capture button). */
@@ -30,9 +31,25 @@ export interface ViewDef {
 
 type ViewModule = { default: ComponentType };
 
-/** One loader shared by `lazy()` and prefetching, so both hit the same module request. */
-function split(load: () => Promise<ViewModule>): Pick<ViewDef, 'component' | 'preload'> {
-  return { component: lazy(load), preload: load };
+/**
+ * One loader shared by rendering and prefetching. Once the chunk is in, the view renders
+ * directly: `lazy()` alone suspends on every first render, even for a prefetched chunk, which
+ * flashes the skeleton and makes the navigation's View Transition capture it.
+ */
+export function split(load: () => Promise<ViewModule>): Pick<ViewDef, 'component' | 'preload'> {
+  let loaded: ComponentType | null = null;
+  const preload = () =>
+    load().then((mod) => {
+      loaded = mod.default;
+      return mod;
+    });
+  const Lazy = lazy(preload);
+  function SplitView() {
+    // Fixed per mount: switching from `Lazy` to the module later would remount the view.
+    const [View] = useState<ComponentType>(() => loaded ?? Lazy);
+    return createElement(View);
+  }
+  return { component: SplitView, preload };
 }
 
 /** Views are code-split: each one loads on first visit, or earlier when prefetched. */

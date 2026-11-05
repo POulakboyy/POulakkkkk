@@ -37,7 +37,10 @@ const SERENDIPITY = {
 /** The map in Plan (outline) view first; switching to Toile turns the list into a map. */
 const CANVAS = {
   why: 'La toile est un <canvas> sans nœud DOM : on part de la vue « Plan » (liste) et on bascule sur « Toile » (carte), ce que décrit la voix off ; le zoom passe par le clavier (+).',
-  setup: [{ type: 'clickRole', role: 'button', name: /^Plan$/ }, { type: 'wait', durationMs: 700 }],
+  setup: [
+    { type: 'clickRole', role: 'radio', name: 'Plan' },
+    { type: 'wait', durationMs: 700 },
+  ],
   /** Same beats, swapped order: switch to the map first, then zoom into it. */
   actions: (original) => {
     const [first, second] = [...original].sort((a, b) => a.at - b.at);

@@ -10,8 +10,8 @@ import './design/motion.css';
 const root = document.getElementById('root');
 if (!root) throw new Error('#root element missing');
 
-// Perf builds only (`VITE_POUXIS_PERF=1`, docs/performance/UI.md): the stress test seeds data through
-// the real store. The branch is removed from regular builds.
+// Perf builds only (`VITE_POUXIS_PERF=1`, docs/performance/UI.md): the stress test seeds data
+// through the real store. The branch is removed from regular builds.
 if (import.meta.env.VITE_POUXIS_PERF === '1') {
   (globalThis as { __pouxis?: unknown }).__pouxis = { store };
 }

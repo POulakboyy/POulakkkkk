@@ -45,11 +45,17 @@ function installObservers() {
   const perf = { longTasks: [], events: [] };
   globalThis.__perf = perf;
   new PerformanceObserver((list) => {
-    for (const e of list.getEntries()) perf.longTasks.push({ start: e.startTime, duration: e.duration });
+    for (const e of list.getEntries())
+      perf.longTasks.push({ start: e.startTime, duration: e.duration });
   }).observe({ type: 'longtask', buffered: true });
   new PerformanceObserver((list) => {
     for (const e of list.getEntries()) {
-      perf.events.push({ name: e.name, start: e.startTime, duration: e.duration, id: e.interactionId });
+      perf.events.push({
+        name: e.name,
+        start: e.startTime,
+        duration: e.duration,
+        id: e.interactionId,
+      });
     }
   }).observe({ type: 'event', durationThreshold: 16, buffered: true });
 }
@@ -118,7 +124,11 @@ function markScroller() {
   }
   best.setAttribute('data-perf-scroller', '');
   const r = best.getBoundingClientRect();
-  return { overflow: bestOverflow, x: r.left + r.width / 2, y: r.top + Math.min(r.height, 600) / 2 };
+  return {
+    overflow: bestOverflow,
+    x: r.left + r.width / 2,
+    y: r.top + Math.min(r.height, 600) / 2,
+  };
 }
 
 async function sampleFrames(page, action) {
@@ -138,7 +148,9 @@ async function scrollFps(page) {
       await page.waitForTimeout(30);
     }
   });
-  await page.evaluate(() => document.querySelector('[data-perf-scroller]')?.removeAttribute('data-perf-scroller'));
+  await page.evaluate(() =>
+    document.querySelector('[data-perf-scroller]')?.removeAttribute('data-perf-scroller'),
+  );
   return result;
 }
 
@@ -146,7 +158,10 @@ async function drag(page, from, to, button, steps = 60) {
   await page.mouse.move(from.x, from.y);
   await page.mouse.down({ button });
   for (let i = 1; i <= steps; i++) {
-    await page.mouse.move(from.x + ((to.x - from.x) * i) / steps, from.y + ((to.y - from.y) * i) / steps);
+    await page.mouse.move(
+      from.x + ((to.x - from.x) * i) / steps,
+      from.y + ((to.y - from.y) * i) / steps,
+    );
     await page.waitForTimeout(16);
   }
   await page.mouse.up({ button });
@@ -237,9 +252,12 @@ async function main() {
   );
 
   for (const view of VIEWS) {
+    // Every visit starts from the same light view, so one view's teardown never counts
+    // against the next. The second visit measures rendering with the chunk cached.
+    const from = view === 'today' ? 'settings' : 'today';
+    await page.evaluate(navigateAndTime, from);
     const nav = await page.evaluate(navigateAndTime, view);
-    // Second visit: chunk cached, measures render cost alone.
-    await page.evaluate(navigateAndTime, view === 'today' ? 'settings' : 'today');
+    await page.evaluate(navigateAndTime, from);
     const warm = await page.evaluate(navigateAndTime, view);
     const entry = { ...nav, warmTti: warm.tti, warmLongTaskMs: warm.longTaskMs };
     entry.scroll = await scrollFps(page);
@@ -262,7 +280,14 @@ async function main() {
 
   report.errors = errors;
   if (opts.out) writeFileSync(opts.out, `${JSON.stringify(report, null, 2)}\n`);
-  console.log(JSON.stringify({ seedMs: report.seedMs, bootWithDataMs: report.bootWithDataMs, heapEmptyMb: report.heapEmptyMb, errors: errors.slice(0, 5) }));
+  console.log(
+    JSON.stringify({
+      seedMs: report.seedMs,
+      bootWithDataMs: report.bootWithDataMs,
+      heapEmptyMb: report.heapEmptyMb,
+      errors: errors.slice(0, 5),
+    }),
+  );
   await browser.close();
 }
 

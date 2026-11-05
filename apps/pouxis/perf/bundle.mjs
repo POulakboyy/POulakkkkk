@@ -135,14 +135,19 @@ function main() {
   } else {
     for (const c of chunks.sort((a, b) => b.gzip - a.gzip)) {
       const tag = c.initial ? 'INITIAL' : 'lazy   ';
-      console.log(`${tag} ${c.file.padEnd(48)} ${kb(c.bytes).padStart(10)} ${kb(c.gzip).padStart(9)} gz`);
+      console.log(
+        `${tag} ${c.file.padEnd(48)} ${kb(c.bytes).padStart(10)} ${kb(c.gzip).padStart(9)} gz`,
+      );
       if (c.initial && c.areas) {
         for (const [area, n] of c.areas.slice(0, top)) {
           console.log(`          ${area.padEnd(46)} ${kb(n).padStart(10)}`);
         }
       }
     }
-    console.log('\nTotals (gzip):', Object.fromEntries(Object.entries(totals).map(([k, v]) => [k, kb(v)])));
+    console.log(
+      '\nTotals (gzip):',
+      Object.fromEntries(Object.entries(totals).map(([k, v]) => [k, kb(v)])),
+    );
   }
 
   const failures = Object.entries(budget)

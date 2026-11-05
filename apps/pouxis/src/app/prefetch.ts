@@ -51,7 +51,9 @@ export function defaultIdleScheduler(): IdleScheduler {
 export function shouldSaveData(nav: unknown = globalThis.navigator): boolean {
   const connection = (nav as { connection?: { saveData?: boolean; effectiveType?: string } })
     ?.connection;
-  return !!connection && (connection.saveData === true || /2g/.test(connection.effectiveType ?? ''));
+  return (
+    !!connection && (connection.saveData === true || /2g/.test(connection.effectiveType ?? ''))
+  );
 }
 
 /**

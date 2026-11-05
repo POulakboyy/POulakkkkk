@@ -45,7 +45,11 @@ export function clipPlan(doc, formatId) {
     const last = i === format.sequence.length - 1;
     const outgoing = last ? null : scene.transition;
     const outKind = xfadeKind(outgoing);
-    const preMs = incoming ? (incoming.kind === 'paper' ? incoming.durationMs / 2 : incoming.durationMs) : 0;
+    const preMs = incoming
+      ? incoming.kind === 'paper'
+        ? incoming.durationMs / 2
+        : incoming.durationMs
+      : 0;
     const cutMs = outKind === 'paper' ? outgoing.durationMs / 2 : 0;
     const clip = {
       index: i,
@@ -59,7 +63,9 @@ export function clipPlan(doc, formatId) {
       fromMs: inMs - preMs,
       toMs: inMs + item.durationMs - cutMs,
       transitionIn: incoming,
-      transitionOut: outKind ? { kind: outKind, durationMs: outgoing.durationMs, type: outgoing.type } : null,
+      transitionOut: outKind
+        ? { kind: outKind, durationMs: outgoing.durationMs, type: outgoing.type }
+        : null,
     };
     incoming = clip.transitionOut;
     startMs += item.durationMs;
@@ -88,10 +94,21 @@ export function segments(plan) {
     const tIn = c.transitionIn;
     if (tIn?.kind === 'paper') {
       // Paper sits over [T − D, T]: A blends into it over D/2, it blends into B over D/2.
-      out.push({ type: 'paper', lengthMs: tIn.durationMs, join: { kind: 'fade', durationMs: tIn.durationMs / 2 } });
-      out.push({ type: 'clip', clip: c, lengthMs: c.toMs - c.fromMs, join: { kind: 'fade', durationMs: tIn.durationMs / 2 } });
+      out.push({
+        type: 'paper',
+        lengthMs: tIn.durationMs,
+        join: { kind: 'fade', durationMs: tIn.durationMs / 2 },
+      });
+      out.push({
+        type: 'clip',
+        clip: c,
+        lengthMs: c.toMs - c.fromMs,
+        join: { kind: 'fade', durationMs: tIn.durationMs / 2 },
+      });
     } else {
-      const join = tIn ? { kind: tIn.kind, durationMs: tIn.durationMs } : { kind: 'cut', durationMs: 0 };
+      const join = tIn
+        ? { kind: tIn.kind, durationMs: tIn.durationMs }
+        : { kind: 'cut', durationMs: 0 };
       out.push({ type: 'clip', clip: c, lengthMs: c.toMs - c.fromMs, join });
     }
   }
@@ -106,7 +123,9 @@ export function segments(plan) {
 export function joinGraph(segs, { fps }) {
   const parts = [];
   for (let i = 0; i < segs.length; i += 1) {
-    parts.push(`[${i}:v]settb=1/${fps * 1000},fps=${fps},format=yuv420p,setpts=PTS-STARTPTS[s${i}]`);
+    parts.push(
+      `[${i}:v]settb=1/${fps * 1000},fps=${fps},format=yuv420p,setpts=PTS-STARTPTS[s${i}]`,
+    );
   }
   let label = 's0';
   let lengthMs = segs[0].lengthMs;
@@ -118,7 +137,9 @@ export function joinGraph(segs, { fps }) {
       lengthMs += segs[i].lengthMs;
     } else {
       const offset = lengthMs - durationMs;
-      parts.push(`[${label}][s${i}]xfade=transition=${kind}:duration=${sec(durationMs)}:offset=${sec(offset)}[${next}]`);
+      parts.push(
+        `[${label}][s${i}]xfade=transition=${kind}:duration=${sec(durationMs)}:offset=${sec(offset)}[${next}]`,
+      );
       lengthMs += segs[i].lengthMs - durationMs;
     }
     label = next;
@@ -131,7 +152,10 @@ export function joinGraph(segs, { fps }) {
  * `frames`: [{ file, t }] sorted by t (ms, scene time). The last frame before `fromMs` opens the clip.
  */
 export function frameList(frames, fromMs, toMs) {
-  const firstIdx = Math.max(0, frames.findLastIndex((f) => f.t <= fromMs));
+  const firstIdx = Math.max(
+    0,
+    frames.findLastIndex((f) => f.t <= fromMs),
+  );
   const picked = frames.slice(firstIdx).filter((f, i) => i === 0 || (f.t > fromMs && f.t < toMs));
   if (picked.length === 0) throw new Error('no frames in window');
   const lines = ['ffconcat version 1.0'];

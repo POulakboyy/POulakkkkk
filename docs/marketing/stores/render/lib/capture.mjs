@@ -24,7 +24,9 @@ function initScript({ key, prefs, safe }) {
   *, *::before, *::after { caret-color: transparent !important; }
   /* The skip link's off-screen offset ignores --safe-top, so it peeks out under a notch
      (reported to the shell owner); hide it while it is not focused. */
-  a[href="#main"]:not(:focus-visible) { visibility: hidden !important; }`;
+  a[href="#main"]:not(:focus-visible) { visibility: hidden !important; }
+  /* Dev-server-only render statistics of the canvas (absent from release builds). */
+  [class*="devStats"] { display: none !important; }`;
   document.addEventListener('DOMContentLoaded', () => document.head.append(style));
 }
 
@@ -91,7 +93,10 @@ export async function captureScene(browser, { sceneId, device, lang, theme = 'li
     await waitForApp(page, Boolean(scene.bare));
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
-    if (scene.run) await scene.run(page, { t, lang });
+    if (scene.run) {
+      const mod = userAgent?.includes('Macintosh') ? 'Meta' : 'Control';
+      await scene.run(page, { t, lang, mod });
+    }
     await page.mouse.move(-10, -10);
     // Route changes focus the skip link; a screenshot shows the app at rest, not mid-tab.
     await page.evaluate(() => {

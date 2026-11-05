@@ -11,9 +11,26 @@ import { spawn } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
-import { encodeClip, encodePaper, encodeProgramme, posterFrame, probe } from './lib/assemble.mjs';
 import {
-  APP_URL, MAX_BYTES, OUT_DIR, OUTPUTS, PORT, REPO_DIR, SHOTLIST, STORE_FORMATS, VIDEO_DIR, WORK_DIR, chromiumPath,
+  contactSheet,
+  encodeClip,
+  encodePaper,
+  encodeProgramme,
+  posterFrame,
+  probe,
+} from './lib/assemble.mjs';
+import {
+  APP_URL,
+  MAX_BYTES,
+  OUT_DIR,
+  OUTPUTS,
+  PORT,
+  REPO_DIR,
+  SHOTLIST,
+  STORE_FORMATS,
+  VIDEO_DIR,
+  WORK_DIR,
+  chromiumPath,
 } from './lib/config.mjs';
 import { directionFor } from './lib/directions.mjs';
 import { captionTiming, clipPlan, recordWindow, segments, stageGeometry } from './lib/plan.mjs';
@@ -40,6 +57,7 @@ function args(argv) {
     lang: get('--lang') ?? 'fr',
     keep: argv.includes('--keep'),
     checkHooks: argv.includes('--check-hooks'),
+    scenes: get('--scenes')?.split(','),
   };
 }
 
@@ -81,7 +99,10 @@ function endcardFor(scene, lang) {
 /** Films every scene a format needs (once per scene, covering all its clips). */
 async function filmFormat(browser, doc, plan, ctx) {
   const geo = stageGeometry(plan.format);
-  const byScene = Map.groupBy(plan.clips, (c) => c.sceneId);
+  const byScene = Map.groupBy(
+    plan.clips.filter((c) => !ctx.scenes || ctx.scenes.includes(c.sceneId)),
+    (c) => c.sceneId,
+  );
   const recordings = new Map();
   for (const [sceneId, clips] of byScene) {
     const scene = clips[0].scene;
@@ -96,7 +117,11 @@ async function filmFormat(browser, doc, plan, ctx) {
       window: win,
       dir: join(ctx.work, plan.format.id, sceneId),
       captionStyle: captionStyle(plan.format),
-      timing: { durationMs: scene.durationMs, easing: doc.easings[scene.camera.easing], ...captionTiming(clips[0]) },
+      timing: {
+        durationMs: scene.durationMs,
+        easing: doc.easings[scene.camera.easing],
+        ...captionTiming(clips[0]),
+      },
       clock: doc.fixtures.clock.now,
       store: STORE_FORMATS.has(plan.format.id),
       disclaimer: doc.fixtures.disclaimer[ctx.lang],
@@ -104,9 +129,23 @@ async function filmFormat(browser, doc, plan, ctx) {
     });
     for (const [hook, how] of rec.usage) ctx.hooks.set(hook, how);
     recordings.set(sceneId, rec.frames);
-    console.log(`  ✓ ${sceneId}: ${rec.frames.length} frames (${((Date.now() - t) / 1000).toFixed(0)} s)`);
+    console.log(
+      `  ✓ ${sceneId}: ${rec.frames.length} frames (${((Date.now() - t) / 1000).toFixed(0)} s)`,
+    );
   }
   return { geo, recordings };
+}
+
+/** --scenes: film only those scenes and write a contact sheet of each, without assembling. */
+async function previewFormat(browser, doc, formatId, ctx) {
+  const plan = clipPlan(doc, formatId);
+  const { recordings } = await filmFormat(browser, doc, plan, ctx);
+  for (const [sceneId, frames] of recordings) {
+    const clip = plan.clips.find((c) => c.sceneId === sceneId);
+    const sheet = join(ctx.work, formatId, `${sceneId}.sheet.jpg`);
+    contactSheet(frames, clip, sheet);
+    console.log(`  → ${sheet}`);
+  }
 }
 
 async function renderFormat(browser, doc, formatId, ctx) {
@@ -120,7 +159,14 @@ async function renderFormat(browser, doc, formatId, ctx) {
   const files = segs.map((seg, i) => {
     const file = join(dir, `seg-${String(i).padStart(2, '0')}.mp4`);
     if (seg.type === 'paper') encodePaper(ctx.tokens.light['--bg'], seg.lengthMs, file, out);
-    else encodeClip(recordings.get(seg.clip.sceneId), seg.clip, file, out, join(dir, `seg-${i}.ffconcat`));
+    else
+      encodeClip(
+        recordings.get(seg.clip.sceneId),
+        seg.clip,
+        file,
+        out,
+        join(dir, `seg-${i}.ffconcat`),
+      );
     return file;
   });
   const srt = join(VIDEO_DIR, 'subtitles', `${formatId}.${ctx.lang}.srt`);
@@ -128,14 +174,26 @@ async function renderFormat(browser, doc, formatId, ctx) {
   if (plan.format.captions === 'lower-third' && existsSync(srt)) {
     assPath = join(dir, 'subtitles.ass');
     const light = ctx.tokens.light;
-    writeFileSync(assPath, toAss(parseSrt(readFileSync(srt, 'utf8')), { ...out, ink: light['--ink'], paper: light['--bg'] }));
+    writeFileSync(
+      assPath,
+      toAss(parseSrt(readFileSync(srt, 'utf8')), {
+        ...out,
+        ink: light['--ink'],
+        paper: light['--bg'],
+      }),
+    );
   }
   const video = join(OUT_DIR, `${base}.mp4`);
   encodeProgramme(segs, files, video, { fps: out.fps, assPath });
-  posterFrame(video, plan.format.posterFrameMs ?? POSTER_MS[formatId] ?? 5000, join(OUT_DIR, `${base}.poster.png`));
+  posterFrame(
+    video,
+    plan.format.posterFrameMs ?? POSTER_MS[formatId] ?? 5000,
+    join(OUT_DIR, `${base}.poster.png`),
+  );
   for (const lang of ['fr', 'en']) {
     const file = join(VIDEO_DIR, 'subtitles', `${formatId}.${lang}.srt`);
-    if (plan.format.voScenes.length && existsSync(file)) copyFileSync(file, join(OUT_DIR, `${base}.${lang}.srt`));
+    if (plan.format.voScenes.length && existsSync(file))
+      copyFileSync(file, join(OUT_DIR, `${base}.${lang}.srt`));
   }
   return check(formatId, video, plan, out);
 }
@@ -144,13 +202,23 @@ async function renderFormat(browser, doc, formatId, ctx) {
 function check(formatId, video, plan, out) {
   const p = probe(video);
   const problems = [];
-  if (Math.abs(p.durationS * 1000 - plan.totalMs) > 100) problems.push(`duration ${p.durationS} s ≠ ${plan.totalMs / 1000} s`);
-  if (p.width !== out.width || p.height !== out.height) problems.push(`size ${p.width}×${p.height} ≠ ${out.width}×${out.height}`);
+  if (Math.abs(p.durationS * 1000 - plan.totalMs) > 100)
+    problems.push(`duration ${p.durationS} s ≠ ${plan.totalMs / 1000} s`);
+  if (p.width !== out.width || p.height !== out.height)
+    problems.push(`size ${p.width}×${p.height} ≠ ${out.width}×${out.height}`);
   if (p.fps !== out.fps) problems.push(`fps ${p.fps} ≠ ${out.fps}`);
   if (p.bytes > MAX_BYTES) problems.push(`${(p.bytes / 1e6).toFixed(1)} MB > 25 MB`);
   const line = `${p.width}×${p.height} · ${p.durationS} s · ${p.fps} i/s · ${(p.bytes / 1e6).toFixed(1)} Mo`;
-  console.log(`  ${problems.length ? '✗' : '✓'} ${formatId}: ${line}${problems.length ? ` — ${problems.join('; ')}` : ''}`);
-  return { format: formatId, file: video.slice(REPO_DIR.length + 1), ...p, expectedS: plan.totalMs / 1000, problems };
+  console.log(
+    `  ${problems.length ? '✗' : '✓'} ${formatId}: ${line}${problems.length ? ` — ${problems.join('; ')}` : ''}`,
+  );
+  return {
+    format: formatId,
+    file: video.slice(REPO_DIR.length + 1),
+    ...p,
+    expectedS: plan.totalMs / 1000,
+    problems,
+  };
 }
 
 /** Opens each scene's route and resolves every hook its actions use (no recording). */
@@ -158,8 +226,11 @@ async function checkHooks(browser, doc, ctx) {
   let failures = 0;
   for (const format of doc.formats.filter((f) => OUTPUTS[f.id])) {
     const plan = clipPlan(doc, format.id);
-    for (const clip of plan.clips.filter((c, i, a) => a.findIndex((x) => x.sceneId === c.sceneId) === i)) {
+    for (const clip of plan.clips.filter(
+      (c, i, a) => a.findIndex((x) => x.sceneId === c.sceneId) === i,
+    )) {
       if (!['ui', 'composite'].includes(clip.scene.kind)) continue;
+      if (ctx.scenes && !ctx.scenes.includes(clip.sceneId)) continue;
       try {
         const rec = await recordScene(browser, {
           scene: clip.scene,
@@ -177,7 +248,9 @@ async function checkHooks(browser, doc, ctx) {
           disclaimer: '',
           endcard: null,
         });
-        console.log(`  ✓ ${format.id}/${clip.sceneId} ${[...rec.usage].map(([h, w]) => `${h}:${w}`).join(' ')}`);
+        console.log(
+          `  ✓ ${format.id}/${clip.sceneId} ${[...rec.usage].map(([h, w]) => `${h}:${w}`).join(' ')}`,
+        );
       } catch (error) {
         failures += 1;
         console.error(`  ✗ ${format.id}/${clip.sceneId}: ${error.message.split('\n')[0]}`);
@@ -197,11 +270,21 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   const stopServer = await ensureServer();
   const browser = await chromium.launch({ executablePath: chromiumPath() });
-  const ctx = { tokens: themeTokens(), lang: opts.lang, work: WORK_DIR, hooks: new Map() };
+  const ctx = {
+    tokens: themeTokens(),
+    lang: opts.lang,
+    work: WORK_DIR,
+    hooks: new Map(),
+    scenes: opts.scenes,
+  };
   try {
     if (opts.checkHooks) {
       const failures = await checkHooks(browser, doc, ctx);
       process.exitCode = failures ? 1 : 0;
+      return;
+    }
+    if (opts.scenes) {
+      for (const id of opts.formats) await previewFormat(browser, doc, id, ctx);
       return;
     }
     const results = [];
@@ -211,7 +294,8 @@ async function main() {
   } finally {
     await browser.close();
     stopServer();
-    if (!opts.keep && !opts.checkHooks) rmSync(WORK_DIR, { recursive: true, force: true });
+    if (!opts.keep && !opts.checkHooks && !opts.scenes)
+      rmSync(WORK_DIR, { recursive: true, force: true });
   }
 }
 
@@ -219,7 +303,8 @@ async function main() {
 function writeLog(results, ctx, doc, opts) {
   const path = join(OUT_DIR, 'render-log.json');
   const previous = existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : { formats: {} };
-  for (const r of results) previous.formats[r.format] = { ...r, renderedAt: new Date().toISOString(), lang: opts.lang };
+  for (const r of results)
+    previous.formats[r.format] = { ...r, renderedAt: new Date().toISOString(), lang: opts.lang };
   previous.hooks = { ...previous.hooks, ...Object.fromEntries(ctx.hooks) };
   previous.directions = Object.fromEntries(
     doc.scenes.filter((s) => directionFor(s.id).why).map((s) => [s.id, directionFor(s.id).why]),
