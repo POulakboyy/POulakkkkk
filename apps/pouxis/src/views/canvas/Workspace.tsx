@@ -350,7 +350,7 @@ export function CanvasWorkspace({ graph, graphs }: { graph: Graph; graphs: reado
         const tree = parseTreeText(raw);
         if (tree) importTree(ctxRef.current, tree, at);
       } catch {
-        toast({ title: t('canvas.export.failed'), tone: 'danger' });
+        toast({ title: t('canvas.import.failed'), tone: 'danger' });
       }
     };
     if (text) handle(text);
@@ -360,7 +360,12 @@ export function CanvasWorkspace({ graph, graphs }: { graph: Graph; graphs: reado
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {
       if (document.activeElement !== controller?.canvas) return;
-      const tree = parseTreeText(e.clipboardData?.getData('text/plain') ?? '');
+      let tree: ReturnType<typeof parseTreeText> = null;
+      try {
+        tree = parseTreeText(e.clipboardData?.getData('text/plain') ?? '');
+      } catch {
+        // Malformed OPML: let the paste fall through untouched.
+      }
       if (!tree) return;
       e.preventDefault();
       importTree(ctxRef.current, tree, viewCenter());
@@ -505,6 +510,7 @@ export function CanvasWorkspace({ graph, graphs }: { graph: Graph; graphs: reado
               count: graph.nodes.length,
             })}
             describedBy={HELP_ID}
+            roleDescription={t('canvas.view.roleDescription')}
             onReady={setController}
             onTheme={(next) => setTheme((prev) => (sameTheme(prev, next) ? prev : next))}
             onKeyDown={onKeyDown}

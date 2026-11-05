@@ -17,6 +17,7 @@ export interface CanvasStageProps {
   dueLabel: (ts: number) => string;
   label: string;
   describedBy: string;
+  roleDescription: string;
   onReady: (controller: CanvasController | null) => void;
   onTheme: (theme: CanvasTheme) => void;
   onKeyDown: (e: ReactKeyboardEvent<HTMLCanvasElement>) => void;
@@ -115,7 +116,7 @@ export function CanvasStage(props: CanvasStageProps) {
       data-tool={props.tool}
       tabIndex={0}
       role="application"
-      aria-roledescription="canvas"
+      aria-roledescription={props.roleDescription}
       aria-label={props.label}
       aria-describedby={props.describedBy}
       onKeyDown={props.onKeyDown}

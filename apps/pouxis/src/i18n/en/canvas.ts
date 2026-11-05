@@ -99,6 +99,7 @@ export const canvas: typeof fr = {
     zoomLevel: 'Zoom {percent}',
     fit: 'Fit to screen',
     minimap: 'Minimap',
+    roleDescription: 'canvas',
     minimapA11y: 'Minimap: tap a point to move the view there',
     canvasA11y: 'Canvas “{title}”, {count, plural, one {# node} other {# nodes}}',
     keyboardHelp:
@@ -133,6 +134,7 @@ export const canvas: typeof fr = {
     tasksDone:
       '{count, plural, one {# task turned into a tree} other {# tasks turned into a tree}}',
     noTasks: 'No tasks to turn into a tree yet.',
+    failed: 'This content could not be read. Drop a Markdown list or an OPML file.',
     pasted: '{count, plural, one {# node created from text} other {# nodes created from text}}',
     dropHint: 'Drop a list or an OPML file to turn it into a tree',
   },

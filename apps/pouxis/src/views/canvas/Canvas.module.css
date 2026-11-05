@@ -929,6 +929,7 @@
   .barButton,
   .tool,
   .paletteSwatch,
+  .pillGhost,
   .swatch::before,
   .presenterDots > span,
   .outlineToggle {

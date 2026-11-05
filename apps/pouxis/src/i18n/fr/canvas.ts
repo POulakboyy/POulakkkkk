@@ -103,6 +103,7 @@ export const canvas = {
     zoomLevel: 'Zoom {percent}',
     fit: 'Tout afficher',
     minimap: 'Mini-carte',
+    roleDescription: 'toile',
     minimapA11y: 'Mini-carte : touchez un point pour y déplacer la vue',
     canvasA11y: 'Toile « {title} », {count, plural, one {# nœud} other {# nœuds}}',
     keyboardHelp:
@@ -137,6 +138,7 @@ export const canvas = {
     tasksDone:
       '{count, plural, one {# tâche transformée en arbre} other {# tâches transformées en arbre}}',
     noTasks: 'Aucune tâche à transformer pour l’instant.',
+    failed: 'Ce contenu n’a pas pu être lu. Déposez une liste Markdown ou un fichier OPML.',
     pasted:
       '{count, plural, one {# nœud créé depuis le texte} other {# nœuds créés depuis le texte}}',
     dropHint: 'Déposez une liste ou un fichier OPML pour en faire un arbre',
