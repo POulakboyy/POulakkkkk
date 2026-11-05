@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+} from 'react';
 import type { Locale, WorkingHours } from '@pouxis/core';
 import { setAppPrefs, useAppPrefs, type Chronotype } from '../../app/appPrefs.ts';
 import { LOCALES, useT, type MessageKey } from '../../i18n/index.ts';
@@ -57,10 +65,8 @@ export function Onboarding({ onDone }: OnboardingProps) {
     <div className={s.root} role="region" aria-label={t('onboarding.a11y')}>
       <header className={s.top}>
         <span className={s.logo} aria-hidden="true" />
-        <ol
-          className={s.dots}
-          aria-label={t('onboarding.progress', { current: index + 1, total: STEPS.length })}
-        >
+        {/* Decorative: the eyebrow above the title already says « Étape n sur 4 ». */}
+        <ol className={s.dots} aria-hidden="true">
           {STEPS.map((id, i) => (
             <li
               key={id}
@@ -237,9 +243,29 @@ const RHYTHMS: {
   { value: null, label: 'onboarding.rhythm.unsure', icon: null },
 ];
 
+const RADIO_KEYS: Record<string, number> = {
+  ArrowDown: 1,
+  ArrowRight: 1,
+  ArrowUp: -1,
+  ArrowLeft: -1,
+};
+
 function Rhythm({ heading }: ScreenProps) {
   const t = useT();
   const { chronotype } = useAppPrefs();
+  const selected = RHYTHMS.findIndex((r) => r.value === chronotype);
+  // Roving tab stop (APG radio group): one Tab enters the group, arrows move and select.
+  const focusable = Math.max(0, selected);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const step = RADIO_KEYS[e.key];
+    if (step === undefined) return;
+    e.preventDefault();
+    const next = (focusable + step + RHYTHMS.length) % RHYTHMS.length;
+    setAppPrefs({ chronotype: RHYTHMS[next]!.value });
+    e.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]')[next]?.focus();
+  };
+
   return (
     <>
       <Title
@@ -247,8 +273,13 @@ function Rhythm({ heading }: ScreenProps) {
         title={t('onboarding.rhythm.title')}
         body={t('onboarding.rhythm.body')}
       />
-      <div role="radiogroup" aria-label={t('onboarding.rhythm.title')} className={s.choices}>
-        {RHYTHMS.map((r) => {
+      <div
+        role="radiogroup"
+        aria-label={t('onboarding.rhythm.title')}
+        className={s.choices}
+        onKeyDown={onKeyDown}
+      >
+        {RHYTHMS.map((r, i) => {
           const checked = chronotype === r.value;
           return (
             <button
@@ -256,6 +287,7 @@ function Rhythm({ heading }: ScreenProps) {
               type="button"
               role="radio"
               aria-checked={checked}
+              tabIndex={i === focusable ? 0 : -1}
               className={cx(s.choice, r.value === null && s.choiceQuiet)}
               onClick={() => setAppPrefs({ chronotype: r.value })}
             >

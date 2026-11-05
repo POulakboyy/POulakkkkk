@@ -65,6 +65,24 @@ describe('Onboarding', () => {
     expect(store.prefs().workingHours.end).toBe(18 * 60);
   });
 
+  it('moves through the rhythm choices with the arrow keys, one tab stop for the group', async () => {
+    const user = userEvent.setup();
+    render(<Onboarding onDone={() => {}} />);
+    await user.click(screen.getByRole('button', { name: 'Commencer' }));
+    await user.click(screen.getByRole('button', { name: 'Suivant' }));
+    const radios = screen.getAllByRole('radio');
+    expect(radios.filter((r) => r.tabIndex === 0)).toHaveLength(1);
+
+    const start = radios.findIndex((r) => r.tabIndex === 0);
+    radios[start]!.focus();
+    await user.keyboard('{ArrowDown}');
+    const next = (start + 1) % radios.length;
+    expect(document.activeElement).toBe(radios[next]);
+    expect(radios[next]!.getAttribute('aria-checked')).toBe('true');
+    await user.keyboard('{ArrowUp}');
+    expect(document.activeElement).toBe(radios[start]);
+  });
+
   it('can be skipped at any time', async () => {
     const user = userEvent.setup();
     const onDone = vi.fn();

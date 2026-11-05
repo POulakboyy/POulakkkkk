@@ -332,7 +332,11 @@
     padding-top: var(--space-4);
   }
 
+  /* Keeps the next step reachable when a screen is taller than the viewport (step 4 at 390×844). */
   .actions {
-    padding-bottom: var(--space-5);
+    position: sticky;
+    bottom: 0;
+    padding-bottom: max(var(--space-5), var(--safe-bottom));
+    background: linear-gradient(to bottom, transparent, var(--bg) var(--space-5));
   }
 }
