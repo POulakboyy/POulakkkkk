@@ -166,14 +166,15 @@ Et une autre étude, plus ancienne, de Phillippa Lally et son équipe, sur la fo
 habitudes : rater une occasion de temps en temps n'a pas compromis sensiblement le processus.
 [pause]
 Au passage : dans cette étude, il a fallu en médiane soixante-six jours, avec énormément de
-variations d'une personne à l'autre. Pas vingt et un. Les vingt et un jours, c'est un mythe.
+variations d'une personne à l'autre. Pas vingt et un. Les vingt et un jours pour tout le monde,
+ça ne vient pas de là.
 
 [ÉCRAN : `packages/core/src/insights/streak.ts` dans l'éditeur, puis les tests qui passent en
 vert dans le terminal. Réf. 7.3 — moteur prêt, interface à venir.]
 
 Alors j'ai écrit des jokers. Chaque semaine, tu en as quelques-uns. Un jour sans création ? Le
 joker le couvre, la série continue. Plus de joker ? La série se met en pause. Elle ne meurt pas.
-Tu reviens, elle reprend là où elle s'était arrêtée.
+Tu reviens dans les jours qui suivent, elle reprend là où elle s'était arrêtée.
 C'est dans le moteur aujourd'hui. L'écran arrive.
 
 **Image forte.**

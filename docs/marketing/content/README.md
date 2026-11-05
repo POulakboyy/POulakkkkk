@@ -84,3 +84,4 @@ Aucune de ces adresses n'existe encore. Elles complètent [`../stores/urls.md`](
 | `{{INSTAGRAM_HANDLE}}` | Compte Instagram (fondateur ou POuxis)      |
 | `{{PRESS_EMAIL}}`      | Contact presse                              |
 | `{{LAUNCH_DATE}}`      | Jour J (J0 du calendrier)                   |
+| `{{UNSUBSCRIBE_URL}}`  | Lien de désinscription de l'e-mail          |

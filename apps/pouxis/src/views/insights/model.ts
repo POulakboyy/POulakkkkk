@@ -12,8 +12,7 @@ import {
   type Timestamp,
   type TimeZone,
 } from '@pouxis/core';
-import type { MessageKey } from '../../i18n/index.ts';
-import type { MessageVars } from '../../i18n/index.ts';
+import type { MessageKey, MessageVars } from '../../i18n/index.ts';
 
 /** Streak rules of the app: one joker per week, at most two in the bank. */
 export const STREAK_RULES: insights.StreakRules = { jokersPerWeek: 1, maxJokers: 2 };
@@ -31,6 +30,8 @@ export interface InsightsInput {
   timeZone: TimeZone;
   /** 0 = the current week, -1 = last week… Never positive. */
   weekOffset: number;
+  /** Self-assessed chronotype, the prior of the energy heatmap until data takes over. */
+  chronotype?: insights.Chronotype | null;
 }
 
 export type StaleKind = 'tasks' | 'notes';
@@ -65,7 +66,7 @@ export interface InsightsModel {
 }
 
 export function computeInsights(input: InsightsInput): InsightsModel {
-  const { tasks, events, journal, notes, now, timeZone } = input;
+  const { tasks, events, journal, notes, now, timeZone, chronotype } = input;
   const offset = Math.min(0, Math.trunc(input.weekOffset));
   const start = addDays(startOfWeek(now, timeZone, 1), offset * 7, timeZone);
   const end = addDays(start, 7, timeZone);
@@ -78,7 +79,7 @@ export function computeInsights(input: InsightsInput): InsightsModel {
   return {
     week: { start, end },
     reviewReady: offset === 0 && weekday(now, timeZone) === 0,
-    energy: insights.energyHeatmap({ tasks, now, timeZone }),
+    energy: insights.energyHeatmap({ tasks, now, timeZone, ...(chronotype ? { chronotype } : {}) }),
     balance: insights.balance({ tasks, events, range: { start, end }, timeZone }),
     streak,
     strip: streakStrip(days, streak, now, timeZone, STREAK_STRIP_DAYS),

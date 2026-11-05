@@ -119,7 +119,7 @@ corail change de place à chaque case (jamais deux points adjacents au même end
   > Un jour malade.
   > Zéro.
   >
-  > Une étude de 2022 a observé qu'une série cassée fait décrocher — et beaucoup moins quand on
+  > Une étude de 2022 a observé qu'une série cassée fait décrocher — moins quand on
   > peut la réparer (Silverman & Barasch).
   >
   > Dans POuxis, il y a des jokers.

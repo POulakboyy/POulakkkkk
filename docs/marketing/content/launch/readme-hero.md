@@ -46,10 +46,11 @@ a React + Tauri 2 client for desktop and mobile, and a blind, end-to-end encrypt
 you can self-host.
 
 [Quick start](#quick-start) · [Architecture](docs/architecture/ARCHITECTURE.md) ·
-[ADRs](docs/adr/README.md) · [Contributing](CONTRIBUTING.md)
+[ADRs](docs/adr/README.md) · [Contributing](docs/architecture/CONTRIBUTING.md)
 ```
 
-> Lien `CONTRIBUTING.md` à retirer s'il n'existe pas au moment de l'intégration.
+> Le guide de contribution vit dans `docs/architecture/CONTRIBUTING.md` ; ajuster le lien s'il
+> est déplacé à la racine au moment de l'intégration.
 
 ## Option C — française (`README.fr.md`)
 

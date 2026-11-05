@@ -2,6 +2,7 @@
  * Geometry of direct manipulation in the time grid: snapping, move / resize / create
  * gestures and their keyboard equivalents. Works in wall-clock minutes of a day column.
  */
+import { atMinutes, type TimeZone, type Timestamp } from '@pouxis/core';
 import { DAY_MINUTES } from './layout.ts';
 
 export const SNAP_MIN = 15;
@@ -88,4 +89,18 @@ export function keyCommand(
   if (key === 'ArrowLeft') return { gesture: 'move', deltaMin: 0, deltaDay: -1 };
   if (key === 'ArrowRight') return { gesture: 'move', deltaMin: 0, deltaDay: 1 };
   return null;
+}
+
+/** Instants of a slot drawn in the column of local day `dayStart` (`endMin` may be 1440). */
+export function slotInterval(
+  slot: Slot,
+  days: readonly Timestamp[],
+  timeZone: TimeZone,
+): { start: Timestamp; end: Timestamp } | null {
+  const dayStart = days[slot.day];
+  if (dayStart === undefined) return null;
+  return {
+    start: atMinutes(dayStart, slot.startMin, timeZone),
+    end: atMinutes(dayStart, slot.endMin, timeZone),
+  };
 }
