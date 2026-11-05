@@ -93,10 +93,22 @@ const BODY = 2;
 /** Per-field term frequencies of one term in one document. */
 type FieldFreqs = [number, number, number];
 
+/**
+ * One document in one term's posting list. Postings are unordered arrays (cache-friendly to
+ * scan, cheap to build); `index` is the posting's position so removal is an O(1) swap.
+ */
+interface Posting {
+  readonly slot: number;
+  readonly freqs: FieldFreqs;
+  index: number;
+}
+
 interface Entry {
+  /** Dense integer handle used by postings and the per-query score arrays. */
+  readonly slot: number;
   doc: SearchDoc;
   lengths: FieldFreqs;
-  terms: Map<string, FieldFreqs>;
+  terms: Map<string, Posting>;
   /** Folded surface word → its index term. */
   surfaces: Map<string, string>;
 }
@@ -120,9 +132,12 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
   const prefixWeight = options.prefixWeight ?? 0.7;
   const minPrefixLength = Math.max(1, options.minPrefixLength ?? 2);
 
+  /** Insertion-ordered (a replaced document moves to the end, like a Map delete + set). */
   const entries = new Map<Id, Entry>();
-  /** term → (doc id → per-field frequencies). */
-  const postings = new Map<string, Map<Id, FieldFreqs>>();
+  /** Entry by slot; freed slots are reused. */
+  const slots: (Entry | undefined)[] = [];
+  const freeSlots: number[] = [];
+  const postings = new Map<string, Posting[]>();
   /** Folded surface word → { stemmed term, number of docs containing it }. */
   const surfaces = new Map<string, { term: string; docs: number }>();
   let sortedSurfaces: string[] | null = null;
@@ -132,11 +147,17 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     const entry = entries.get(id);
     if (!entry) return false;
     entries.delete(id);
-    for (const term of entry.terms.keys()) {
+    slots[entry.slot] = undefined;
+    freeSlots.push(entry.slot);
+    for (const [term, posting] of entry.terms) {
       const list = postings.get(term);
       if (!list) continue;
-      list.delete(id);
-      if (list.size === 0) postings.delete(term);
+      const moved = list.pop() as Posting;
+      if (moved !== posting) {
+        list[posting.index] = moved;
+        moved.index = posting.index;
+      }
+      if (list.length === 0) postings.delete(term);
     }
     for (const surface of entry.surfaces.keys()) {
       const info = surfaces.get(surface);
@@ -153,7 +174,9 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
 
   function add(doc: SearchDoc): void {
     remove(doc.id);
+    const slot = freeSlots.pop() ?? slots.length;
     const entry: Entry = {
+      slot,
       doc: { ...doc, tags: doc.tags ? [...doc.tags] : [] },
       lengths: [0, 0, 0],
       terms: new Map(),
@@ -168,23 +191,25 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
       for (const token of tokenize(fields[f] ?? '')) {
         if (token.stop) continue;
         entry.lengths[f] = (entry.lengths[f] ?? 0) + 1;
-        let freqs = entry.terms.get(token.term);
-        if (!freqs) {
-          freqs = [0, 0, 0];
-          entry.terms.set(token.term, freqs);
+        let posting = entry.terms.get(token.term);
+        if (!posting) {
+          posting = { slot, freqs: [0, 0, 0], index: 0 };
+          entry.terms.set(token.term, posting);
         }
-        freqs[f] = (freqs[f] ?? 0) + 1;
+        posting.freqs[f] = (posting.freqs[f] ?? 0) + 1;
         entry.surfaces.set(token.surface, token.term);
       }
     }
     entries.set(doc.id, entry);
-    for (const [term, freqs] of entry.terms) {
+    slots[slot] = entry;
+    for (const [term, posting] of entry.terms) {
       let list = postings.get(term);
       if (!list) {
-        list = new Map();
+        list = [];
         postings.set(term, list);
       }
-      list.set(doc.id, freqs);
+      posting.index = list.length;
+      list.push(posting);
     }
     for (const [surface, term] of entry.surfaces) {
       const info = surfaces.get(surface);
@@ -253,9 +278,46 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
   }
 
   function idf(term: string): number {
-    const df = postings.get(term)?.size ?? 0;
+    const df = postings.get(term)?.length ?? 0;
     const n = entries.size;
     return Math.log(1 + (n - df + 0.5) / (df + 0.5));
+  }
+
+  /** BM25F contribution of one term to one document. */
+  function termScore(
+    freqs: FieldFreqs,
+    lengths: FieldFreqs,
+    avg: FieldFreqs,
+    termIdf: number,
+  ): number {
+    let tf = 0;
+    for (let f = 0; f < 3; f++) {
+      const freq = freqs[f] ?? 0;
+      if (freq === 0) continue;
+      const norm = 1 - b + (b * (lengths[f] ?? 0)) / (avg[f] ?? 1);
+      tf += ((weights[f] ?? 0) * freq) / norm;
+    }
+    return (termIdf * tf) / (k1 + tf);
+  }
+
+  /** Best-scoring term of each clause in `entry` (the terms reported as `matched`). */
+  function matchedTerms(entry: Entry, clauses: readonly QueryClause[], avg: FieldFreqs) {
+    const matched = new Set<string>();
+    for (const clause of clauses) {
+      let bestTerm: string | undefined;
+      let bestScore = 0;
+      for (const [term, multiplier] of clause.terms) {
+        const posting = entry.terms.get(term);
+        if (!posting) continue;
+        const score = termScore(posting.freqs, entry.lengths, avg, idf(term) * multiplier);
+        if (bestTerm === undefined || score > bestScore) {
+          bestTerm = term;
+          bestScore = score;
+        }
+      }
+      if (bestTerm !== undefined) matched.add(bestTerm);
+    }
+    return matched;
   }
 
   function search(query: string, opts: SearchOptions = {}): SearchHit[] {
@@ -265,76 +327,76 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     if (clauses.length === 0) return [];
 
     const keep = docFilter(opts);
-    const accepted = new Map<Id, boolean>();
-    const accepts = (id: Id): boolean => {
-      let ok = accepted.get(id);
-      if (ok === undefined) {
-        const doc = entries.get(id)?.doc;
-        ok = doc !== undefined && keep(doc);
-        accepted.set(id, ok);
-      }
-      return ok;
-    };
-
     const n = entries.size;
     const avg: FieldFreqs = [
       (totalLengths[TITLE] ?? 0) / n || 1,
       (totalLengths[TAGS] ?? 0) / n || 1,
       (totalLengths[BODY] ?? 0) / n || 1,
     ];
-    const scores = new Map<Id, number>();
-    const matched = new Map<Id, Set<string>>();
+    // Per-slot scratch arrays: 0 = unknown, 1 = accepted, 2 = filtered out.
+    const acceptance = new Uint8Array(slots.length);
+    const totals = new Float64Array(slots.length);
+    const clauseBest = new Float64Array(slots.length);
+    /** Index (+1) of the last clause that touched the slot. */
+    const clauseMark = new Int32Array(slots.length);
+    const scored = new Uint8Array(slots.length);
+    const candidates: number[] = [];
 
-    for (const clause of clauses) {
+    for (let c = 0; c < clauses.length; c++) {
       // Within a clause (one query word and its prefix expansions) keep the best term only,
       // so a document is not rewarded for containing many words sharing a prefix.
-      const best = new Map<Id, { score: number; term: string }>();
-      for (const [term, multiplier] of clause.terms) {
+      const touched: number[] = [];
+      for (const [term, multiplier] of (clauses[c] as QueryClause).terms) {
         const list = postings.get(term);
         if (!list) continue;
         const termIdf = idf(term) * multiplier;
-        for (const [id, freqs] of list) {
-          if (!accepts(id)) continue;
-          const entry = entries.get(id) as Entry;
-          let tf = 0;
-          for (let f = 0; f < 3; f++) {
-            const freq = freqs[f] ?? 0;
-            if (freq === 0) continue;
-            const norm = 1 - b + (b * (entry.lengths[f] ?? 0)) / (avg[f] ?? 1);
-            tf += ((weights[f] ?? 0) * freq) / norm;
+        for (const posting of list) {
+          const slot = posting.slot;
+          const entry = slots[slot] as Entry;
+          let state = acceptance[slot];
+          if (state === 0) {
+            state = keep(entry.doc) ? 1 : 2;
+            acceptance[slot] = state;
           }
-          const score = (termIdf * tf) / (k1 + tf);
-          const current = best.get(id);
-          if (!current || score > current.score) best.set(id, { score, term });
+          if (state === 2) continue;
+          const score = termScore(posting.freqs, entry.lengths, avg, termIdf);
+          if (clauseMark[slot] !== c + 1) {
+            clauseMark[slot] = c + 1;
+            clauseBest[slot] = score;
+            touched.push(slot);
+          } else if (score > (clauseBest[slot] as number)) clauseBest[slot] = score;
         }
       }
-      for (const [id, { score, term }] of best) {
-        scores.set(id, (scores.get(id) ?? 0) + score);
-        let set = matched.get(id);
-        if (!set) {
-          set = new Set();
-          matched.set(id, set);
+      for (const slot of touched) {
+        totals[slot] = (totals[slot] as number) + (clauseBest[slot] as number);
+        if (scored[slot] === 0) {
+          scored[slot] = 1;
+          candidates.push(slot);
         }
-        set.add(term);
       }
     }
 
-    const ranked = [...scores.entries()].sort((x, y) => {
-      if (y[1] !== x[1]) return y[1] - x[1];
-      const ux = entries.get(x[0])?.doc.updatedAt ?? 0;
-      const uy = entries.get(y[0])?.doc.updatedAt ?? 0;
+    const compare = (x: number, y: number): number => {
+      const sx = totals[x] as number;
+      const sy = totals[y] as number;
+      if (sy !== sx) return sy - sx;
+      const dx = (slots[x] as Entry).doc;
+      const dy = (slots[y] as Entry).doc;
+      const ux = dx.updatedAt ?? 0;
+      const uy = dy.updatedAt ?? 0;
       if (uy !== ux) return uy - ux;
-      return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
-    });
+      return dx.id < dy.id ? -1 : dx.id > dy.id ? 1 : 0;
+    };
 
-    return ranked.slice(0, limit).map(([id, score]) => {
-      const doc = (entries.get(id) as Entry).doc;
-      const terms = matched.get(id) ?? new Set<string>();
+    return topK(candidates, limit, compare).map((slot) => {
+      const entry = slots[slot] as Entry;
+      const doc = entry.doc;
+      const terms = matchedTerms(entry, clauses, avg);
       return {
-        id,
+        id: doc.id,
         collection: doc.collection,
         title: doc.title,
-        score,
+        score: totals[slot] as number,
         snippet: makeSnippet(doc.body ?? '', terms),
         matched: [...terms],
       };
@@ -352,6 +414,8 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     },
     clear() {
       entries.clear();
+      slots.length = 0;
+      freeSlots.length = 0;
       postings.clear();
       surfaces.clear();
       sortedSurfaces = null;
@@ -362,6 +426,52 @@ export function createSearchIndex(options: SearchIndexOptions = {}): SearchIndex
     },
     search,
   };
+}
+
+/**
+ * The `k` smallest items under `compare`, sorted. A bounded max-heap keeps it O(n log k)
+ * instead of sorting every candidate (a frequent term can match the whole index).
+ */
+export function topK<T>(items: readonly T[], k: number, compare: (a: T, b: T) => number): T[] {
+  if (k <= 0) return [];
+  if (items.length <= k) return [...items].sort(compare);
+  // heap[0] is the worst item kept so far.
+  const heap: T[] = [];
+  const worse = (i: number, j: number): boolean => compare(heap[i] as T, heap[j] as T) > 0;
+  const swap = (i: number, j: number): void => {
+    const t = heap[i] as T;
+    heap[i] = heap[j] as T;
+    heap[j] = t;
+  };
+  const siftDown = (start: number): void => {
+    let i = start;
+    for (;;) {
+      const l = 2 * i + 1;
+      const r = l + 1;
+      let top = i;
+      if (l < heap.length && worse(l, top)) top = l;
+      if (r < heap.length && worse(r, top)) top = r;
+      if (top === i) return;
+      swap(i, top);
+      i = top;
+    }
+  };
+  for (const item of items) {
+    if (heap.length < k) {
+      heap.push(item);
+      let i = heap.length - 1;
+      while (i > 0) {
+        const parent = (i - 1) >> 1;
+        if (!worse(i, parent)) break;
+        swap(i, parent);
+        i = parent;
+      }
+    } else if (compare(item, heap[0] as T) < 0) {
+      heap[0] = item;
+      siftDown(0);
+    }
+  }
+  return heap.sort(compare);
 }
 
 /**

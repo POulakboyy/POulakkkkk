@@ -102,19 +102,48 @@ export function tokenize(text: string): Token[] {
   const out: Token[] = [];
   for (const match of text.matchAll(WORD_RE)) {
     const raw = match[0];
-    const surface = fold(raw);
-    if (surface.length === 0 || surface.length > MAX_TOKEN_LENGTH) continue;
-    if (surface.length === 1 && !/\d/.test(surface)) continue;
+    const word = analyzeWord(raw);
+    if (word === null) continue;
     const start = match.index;
     out.push({
-      surface,
-      term: stem(surface),
+      surface: word.surface,
+      term: word.term,
       start,
       end: start + raw.length,
-      stop: STOPWORDS.has(surface),
+      stop: word.stop,
     });
   }
   return out;
+}
+
+interface AnalyzedWord {
+  surface: string;
+  term: string;
+  stop: boolean;
+}
+
+/**
+ * Memo of `analyzeWord`: folding (NFD + regexes) and stemming dominate indexing time, and word
+ * frequencies are Zipfian, so a small cache absorbs most of the work. Cleared when full to
+ * bound memory; the analysis is pure, so the cache never changes a result.
+ */
+const WORD_CACHE = new Map<string, AnalyzedWord | null>();
+const WORD_CACHE_LIMIT = 50_000;
+
+/** Folded surface, stem and stop flag of one raw word; `null` when it is not a token. */
+function analyzeWord(raw: string): AnalyzedWord | null {
+  const cached = WORD_CACHE.get(raw);
+  if (cached !== undefined) return cached;
+  const surface = fold(raw);
+  const word =
+    surface.length === 0 ||
+    surface.length > MAX_TOKEN_LENGTH ||
+    (surface.length === 1 && !/\d/.test(surface))
+      ? null
+      : { surface, term: stem(surface), stop: STOPWORDS.has(surface) };
+  if (WORD_CACHE.size >= WORD_CACHE_LIMIT) WORD_CACHE.clear();
+  WORD_CACHE.set(raw, word);
+  return word;
 }
 
 /** Index terms of `text`: tokenised, stop words removed, stemmed. */
